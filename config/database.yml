@@ -3,16 +3,16 @@ development:
   encoding: unicode
   database: enrs_d
   pool: 5
-  username: root
-  password:
+  username: enrs
+  password: enrs
 
 test:
   adapter: postgresql
   encoding: unicode
   database: enrs_t
   pool: 5
-  username: root
-  password:
+  username: enrs
+  password: enrs
 
 production:
   adapter: postgresql
