@@ -1,0 +1,27 @@
+.row.header
+  .small-6.columns
+    %h1 Travis County, Texas
+  .small-6.columns
+    %p November 2, 2010 Election Day Results
+
+.row.subh
+  %h2.small-2.columns Scoreboard
+  .small-10.columns
+
+.row.menu
+  .small-2.columns Local
+  .small-2.columns.active State
+  .small-2.columns Federal
+  .small-6.columns
+
+.row
+  .small-3.columns Select a Precinct
+  .small-6.columns
+  .small-3.columns ... Sharing icons ...
+
+.row
+  .small-3.columns
+    = render 'precincts'
+  .small-9.columns
+    = render 'map'
+    = render 'stats'
