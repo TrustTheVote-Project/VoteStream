@@ -1,0 +1,23 @@
+development:
+  adapter: postgresql
+  encoding: unicode
+  database: enrs_d
+  pool: 5
+  username: root
+  password:
+
+test:
+  adapter: postgresql
+  encoding: unicode
+  database: enrs_t
+  pool: 5
+  username: root
+  password:
+
+production:
+  adapter: postgresql
+  encoding: unicode
+  database: enrs
+  pool: 5
+  username: enrs
+  password:
