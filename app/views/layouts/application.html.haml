@@ -1,0 +1,12 @@
+!!!
+%html
+  %head
+    %title ENRS
+    = stylesheet_link_tag "application", :media => "all"
+    = csrf_meta_tags
+
+  %body{ id: @page_id }
+    .container
+      = yield
+
+    = javascript_include_tag  "application"
