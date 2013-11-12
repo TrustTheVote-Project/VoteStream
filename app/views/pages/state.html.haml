@@ -1,3 +1,4 @@
+- @page_id = "pages_state"
 .row
   .span12.header
     .row
@@ -21,10 +22,10 @@
       %li.span2.active= link_to "State", "#"
       %li.span2= link_to "Federal", "#"
 
-.row
+.row.top-line
   .span3 Select a Precinct
-  .span6
-  .span3 ... Sharing icons ...
+  .span7
+  .span2.share= image_tag 'share-icons.png', size: "140x19"
 
 .row
   .span3

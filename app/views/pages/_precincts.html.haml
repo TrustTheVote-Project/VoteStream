@@ -1,1 +1,11 @@
-Precincts...
+- n = 8
+%table#precincts
+  %tr.header
+    %td{ colspan: n } All Precincts
+  - grouped_precincts(@precincts).each do |_, precincts|
+    %tr.block_header
+      %td{ colspan: n } #{precincts.first}-#{precincts.last}
+    - precincts.in_groups_of(n) do |g|
+      %tr
+        - g.each do |p|
+          %td= p ? link_to(p, "##{p}") : "&nbsp;".html_safe
