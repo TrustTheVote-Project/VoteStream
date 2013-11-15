@@ -47,6 +47,7 @@ end
 group :development do
   gem 'capistrano', '~> 3.0.0'
   gem 'capistrano-bundler'
+  gem 'capistrano-rails'
 end
 
 # Use debugger
