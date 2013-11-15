@@ -14,3 +14,7 @@
 # Ignore all logfiles and tempfiles.
 /log/*.log
 /tmp
+
+# Ignore deployment config
+/config/deploy/staging.rb
+/config/deploy/production.rb
