@@ -1,0 +1,7 @@
+production:
+  adapter:  mysql2
+  host:     localhost
+  database: enrs
+  pool:     25
+  username: enrs
+  password:
