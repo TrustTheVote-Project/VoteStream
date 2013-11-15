@@ -3,13 +3,13 @@ development:
   host:     localhost
   database: enrs_d
   pool: 25
-  username: enrs
-  password: enrs
+  username: root
+  password: password
 
 test:
   adapter:  mysql2
   host:     localhost
   database: enrs_t
   pool: 25
-  username: enrs
-  password: enrs
+  username: root
+  password: password
