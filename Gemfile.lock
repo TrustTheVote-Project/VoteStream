@@ -32,6 +32,8 @@ GEM
       i18n
       rake (>= 10.0.0)
       sshkit (>= 0.0.23)
+    capistrano-bundler (1.0.0)
+      capistrano (>= 3.0.0.pre)
     coffee-rails (4.0.1)
       coffee-script (>= 2.2.0)
       railties (>= 4.0.0, < 5.0)
@@ -139,7 +141,8 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
-  capistrano
+  capistrano (~> 3.0.0)
+  capistrano-bundler
   coffee-rails (~> 4.0.0)
   haml-rails
   jbuilder (~> 1.2)
