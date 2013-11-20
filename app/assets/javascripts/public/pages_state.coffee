@@ -1,21 +1,20 @@
 map          = null
 bounds       = null
-statePoints  = null
+statesPoints = null
 countyPoints = null
 
 window.onCountyPolygon = (data) ->
   countyPoints = pointsFromData(data, true)
   highlightCounty()
 
-window.onStatePolygon = (data) ->
-  statePoints = pointsFromData(data, false)
+window.onStatesPolygon = (data) ->
+  statesPoints = pointsFromData(data, false)
   highlightCounty()
 
 highlightCounty = ->
-  return if !statePoints or !countyPoints
-  console.log "Highlighting...", countyPoints, statePoints
+  return if !statesPoints or !countyPoints
   poly = new google.maps.Polygon
-    paths:          [ statePoints, countyPoints ]
+    paths:          [ statesPoints, countyPoints ]
     strokeColor:    '#000000'
     strokeOpacity:  0.3
     strokeWeight:   1
@@ -27,7 +26,7 @@ highlightCounty = ->
 
 pointsFromData = (data, extendBounds) ->
   if data.error
-    console.log data.error.message
+    alert(data.error.message)
     return
 
   row = data['rows'][0]
@@ -68,7 +67,7 @@ loadGeometryPolygon = (mapId, where, apiKey, callbackName) ->
 
 initialize = ->
   center        = new google.maps.LatLng(parseFloat($("#map_center_lat").val()), parseFloat($("#map_center_lng").val()))
-  statesMapId   = '1xzUXAJRDNBTIadEdmMqYqAfKf1OmUEs_cc78jMA'
+  helperTableId = '1-hNWH5CVdzVcDDO7w5WVCO5-yc1_uG4gMOd1Uw4'
   countiesMapId = '0IMZAFCwR-t7jZnVzaW9udGFibGVzOjIxMDIxNw'
   apiKey        = $("#map_browser_key").val()
 
@@ -82,7 +81,7 @@ initialize = ->
   })
 
   bounds = new google.maps.LatLngBounds()
-  loadGeometryPolygon statesMapId, "id = 'MN'", apiKey, 'onStatePolygon'
+  loadGeometryPolygon helperTableId, "Key = 'USA'", apiKey, 'onStatesPolygon'
   loadGeometryPolygon countiesMapId, "'State Abbr.' = 'MN' AND 'County Name' = 'Ramsey'", apiKey, 'onCountyPolygon'
 
 
