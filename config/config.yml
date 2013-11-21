@@ -1,2 +1,17 @@
 google_maps:
   browser_key: AIzaSyDVK21ipXemMEdvJohRr_XXyrvMtsHhCwc
+
+party_colors:
+  default:  "#888888"
+  CG:       "#555555"
+  CP:       "#444444"
+  DFL:      "#0000ff"
+  GP:       "#666666"
+  GR:       "#999999"
+  JP:       "#777777"
+  LIB:      "#FFFF00"
+  R:        "#ff0000"
+  SL:       "#666666"
+  SWP:      "#333333"
+  WI:       "#cccccc"
+  NA:       "#ffffff"
