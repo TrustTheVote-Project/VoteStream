@@ -2,9 +2,10 @@
 = hidden_field_tag :map_center_lat, @center[1]
 = hidden_field_tag :map_center_lng, @center[0]
 = hidden_field_tag :map_zoom, @zoom
-= hidden_field_tag :map_id, '10tPNQPpGbZj78eFe8QdCJug0nv7bLzau4AwCKIs' #@map_id
+= hidden_field_tag :map_id, @map_id
 
-%script
-  window.mapPartyColors = #{raw AppConfig['party_colors'].to_json};
+- if @showColors
+  %script
+    window.mapPartyColors = #{raw AppConfig['party_colors'].to_json};
 
 #map
