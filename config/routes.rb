@@ -1,7 +1,7 @@
 Enrs::Application.routes.draw do
   root 'pages#state'
 
-  get '/color' => 'pages#state_with_color'
+  get '/other' => 'pages#state_with_color'
 
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".
