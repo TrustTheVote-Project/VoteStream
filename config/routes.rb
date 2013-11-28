@@ -1,5 +1,5 @@
 Enrs::Application.routes.draw do
-  root 'pages#state'
+  root 'pages#front'
 
   get '/other' => 'pages#state_with_color'
 
