@@ -1,9 +1,11 @@
 - @page_id = 'pages_front'
+
 .row
   .span12
-    = image_tag "logo.jpg"
+    %section.head
+      = image_tag "logo.jpg"
 
-    %section
+    %section.main
       %h1= t 'front.title'
       .lead= t 'front.summary'
       %p= t 'front.details'
