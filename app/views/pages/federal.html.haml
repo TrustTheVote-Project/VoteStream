@@ -1,0 +1,94 @@
+- @page_id = 'pages_federal'
+
+.row
+  .span12
+    %h1 Election Night Reporting
+    %h2 Ramsey County, Minnesota
+    %p Scoreboard for November 6, 2012 General Election
+
+    .scale
+      %label.radio
+        = radio_button_tag 'scale', 'federal', true
+        Federal
+      %label.radio
+        = radio_button_tag 'scale', 'state'
+        State
+      %label.radio
+        = radio_button_tag 'scale', 'local'
+        Local
+
+.row
+  .span4
+    %p View Election Results for all Precincts, or Select a Precinct or District
+
+    %section.districts
+      .prompt Select a District
+      .accordion#acc-district
+        .accordion-group
+          .accordion-heading
+            = link_to "Federal Districts", '#federal-district', class: 'accordion-toggle', data: { toggle: 'collapse', parent: '#acc-district' }
+          #federal-district.accordion-body.collapse
+            .accordion-inner
+              Federal districts list
+        .accordion-group
+          .accordion-heading
+            = link_to "State Districts", '#state-district', class: 'accordion-toggle', data: { toggle: 'collapse', parent: '#acc-district' }
+          #state-district.accordion-body.collapse
+            .accordion-inner
+              State districts list
+        .accordion-group
+          .accordion-heading
+            = link_to "County Districts", '#county-district', class: 'accordion-toggle', data: { toggle: 'collapse', parent: '#acc-district' }
+          #county-district.accordion-body.collapse
+            .accordion-inner
+              County districts list
+        .accordion-group
+          .accordion-heading
+            = link_to "Local Districts", '#local-district', class: 'accordion-toggle', data: { toggle: 'collapse', parent: '#acc-district' }
+          #local-district.accordion-body.collapse
+            .accordion-inner
+              Local districts list
+
+    %section.precincts
+      .prompt Select a Precinct
+      .selected.all-precincts All precincts
+      .accordion#acc-precinct
+        .accordion-group
+          .accordion-heading
+            = link_to "Precincts A-M", '#precincts-a-m', class: 'accordion-toggle', data: { toggle: 'collapse', parent: '#acc-precinct' }
+          #precincts-a-m.accordion-body.collapse
+            .accordion-inner
+              Precincts A through M
+        .accordion-group
+          .accordion-heading
+            = link_to "Precincts N-S", '#precincts-n-s', class: 'accordion-toggle', data: { toggle: 'collapse', parent: '#acc-precinct' }
+          #precincts-n-s.accordion-body.collapse
+            .accordion-inner
+              Precincts N through S
+        .accordion-group
+          .accordion-heading
+            = link_to "St. Paul", '#st-paul', class: 'accordion-toggle', data: { toggle: 'collapse', parent: '#acc-precinct' }
+          #st-paul.accordion-body.collapse
+            .accordion-inner
+              St. Paul
+        .accordion-group
+          .accordion-heading
+            = link_to "Precincts T-Z", '#precincts-t-z', class: 'accordion-toggle', data: { toggle: 'collapse', parent: '#acc-precinct' }
+          #precincts-t-z.accordion-body.collapse
+            .accordion-inner
+              Precincts T through Z
+
+  .span8
+    %section.results
+      .head Presidential Contest (All Precincts)
+      %table.table
+        %tr
+          %th Obama
+          %td 80%
+        %tr
+          %th Romney
+          %td 20%
+      %p 100% Reporting
+
+    %section.map
+      = render 'map'

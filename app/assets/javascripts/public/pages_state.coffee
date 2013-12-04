@@ -239,5 +239,5 @@ initialize = ->
     # e.infoWindowHtml = e.row['Popup'].value
 
 $ ->
-  return if $("#pages_state").length == 0
+  return if $("#pages_state, #pages_federal").length == 0
   initialize()

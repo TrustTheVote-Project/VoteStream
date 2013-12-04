@@ -1,6 +1,8 @@
 Enrs::Application.routes.draw do
   root 'pages#front'
 
+  get '/federal' => 'pages#federal', as: :federal
+  get '/state' => 'pages#state'
   get '/other' => 'pages#state_with_color'
 
   # The priority is based upon order of creation: first created -> highest priority.

@@ -13,4 +13,11 @@ class PagesController < ApplicationController
     state
   end
 
+  def federal
+    @precincts  = (100..164).to_a + (200..279).to_a + (301..379).to_a + (401..463).to_a
+    @center     = [ -93.147, 45.005988 ]
+    @zoom       = 11
+    @map_id     = '10tPNQPpGbZj78eFe8QdCJug0nv7bLzau4AwCKIs'
+  end
+
 end
