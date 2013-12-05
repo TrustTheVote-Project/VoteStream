@@ -1,4 +1,8 @@
 #pages_federal {
+  .accordion {
+    display: none;
+  }
+
   .ui-widget {
     font-family: "Helvetica Neue",Helvetica,Arial,sans-serif;
     font-size: 14px;
@@ -6,5 +10,19 @@
 
   .ui-state-default {
     background: #e6e6e6;
+  }
+
+  .results {
+    table {
+      margin-bottom: 5px;
+    }
+
+    td, th {
+      padding: 8px 0;
+    }
+  }
+
+  .text-right {
+    text-align: right;
   }
 }

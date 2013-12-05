@@ -22,10 +22,12 @@
 
 .row
   .span4
-    %p View Election Results for all Precincts, or Select a Precinct or District
+    %p
+      View Election Results for all Precincts, or<br>
+      Select a Precinct or District
 
     %section.districts
-      .prompt Select a District
+      %h4 Select a District
       .accordion#acc-district
         %h3 Federal Districts
         %div Federal districts list
@@ -37,7 +39,7 @@
         %div Local districts list
 
     %section.precincts
-      .prompt Select a Precinct
+      %h4 Select a Precinct
       .ui-accordion
         .ui-state-active.ui-accordion-header All precincts
       .accordion#acc-precinct
@@ -52,14 +54,14 @@
 
   .span8
     %section.results
-      .head Presidential Contest (All Precincts)
+      %h4 Presidential Contest (All Precincts)
       %table.table
         %tr
           %th Obama
-          %td 80%
+          %td.text-right 80%
         %tr
           %th Romney
-          %td 20%
+          %td.text-right 20%
       %p 100% Reporting
 
     %section.map

@@ -2,5 +2,5 @@
 //= require jquery.ui.accordion
 
 $(function() {
-  $(".accordion").accordion({ collapsible: true, active: false });
+  $(".accordion").accordion({ collapsible: true, active: false }).show();
 });
