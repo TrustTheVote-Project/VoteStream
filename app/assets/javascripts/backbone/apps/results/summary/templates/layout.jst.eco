@@ -1,0 +1,7 @@
+<div class="row-fluid">
+  <div class="span4" id="sidebar-region"></div>
+  <div class="span8">
+    <div id="results-region"></div>
+    <div id="map-region"></div>
+  </div>
+</div>

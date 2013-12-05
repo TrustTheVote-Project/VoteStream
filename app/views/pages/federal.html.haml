@@ -1,4 +1,7 @@
 - @page_id = 'pages_federal'
+- @js = 'demo_federal'
+-# - @js = 'results'
+-# #main-region
 
 .row
   .span12
@@ -24,59 +27,28 @@
     %section.districts
       .prompt Select a District
       .accordion#acc-district
-        .accordion-group
-          .accordion-heading
-            = link_to "Federal Districts", '#federal-district', class: 'accordion-toggle', data: { toggle: 'collapse', parent: '#acc-district' }
-          #federal-district.accordion-body.collapse
-            .accordion-inner
-              Federal districts list
-        .accordion-group
-          .accordion-heading
-            = link_to "State Districts", '#state-district', class: 'accordion-toggle', data: { toggle: 'collapse', parent: '#acc-district' }
-          #state-district.accordion-body.collapse
-            .accordion-inner
-              State districts list
-        .accordion-group
-          .accordion-heading
-            = link_to "County Districts", '#county-district', class: 'accordion-toggle', data: { toggle: 'collapse', parent: '#acc-district' }
-          #county-district.accordion-body.collapse
-            .accordion-inner
-              County districts list
-        .accordion-group
-          .accordion-heading
-            = link_to "Local Districts", '#local-district', class: 'accordion-toggle', data: { toggle: 'collapse', parent: '#acc-district' }
-          #local-district.accordion-body.collapse
-            .accordion-inner
-              Local districts list
+        %h3 Federal Districts
+        %div Federal districts list
+        %h3 State Districts
+        %div State districts list
+        %h3 County Districts
+        %div County districts list
+        %h3 Local Districts
+        %div Local districts list
 
     %section.precincts
       .prompt Select a Precinct
-      .selected.all-precincts All precincts
+      .ui-accordion
+        .ui-state-active.ui-accordion-header All precincts
       .accordion#acc-precinct
-        .accordion-group
-          .accordion-heading
-            = link_to "Precincts A-M", '#precincts-a-m', class: 'accordion-toggle', data: { toggle: 'collapse', parent: '#acc-precinct' }
-          #precincts-a-m.accordion-body.collapse
-            .accordion-inner
-              Precincts A through M
-        .accordion-group
-          .accordion-heading
-            = link_to "Precincts N-S", '#precincts-n-s', class: 'accordion-toggle', data: { toggle: 'collapse', parent: '#acc-precinct' }
-          #precincts-n-s.accordion-body.collapse
-            .accordion-inner
-              Precincts N through S
-        .accordion-group
-          .accordion-heading
-            = link_to "St. Paul", '#st-paul', class: 'accordion-toggle', data: { toggle: 'collapse', parent: '#acc-precinct' }
-          #st-paul.accordion-body.collapse
-            .accordion-inner
-              St. Paul
-        .accordion-group
-          .accordion-heading
-            = link_to "Precincts T-Z", '#precincts-t-z', class: 'accordion-toggle', data: { toggle: 'collapse', parent: '#acc-precinct' }
-          #precincts-t-z.accordion-body.collapse
-            .accordion-inner
-              Precincts T through Z
+        %h3 Precincts A-M
+        %div Precincts A through M
+        %h3 Precincts N-S
+        %div Precincts N through S
+        %h3 St. Paul
+        %div St. Paul
+        %h3 Precincts T-Z
+        %div Precincts T through Z
 
   .span8
     %section.results

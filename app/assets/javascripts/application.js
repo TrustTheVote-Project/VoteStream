@@ -11,10 +11,5 @@
 // about supported directives.
 //
 //= require jquery
-//= require jquery_ujs
 //= require twitter/bootstrap
 //= require turbolinks
-//= require underscore
-//= require backbone
-//= require backbone.marionette
-//= require_tree .

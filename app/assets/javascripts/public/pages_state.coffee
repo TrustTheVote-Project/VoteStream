@@ -203,7 +203,7 @@ initialize = ->
   styleMap(map)
   loadResults(resultsMapId, apiKey)
 
-  bounds = new google.maps.LatLngBounds()
+  # bounds = new google.maps.LatLngBounds()
   # loadGeometryPolygon helperTableId, "Key = 'USA'", apiKey, 'onStatesPolygon'
   # loadGeometryPolygon countiesMapId, "'State Abbr.' = 'MN' AND 'County Name' = 'Ramsey'", apiKey, 'onCountyPolygon'
 
