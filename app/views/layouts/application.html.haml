@@ -4,6 +4,7 @@
     %title ENRS
     = stylesheet_link_tag "application", :media => "all"
     = csrf_meta_tags
+    = include_gon
 
   %body{ id: @page_id }
     .container

@@ -1,1 +1,15 @@
-results
+<h4>Presidential Contest (All Precincts)</h4>
+<table class="table">
+  <tr>
+    <th>Obama</th>
+    <td class="text-right">80%</td>
+  </tr>
+  <tr>
+    <th>Romney</th>
+    <td class="text-right">20%</td>
+  </tr>
+  <tr>
+    <th>Reporting</th>
+    <th class="text-right">100%</th>
+  </tr>
+</table>

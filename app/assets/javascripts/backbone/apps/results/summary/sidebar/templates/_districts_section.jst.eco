@@ -1,0 +1,11 @@
+<div class="accordion-heading">
+  <a class="accordion-toggle" data-toggle="collapse" data-parent="#districts" href="#district-<%= @id %>">
+    <%= @section %>
+  </a>
+</div>
+<div id="district-<%= @id %>" class="accordion-body collapse">
+  <div class="accordion-inner">
+    <ul>
+    </ul>
+  </div>
+</div>

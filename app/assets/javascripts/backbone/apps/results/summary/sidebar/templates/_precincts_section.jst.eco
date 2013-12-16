@@ -1,0 +1,11 @@
+<div class="accordion-heading">
+  <a class="accordion-toggle" data-toggle="collapse" data-parent="#precincts" href="#precinct-<%= @id %>">
+    <%= @section %>
+  </a>
+</div>
+<div id="precinct-<%= @id %>" class="accordion-body collapse">
+  <div class="accordion-inner">
+    <ul>
+    </ul>
+  </div>
+</div>

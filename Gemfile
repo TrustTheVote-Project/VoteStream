@@ -23,6 +23,7 @@ gem 'jquery-rails'
 gem 'jquery-ui-rails'
 gem 'haml-rails'
 gem 'eco'
+gem 'gon'
 
 # Turbolinks makes following links in your web application faster. Read more: https://github.com/rails/turbolinks
 gem 'turbolinks'
@@ -50,6 +51,20 @@ group :development do
   gem 'capistrano', '~> 3.0.0'
   gem 'capistrano-bundler'
   gem 'capistrano-rails'
+  gem 'quiet_assets'
+  gem 'better_errors'
+  gem 'binding_of_caller'
+end
+
+group :test do
+  gem 'guard-rspec'
+  gem 'shoulda-matchers'
+  gem 'database_cleaner'
+end
+
+group :test, :development do
+  gem 'factory_girl_rails'
+  gem 'rspec-rails'
 end
 
 # Use debugger
