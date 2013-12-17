@@ -47,6 +47,16 @@ describe DataLoader do
       expect(pl.state).to eq "MN"
       expect(pl.zip).to eq "55126"
     end
+
+    it 'should add election' do
+      expect(Election.count).to eq 1
+      el = Election.first
+      expect(el.uid).to eq "2012-11-06-120000000027-123"
+      expect(el.held_on.strftime("%Y-%m-%d")).to eq "2012-11-02"
+      expect(el.election_type).to eq Election::FEDERAL
+      expect(el.state).to eq state_mn
+      expect(el).to be_statewide
+    end
   end
 
 end

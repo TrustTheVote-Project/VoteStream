@@ -15,14 +15,27 @@ class DataLoader
   private
 
   def load_election
+    election_el = @doc.css("vip_object > election").first
+
+    uid = election_el['id']
+    state_uid = election_el.css("> state_id").first.content
+    date = election_el.css("> date").first.content
+    type = election_el.css("> election_type").first.content
+    statewide = election_el.css("> statewide").first.content == "YES"
+
+    state = State.find_by_uid!(state_uid)
+    state.elections.create_with({
+      held_on: date,
+      election_type: type,
+      statewide: statewide
+    }).find_or_create_by(uid: uid)
   end
 
   def for_each_state
     @doc.css("vip_object > state").each do |state_el|
       uid = state_el['id']
-      @state = State.find_by_uid!(uid)
-
-      yield state_el, @state
+      state = State.find_by_uid!(uid)
+      yield state_el, state
     end
   end
 

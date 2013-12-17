@@ -1,5 +1,7 @@
 class Election < ActiveRecord::Base
 
+  FEDERAL = "Federal"
+
   belongs_to :state
 
   validates :uid, presence: true
