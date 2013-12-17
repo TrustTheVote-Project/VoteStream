@@ -1,6 +1,7 @@
 class District < ActiveRecord::Base
 
-  belongs_to :state
+  FEDERAL = 'Federal'
+
   has_and_belongs_to_many :precincts
 
   validates :uid, presence: true
