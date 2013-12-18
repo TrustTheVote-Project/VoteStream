@@ -6,7 +6,7 @@ describe DataLoader do
     let(:state_mn) { State.find_by(code: "MN") }
 
     before(:all) do
-      District.delete_all
+      District.destroy_all
       State.create_with(uid: "120000000027", name: "State of Minnesota").find_or_create_by(code: "MN")
       l = DataLoader.new(fixture('Ramsey-County-MN-Jurisdiction-Definition-VIP.xml'))
       l.load
