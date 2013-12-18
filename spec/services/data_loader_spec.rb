@@ -6,6 +6,7 @@ describe DataLoader do
     let(:state_mn) { State.find_by(code: "MN") }
 
     before(:all) do
+      District.delete_all
       State.create_with(uid: "120000000027", name: "State of Minnesota").find_or_create_by(code: "MN")
       l = DataLoader.new(fixture('Ramsey-County-MN-Jurisdiction-Definition-VIP.xml'))
       l.load
@@ -56,6 +57,38 @@ describe DataLoader do
       expect(el.election_type).to eq Election::FEDERAL
       expect(el.state).to eq state_mn
       expect(el).to be_statewide
+    end
+  end
+
+  context 'Election Definition parsing' do
+    let(:state_mn) { State.find_by(code: "MN") }
+    let(:county) { state_mn.localities.first }
+    let(:contest) { county.contests.find_by_uid("2012-11-06-120000000027-123-0101") }
+    let(:candidate) { contest.candidates.find_by_uid("0101-0301") }
+
+    before(:all) do
+      State.create_with(uid: "120000000027", name: "State of Minnesota").find_or_create_by(code: "MN")
+      l = DataLoader.new(fixture('Ramsey-County-MN-Election-Definition-Nov-2012-VIP-Draft.xml'))
+      l.load
+    end
+
+    after(:all) do
+      State.where(code: "MN").destroy_all
+    end
+
+    it 'should add contests' do
+      expect(county.contests.count).to eq 61
+
+      expect(contest.office).to       eq "U.S. President & Vice President"
+      expect(contest.sort_order).to   eq "0101"
+      expect(contest.district.uid).to eq "US-SN-MN"
+    end
+
+    it 'should add candidates' do
+      expect(contest.candidates.count).to eq 11
+      expect(candidate.name).to       eq "MITT ROMNEY AND PAUL RYAN"
+      expect(candidate.party).to      eq "Republican"
+      expect(candidate.sort_order).to eq 1
     end
   end
 
