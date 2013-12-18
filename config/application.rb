@@ -26,6 +26,6 @@ module Enrs
     # config.i18n.default_locale = :de
 
     config.assets.enabled = true
-    config.assets.precompile += %w{ demo_federal.js demo_state.js results.js }
+    config.assets.precompile += %w{ demo_federal.js demo_state.js results.js admin.js admin.css }
   end
 end
