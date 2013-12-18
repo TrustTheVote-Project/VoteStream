@@ -14,12 +14,13 @@
 %body.admin{ id: "admin_#{params[:controller].gsub('admin/', '')}_#{params[:action]}" }
 
   = render partial: 'layouts/admin/header'
-  - if flash.alert
-    .alert.alert-error= flash.alert
-  - if flash.notice
-    .alert= flash.notice
 
   #main-container.container
+    - if flash.alert
+      .alert.alert-error= flash.alert
+    - if flash.notice
+      .alert= flash.notice
+
     = yield
 
   = render partial: 'layouts/admin/footer'

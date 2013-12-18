@@ -10,6 +10,9 @@ Enrs::Application.routes.draw do
 
     resources :states
     resources :localities
+
+    get  '/data' => 'data#index', as: 'data'
+    post '/load_definitions' => 'data#load_definitions', as: 'load_definitions'
   end
 
   # The priority is based upon order of creation: first created -> highest priority.

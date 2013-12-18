@@ -1,0 +1,15 @@
+.page-header
+  %h1 Data Management
+
+.row-fluid
+  .span6
+    %h3 Upload definitions
+    = form_tag admin_load_definitions_path, multipart: true do
+      .row-fluid
+        .span6
+          .file-wrap
+            %span.file-btn.btn Choose XML file
+            = file_field_tag :file
+        .span6
+          = submit_tag "Upload", class: 'btn'
+
