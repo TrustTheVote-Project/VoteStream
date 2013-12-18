@@ -15,3 +15,8 @@ party_colors:
   SWP:      "#333333"
   WI:       "#cccccc"
   NA:       "#ffffff"
+
+admin:
+  user: enrsadmin
+  pass: enrs23operations$2
+

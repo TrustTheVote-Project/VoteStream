@@ -1,0 +1,19 @@
+.page-header
+  %h1 Localities
+
+.row
+  .span12
+    %table.table.table-striped
+      %thead
+        %tr
+          %th.uid  UID
+          %th.state State
+          %th.name Name
+          %th.type Type
+      %tbody
+        - @localities.each do |l|
+          %tr
+            %td.uid= l.uid
+            %td.state= l.state.name
+            %td.name= link_to l.name, [ :admin, l ]
+            %td.type= l.locality_type

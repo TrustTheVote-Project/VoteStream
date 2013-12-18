@@ -1,0 +1,48 @@
+.page-header
+  %h1= @locality.name
+
+.row
+  .span12
+    %table.properties
+      %tr
+        %th.l UID:
+        %td= @locality.uid
+      %tr
+        %th.l Type:
+        %td= @locality.locality_type
+
+.row
+  .span12
+    %h3 Contests
+    - if @locality.contests.blank?
+      %p.none No contests uploaded
+    - else
+      %table.table.contests
+        %thead
+          %tr
+            %th.uid  UID
+            %th.office Office
+            %th.district District
+        %tbody
+          - @locality.contests.includes(:district).order('sort_order').each do |c|
+            %tr
+              %td.uid= c.uid
+              %td.office= c.office
+              %td.district= c.district.name
+
+.row
+  .span12
+    %h3 Precincts
+    - if @locality.precincts.blank?
+      %p.none No precincts uploaded
+    - else
+      %table.table.precincts
+        %thead
+          %tr
+            %th.uid UID
+            %th.name Name
+        %tbody
+          - @locality.precincts.order('name').each do |p|
+            %tr
+              %td.uid= p.uid
+              %td.name= p.name

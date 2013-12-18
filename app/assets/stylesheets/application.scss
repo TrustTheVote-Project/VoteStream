@@ -10,5 +10,6 @@
  *
  *= require_self
  *= require jquery.ui.accordion
- *= require_tree .
+ *= require bootstrap_and_overrides
+ *= require_tree ./admin
  */

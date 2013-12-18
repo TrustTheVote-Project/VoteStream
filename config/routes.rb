@@ -5,6 +5,13 @@ Enrs::Application.routes.draw do
   get '/state' => 'pages#state'
   get '/other' => 'pages#state_with_color'
 
+  namespace :admin do
+    root 'states#index'
+
+    resources :states
+    resources :localities
+  end
+
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".
 

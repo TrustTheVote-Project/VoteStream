@@ -1,0 +1,17 @@
+#admin_states_index {
+  .code {
+    width: 50px;
+  }
+}
+
+#admin_states_show {
+  .localities {
+    .uid { width: 150px; }
+    .type { width: 100px; }
+  }
+
+  .elections {
+    .uid { width: 250px; }
+    .type, .sw { width: 100px; }
+  }
+}

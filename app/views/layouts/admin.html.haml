@@ -1,0 +1,28 @@
+!!!
+%head
+  %meta{:charset => "utf-8"}
+  %meta{:content => "IE=edge,chrome=1", "http-equiv" => "X-UA-Compatible"}
+  %title= @title || "ENRS Dashboard"
+  %meta{:content => @description, :name => "description"}
+  %meta{:content => "width=device-width,initial-scale=1", :name => "viewport"}
+  %link(href="/assets/favicon.png" rel="shortcut icon")
+  = stylesheet_link_tag "admin", :media => "all"
+  = csrf_meta_tags
+  /[if lt IE 9]
+    = javascript_include_tag "https://html5shiv.googlecode.com/svn/trunk/html5.js"
+
+%body.admin{ id: "admin_#{params[:controller].gsub('admin/', '')}_#{params[:action]}" }
+
+  = render partial: 'layouts/admin/header'
+  - if flash.alert
+    .alert.alert-error= flash.alert
+  - if flash.notice
+    .alert= flash.notice
+
+  #main-container.container
+    = yield
+
+  = render partial: 'layouts/admin/footer'
+
+  = javascript_include_tag "https://www.google.com/jsapi"
+  = javascript_include_tag "admin"

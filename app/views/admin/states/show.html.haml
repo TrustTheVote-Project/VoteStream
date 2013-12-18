@@ -1,0 +1,52 @@
+.page-header
+  %h1= @state.name
+
+.row
+  .span12
+    %table.properties
+      %tr
+        %th.l Code:
+        %td= @state.code
+      %tr
+        %th.l UID:
+        %td= @state.uid
+
+.row
+  .span12
+    %h3 Elections
+    - if @state.elections.blank?
+      %p.none No elections uploaded
+    - else
+      %table.table.elections
+        %thead
+          %tr
+            %th.uid UID
+            %th.date Held on
+            %th.type Type
+            %th.sw Statewide
+        %tbody
+          - @state.elections.each do |e|
+            %tr
+              %td.uid= e.uid
+              %td.date= e.held_on.strftime('%b %d, %Y')
+              %td.type= e.election_type
+              %td.sw= e.statewide? ? 'Yes' : 'No'
+
+.row
+  .span12
+    %h3 Localities
+    - if @state.localities.blank?
+      %p.none No localities uploaded
+    - else
+      %table.table.localities
+        %thead
+          %tr
+            %th.uid UID
+            %th.name Name
+            %th.type Type
+        %tbody
+          - @state.localities.each do |l|
+            %tr
+              %td.uid= l.uid
+              %td.name= link_to l.name, [ :admin, l ]
+              %td.type= l.locality_type
