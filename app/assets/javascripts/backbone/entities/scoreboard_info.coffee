@@ -8,11 +8,13 @@
         contests = App.request 'entities:contests'
 
         Entities.scoreboardInfo = new Entities.ScoreboardInfo
-          localityId:     gon.locality_id
-          localityName:   gon.locality_name
-          localityInfo:   gon.locality_info
-          electionInfo:   gon.election_info
-          contest:        contests.first()
+          localityId:       gon.locality_id
+          localityName:     gon.locality_name
+          localityInfo:     gon.locality_info
+          electionInfo:     gon.election_info
+          contest:          contests.first()
+          selectedRegion:   -> "All Precincts"
+          percentReporting: -> 29
 
       Entities.scoreboardInfo
 

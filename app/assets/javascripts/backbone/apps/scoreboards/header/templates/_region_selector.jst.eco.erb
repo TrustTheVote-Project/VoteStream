@@ -1,0 +1,16 @@
+<div class='js-trigger'>
+  <%%= @selectedRegion() %>
+  <%= image_tag "drop-down-arrow.png", class: 'drop-down-arrow' %>
+</div>
+<div class="popover">
+  <div class="popover-content">
+    
+    <ul class="nav nav-tabs">
+      <li class="js-tab-districts active"><a href="#">Districts</a></li>
+      <li class='js-tab-precincts'><a href="#">Precincts</a></li>
+    </ul>
+
+    <div class="popover-body" id="selector-region">
+    </div>
+  </div>
+</div>

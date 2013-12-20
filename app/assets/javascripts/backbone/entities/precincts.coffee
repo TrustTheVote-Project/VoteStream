@@ -11,6 +11,12 @@
     model: Entities.PrecinctsSection
 
   API =
+    getContestPrecincts: ->
+      Entities.contestPrecincts = new Entities.Precincts [
+        { id: 1, name: "Precinct: 1" }
+        { id: 2, name: "Precinct: 2" }
+      ]
+
     getPrecincts: ->
       unless Entities.precincts?
         # TODO: Change this to the real data fetching...
@@ -32,3 +38,4 @@
       Entities.precincts
 
   App.reqres.setHandler 'entities:precincts', -> API.getPrecincts()
+  App.reqres.setHandler 'entities:contestPrecincts', -> API.getContestPrecincts()

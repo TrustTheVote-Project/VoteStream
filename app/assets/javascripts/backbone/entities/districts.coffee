@@ -11,6 +11,12 @@
     model: Entities.DistrictsSection
 
   API =
+    getContestDistricts: ->
+      Entities.contestDistricts = new Entities.Districts [
+        { id: 1, name: "District: 1" }
+        { id: 2, name: "District: 2" }
+      ]
+
     getDistricts: ->
       unless Entities.districts?
         # TODO: Change this to the real data fetching...
@@ -32,3 +38,4 @@
       Entities.districts
 
   App.reqres.setHandler 'entities:districts', -> API.getDistricts()
+  App.reqres.setHandler 'entities:contestDistricts', -> API.getContestDistricts()

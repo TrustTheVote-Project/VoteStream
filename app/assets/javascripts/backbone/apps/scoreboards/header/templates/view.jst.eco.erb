@@ -32,13 +32,11 @@
       </div>
       <div class="span4">
         <label>Select a Region</label>
-        <div class="selection">
-          All Precincts
-          <%= image_tag "drop-down-arrow.png", class: 'drop-down-arrow' %>
+        <div class="selection" id="region-selector-region">
         </div>
       </div>
       <div class="span2 reporting">
-        <span>28% Reporting</span>
+        <span><%%= @percentReporting() %>% Reporting</span>
       </div>
     </div>
   </div>
