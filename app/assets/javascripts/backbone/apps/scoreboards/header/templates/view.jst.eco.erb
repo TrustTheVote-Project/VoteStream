@@ -1,0 +1,46 @@
+<div class="row">
+  <div class="span12 title-bar">
+    <div class="share pull-right">
+      <%= image_tag "share-facebook.png" %>
+      <%= image_tag "share-twitter.png" %>
+      <%= image_tag "share-rss.png" %>
+    </div>
+    <div class="title">
+      <%= image_tag "logo-small.png" %>
+      <h1>Election Night Reporting</h1>
+    </div>
+  </div>
+</div>
+
+<div class="row">
+  <div class="span12 heading-bar">
+    <h1><%%= @localityInfo %></h1>
+    <div id="voting-info">
+      <strong>LIVE Scoreboard</strong>
+      for <%%= @electionInfo %>
+    </div>
+  </div>
+</div>
+
+<div class="row">
+  <div class="span12 filter-bar">
+    <div class="row-fluid">
+      <div class="span6">
+        <label>Select a Race</label>
+        <div class="selection" id="contest-selector-region">
+        </div>
+      </div>
+      <div class="span4">
+        <label>Select a Region</label>
+        <div class="selection">
+          All Precincts
+          <%= image_tag "drop-down-arrow.png", class: 'drop-down-arrow' %>
+        </div>
+      </div>
+      <div class="span2 reporting">
+        <span>28% Reporting</span>
+      </div>
+    </div>
+  </div>
+</div>
+

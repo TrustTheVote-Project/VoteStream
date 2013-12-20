@@ -1,4 +1,4 @@
-@ENRS.module "Entities", (Entities, App, Backbone, Marionette, $, _) ->
+@App.module "Entities", (Entities, App, Backbone, Marionette, $, _) ->
 
   class Entities.District extends Backbone.Model
   class Entities.Districts extends Backbone.Collection
@@ -30,5 +30,5 @@
             { id: 8, name: 'District B' } ] }
         ]
       Entities.districts
-      
+
   App.reqres.setHandler 'entities:districts', -> API.getDistricts()

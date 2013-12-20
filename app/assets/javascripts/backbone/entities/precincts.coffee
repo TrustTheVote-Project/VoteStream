@@ -1,4 +1,4 @@
-@ENRS.module "Entities", (Entities, App, Backbone, Marionette, $, _) ->
+@App.module "Entities", (Entities, App, Backbone, Marionette, $, _) ->
 
   class Entities.Precinct extends Backbone.Model
   class Entities.Precincts extends Backbone.Collection
@@ -30,5 +30,5 @@
             { id: 8, name: 'Precinct Z' } ] }
         ]
       Entities.precincts
-      
+
   App.reqres.setHandler 'entities:precincts', -> API.getPrecincts()
