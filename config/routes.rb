@@ -1,5 +1,7 @@
 Enrs::Application.routes.draw do
   root 'pages#front'
+  get  '/scoreboards'           => 'scoreboards#index', as: 'scoreboards'
+  get  '/scoreboards/:locality' => 'scoreboards#show', as: 'scoreboard'
 
   get '/federal' => 'pages#federal', as: :federal
   get '/state' => 'pages#state'

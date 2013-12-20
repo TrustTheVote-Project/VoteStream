@@ -1,4 +1,4 @@
-@ENRS.module "ResultsApp.Summary.Sidebar", (Sidebar, App, Backbone, Marionette, $, _) ->
+@App.module "ResultsApp.Summary.Sidebar", (Sidebar, App, Backbone, Marionette, $, _) ->
 
   class Sidebar.View extends Marionette.Layout
     template: 'results/summary/sidebar/templates/_view'

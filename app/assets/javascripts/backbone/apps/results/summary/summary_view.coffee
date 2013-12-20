@@ -1,4 +1,4 @@
-@ENRS.module "ResultsApp.Summary", (Summary, App, Backbone, Marionette, $, _) ->
+@App.module "ResultsApp.Summary", (Summary, App, Backbone, Marionette, $, _) ->
   class Summary.Results extends Marionette.ItemView
     template: "results/summary/templates/_results"
     tagName: "section"

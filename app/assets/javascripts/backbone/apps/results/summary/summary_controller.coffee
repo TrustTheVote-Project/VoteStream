@@ -1,4 +1,4 @@
-@ENRS.module "ResultsApp.Summary", (Summary, App, Backbone, Marionette, $, _) ->
+@App.module "ResultsApp.Summary", (Summary, App, Backbone, Marionette, $, _) ->
 
   Summary.Controller =
     showSummary: ->

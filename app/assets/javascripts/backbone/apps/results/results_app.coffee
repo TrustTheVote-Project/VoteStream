@@ -1,4 +1,4 @@
-@ENRS.module "ResultsApp", (ResultsApp, App, Backbone, Marionette, $, _) ->
+@App.module "ResultsApp", (ResultsApp, App, Backbone, Marionette, $, _) ->
 
   API =
     showSummary: ->

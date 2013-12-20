@@ -1,0 +1,7 @@
+.row
+  .span12
+    %h1 Select locality
+
+    %ul
+      - @localities.each do |l|
+        %li= link_to "#{l.state.name} - #{l.name}", scoreboard_path(l)

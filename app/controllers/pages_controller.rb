@@ -1,5 +1,9 @@
 class PagesController < ApplicationController
 
+  def select_locality
+    @localities = Locality.includes(:state).order("states.name, localities.name")
+  end
+
   def state
     @precincts  = (100..164).to_a + (200..279).to_a + (301..379).to_a + (401..463).to_a
     @center     = [ -93.147, 45.005988 ]

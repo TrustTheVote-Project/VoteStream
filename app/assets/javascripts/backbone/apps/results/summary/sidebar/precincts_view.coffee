@@ -1,4 +1,4 @@
-@ENRS.module "ResultsApp.Summary.Sidebar", (Sidebar, App, Backbone, Marionette, $, _) ->
+@App.module "ResultsApp.Summary.Sidebar", (Sidebar, App, Backbone, Marionette, $, _) ->
 
   class Sidebar.PrecinctsItemView extends Marionette.ItemView
     template: "results/summary/sidebar/templates/_precincts_item"
