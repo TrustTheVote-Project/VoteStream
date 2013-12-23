@@ -28,6 +28,8 @@
 
       Entities.contestPrecincts
 
+
+    # unused in new version
     getPrecincts: ->
       unless Entities.precincts?
         # TODO: Change this to the real data fetching...

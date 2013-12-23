@@ -27,7 +27,7 @@
       contestsRegion: '#contests-region'
 
     modelEvents:
-      change: 'render'
+      'change:contest': 'render'
 
     events:
       'click .js-trigger': (e) ->
@@ -66,7 +66,8 @@
     template: 'scoreboards/header/_region_selector'
 
     regions:
-      selectorRegion: '#selector-region'
+      regionLabelRegion: '#region-label-region'
+      selectorRegion:    '#selector-region'
 
     ui:
       popover: '.popover'
@@ -98,10 +99,19 @@
         collection: App.request 'entities:contestPrecincts'
       @.selectorRegion.show @districtsView
 
+      scoreboardInfo = App.request 'entities:scoreboardInfo'
+      @.regionLabelRegion.show new SelectedRegionView
+        model: scoreboardInfo
+
 
   class DistrictView extends Marionette.ItemView
     template: 'scoreboards/header/_district'
     tagName: 'li'
+    events:
+      'click a': (e) ->
+        e.preventDefault()
+        scoreboardInfo = App.request 'entities:scoreboardInfo'
+        scoreboardInfo.set 'region', @model
 
   class DistrictsView extends Marionette.CollectionView
     tagName: 'ul'
@@ -113,7 +123,18 @@
   class PrecinctView extends Marionette.ItemView
     template: 'scoreboards/header/_precinct'
     tagName: 'li'
+    events:
+      'click a': (e) ->
+        e.preventDefault()
+        scoreboardInfo = App.request 'entities:scoreboardInfo'
+        scoreboardInfo.set 'region', @model
 
   class PrecinctsView extends Marionette.CollectionView
     tagName: 'ul'
     itemView: PrecinctView
+
+  class SelectedRegionView extends Marionette.ItemView
+    template: 'scoreboards/header/_selected_region'
+    tagName: 'span'
+    modelEvents:
+      'change:region': 'render'

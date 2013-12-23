@@ -30,6 +30,7 @@
       Entities.contestDistricts
 
 
+    # unused in new version
     getDistricts: ->
       unless Entities.districts?
         # TODO: Change this to the real data fetching...
