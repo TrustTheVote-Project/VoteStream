@@ -20,6 +20,9 @@
   class ContestSelectorView extends Marionette.Layout
     template: 'scoreboards/header/_contest_selector'
 
+    ui:
+      popover: '.popover'
+
     regions:
       contestsRegion: '#contests-region'
 
@@ -29,7 +32,9 @@
     events:
       'click .js-trigger': (e) ->
         e.preventDefault()
-        $(e.target).parents('.selection').find('.popover').toggle()
+        $(".popover").each (i, po) =>
+          $(po).hide() unless po == @ui.popover[0]
+        @ui.popover.toggle()
 
     onShow: ->
       @.contestsRegion.show @contestsView = new ContestsView
@@ -63,20 +68,27 @@
     regions:
       selectorRegion: '#selector-region'
 
+    ui:
+      popover: '.popover'
+      precinctsTab: '.js-tab-precincts'
+      districtsTab: '.js-tab-districts'
+
     events:
       'click .js-trigger': (e) ->
         e.preventDefault()
-        $(e.target).parents('.selection').find('.popover').toggle()
+        $(".popover").each (i, po) =>
+          $(po).hide() unless po == @ui.popover[0]
+        @ui.popover.toggle()
       'click .js-tab-districts': (e) ->
         e.preventDefault()
         @.selectorRegion.show @districtsView
-        $('.js-tab-precincts').removeClass('active')
-        $('.js-tab-districts').addClass('active')
+        @.ui.precinctsTab.removeClass('active')
+        @.ui.districtsTab.addClass('active')
       'click .js-tab-precincts': (e) ->
         e.preventDefault()
         @.selectorRegion.show @precinctsView
-        $('.js-tab-precincts').addClass('active')
-        $('.js-tab-districts').removeClass('active')
+        @.ui.precinctsTab.addClass('active')
+        @.ui.districtsTab.removeClass('active')
         
 
     onShow: ->
