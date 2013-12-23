@@ -107,6 +107,9 @@
     tagName: 'ul'
     itemView: DistrictView
 
+    collectionEvents:
+      all: 'render'
+
   class PrecinctView extends Marionette.ItemView
     template: 'scoreboards/header/_precinct'
     tagName: 'li'

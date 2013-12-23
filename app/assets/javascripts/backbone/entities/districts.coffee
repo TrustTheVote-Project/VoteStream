@@ -3,19 +3,32 @@
   class Entities.District extends Backbone.Model
   class Entities.Districts extends Backbone.Collection
     model: Entities.District
+    fetchForContest: (contest) ->
+      Entities.contestDistricts.fetch
+        url: '/data/districts'
+        data:
+          contest_id: contest.get('id')
 
   class Entities.DistrictsSection extends Backbone.Model
     initialize: ->
       @set('districts', new Entities.Districts(@get('districts')))
+
   class Entities.DistrictsSections extends Backbone.Collection
     model: Entities.DistrictsSection
 
   API =
     getContestDistricts: ->
-      Entities.contestDistricts = new Entities.Districts [
-        { id: 1, name: "District: 1" }
-        { id: 2, name: "District: 2" }
-      ]
+      unless Entities.contestDistricts?
+        scoreboardInfo = App.request "entities:scoreboardInfo"
+
+        Entities.contestDistricts = new Entities.Districts
+        Entities.contestDistricts.fetchForContest scoreboardInfo.get('contest')
+
+        scoreboardInfo.on 'change', ->
+          Entities.contestDistricts.fetchForContest scoreboardInfo.get('contest')
+
+      Entities.contestDistricts
+
 
     getDistricts: ->
       unless Entities.districts?

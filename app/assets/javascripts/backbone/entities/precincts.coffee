@@ -3,6 +3,11 @@
   class Entities.Precinct extends Backbone.Model
   class Entities.Precincts extends Backbone.Collection
     model: Entities.Precinct
+    fetchForContest: (contest) ->
+      Entities.contestPrecincts.fetch
+        url: '/data/precincts'
+        data:
+          contest_id: contest.get('id')
 
   class Entities.PrecinctsSection extends Backbone.Model
     initialize: ->
@@ -12,10 +17,16 @@
 
   API =
     getContestPrecincts: ->
-      Entities.contestPrecincts = new Entities.Precincts [
-        { id: 1, name: "Precinct: 1" }
-        { id: 2, name: "Precinct: 2" }
-      ]
+      unless Entities.contestPrecincts?
+        scoreboardInfo = App.request "entities:scoreboardInfo"
+
+        Entities.contestPrecincts = new Entities.Precincts
+        Entities.contestPrecincts.fetchForContest scoreboardInfo.get('contest')
+
+        scoreboardInfo.on 'change', ->
+          Entities.contestPrecincts.fetchForContest scoreboardInfo.get('contest')
+
+      Entities.contestPrecincts
 
     getPrecincts: ->
       unless Entities.precincts?

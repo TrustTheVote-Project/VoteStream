@@ -17,6 +17,9 @@ Enrs::Application.routes.draw do
     post '/load_definitions' => 'data#load_definitions', as: 'load_definitions'
   end
 
+  get '/data/districts' => 'data#districts'
+  get '/data/precincts' => 'data#precincts'
+
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".
 
