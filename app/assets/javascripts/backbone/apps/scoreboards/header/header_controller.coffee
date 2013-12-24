@@ -7,4 +7,7 @@
       view = new Header.View
         model: App.request('entities:scoreboardInfo')
 
+      App.vent.on 'region:selected', ->
+        view.closePopovers()
+
       App.headerRegion.show view

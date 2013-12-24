@@ -20,6 +20,9 @@
         sb.on 'change:contest', ->
           sb.set 'region', null
 
+        App.vent.on 'region:selected', (region) ->
+          sb.set 'region', region
+
       Entities.scoreboardInfo
 
   App.reqres.setHandler 'entities:scoreboardInfo', -> API.getScoreboardInfo()

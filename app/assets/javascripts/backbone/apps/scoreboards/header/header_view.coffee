@@ -8,12 +8,15 @@
       contestSelectorRegion: '#contest-selector-region'
       regionSelectorRegion:  '#region-selector-region'
 
+    closePopovers: ->
+      @regionSelector.closePopover()
+
     onShow: ->
       scoreboardInfo = App.request "entities:scoreboardInfo"
 
-      @.contestSelectorRegion.show new ContestSelectorView
+      @.contestSelectorRegion.show @contestSelector = new ContestSelectorView
         model: scoreboardInfo
-      @.regionSelectorRegion.show new RegionSelectorView
+      @.regionSelectorRegion.show @regionSelector = new RegionSelectorView
         model: scoreboardInfo
 
 
@@ -28,6 +31,9 @@
 
     modelEvents:
       'change:contest': 'render'
+
+    closePopover: ->
+      @ui.popover.hide()
 
     events:
       'click .js-trigger': (e) ->
@@ -74,6 +80,9 @@
       precinctsTab: '.js-tab-precincts'
       districtsTab: '.js-tab-districts'
 
+    closePopover: ->
+      @ui.popover.hide()
+
     events:
       'click .js-trigger': (e) ->
         e.preventDefault()
@@ -110,8 +119,7 @@
     events:
       'click a': (e) ->
         e.preventDefault()
-        scoreboardInfo = App.request 'entities:scoreboardInfo'
-        scoreboardInfo.set 'region', @model
+        App.vent.trigger 'region:selected', @model
 
   class DistrictsView extends Marionette.CollectionView
     tagName: 'ul'
@@ -126,8 +134,7 @@
     events:
       'click a': (e) ->
         e.preventDefault()
-        scoreboardInfo = App.request 'entities:scoreboardInfo'
-        scoreboardInfo.set 'region', @model
+        App.vent.trigger 'region:selected', @model
 
   class PrecinctsView extends Marionette.CollectionView
     tagName: 'ul'
