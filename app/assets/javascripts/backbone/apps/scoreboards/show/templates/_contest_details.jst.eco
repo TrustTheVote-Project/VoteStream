@@ -1,0 +1,12 @@
+<tr>
+  <th>Locality</th>
+  <td><%= @localityInfo %></td>
+</tr>
+<tr>
+  <th>Contest</th>
+  <td><%= @contest.get('office') %></td>
+</tr>
+<tr>
+  <th>Region</th>
+  <td><%= @regionLabel() %></td>
+</tr>

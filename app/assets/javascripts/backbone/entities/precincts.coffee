@@ -23,7 +23,7 @@
         Entities.contestPrecincts = new Entities.Precincts
         Entities.contestPrecincts.fetchForContest scoreboardInfo.get('contest')
 
-        scoreboardInfo.on 'change', ->
+        scoreboardInfo.on 'change:contest', ->
           Entities.contestPrecincts.fetchForContest scoreboardInfo.get('contest')
 
       Entities.contestPrecincts

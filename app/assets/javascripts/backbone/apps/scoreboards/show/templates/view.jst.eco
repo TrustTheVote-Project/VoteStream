@@ -1,1 +1,7 @@
-Main view
+<div class="row">
+  <div class="span6" id="contest-details-region"></div>
+  <div class="span6">
+    <h4>Precincts</h4>
+    <div id="precincts-list-region"></div>
+  </div>
+</div>

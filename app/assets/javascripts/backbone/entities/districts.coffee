@@ -24,7 +24,7 @@
         Entities.contestDistricts = new Entities.Districts
         Entities.contestDistricts.fetchForContest scoreboardInfo.get('contest')
 
-        scoreboardInfo.on 'change', ->
+        scoreboardInfo.on 'change:contest', ->
           Entities.contestDistricts.fetchForContest scoreboardInfo.get('contest')
 
       Entities.contestDistricts

@@ -2,7 +2,5 @@
 
   Show.Controller =
     show: ->
-      console.log 'show.show'
-
       view = new Show.View
       App.mainRegion.show view
