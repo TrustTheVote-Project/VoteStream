@@ -19,6 +19,7 @@ Enrs::Application.routes.draw do
 
   get '/data/districts' => 'data#districts'
   get '/data/precincts' => 'data#precincts'
+  get '/data/precincts_geometries' => 'data#precincts_geometries'
 
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".

@@ -7,11 +7,13 @@
     mainRegion: "#main-region"
 
   App.addInitializer ->
-    App.module("HeaderApp").start()
-    App.module("ScoreboardApp").start()
+    App.module("ScoreboardsApp").start()
 
-  App.on "initialize:after", ->
-    if Backbone.history
-      Backbone.history.start()
+    # Start loading geometries on launch
+    App.request 'entities:precinctsGeometries'
+
+  # App.on "initialize:after", ->
+  #   if Backbone.history
+  #     Backbone.history.start()
 
   App

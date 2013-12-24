@@ -4,7 +4,7 @@
   class Entities.Precincts extends Backbone.Collection
     model: Entities.Precinct
     fetchForContest: (contest) ->
-      Entities.contestPrecincts.fetch
+      @fetch
         url: '/data/precincts'
         data:
           contest_id: contest.get('id')

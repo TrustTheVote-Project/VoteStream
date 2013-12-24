@@ -12,4 +12,9 @@ class DataController < ApplicationController
     render json: precincts.map { |p| { id: p.id, name: p.name } }
   end
 
+  def precincts_geometries
+    locality = Locality.find(params[:locality_id])
+    render json: locality.precincts.map { |p| { id: p.id, kml: p.kml } }
+  end
+
 end

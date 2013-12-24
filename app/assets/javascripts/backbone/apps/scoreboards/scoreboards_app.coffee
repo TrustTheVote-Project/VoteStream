@@ -1,4 +1,5 @@
 @App.module "ScoreboardsApp", (ScoreboardsApp, App, Backbone, Marionette, $, _) ->
+  @startWithParent = false
 
   API =
     showScoreboard: ->
