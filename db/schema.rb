@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20131224081947) do
+ActiveRecord::Schema.define(version: 20131224133144) do
 
   create_table "candidates", force: true do |t|
     t.string  "uid",        null: false
@@ -90,6 +90,7 @@ ActiveRecord::Schema.define(version: 20131224081947) do
     t.string  "uid",         null: false
     t.string  "name",        null: false
     t.text    "kml"
+    t.integer "total_cast"
   end
 
   add_index "precincts", ["locality_id"], name: "index_precincts_on_locality_id", using: :btree
@@ -103,5 +104,14 @@ ActiveRecord::Schema.define(version: 20131224081947) do
 
   add_index "states", ["code"], name: "index_states_on_code", unique: true, using: :btree
   add_index "states", ["uid"], name: "index_states_on_uid", unique: true, using: :btree
+
+  create_table "voting_results", force: true do |t|
+    t.integer "candidate_id"
+    t.integer "precinct_id"
+    t.integer "votes"
+  end
+
+  add_index "voting_results", ["candidate_id"], name: "index_voting_results_on_candidate_id", using: :btree
+  add_index "voting_results", ["precinct_id"], name: "index_voting_results_on_precinct_id", using: :btree
 
 end

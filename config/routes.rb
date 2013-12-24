@@ -15,6 +15,7 @@ Enrs::Application.routes.draw do
 
     get  '/data' => 'data#index', as: 'data'
     post '/load_definitions' => 'data#load_definitions', as: 'load_definitions'
+    post '/load_results' => 'data#load_results', as: 'load_results'
   end
 
   get '/data/districts' => 'data#districts'

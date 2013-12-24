@@ -6,6 +6,7 @@ describe DataLoader do
     let(:state_mn) { State.find_by(code: "MN") }
     let(:county) { state_mn.localities.first }
     let(:contest) { county.contests.find_by_uid("2012-11-06-120000000027-123-0101") }
+    let(:referendum) { county.contests.find_by_uid("2012-11-06-120000000027-123-0351") }
     let(:candidate) { contest.candidates.find_by_uid("0101-0301") }
 
     before(:all) do
@@ -17,6 +18,7 @@ describe DataLoader do
 
     after(:all) do
       State.where(code: "MN").destroy_all
+      District.destroy_all
     end
 
     it 'should add locality' do
@@ -64,11 +66,20 @@ describe DataLoader do
     end
 
     it 'should add contests' do
-      expect(county.contests.count).to eq 55
+      expect(county.contests.count).to eq 58
 
       expect(contest.office).to       eq "U.S. President & Vice President"
       expect(contest.sort_order).to   eq "0101"
       expect(contest.district.uid).to eq "US-SN-MN"
+    end
+
+    it 'should add referendums' do
+      expect(referendum.office).to    eq "Constitutional Amendment 1"
+      expect(referendum.sort_order).to eq "0351"
+      expect(referendum.district.uid).to eq "US-ST-MN"
+
+      expect(referendum.candidates.map { |c| [ c.uid, c.name, c.sort_order ] }).to eq \
+        [ [ "0351-9001", "YES", 1 ], [ "0351-9002", "NO", 2 ] ]
     end
 
     it 'should add candidates' do

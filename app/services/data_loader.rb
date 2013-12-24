@@ -108,10 +108,10 @@ class DataLoader
     return if @doc.css('vip_object > state > locality > contest').size == 0
 
     for_each_contest do |contest_el, contest|
-      contest_el.css("> candidate").each do |candidate_el|
+      contest_el.css("candidate, ballot_response").each do |candidate_el|
         uid        = candidate_el['id']
-        name       = dequote(candidate_el.css('> name').first.content)
-        party      = dequote(candidate_el.css('> party').first.content)
+        name       = dequote(candidate_el.css('name, text').first.content)
+        party      = dequote(candidate_el.css('> party').first.try(:content))
         sort_order = dequote(candidate_el.css('> sort_order').first.content)
 
         contest.candidates.create_with(name: name, party: party, sort_order: sort_order).find_or_create_by(uid: uid)
@@ -121,10 +121,10 @@ class DataLoader
 
   def for_each_contest(&block)
     for_each_locality do |locality_el, locality|
-      locality_el.css("> contest").each do |contest_el|
+      locality_el.css("contest, referendum").each do |contest_el|
         uid        = contest_el['id']
-        office     = dequote(contest_el.css("> office").first.content)
-        sort_order = dequote(contest_el.css("> sort_order").first.content)
+        office     = dequote(contest_el.css("office, title").first.content)
+        sort_order = dequote(contest_el.css("sort_order").first.content)
         district_id = contest_el.css("> electoral_district").first['id']
         district   = District.find_by_uid(district_id)
         if district

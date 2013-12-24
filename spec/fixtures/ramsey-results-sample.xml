@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="utf-8"?>
+<vip_object xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" schemaVersion="2.1">
+  <source id="100000000000">
+    <name>State of Minnesota</name>
+    <vip_id>27</vip_id>
+    <datetime>2010-10-19T20:33:19</datetime>
+	<description>Ramsey County Elections is the official source of election results. This feed provides unofficial informational vote tallies on an election in progress.</description>
+    <organization_url>http://www.sos.state.mn.us/</organization_url>
+  </source>
+  <election id="2012-11-06-120000000027-123">
+    <date>2012-11-02</date>
+    <election_type>Federal</election_type>
+    <state_id>120000000027</state_id>
+    <statewide>YES</statewide>
+  </election>
+  <state id="120000000027">
+    <name>State of Minnesota</name>
+      <locality id="120000000027-123">
+        <name>RAMSEY COUNTY</name>
+        <type>COUNTY</type>
+          <precinct id="271230010"> 
+            <name>ARDEN HILLS P-1</name>
+            <ballot id="2012-11-06-120000000027-123-271230010">
+              <name>Ramsey-County-MN-November-2012-Federal-ARDEN HILLS P-1</name> 
+              <scope>Precinct-Partial</scope>
+              <total_cast>2173</total_cast>
+            </ballot>
+            <contest id="2012-11-06-120000000027-123-0101">
+              <office>U.S. President &amp; Vice President</office>
+              <candidate id="0101-0301"> 
+                <name>MITT ROMNEY AND PAUL RYAN</name>
+                <ballot_line_result id="0101-0301-271230010"> 
+                  <votes>962</votes>
+                </ballot_line_result>
+              </candidate>	
+              <candidate id="0101-0401"> 
+                <name>BARACK OBAMA AND JOE BIDEN</name>
+                <ballot_line_result id="0101-0401-271230010"> 
+                  <votes>1146</votes>
+                </ballot_line_result>
+              </candidate>	
+              <candidate id="0101-0501"> 
+                <name>GARY JOHNSON AND JIM GRAY</name>
+                <ballot_line_result id="0101-0501-271230010"> 
+                  <votes>22</votes>
+                </ballot_line_result>
+              </candidate>	
+              <candidate id="0101-0601"> 
+                <name>JAMES HARRIS AND MAURA DELUCA</name>
+                <ballot_line_result id="0101-0601-271230010"> 
+                  <votes>1</votes>
+                </ballot_line_result>
+              </candidate>	
+              <candidate id="0101-0701"> 
+                <name>VIRGIL GOODE AND JIM CLYMER</name>
+                <ballot_line_result id="0101-0701-271230010"> 
+                  <votes>2</votes>
+                </ballot_line_result>
+              </candidate>	
+              <candidate id="0101-0801"> 
+                <name>DEAN MORSTAD AND JOSH FRANKE-HYLAND</name>
+                <ballot_line_result id="0101-0801-271230010"> 
+                  <votes>0</votes>
+                </ballot_line_result>
+              </candidate>	
+              <candidate id="0101-0901"> 
+                <name>JILL STEIN AND CHERI HONKALA</name>
+                <ballot_line_result id="0101-0901-271230010"> 
+                  <votes>14</votes>
+                </ballot_line_result>
+              </candidate>	
+              <candidate id="0101-1001"> 
+                <name>JIM CARLSON AND GEORGE MCMAHON</name>
+                <ballot_line_result id="0101-1001-271230010"> 
+                  <votes>1</votes>
+                </ballot_line_result>
+              </candidate>	
+              <candidate id="0101-1401"> 
+                <name>PETA LINDSAY AND YARI OSORIO</name>
+                <ballot_line_result id="0101-1401-271230010"> 
+                  <votes>0</votes>
+                </ballot_line_result>
+              </candidate>	
+              <candidate id="0101-1501"> 
+                <name>ROSS C. "ROCKY" ANDERSON AND LUIS J. RODRIGUEZ</name>
+                <ballot_line_result id="0101-1501-271230010"> 
+                  <votes>1</votes>
+                </ballot_line_result>
+              </candidate>	
+              <candidate id="0101-9901"> 
+                <name>WRITE-IN**</name>
+                <ballot_line_result id="0101-9901-271230010"> 
+                  <votes>14</votes>
+                </ballot_line_result>
+              </candidate>	
+            </contest>
+          </precinct> <!-- VTD 271231780 ends -->
+	</locality>	
+    </state>
+</vip_object>
