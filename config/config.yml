@@ -1,6 +1,9 @@
 google_maps:
   browser_key: AIzaSyDVK21ipXemMEdvJohRr_XXyrvMtsHhCwc
 
+# when TRUE rejects imperfect XML files
+enable_strict_vipplus_parsing: true
+
 party_colors:
   default:  "#888888"
   CG:       "#555555"
@@ -20,3 +23,5 @@ admin:
   user: enrsadmin
   pass: enrs23operations$2
 
+development:
+  enable_strict_vipplus_parsing: false
