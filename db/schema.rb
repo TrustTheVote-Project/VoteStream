@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20131217130427) do
+ActiveRecord::Schema.define(version: 20131224081947) do
 
   create_table "candidates", force: true do |t|
     t.string  "uid",        null: false
@@ -89,6 +89,7 @@ ActiveRecord::Schema.define(version: 20131217130427) do
     t.integer "locality_id"
     t.string  "uid",         null: false
     t.string  "name",        null: false
+    t.text    "kml"
   end
 
   add_index "precincts", ["locality_id"], name: "index_precincts_on_locality_id", using: :btree
