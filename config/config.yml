@@ -25,3 +25,6 @@ admin:
 
 development:
   enable_strict_vipplus_parsing: false
+
+test:
+  enable_strict_vipplus_parsing: false

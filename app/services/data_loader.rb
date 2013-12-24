@@ -1,8 +1,11 @@
 class DataLoader
 
+  class InvalidFormat < StandardError; end
+
   def initialize(xml_source)
     @xml_source = xml_source
     @doc = Nokogiri::XML(xml_source)
+    @doc.remove_namespaces!
     @districts = {}
   end
 
@@ -62,7 +65,13 @@ class DataLoader
       locality_el.css('precinct').each do |precinct_el|
         uid      = precinct_el['id']
         name     = dequote(precinct_el.css('> name').first.content)
-        precinct = locality.precincts.create_with(name: name).find_or_create_by(uid: uid)
+        kml      = precinct_el.css('> geometry kml coordinates').first.try(:content)
+
+        if kml.blank?
+          raise_strict InvalidFormat.new("Precinct #{uid} has no geometry KML")
+        end
+
+        precinct = locality.precincts.create_with(name: name, kml: kml).find_or_create_by(uid: uid)
 
         precinct_el.css('> electoral_district_id').each do |electoral_district_id_el|
           uid = electoral_district_id_el.content
@@ -116,10 +125,14 @@ class DataLoader
         uid        = contest_el['id']
         office     = dequote(contest_el.css("> office").first.content)
         sort_order = dequote(contest_el.css("> sort_order").first.content)
-        district   = find_or_create_district(contest_el.css("> electoral_district").first)
-        contest    = locality.contests.create_with(office: office, sort_order: sort_order, district: district).find_or_create_by(uid: uid)
-
-        block.call(contest_el, contest)
+        district_id = contest_el.css("> electoral_district").first['id']
+        district   = District.find_by_uid(district_id)
+        if district
+          contest    = locality.contests.create_with(office: office, sort_order: sort_order, district: district).find_or_create_by(uid: uid)
+          block.call(contest_el, contest)
+        else
+          raise_strict InvalidFormat.new("District with ID '#{district_id}' was not found")
+        end
       end
     end
   end
@@ -134,4 +147,11 @@ class DataLoader
     v.blank? ? v : v.gsub(/(^["']|["']$)/, '')
   end
 
+  def raise_strict(ex)
+    if AppConfig['enable_strict_vipplus_parsing']
+      raise ex
+    else
+      Rails.logger.error ex.message
+    end
+  end
 end
