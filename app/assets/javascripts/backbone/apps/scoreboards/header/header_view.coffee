@@ -91,22 +91,25 @@
         @ui.popover.toggle()
       'click .js-tab-districts': (e) ->
         e.preventDefault()
-        @.selectorRegion.show @districtsView
-        @.ui.precinctsTab.removeClass('active')
-        @.ui.districtsTab.addClass('active')
+        @showDistrictsView()
       'click .js-tab-precincts': (e) ->
         e.preventDefault()
-        @.selectorRegion.show @precinctsView
-        @.ui.precinctsTab.addClass('active')
-        @.ui.districtsTab.removeClass('active')
-        
+        @showPrecinctsView()
+
+    showDistrictsView: ->
+      @.ui.precinctsTab.removeClass('active')
+      @.ui.districtsTab.addClass('active')
+      @.selectorRegion.show new DistrictsView
+        collection: App.request 'entities:contestDistricts'
+
+    showPrecinctsView: ->
+      @.ui.precinctsTab.addClass('active')
+      @.ui.districtsTab.removeClass('active')
+      @.selectorRegion.show new PrecinctsView
+        collection: App.request 'entities:contestPrecincts'
 
     onShow: ->
-      @districtsView = new DistrictsView
-        collection: App.request 'entities:contestDistricts'
-      @precinctsView = new PrecinctsView
-        collection: App.request 'entities:contestPrecincts'
-      @.selectorRegion.show @districtsView
+      @showDistrictsView()
 
       scoreboardInfo = App.request 'entities:scoreboardInfo'
       @.regionLabelRegion.show new SelectedRegionView
@@ -126,7 +129,7 @@
     itemView: DistrictView
 
     collectionEvents:
-      all: 'render'
+      reset: 'render'
 
   class PrecinctView extends Marionette.ItemView
     template: 'scoreboards/header/_precinct'

@@ -88,6 +88,18 @@
               fillColor: fillColor
               fillOpacity: fillOpacity
 
+          google.maps.event.addListener poly, 'mouseover', ->
+            # return if this == selectedPolygon
+            @setOptions
+              fillColor:   hoverFillColor
+              fillOpacity: hoverFillOpacity
+
+          google.maps.event.addListener poly, 'mouseout', ->
+            # return if this == selectedPolygon
+            @setOptions
+              fillColor:   fillColor
+              fillOpacity: fillOpacity
+
           @polygons.push poly
           poly.setMap @map
 

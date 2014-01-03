@@ -16,15 +16,22 @@
         data: filter
 
   API =
+    reloadVotingResults: ->
+      scoreboardInfo = App.request "entities:scoreboardInfo"
+      Entities.votingResults.fetchForContest scoreboardInfo.get('contest'), scoreboardInfo.get('region')
+
     getVotingResults: ->
       unless Entities.votingResults?
         scoreboardInfo = App.request "entities:scoreboardInfo"
 
-        Entities.votingResults = vr = new Entities.VotingResults
-        vr.fetchForContest scoreboardInfo.get('contest'), scoreboardInfo.get('region')
+        Entities.votingResults = new Entities.VotingResults
+        API.reloadVotingResults()
+
+        scoreboardInfo.on 'change:contest', ->
+          API.reloadVotingResults() unless scoreboardInfo.get('region')?
 
         scoreboardInfo.on 'change:region', ->
-          vr.fetchForContest scoreboardInfo.get('contest'), scoreboardInfo.get('region')
+          API.reloadVotingResults()
 
       Entities.votingResults
 

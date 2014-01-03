@@ -6,6 +6,7 @@
     fetchForContest: (contest) ->
       Entities.contestDistricts.fetch
         url: '/data/districts'
+        reset: true
         data:
           contest_id: contest.get('id')
 
