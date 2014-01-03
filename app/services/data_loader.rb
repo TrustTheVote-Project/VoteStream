@@ -105,7 +105,7 @@ class DataLoader
   end
 
   def load_candidates
-    return if @doc.css('vip_object > state > locality > contest').size == 0
+    return if @doc.css('vip_object > contest').size == 0
 
     for_each_contest do |contest_el, contest|
       contest_el.css("candidate, ballot_response").each do |candidate_el|
@@ -120,19 +120,17 @@ class DataLoader
   end
 
   def for_each_contest(&block)
-    for_each_locality do |locality_el, locality|
-      locality_el.css("contest, referendum").each do |contest_el|
-        uid        = contest_el['id']
-        office     = dequote(contest_el.css("office, title").first.content)
-        sort_order = dequote(contest_el.css("sort_order").first.content)
-        district_id = contest_el.css("> electoral_district").first['id']
-        district   = District.find_by_uid(district_id)
-        if district
-          contest    = locality.contests.create_with(office: office, sort_order: sort_order, district: district).find_or_create_by(uid: uid)
-          block.call(contest_el, contest)
-        else
-          raise_strict InvalidFormat.new("District with ID '#{district_id}' was not found")
-        end
+    @doc.css("vip_object > contest, vip_object > referendum").each do |contest_el|
+      uid        = contest_el['id']
+      office     = dequote(contest_el.css("office, title").first.content)
+      sort_order = dequote(contest_el.css("sort_order").first.content)
+      district_id = contest_el.css("> electoral_district").first['id']
+      district   = District.find_by_uid(district_id)
+      if district
+        contest    = Contest.create_with(office: office, sort_order: sort_order, district: district).find_or_create_by(uid: uid)
+        block.call(contest_el, contest)
+      else
+        raise_strict InvalidFormat.new("District with ID '#{district_id}' was not found")
       end
     end
   end

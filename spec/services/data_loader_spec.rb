@@ -5,12 +5,13 @@ describe DataLoader do
   context 'Election Definition parsing' do
     let(:state_mn) { State.find_by(code: "MN") }
     let(:county) { state_mn.localities.first }
-    let(:contest) { county.contests.find_by_uid("2012-11-06-120000000027-123-0101") }
-    let(:referendum) { county.contests.find_by_uid("2012-11-06-120000000027-123-0351") }
+    let(:contest) { Contest.find_by_uid("2012-11-06-120000000027-123-0101") }
+    let(:referendum) { Contest.find_by_uid("2012-11-06-120000000027-123-0351") }
     let(:candidate) { contest.candidates.find_by_uid("0101-0301") }
 
     before(:all) do
       District.destroy_all
+      Contest.destroy_all
       State.create_with(uid: "120000000027", name: "State of Minnesota").find_or_create_by(code: "MN")
       l = DataLoader.new(fixture('RamseyCounty2012Definition.xml'))
       l.load
@@ -19,6 +20,7 @@ describe DataLoader do
     after(:all) do
       State.where(code: "MN").destroy_all
       District.destroy_all
+      Contest.destroy_all
     end
 
     it 'should add locality' do
@@ -66,7 +68,7 @@ describe DataLoader do
     end
 
     it 'should add contests' do
-      expect(county.contests.count).to eq 58
+      expect(Contest.count).to eq 61
 
       expect(contest.office).to       eq "U.S. President & Vice President"
       expect(contest.sort_order).to   eq "0101"

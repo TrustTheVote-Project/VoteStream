@@ -19,7 +19,7 @@ class DataController < ApplicationController
 
   def voting_results
     contest = Contest.find(params[:contest_id])
-    precincts = contest.locality.precincts
+    precincts = contest.district.precincts
     precincts = precincts.joins(:districts).where(districts: { id: params[:district_id] }) if params[:district_id].present?
     precincts = precincts.where(id: params[:precinct_id]) if params[:precinct_id].present?
 

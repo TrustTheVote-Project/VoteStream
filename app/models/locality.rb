@@ -3,7 +3,6 @@ class Locality < ActiveRecord::Base
   COUNTY = "COUNTY"
 
   belongs_to :state
-  has_many   :contests, dependent: :destroy
   has_many   :precincts, dependent: :destroy
 
   validates :uid, presence: true
