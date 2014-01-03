@@ -4,6 +4,8 @@ class Locality < ActiveRecord::Base
 
   belongs_to :state
   has_many   :precincts, dependent: :destroy
+  has_many   :districts, through: :precincts
+  has_many   :contests, through: :districts
 
   validates :uid, presence: true
   validates :name, presence: true
