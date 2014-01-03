@@ -2,6 +2,6 @@
   <div class="span6" id="contest-details-region"></div>
   <div class="span6">
     <h4>Precincts</h4>
-    <div id="precincts-list-region"></div>
+    <div id="map-region"></div>
   </div>
 </div>

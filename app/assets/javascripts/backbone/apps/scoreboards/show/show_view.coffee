@@ -6,12 +6,13 @@
     regions:
       contestDetailsRegion: '#contest-details-region'
       precinctsListRegion: '#precincts-list-region'
+      mapRegion: '#map-region'
 
     onShow: ->
       @.contestDetailsRegion.show new ContestDetailsView
         model: App.request 'entities:scoreboardInfo'
-      @.precinctsListRegion.show new PrecinctsView
-        collection: App.request 'entities:votingResults'
+      @.mapRegion.show new Show.MapView
+        results: App.request 'entities:votingResults'
 
   class ContestDetailsView extends Marionette.ItemView
     template: 'scoreboards/show/_contest_details'
@@ -19,12 +20,4 @@
     className: 'table'
     modelEvents:
       'change:contest change:region': 'render'
-
-  class PrecinctView extends Marionette.ItemView
-    template: 'scoreboards/show/_precinct'
-    tagName: 'li'
-
-  class PrecinctsView extends Marionette.CollectionView
-    tagName: 'ul'
-    itemView: PrecinctView
 

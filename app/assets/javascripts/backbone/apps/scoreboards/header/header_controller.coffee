@@ -2,8 +2,6 @@
 
   Header.Controller =
     show: ->
-      console.log 'header.show'
-
       view = new Header.View
         model: App.request('entities:scoreboardInfo')
 
