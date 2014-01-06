@@ -24,7 +24,12 @@
     template: 'scoreboards/header/_contest_selector'
 
     ui:
-      popover: '.popover'
+      popover:      '.popover'
+      tabReferenda: '.js-tab-referenda'
+      tabFederal:   '.js-tab-federal'
+      tabState:     '.js-tab-state'
+      tabLocal:     '.js-tab-local'
+      tabOther:     '.js-tab-other'
 
     regions:
       contestsRegion: '#contests-region'
@@ -42,13 +47,28 @@
           $(po).hide() unless po == @ui.popover[0]
         @ui.popover.toggle()
 
-    showContests: (type) ->
+      'click .js-tab-referenda': (e) -> @showCategory 'referenda', @ui.tabReferenda, e
+      'click .js-tab-federal': (e) -> @showCategory 'federal', @ui.tabFederal, e
+      'click .js-tab-state': (e) -> @showCategory 'state', @ui.tabState, e
+      'click .js-tab-local': (e) -> @showCategory 'local', @ui.tabLocal, e
+      'click .js-tab-other': (e) -> @showCategory 'other', @ui.tabOther, e
+
+    showCategory: (type, tab, e) ->
+      e.preventDefault() if e?
+
+      for t in @tabs
+        if t == tab
+          t.addClass 'active'
+        else
+          t.removeClass 'active'
+
       contests = App.request "entities:contests:#{type}"
       @.contestsRegion.show new ContestsView
         collection: contests
 
     onShow: ->
-      @showContests 'federal'
+      @tabs = [ @ui.tabReferenda, @ui.tabFederal, @ui.tabState, @ui.tabLocal, @ui.tabOther ]
+      @showCategory 'referenda', @ui.tabReferenda
 
     onRender: ->
       if @contestsView

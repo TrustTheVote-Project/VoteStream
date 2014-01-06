@@ -9,9 +9,6 @@
   App.addInitializer ->
     App.module("ScoreboardsApp").start()
 
-    # Start loading geometries on launch
-    App.request 'entities:precinctsGeometries'
-
   # App.on "initialize:after", ->
   #   if Backbone.history
   #     Backbone.history.start()

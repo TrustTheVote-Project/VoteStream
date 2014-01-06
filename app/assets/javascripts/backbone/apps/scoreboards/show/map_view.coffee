@@ -4,16 +4,42 @@
     template: 'scoreboards/show/_map'
     id: 'map'
 
-    initialize: (options = {}) ->
-      throw new Error 'Results are required' unless options.results
-      @results = options.results
+    initialize: ->
       @polygons = []
+
+      si = App.request 'entities:scoreboardInfo'
+      si.on 'change:region', =>
+        @highlightRegion si.get('region')
+
+    highlightPolygon: (p) ->
+      p.data.highlighted = true
+      p.setOptions
+        fillColor:   p.data.highlightColor
+        fillOpacity: p.data.highlightOpacity
+
+    unhighlightPolygon: (p) ->
+      p.data.highlighted = false
+      p.setOptions
+        fillColor:   p.data.fillColor
+        fillOpacity: p.data.fillOpacity
+
+    highlightRegion: (region) ->
+      if !region?
+        pids = 'all'
+      else if region instanceof App.Entities.District
+        pids = region.get('pids')
+      else
+        pids = [ region.get('id') ]
+
+      for p in @polygons
+        if pids == 'all' or pids.indexOf(p.data.precinctId) != -1
+          @highlightPolygon p
+        else
+          @unhighlightPolygon p
 
     onShow: ->
       @initMap()
-
-      @results.on 'reset', =>
-        @renderResults()
+      @renderPrecincts()
 
     initMap: ->
       center = new google.maps.LatLng gon.mapCenterLat, gon.mapCenterLon
@@ -55,17 +81,17 @@
       poly.setMap(null) for poly in @polygons
       @polygons = []
 
-    renderResults: ->
-      geos = App.request 'entities:precinctsGeometries'
-      App.execute 'when:fetched', [ geos, @results ], =>
+    renderPrecincts: ->
+      precincts = App.request 'entities:precincts'
+      App.execute 'when:fetched', precincts, =>
         @removePreviousPolygons()
 
         bounds = new google.maps.LatLngBounds()
 
-        for result in @results.models
+        for result in precincts.models
           precinctId = result.get 'id'
-          geo = geos.get precinctId
-          kml = geo.get('kml')
+          precinct = precincts.get precinctId
+          kml = precinct.get('kml')
 
           points = @pointsFromKml(kml)
           bounds.extend(point) for point in points
@@ -74,8 +100,8 @@
           fillOpacity      = 0.3
           hoverFillColor   = fillColor
           hoverFillOpacity = 0.5
-          clickFillColor   = '#cccc00'
-          clickFillOpacity = 0.8
+          highlightColor   = '#cccc00'
+          highlightOpacity = 0.8
 
           poly = new google.maps.Polygon
             paths:          points,
@@ -85,8 +111,11 @@
             fillColor:      fillColor
             fillOpacity:    fillOpacity
             data:
-              fillColor: fillColor
+              fillColor:   fillColor
               fillOpacity: fillOpacity
+              precinctId:  precinctId
+              highlightColor: highlightColor
+              highlightOpacity: highlightOpacity
 
           google.maps.event.addListener poly, 'mouseover', ->
             # return if this == selectedPolygon
@@ -96,11 +125,13 @@
 
           google.maps.event.addListener poly, 'mouseout', ->
             # return if this == selectedPolygon
+            hl = @.data.highlighted
             @setOptions
-              fillColor:   fillColor
-              fillOpacity: fillOpacity
+              fillColor:   if hl then @.data.highlightColor else @.data.fillColor
+              fillOpacity: if hl then @.data.highlightOpacity else @.data.fillOpacity
 
           @polygons.push poly
           poly.setMap @map
 
         @map.fitBounds bounds
+        @highlightRegion null

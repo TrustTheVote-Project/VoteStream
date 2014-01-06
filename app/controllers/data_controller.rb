@@ -10,7 +10,8 @@ class DataController < ApplicationController
       districts = locality.districts
     end
 
-    render json: districts.map { |d| { id: d.id, name: d.name } }
+    districts = districts.includes(:precincts)
+    render json: districts.map { |d| { id: d.id, name: d.name, pids: d.precinct_ids } }
   end
 
   def precincts
@@ -23,7 +24,7 @@ class DataController < ApplicationController
       precincts = locality.precincts
     end
 
-    render json: precincts.map { |p| { id: p.id, name: p.name } }
+    render json: precincts.map { |p| { id: p.id, name: p.name, kml: p.kml } }
   end
 
   def precincts_geometries
