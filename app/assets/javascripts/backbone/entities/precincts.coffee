@@ -3,6 +3,12 @@
   class Entities.Precinct extends Backbone.Model
   class Entities.Precincts extends Backbone.Collection
     model: Entities.Precinct
+    fetchForLocality: (localityId) ->
+      @fetch
+        url: '/data/precincts'
+        data:
+          locality_id: localityId
+
     fetchForContest: (contest) ->
       @fetch
         url: '/data/precincts'
@@ -29,25 +35,11 @@
       Entities.contestPrecincts
 
 
-    # unused in new version
     getPrecincts: ->
       unless Entities.precincts?
-        # TODO: Change this to the real data fetching...
-
-        Entities.precincts = new Entities.PrecinctsSections [
-          { id: 1, section: 'Precincts A-M', precincts: [
-            { id: 1, name: 'Precinct A' },
-            { id: 2, name: 'Precinct B' } ] }
-          { id: 2, section: 'Precincts N-S', precincts: [
-            { id: 3, name: 'Precinct N' },
-            { id: 4, name: 'Precinct O' },
-            { id: 5, name: 'Precinct P' } ] }
-          { id: 3, section: 'St. Paul', precincts: [
-            { id: 6, name: 'St. Paul' } ] }
-          { id: 4, section: 'Precincts T-Z', precincts: [
-            { id: 7, name: 'Precinct Y' },
-            { id: 8, name: 'Precinct Z' } ] }
-        ]
+        scoreboardInfo = App.request "entities:scoreboardInfo"
+        Entities.precincts = new Entities.Precincts
+        Entities.precincts.fetchForLocality(scoreboardInfo.get('localityId'))
       Entities.precincts
 
   App.reqres.setHandler 'entities:precincts', -> API.getPrecincts()

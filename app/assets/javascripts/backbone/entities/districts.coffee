@@ -3,8 +3,15 @@
   class Entities.District extends Backbone.Model
   class Entities.Districts extends Backbone.Collection
     model: Entities.District
+    fetchForLocality: (localityId) ->
+      @fetch
+        url: '/data/districts'
+        reset: true
+        data:
+          locality_id: localityId
+
     fetchForContest: (contest) ->
-      Entities.contestDistricts.fetch
+      @fetch
         url: '/data/districts'
         reset: true
         data:
@@ -31,25 +38,13 @@
       Entities.contestDistricts
 
 
-    # unused in new version
     getDistricts: ->
       unless Entities.districts?
-        # TODO: Change this to the real data fetching...
+        scoreboardInfo = App.request "entities:scoreboardInfo"
 
-        Entities.districts = new Entities.DistrictsSections [
-          { id: 1, section: 'Federal Districts', districts: [
-            { id: 1, name: 'District A' },
-            { id: 2, name: 'District B' } ] }
-          { id: 2, section: 'State Districts', districts: [
-            { id: 3, name: 'District A' },
-            { id: 4, name: 'District B' } ] }
-          { id: 3, section: 'County Districts', districts: [
-            { id: 5, name: 'District A' },
-            { id: 6, name: 'District B' } ] }
-          { id: 4, section: 'Local Districts', districts: [
-            { id: 7, name: 'District A' },
-            { id: 8, name: 'District B' } ] }
-        ]
+        Entities.districts = new Entities.Districts
+        Entities.districts.fetchForLocality(scoreboardInfo.get('localityId'))
+
       Entities.districts
 
   App.reqres.setHandler 'entities:districts', -> API.getDistricts()

@@ -76,7 +76,8 @@
       selectorRegion:    '#selector-region'
 
     ui:
-      popover: '.popover'
+      popover:      '.popover'
+      allTab:       '.js-tab-all'
       precinctsTab: '.js-tab-precincts'
       districtsTab: '.js-tab-districts'
 
@@ -95,26 +96,44 @@
       'click .js-tab-precincts': (e) ->
         e.preventDefault()
         @showPrecinctsView()
+      'click .js-tab-all': (e) ->
+        e.preventDefault()
+        @showAllView()
 
     showDistrictsView: ->
-      @.ui.precinctsTab.removeClass('active')
       @.ui.districtsTab.addClass('active')
+      @.ui.precinctsTab.removeClass('active')
+      @.ui.allTab.removeClass('active')
       @.selectorRegion.show new DistrictsView
-        collection: App.request 'entities:contestDistricts'
+        collection: App.request 'entities:districts'
 
     showPrecinctsView: ->
       @.ui.precinctsTab.addClass('active')
       @.ui.districtsTab.removeClass('active')
+      @.ui.allTab.removeClass('active')
       @.selectorRegion.show new PrecinctsView
-        collection: App.request 'entities:contestPrecincts'
+        collection: App.request 'entities:precincts'
+
+    showAllView: ->
+      @.ui.allTab.addClass('active')
+      @.ui.districtsTab.removeClass('active')
+      @.ui.precinctsTab.removeClass('active')
+      @.selectorRegion.show new AllPrecinctsView
 
     onShow: ->
-      @showDistrictsView()
+      @showAllView()
 
       scoreboardInfo = App.request 'entities:scoreboardInfo'
       @.regionLabelRegion.show new SelectedRegionView
         model: scoreboardInfo
 
+  class AllPrecinctsView extends Marionette.ItemView
+    template: 'scoreboards/header/_all_precincts'
+    tagName: 'ul'
+    events:
+      'click a': (e) ->
+        e.preventDefault()
+        App.vent.trigger 'region:selected', null
 
   class DistrictView extends Marionette.ItemView
     template: 'scoreboards/header/_district'
