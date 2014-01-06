@@ -42,9 +42,13 @@
           $(po).hide() unless po == @ui.popover[0]
         @ui.popover.toggle()
 
+    showContests: (type) ->
+      contests = App.request "entities:contests:#{type}"
+      @.contestsRegion.show new ContestsView
+        collection: contests
+
     onShow: ->
-      @.contestsRegion.show @contestsView = new ContestsView
-        collection: App.request "entities:contests"
+      @showContests 'federal'
 
     onRender: ->
       if @contestsView

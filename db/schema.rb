@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140103103430) do
+ActiveRecord::Schema.define(version: 20140106171244) do
 
   create_table "candidates", force: true do |t|
     t.string  "uid",        null: false
@@ -25,13 +25,15 @@ ActiveRecord::Schema.define(version: 20140103103430) do
   add_index "candidates", ["uid"], name: "index_candidates_on_uid", unique: true, using: :btree
 
   create_table "contests", force: true do |t|
-    t.string  "uid",         null: false
+    t.string  "uid",           null: false
     t.integer "district_id"
     t.string  "office"
     t.string  "sort_order"
+    t.string  "district_type"
   end
 
   add_index "contests", ["district_id"], name: "index_contests_on_district_id", using: :btree
+  add_index "contests", ["district_type"], name: "index_contests_on_district_type", using: :btree
   add_index "contests", ["uid"], name: "index_contests_on_uid", unique: true, using: :btree
 
   create_table "districts", force: true do |t|

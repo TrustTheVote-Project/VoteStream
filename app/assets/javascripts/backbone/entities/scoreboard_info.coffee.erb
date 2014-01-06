@@ -5,15 +5,13 @@
   API =
     getScoreboardInfo: ->
       unless Entities.scoreboardInfo?
-        contests = App.request 'entities:contests'
-
         Entities.scoreboardInfo = sb = new Entities.ScoreboardInfo
           localityId:       gon.locality_id
           localityName:     gon.locality_name
           localityInfo:     gon.locality_info
           electionInfo:     gon.election_info
-          contest:          contests.first()
-          regionLabel:      -> if !@region then "All Precincts" else @region.get('name')
+          contest:          null
+          regionLabel:      -> if !@region then "<%= I18n.t 'scoreboard.header.right_menu.tabs.all' %>" else @region.get('name')
           region:           null
           percentReporting: -> 29
   

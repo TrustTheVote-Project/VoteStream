@@ -3,8 +3,14 @@
   <td><%= @localityInfo %></td>
 </tr>
 <tr>
-  <th>Contest</th>
-  <td><%= @contest.get('office') %></td>
+  <th>Category</th>
+  <td>
+    <% if @contest: %>
+    <%= @contest.get('office') %>
+    <% else: %>
+    No category
+    <% end %>
+  </td>
 </tr>
 <tr>
   <th>Region</th>

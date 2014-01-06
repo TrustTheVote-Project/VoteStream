@@ -5,3 +5,22 @@ en:
     details: Supported by OSET Foundation under a grant from Knight Foundation
     button_label: Enter
     footer: TrustTheVote Project, powered by Open Source Election Technology Foundation
+
+  scoreboard:
+    header:
+      left_menu:
+        label: Select a Category
+        prompt: Choose a Category
+        tabs:
+          referenda: All Referenda
+          federal: Federal Contests
+          state: State Contests
+          local: Local Contests
+          other: Other Contests
+
+      right_menu:
+        label: Select a Region
+        tabs:
+          all: All Precincts
+          districts: Districts
+          precincts: Precincts

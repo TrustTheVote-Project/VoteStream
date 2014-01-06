@@ -32,11 +32,8 @@ class DataController < ApplicationController
   end
 
   def voting_results
-    contest = Contest.find(params[:contest_id])
-    precincts = contest.district.precincts
-    precincts = precincts.joins(:districts).where(districts: { id: params[:district_id] }) if params[:district_id].present?
-    precincts = precincts.where(id: params[:precinct_id]) if params[:precinct_id].present?
-
+    locality = Locality.find(params[:locality_id])
+    precincts = locality.precincts
     render json: precincts.map { |p| { id: p.id, name: p.name } }
   end
 

@@ -1,11 +1,21 @@
 <div class='js-trigger'>
+  <%% if @contest: %>
   <%%= @contest.get('office') %>
+  <%% else: %>
+  No category
+  <%% end %>
   <%= image_tag "drop-down-arrow.png", class: 'drop-down-arrow' %>
 </div>
 <div class="popover">
   <div class="popover-content">
-    Choose a Category:
-    <div class="popover-body" id="contests-region">
-    </div>
+    <%= I18n.t 'scoreboard.header.left_menu.prompt' %>:
+    <ul class="nav nav-tabs">
+      <li class="js-tab-referenda active"><a href="#"><%= I18n.t 'scoreboard.header.left_menu.tabs.referenda' %></a></li>
+      <li class="js-tab-federal"><a href="#"><%= I18n.t 'scoreboard.header.left_menu.tabs.federal' %></a></li>
+      <li class="js-tab-state"><a href="#"><%= I18n.t 'scoreboard.header.left_menu.tabs.state' %></a></li>
+      <li class="js-tab-local"><a href="#"><%= I18n.t 'scoreboard.header.left_menu.tabs.local' %></a></li>
+      <li class="js-tab-other"><a href="#"><%= I18n.t 'scoreboard.header.left_menu.tabs.other' %></a></li>
+    </ul>
+    <div class="popover-body" id="contests-region"></div>
   </div>
 </div>
