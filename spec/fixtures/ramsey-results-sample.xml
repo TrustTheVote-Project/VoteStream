@@ -94,6 +94,21 @@
                 </ballot_line_result>
               </candidate>	
             </contest>
+            <referendum id="2012-11-06-120000000027-123-5031">
+              <title>SCHOOL DISTRICT QUESTION 1 (ISD #625)</title>
+              <ballot_response id="5031-9001"> 
+                <text>YES</text>
+                <ballot_line_result id="5031-9001-271230710"> 
+                  <votes>931</votes>
+                </ballot_line_result>
+              </ballot_response>
+              <ballot_response id="5031-9002"> 
+                <text>NO</text>
+                <ballot_line_result id="5031-9002-271230710"> 
+                  <votes>347</votes>
+                </ballot_line_result>
+              </ballot_response>
+            </referendum>
           </precinct> <!-- VTD 271231780 ends -->
 	</locality>	
     </state>

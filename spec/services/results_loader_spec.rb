@@ -32,4 +32,10 @@ describe ResultsLoader do
     expect(CandidateResult.where(candidate_id: c.id, precinct_id: p.id).first.votes).to eq 962
   end
 
+  it 'should set ballot response votes' do
+    b = BallotResponse.find_by_uid('5031-9001')
+    p = Precinct.find_by_uid('271230010')
+    expect(BallotResponseResult.where(ballot_response_id: b.id, precinct_id: p.id).first.votes).to eq 931
+  end
+
 end
