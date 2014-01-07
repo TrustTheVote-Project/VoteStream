@@ -47,7 +47,7 @@
           $(po).hide() unless po == @ui.popover[0]
         @ui.popover.toggle()
 
-      'click .js-tab-referenda': (e) -> @showCategory 'referenda', @ui.tabReferenda, e
+      'click .js-tab-referenda': (e) -> @showCategory 'referendums', @ui.tabReferenda, e
       'click .js-tab-federal': (e) -> @showCategory 'federal', @ui.tabFederal, e
       'click .js-tab-state': (e) -> @showCategory 'state', @ui.tabState, e
       'click .js-tab-local': (e) -> @showCategory 'local', @ui.tabLocal, e
@@ -63,20 +63,22 @@
           t.removeClass 'active'
 
       contests = App.request "entities:contests:#{type}"
-      @.contestsRegion.show new ContestsView
+      console.log contests
+      @.contestsRegion.show new CategoriesView
         collection: contests
 
     onShow: ->
       @tabs = [ @ui.tabReferenda, @ui.tabFederal, @ui.tabState, @ui.tabLocal, @ui.tabOther ]
-      @showCategory 'referenda', @ui.tabReferenda
-
-    onRender: ->
-      if @contestsView
-        @.contestsRegion.show @contestsView
+      @showCategory 'referendums', @ui.tabReferenda
 
 
-  class ContestView extends Marionette.ItemView
-    template: 'scoreboards/header/_contest'
+  class CategoryView extends Marionette.ItemView
+    getTemplate: ->
+      if @model instanceof App.Entities.Contest
+        'scoreboards/header/_contest'
+      else
+        'scoreboards/header/_referendum'
+
     tagName: 'li'
 
     events:
@@ -87,9 +89,9 @@
         $(this).parents(".popover").hide()
 
 
-  class ContestsView extends Marionette.CollectionView
+  class CategoriesView extends Marionette.CollectionView
     tagName: 'ul'
-    itemView: ContestView
+    itemView: CategoryView
 
 
   class RegionSelectorView extends Marionette.Layout

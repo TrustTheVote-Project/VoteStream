@@ -10,7 +10,6 @@ en:
     header:
       left_menu:
         label: Select a Category
-        prompt: Choose a Category
         tabs:
           referenda: All Referenda
           federal: Federal Contests

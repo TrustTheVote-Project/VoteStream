@@ -16,6 +16,7 @@ class ScoreboardsController < ApplicationController
 
     contests = locality.contests.group_by { |c| c.district_type_normalized }
     gon.contests      = contests.inject({}) { |memo, (type, cs)| memo[type] = cs.map { |c| { id: c.id, office: c.office } }; memo }
+    gon.referendums   = locality.referendums.map { |r| { id: r.id, title: r.title, subtitle: r.subtitle, question: r.question } }
 
     gon.mapCenterLat  = -93.147
     gon.mapCenterLon  = 45.005988
