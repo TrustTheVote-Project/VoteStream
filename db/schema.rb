@@ -11,7 +11,16 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140107070833) do
+ActiveRecord::Schema.define(version: 20140107080956) do
+
+  create_table "ballot_response_results", force: true do |t|
+    t.integer "ballot_response_id"
+    t.integer "precinct_id"
+    t.integer "votes"
+  end
+
+  add_index "ballot_response_results", ["ballot_response_id"], name: "index_ballot_response_results_on_ballot_response_id", using: :btree
+  add_index "ballot_response_results", ["precinct_id"], name: "index_ballot_response_results_on_precinct_id", using: :btree
 
   create_table "ballot_responses", force: true do |t|
     t.integer "referendum_id"
@@ -22,6 +31,15 @@ ActiveRecord::Schema.define(version: 20140107070833) do
 
   add_index "ballot_responses", ["referendum_id"], name: "index_ballot_responses_on_referendum_id", using: :btree
   add_index "ballot_responses", ["uid"], name: "index_ballot_responses_on_uid", unique: true, using: :btree
+
+  create_table "candidate_results", force: true do |t|
+    t.integer "candidate_id"
+    t.integer "precinct_id"
+    t.integer "votes"
+  end
+
+  add_index "candidate_results", ["candidate_id"], name: "index_candidate_results_on_candidate_id", using: :btree
+  add_index "candidate_results", ["precinct_id"], name: "index_candidate_results_on_precinct_id", using: :btree
 
   create_table "candidates", force: true do |t|
     t.string  "uid",        null: false
@@ -126,14 +144,5 @@ ActiveRecord::Schema.define(version: 20140107070833) do
 
   add_index "states", ["code"], name: "index_states_on_code", unique: true, using: :btree
   add_index "states", ["uid"], name: "index_states_on_uid", unique: true, using: :btree
-
-  create_table "voting_results", force: true do |t|
-    t.integer "candidate_id"
-    t.integer "precinct_id"
-    t.integer "votes"
-  end
-
-  add_index "voting_results", ["candidate_id"], name: "index_voting_results_on_candidate_id", using: :btree
-  add_index "voting_results", ["precinct_id"], name: "index_voting_results_on_precinct_id", using: :btree
 
 end

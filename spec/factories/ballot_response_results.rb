@@ -1,6 +1,6 @@
 FactoryGirl.define do
-  factory :voting_result do
-    candidate
+  factory :ballot_response_result do
+    ballot_response
     precinct
     votes { rand 1000 }
   end

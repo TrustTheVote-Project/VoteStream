@@ -15,9 +15,9 @@ class ResultsLoader
       precinct.save
 
       for_each_candidate(precinct_el) do |candidate_el, candidate|
-        vr = VotingResult.find_or_initialize_by(precinct_id: precinct.id, candidate_id: candidate.id)
-        vr.votes = candidate_el.css('votes').first.content
-        vr.save
+        cr = CandidateResult.find_or_initialize_by(precinct_id: precinct.id, candidate_id: candidate.id)
+        cr.votes = candidate_el.css('votes').first.content
+        cr.save
       end
     end
   end

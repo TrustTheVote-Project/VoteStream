@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe VotingResult do
+describe CandidateResult do
 
   it { should belong_to :candidate }
   it { should belong_to :precinct }

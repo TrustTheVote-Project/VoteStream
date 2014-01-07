@@ -29,7 +29,7 @@ describe ResultsLoader do
   it 'should set candidate votes' do
     c = Candidate.find_by_uid('0101-0301')
     p = Precinct.find_by_uid('271230010')
-    expect(VotingResult.where(candidate_id: c.id, precinct_id: p.id).first.votes).to eq 962
+    expect(CandidateResult.where(candidate_id: c.id, precinct_id: p.id).first.votes).to eq 962
   end
 
 end
