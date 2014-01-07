@@ -4,6 +4,7 @@ class District < ActiveRecord::Base
 
   has_and_belongs_to_many :precincts
   has_many :contests
+  has_many :referendums
 
   validates :uid, presence: true
   validates :name, presence: true

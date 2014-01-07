@@ -11,7 +11,17 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140106171244) do
+ActiveRecord::Schema.define(version: 20140107070833) do
+
+  create_table "ballot_responses", force: true do |t|
+    t.integer "referendum_id"
+    t.string  "uid",           null: false
+    t.string  "name",          null: false
+    t.integer "sort_order"
+  end
+
+  add_index "ballot_responses", ["referendum_id"], name: "index_ballot_responses_on_referendum_id", using: :btree
+  add_index "ballot_responses", ["uid"], name: "index_ballot_responses_on_uid", unique: true, using: :btree
 
   create_table "candidates", force: true do |t|
     t.string  "uid",        null: false
@@ -95,6 +105,18 @@ ActiveRecord::Schema.define(version: 20140106171244) do
 
   add_index "precincts", ["locality_id"], name: "index_precincts_on_locality_id", using: :btree
   add_index "precincts", ["uid"], name: "index_precincts_on_uid", unique: true, using: :btree
+
+  create_table "referendums", force: true do |t|
+    t.integer "district_id"
+    t.string  "uid",         null: false
+    t.string  "title",       null: false
+    t.text    "subtitle",    null: false
+    t.text    "question",    null: false
+    t.string  "sort_order"
+  end
+
+  add_index "referendums", ["district_id"], name: "index_referendums_on_district_id", using: :btree
+  add_index "referendums", ["uid"], name: "index_referendums_on_uid", unique: true, using: :btree
 
   create_table "states", force: true do |t|
     t.string "uid",  null: false

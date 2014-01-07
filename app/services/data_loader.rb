@@ -13,7 +13,8 @@ class DataLoader
     load_election
     load_districts
     load_precincts
-    load_candidates
+    load_contests
+    load_referendums
   end
 
   private
@@ -104,11 +105,11 @@ class DataLoader
     })
   end
 
-  def load_candidates
+  def load_contests
     return if @doc.css('vip_object > contest').size == 0
 
     for_each_contest do |contest_el, contest|
-      contest_el.css("candidate, ballot_response").each do |candidate_el|
+      contest_el.css("candidate").each do |candidate_el|
         uid        = candidate_el['id']
         name       = dequote(candidate_el.css('name, text').first.content)
         party      = dequote(candidate_el.css('> party').first.try(:content))
@@ -120,15 +121,47 @@ class DataLoader
   end
 
   def for_each_contest(&block)
-    @doc.css("vip_object > contest, vip_object > referendum").each do |contest_el|
-      uid        = contest_el['id']
-      office     = dequote(contest_el.css("office, title").first.content)
-      sort_order = dequote(contest_el.css("sort_order").first.content)
+    @doc.css("vip_object > contest").each do |contest_el|
+      uid         = contest_el['id']
+      office      = dequote(contest_el.css("office, title").first.content)
+      sort_order  = dequote(contest_el.css("sort_order").first.content)
       district_id = contest_el.css("> electoral_district").first['id']
-      district   = District.find_by_uid(district_id)
+      district    = District.find_by_uid(district_id)
       if district
-        contest    = Contest.create_with(office: office, sort_order: sort_order, district: district).find_or_create_by(uid: uid)
+        contest   = Contest.create_with(office: office, sort_order: sort_order, district: district).find_or_create_by(uid: uid)
         block.call(contest_el, contest)
+      else
+        raise_strict InvalidFormat.new("District with ID '#{district_id}' was not found")
+      end
+    end
+  end
+
+  def load_referendums
+    return if @doc.css('vip_object > referendum').size == 0
+
+    for_each_referendum do |referendum_el, referendum|
+      referendum_el.css("ballot_response").each do |ballot_response_el|
+        uid        = ballot_response_el['id']
+        name       = dequote(ballot_response_el.css('> text').first.content)
+        sort_order = dequote(ballot_response_el.css('> sort_order').first.content)
+
+        referendum.ballot_responses.create_with(name: name, sort_order: sort_order).find_or_create_by(uid: uid)
+      end
+    end
+  end
+
+  def for_each_referendum(&block)
+    @doc.css("vip_object > referendum").each do |referendum_el|
+      uid         = referendum_el['id']
+      title       = dequote(referendum_el.css("title").first.content)
+      subtitle    = dequote(referendum_el.css("subtitle").first.content)
+      question    = dequote(referendum_el.css("text").first.content)
+      sort_order  = dequote(referendum_el.css("sort_order").first.content)
+      district_id = referendum_el.css("> electoral_district").first['id']
+      district    = District.find_by_uid(district_id)
+      if district
+        referendum = Referendum.create_with(title: title, subtitle: subtitle, question: question, sort_order: sort_order, district: district).find_or_create_by(uid: uid)
+        block.call(referendum_el, referendum)
       else
         raise_strict InvalidFormat.new("District with ID '#{district_id}' was not found")
       end
