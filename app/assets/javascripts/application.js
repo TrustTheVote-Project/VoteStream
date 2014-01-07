@@ -12,4 +12,3 @@
 //
 //= require jquery
 //= require twitter/bootstrap
-//= require turbolinks

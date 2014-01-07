@@ -4,13 +4,13 @@
     %title ENRS
     = stylesheet_link_tag "application", :media => "all"
     = csrf_meta_tags
-    = include_gon
 
   %body{ id: @page_id }
     .container
       = yield
 
     = javascript_include_tag "https://maps.googleapis.com/maps/api/js?v=3.exp&sensor=false"
+    = include_gon
     = javascript_include_tag "application"
     - if @js
       = javascript_include_tag @js
