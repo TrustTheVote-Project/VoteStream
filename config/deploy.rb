@@ -1,7 +1,7 @@
 set :application, 'enrs'
 set :repo_url, 'git@github.com:trustthevote/ElectionNightReportingService.git'
 
-ask :branch, proc { `git rev-parse --abbrev-ref HEAD`.chomp }
+set :branch, proc { `git rev-parse --abbrev-ref HEAD`.chomp }
 
 set :deploy_to, '/home/deploy/enrs'
 set :scm, :git
