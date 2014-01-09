@@ -1,6 +1,9 @@
 @App.module "Entities", (Entities, App, Backbone, Marionette, $, _) ->
 
   class Entities.ScoreboardInfo extends Backbone.Model
+    reloadRefcons: ->
+      refcons = @get 'refcons'
+      refcons.fetchForRegion @get('localityId'), @get('region')
 
   API =
     getScoreboardInfo: ->
@@ -10,16 +13,29 @@
           localityName:     gon.locality_name
           localityInfo:     gon.locality_info
           electionInfo:     gon.election_info
-          contest:          null
+          
+          refcons:          new Entities.RefCons
+          refcon:           null
+          results:          new Entities.Results
+
           regionLabel:      -> if !@region then "<%= I18n.t 'scoreboard.header.right_menu.tabs.all' %>" else @region.get('name')
           region:           null
           percentReporting: -> 29
   
-        sb.on 'change:contest', ->
-          sb.set 'region', null
-
         App.vent.on 'region:selected', (region) ->
           sb.set 'region', region
+
+        sb.on 'change:region', -> @reloadRefcons()
+
+        sb.on 'change:refcon', ->
+          results = @get 'results'
+          results.fetchForRefCon @get 'refcon'
+
+        sb.get('refcons').on 'reset', ->
+          si = App.request 'entities:scoreboardInfo'
+          si.set 'refcon', @first()
+
+        sb.reloadRefcons()
 
       Entities.scoreboardInfo
 

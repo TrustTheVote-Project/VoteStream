@@ -1,0 +1,60 @@
+#results-summary-region {
+  #js-next-refcon a {
+    float: right;
+  }
+}
+
+#summary-region {
+
+  ul {
+    list-style: none;
+    margin: 0;
+
+    li {
+      margin-bottom: 10px;
+    }
+
+    h5 {
+      margin: 0;
+    }
+
+    .bar {
+      width: 100%;
+      height: 20px;
+      background: #ccc;
+    }
+
+    .meta {
+      overflow: hidden;
+      .percent {
+        float: right;
+      }
+    }
+
+    .filler {
+      height: 20px;
+      background: #bbb;
+    }
+
+    .party-republican {
+      h5 {
+        color: red;
+      }
+
+      .filler {
+        background: red;
+      }
+    }
+
+    .party-democraticfarmerlabor {
+      h5 {
+        color: blue;
+      }
+
+      .filler {
+        background: blue;
+      }
+    }
+
+  }
+}

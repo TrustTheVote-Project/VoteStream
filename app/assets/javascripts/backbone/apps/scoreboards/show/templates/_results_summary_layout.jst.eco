@@ -1,0 +1,7 @@
+<div class="span1" id="js-prev-refcon">
+  <a href="#" class="btn">&lt;</a>
+</div>
+<div class="span4" id="summary-region">summary</div>
+<div class="span1" id="js-next-refcon">
+  <a href="#" class="btn">&gt;</a>
+</div>

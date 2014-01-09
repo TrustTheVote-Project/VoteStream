@@ -1,0 +1,6 @@
+<h4><%= @summary.get('title') %></h4>
+
+<ul></ul>
+
+<a href="#" id='js-show-more' class='hide'>Show More Candidates</a>
+<a href="#" id='js-show-less' class='hide'>Show Less Candidates</a>

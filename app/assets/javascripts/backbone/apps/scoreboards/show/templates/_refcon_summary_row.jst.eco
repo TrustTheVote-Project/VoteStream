@@ -1,0 +1,7 @@
+<h5><%= @name %> <span class='party'>(<%= @party %>)</party></h5>
+
+<div class='bar'><div class='filler' style='width:<%= @percent() %>%'></div></div>
+<div class='meta'>
+  <div class='percent'><%= @percentFormatted() %></div>
+  <%= @votes %>
+</div>
