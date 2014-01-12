@@ -19,6 +19,10 @@ party_colors:
   WI:       "#cccccc"
   NA:       "#ffffff"
 
+  # new version
+  republican: "#ec012e"
+  democrat:   "#123d74"
+
 admin:
   user: enrsadmin
   pass: enrs23operations$2
