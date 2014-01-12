@@ -74,9 +74,12 @@
 
     updateLayout: ->
       results = @si.get('results')
-      @summaryRegion.show new SummaryView
-        model: results
-        collection: results.get('summary')?.get('rows')
+      if results.hasData()
+        @summaryRegion.show new SummaryView
+          model: results
+          collection: results.get('summary').get('rows')
+      else
+        @summaryRegion.show new NoRefConView
 
       if @rotator.hasPrev() then @ui.prevRefCon.removeAttr('disabled') else @ui.prevRefCon.attr('disabled', true)
       if @rotator.hasNext() then @ui.nextRefCon.removeAttr('disabled') else @ui.nextRefCon.attr('disabled', true)

@@ -29,11 +29,11 @@
 
         sb.on 'change:refcon', ->
           results = @get 'results'
-          results.fetchForRefCon @get 'refcon'
+          results.fetchForRefCon @get('refcon'), @get('region')
 
         sb.get('refcons').on 'reset', ->
           si = App.request 'entities:scoreboardInfo'
-          si.set 'refcon', @first()
+          si.set 'refcon', @first() or null
 
         sb.reloadRefcons()
 

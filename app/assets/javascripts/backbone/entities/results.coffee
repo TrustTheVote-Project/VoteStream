@@ -49,7 +49,10 @@
       { summary:         new ResultsSummary data?.summary,
         precinctResults: new PrecinctResults data?.precinctResults }
 
-    fetchForRefCon: (refcon) ->
+    hasData: ->
+      @get('summary')?
+
+    fetchForRefCon: (refcon, region) ->
       unless refcon?
         @set 'precinctResults', null
         @set 'summary', null
@@ -62,6 +65,11 @@
       filter = {}
       filter.contest_id = rcid if rcty == 'contest'
       filter.referendum_id = rcid if rcty == 'referendum'
+      rid = region?.get 'id'
+      if region instanceof Entities.District
+        filter.district_id = rid
+      else if region instanceof Entities.Precinct
+        dilter.precinct_id = rid
 
       @fetch
         url: '/data/results'
