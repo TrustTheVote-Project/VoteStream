@@ -9,10 +9,7 @@ describe DataLoader do
   let(:candidate)   { contest.candidates.find_by_uid("0101-0301") }
 
   before(:all) do
-    cleanup_data
-    State.create_with(uid: "120000000027", name: "State of Minnesota").find_or_create_by(code: "MN")
-    l = DataLoader.new(fixture('RamseyCounty2012Definition.xml'))
-    l.load
+    load_def_fixture
   end
 
   after(:all) do
@@ -89,13 +86,6 @@ describe DataLoader do
     expect(candidate.name).to       eq "MITT ROMNEY AND PAUL RYAN"
     expect(candidate.party).to      eq "Republican"
     expect(candidate.sort_order).to eq 1
-  end
-
-  def cleanup_data
-    State.where(code: "MN").destroy_all
-    District.destroy_all
-    Contest.destroy_all
-    Referendum.destroy_all
   end
 
 end

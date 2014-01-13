@@ -1,5 +1,9 @@
 @App.module "Entities", (Entities, App, Backbone, Marionette, $, _) ->
 
+  class Candidate extends Backbone.Model
+  class Candidates extends Backbone.Collection
+    model: Candidate
+
   # Contest or Referendum
   # - type
   # - id
@@ -9,7 +13,6 @@
     fetchForRegion: (localityId, region) ->
       filter = locality_id: localityId
       if region?
-        console.log region
         rid = region.get 'id'
         if region instanceof App.Entities.District
           filter.district_id = rid
@@ -40,13 +43,19 @@
   # RefCon results for the given Region
   # - summary (ResultsSummary) for summary display
   # - precinctResults (PrecinctResults ...)
+  # - candidates (Candidates ...)
   class Entities.Results extends Backbone.Model
     initialize: ->
+      @set 'candidates', new Candidates
       @set 'summary', new ResultsSummary
       @set 'precinctResults', new PrecinctResults
 
     parse: (data) ->
-      { summary:         new ResultsSummary data?.summary,
+      summary = new ResultsSummary data?.summary
+      candidates = new Candidates data?.candidates
+      return {
+        summary:         summary,
+        candidates:      candidates,
         precinctResults: new PrecinctResults data?.precinctResults }
 
     hasData: ->
@@ -54,6 +63,7 @@
 
     fetchForRefCon: (refcon, region) ->
       unless refcon?
+        @set 'candidates', null
         @set 'precinctResults', null
         @set 'summary', null
         @trigger 'reset'

@@ -5,21 +5,11 @@ describe ResultsLoader do
   let(:state_mn) { State.find_by(code: 'MN') }
 
   before(:all) do
-    District.destroy_all
-    State.create_with(uid: "120000000027", name: "State of Minnesota").find_or_create_by(code: "MN")
-
-    # load definitions
-    l = DataLoader.new(fixture('RamseyCounty2012Definition.xml'))
-    l.load
-
-    # load results
-    l = ResultsLoader.new(fixture('ramsey-results-sample.xml'))
-    l.load
+    load_results_fixture
   end
 
   after(:all) do
-    State.where(code: "MN").destroy_all
-    District.destroy_all
+    cleanup_data
   end
 
   it 'should set precinct total cast' do

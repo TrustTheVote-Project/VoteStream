@@ -48,26 +48,7 @@ class DataController < ApplicationController
   end
 
   def results
-    if cid = params[:contest_id]
-      c1 = rand(100)
-      c2 = rand(100 - c1)
-      c3 = 100 - c1 - c2
-      render json: {
-        summary: {
-          title: "Contest #{cid}",
-          total_voters: 1000,
-          total_votes: 100,
-          rows: [
-            { name: 'Candidate 1', votes: c1, party: 'Democratic-Farmer-Labor' },
-            { name: 'Candidate 2', votes: c2, party: 'Republican' },
-            { name: 'Candidate 3', votes: c3, party: 'Beer lovers' }
-          ]
-        },
-        precinctResults: []
-      }
-    else
-      render json: {}
-    end
+    render json: RefConResults.data(params)
   end
 
   def voting_results

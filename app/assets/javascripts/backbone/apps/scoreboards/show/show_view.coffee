@@ -76,7 +76,7 @@
       results = @si.get('results')
       if results.hasData()
         @summaryRegion.show new SummaryView
-          model: results
+          model:      results
           collection: results.get('summary').get('rows')
       else
         @summaryRegion.show new NoRefConView
@@ -91,10 +91,12 @@
     template: 'scoreboards/show/_refcon_summary_row'
     tagName:  'li'
     className: ->
-      "#{if @.options.hidden then 'hide' else ''} party-#{(@model.get('party') || "").toLowerCase().replace(/[^a-z]/g, '')}".trim()
+      "#{if @.options.hidden then 'hide' else ''} party-#{(@options.candidate.get('party') || "").toLowerCase().replace(/[^a-z]/g, '')}".trim()
     serializeData: ->
       data = Backbone.Marionette.ItemView.prototype.serializeData.apply @, arguments
       data.totalVotes = @options.totalVotes
+      data.name       = @options.candidate.get('name')
+      data.party      = @options.candidate.get('party')
       data
     templateHelpers:
       percent: ->
@@ -108,7 +110,10 @@
     itemView: SummaryRowView
     itemViewContainer: 'ul'
     itemViewOptions: (m, i) ->
-      { hidden: i > 1, totalVotes: @model.get('summary').get('total_votes') }
+      return {
+        hidden:     i > 1,
+        candidate:  @model.get('candidates').get(m.get('cid')),
+        totalVotes: @model.get('summary').get('total_votes') }
 
     ui:
       rowsList: 'ul'
