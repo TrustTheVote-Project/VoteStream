@@ -39,7 +39,7 @@
 
     hasPrev: -> @idx > 0
     hasNext: -> @idx < @refcons.length - 1
-      
+
   class ResultsSummaryLayout extends Marionette.Layout
     template: 'scoreboards/show/_results_summary_layout'
     className: 'row'
@@ -49,7 +49,7 @@
 
     initialize: ->
       @rotator = new RefConRotator
-      
+
       @si = App.request 'entities:scoreboardInfo'
       @si.get('refcons').on 'reset', => @updateLayout()
       @si.get('results').on 'sync', => @updateLayout()

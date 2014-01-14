@@ -13,7 +13,7 @@
           localityName:     gon.locality_name
           localityInfo:     gon.locality_info
           electionInfo:     gon.election_info
-          
+
           refcons:          new Entities.RefCons
           refcon:           null
           results:          new Entities.Results
@@ -21,7 +21,7 @@
           regionLabel:      -> if !@region then "<%= I18n.t 'scoreboard.header.right_menu.tabs.all' %>" else @region.get('name')
           region:           null
           percentReporting: -> 29
-  
+
         App.vent.on 'region:selected', (region) ->
           sb.set 'region', region
 

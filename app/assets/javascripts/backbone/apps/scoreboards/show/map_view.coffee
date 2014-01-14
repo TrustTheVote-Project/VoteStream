@@ -11,17 +11,33 @@
       si.on 'change:region', =>
         @highlightRegion si.get('region')
 
+      res = si.get 'results'
+      res.on 'sync', => @updateColors()
+
+    updateColors: ->
+      si = App.request 'entities:scoreboardInfo'
+      res = si.get 'results'
+      candidates = res.get 'candidates'
+      precinctResults = res.get 'precinctResults'
+
+      for p in @polygons
+        res = precinctResults.get p.data.precinctId
+        p.data.colors = @precinctColors candidates, res
+        @rehighlight p
+
+
+    rehighlight: (p) ->
+      p.setOptions
+        fillColor:   if p.data.highlighted then p.data.colors.highlightColor else p.data.colors.fillColor
+        fillOpacity: if p.data.highlighted then p.data.colors.highlightOpacity else p.data.colors.fillOpacity
+
     highlightPolygon: (p) ->
       p.data.highlighted = true
-      p.setOptions
-        fillColor:   p.data.highlightColor
-        fillOpacity: p.data.highlightOpacity
+      @rehighlight p
 
     unhighlightPolygon: (p) ->
       p.data.highlighted = false
-      p.setOptions
-        fillColor:   p.data.fillColor
-        fillOpacity: p.data.fillOpacity
+      @rehighlight p
 
     highlightRegion: (region) ->
       if !region?
@@ -81,6 +97,51 @@
       poly.setMap(null) for poly in @polygons
       @polygons = []
 
+    partyColorRange: (party) ->
+      if party == 'Republican'
+        gon.partyColors.republican
+      else if party == 'Democratic-Farmer-Labor'
+        gon.partyColors.democrat
+      else
+        gon.partyColors.other
+
+    colorShade: (range, candidateVotes, precinctVotes) ->
+      p = candidateVotes * 100 / precinctVotes
+      if p < 0.5
+        c = 0
+      else if p < 0.6
+        c = 1
+      else if p < 0.7
+        c = 2
+      else
+        c = 3
+
+      range[c]
+
+    precinctColors: (candidates, precinctResult) ->
+      ho = 0.5
+
+      rows = precinctResult?.get('rows')
+      if !rows or rows.length == 0
+        # not reporting
+        hc = '#cccccc'
+      else
+        leadingResult = rows.first()
+        candidate = candidates.get leadingResult.get 'cid'
+        party = candidate.get 'party'
+
+        colorRange = @partyColorRange party
+        hc = @colorShade colorRange, candidate.get('votes'), precinctResult.get('votes')
+
+      return {
+        fillColor:        '#000000'
+        fillOpacity:      0.3
+        hoverFillColor:   hc
+        hoverFillOpacity: 0.8
+        highlightColor:   hc
+        highlightOpacity: ho
+      }
+
     renderPrecincts: ->
       precincts = App.request 'entities:precincts'
       App.execute 'when:fetched', precincts, =>
@@ -88,47 +149,43 @@
 
         bounds = new google.maps.LatLngBounds()
 
-        for result in precincts.models
-          precinctId = result.get 'id'
-          precinct = precincts.get precinctId
-          kml = precinct.get('kml')
+        si = App.request 'entities:scoreboardInfo'
+        precinctResults = si.get('results').get('precinctResults')
+        candidates = si.get('results').get('candidates')
+
+        console.log precinctResults
+        for precinct in precincts.models
+          precinctId = precinct.get 'id'
+          res = precinctResults.get 'id'
+          kml = precinct.get 'kml'
+          colors = @precinctColors(candidates, res)
 
           points = @pointsFromKml(kml)
           bounds.extend(point) for point in points
-
-          fillColor        = '#000000'
-          fillOpacity      = 0.3
-          hoverFillColor   = fillColor
-          hoverFillOpacity = 0.5
-          highlightColor   = '#cccc00'
-          highlightOpacity = 0.8
 
           poly = new google.maps.Polygon
             paths:          points,
             strokeColor:    '#000000'
             strokeOpacity:  0.3
             strokeWeight:   1
-            fillColor:      fillColor
-            fillOpacity:    fillOpacity
+            fillColor:      colors.fillColor
+            fillOpacity:    colors.fillOpacity
             data:
-              fillColor:   fillColor
-              fillOpacity: fillOpacity
-              precinctId:  precinctId
-              highlightColor: highlightColor
-              highlightOpacity: highlightOpacity
+              precinctId:       precinctId
+              colors:           colors
 
           google.maps.event.addListener poly, 'mouseover', ->
             # return if this == selectedPolygon
             @setOptions
-              fillColor:   hoverFillColor
-              fillOpacity: hoverFillOpacity
+              fillColor:   @.data.colors.hoverFillColor
+              fillOpacity: @.data.colors.hoverFillOpacity
 
           google.maps.event.addListener poly, 'mouseout', ->
             # return if this == selectedPolygon
             hl = @.data.highlighted
             @setOptions
-              fillColor:   if hl then @.data.highlightColor else @.data.fillColor
-              fillOpacity: if hl then @.data.highlightOpacity else @.data.fillOpacity
+              fillColor:   if hl then @.data.colors.highlightColor else @.data.colors.fillColor
+              fillOpacity: if hl then @.data.colors.highlightOpacity else @.data.colors.fillOpacity
 
           @polygons.push poly
           poly.setMap @map

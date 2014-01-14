@@ -23,7 +23,7 @@
         url:   '/data/refcons'
         reset: true
         data:  filter
-          
+
   # Single results row
   # - name
   # - votes
@@ -79,7 +79,7 @@
       if region instanceof Entities.District
         filter.district_id = rid
       else if region instanceof Entities.Precinct
-        dilter.precinct_id = rid
+        filter.precinct_id = rid
 
       @fetch
         url: '/data/results'
@@ -88,11 +88,11 @@
 
   # RefCon results summary for individual precinct
   # - pid
-  # - votes_total
-  # - leading_party
+  # - votes
   # - rows (top 2) (ResultRow collection)
   class PrecinctResult extends Backbone.Model
     initialize: ->
       @set 'rows', new ResultRows @get 'rows'
   class PrecinctResults extends Backbone.Collection
+    model: PrecinctResult
 

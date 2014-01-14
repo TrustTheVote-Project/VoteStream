@@ -21,6 +21,13 @@ class ScoreboardsController < ApplicationController
     gon.mapCenterLat  = -93.147
     gon.mapCenterLon  = 45.005988
     gon.mapZoom       = 11
+
+    # TODO: These colors should be set on county basis
+    gon.partyColors = {
+      republican: [ '#ffbebf', '#ff7c7e', '#ff3841', '#ff0014' ],
+      democrat:   [ '#b0deed', '#70cfec', '#26bfea', '#00afeb' ],
+      other:      [ '#fdfec5', '#fbfe8f', '#fbfe63', '#fbfe56' ]
+    }
   end
 
 end
