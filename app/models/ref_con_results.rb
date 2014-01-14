@@ -8,7 +8,7 @@ class RefConResults
         precincts = contest.district.precincts.where(id: pid)
       else
         did = params[:district_id]
-        precincts = !did || contest.district_id == did ? contest.district.precincts : Precinct.none
+        precincts = !did || contest.district_id == did.to_i ? contest.district.precincts : Precinct.none
       end
       cids = contest.candidate_ids
       pids = precincts.map(&:id)

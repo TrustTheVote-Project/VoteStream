@@ -66,7 +66,7 @@
         @set 'candidates', null
         @set 'precinctResults', null
         @set 'summary', null
-        @trigger 'reset'
+        @trigger 'sync'
         return
 
       rcid = refcon.get('id')
