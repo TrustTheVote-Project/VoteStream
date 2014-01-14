@@ -167,4 +167,9 @@
           @polygons.push poly
           poly.setMap @map
 
+        # make extra zoom step to show a bigger map
+        do (map = @map) ->
+          google.maps.event.addListenerOnce map, 'zoom_changed', ->
+            map.setZoom map.getZoom() + 1
+
         @map.fitBounds bounds
