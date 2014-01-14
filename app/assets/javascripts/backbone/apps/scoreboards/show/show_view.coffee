@@ -42,7 +42,8 @@
 
   class ResultsSummaryLayout extends Marionette.Layout
     template: 'scoreboards/show/_results_summary_layout'
-    className: 'row'
+    tagName:   'table'
+    className: ''
 
     regions:
       summaryRegion: '#summary-region'

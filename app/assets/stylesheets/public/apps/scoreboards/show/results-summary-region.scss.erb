@@ -3,13 +3,24 @@ $republican: <%= AppConfig['party_colors']['republican'] %>;
 $democrat: <%= AppConfig['party_colors']['democrat'] %>;
 
 #results-summary-region {
-  #js-next-refcon a {
-    float: right;
+  #js-next-refcon { text-align: right; }
+
+  .refcon-nav {
+    width: 25px;
+    
+    a {
+      color: #000;
+      font-size: 18px;
+
+      &[disabled] {
+        color: #ddd;
+        cursor: default;
+      }
+    }
   }
 }
 
 #summary-region {
-
   ul {
     list-style: none;
     margin: 0;
