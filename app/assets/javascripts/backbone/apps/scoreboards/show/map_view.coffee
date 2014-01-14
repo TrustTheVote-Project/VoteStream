@@ -139,8 +139,8 @@
           colors = @precinctColors(candidates, res)
 
           points = @pointsFromKml(kml)
-          bounds.extend(point) for point in points
 
+          bounds.extend(point) for point in points
           poly = new google.maps.Polygon
             paths:          points,
             strokeColor:    '#000000'
@@ -154,6 +154,7 @@
 
           google.maps.event.addListener poly, 'mouseover', ->
             # return if this == selectedPolygon
+            console.log @.data.precinctId
             @setOptions
               fillColor:   @.data.colors.hoverFillColor
               fillOpacity: @.data.colors.hoverFillOpacity
@@ -166,10 +167,5 @@
 
           @polygons.push poly
           poly.setMap @map
-
-        # make extra zoom step to show a bigger map
-        do (map = @map) ->
-          google.maps.event.addListenerOnce map, 'zoom_changed', ->
-            map.setZoom map.getZoom() + 1
 
         @map.fitBounds bounds
