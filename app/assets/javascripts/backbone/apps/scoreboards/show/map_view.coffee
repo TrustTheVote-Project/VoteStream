@@ -100,17 +100,18 @@
         # Highlight with opacity if precinct is in range
         hoverOpacity = 0.8
 
-        rows = precinctResult.get('rows')
-        if !rows or rows.length == 0
+        precinctVotes = precinctResult.get('votes')
+        if precinctVotes == 0
           # Precinct is not reporting
           fillColor = '#cccccc'
         else
+          rows = precinctResult.get('rows')
           leadingResult = rows.first()
           candidate = candidates.get leadingResult.get 'cid'
           party = candidate.get 'party'
 
           colorRange = @partyColorRange party
-          fillColor = @colorShade colorRange, candidate.get('votes'), precinctResult.get('votes')
+          fillColor = @colorShade colorRange, candidate.get('votes'), precinctVotes
           hoverColor = fillColor
 
       return {
