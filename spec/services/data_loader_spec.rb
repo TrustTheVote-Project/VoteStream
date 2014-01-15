@@ -39,7 +39,9 @@ describe DataLoader do
     sample_precinct = Precinct.find_by(uid: '271231780')
     expect(sample_precinct.name).to eq 'WHITE BEAR LAKE W-5 P-1'
     expect(sample_precinct.districts.map(&:uid)).to match_array %w{ US-HS-MN-4 US-SN-MN US-MCD-69970 MN-DV-123-CC-7 MN-SW-4123 MN-ISD-624 MN-JUD-2 US-ST-MN US-ST-MN-SH-43A US-ST-MN-SN-43 }
-    expect(sample_precinct.kml).not_to be_blank
+    expect(sample_precinct.kml).to be_kind_of Array
+
+    expect(Precinct.find_by(uid: '271231700').kml.size).to eq 3
 
     pl = sample_precinct.polling_location
     expect(pl.name).to eq "St. Stephen's Lutheran Church"

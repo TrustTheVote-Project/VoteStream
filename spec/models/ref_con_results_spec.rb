@@ -10,8 +10,6 @@ describe RefConResults do
 
   it 'should return data for the contest' do
     d = RefConResults.data(contest_id: contest.id)
-    puts d.inspect
-
     s = d[:summary]
     expect(s[:title]).to eq contest.office
     expect(s[:total_cast]).to eq 2173

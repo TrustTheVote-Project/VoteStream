@@ -66,7 +66,7 @@ class DataLoader
       locality_el.css('precinct').each do |precinct_el|
         uid      = precinct_el['id']
         name     = dequote(precinct_el.css('> name').first.content)
-        kml      = precinct_el.css('> geometry kml coordinates').first.try(:content)
+        kml      = (precinct_el.css('> geometry kml coordinates') || []).map { |c| c.content }
 
         if kml.blank?
           raise_strict InvalidFormat.new("Precinct #{uid} has no geometry KML")

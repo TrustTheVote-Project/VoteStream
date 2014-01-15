@@ -61,8 +61,9 @@
       coords = pair.split(',')
       new google.maps.LatLng parseFloat(coords[1]), parseFloat(coords[0])
 
-    pointsFromKml: (kml) ->
-      @pointFromPair(pair) for pair in kml.split(' ')
+    pointsFromKml: (kmls) ->
+      for kml in kmls
+        @pointFromPair(pair) for pair in kml.split(' ')
 
     removePreviousPolygons: =>
       poly.setMap(null) for poly in @polygons
@@ -113,6 +114,10 @@
           fillColor = @colorShade colorRange, candidate.get('votes'), precinctVotes
           hoverColor = fillColor
 
+      if [ 679, 520, 527 ].indexOf(precinctResult?.get('id')) != -1
+        console.log 'found'
+        fillColor = '#FFFF00'
+
       return {
         fillColor:        fillColor
         fillOpacity:      fillOpacity
@@ -137,11 +142,13 @@
           kml = precinct.get 'kml'
           colors = @precinctColors(candidates, res)
 
-          points = @pointsFromKml(kml)
+          lines = @pointsFromKml(kml)
 
-          bounds.extend(point) for point in points
+          for points in lines
+            bounds.extend(point) for point in points
+
           poly = new google.maps.Polygon
-            paths:          points,
+            paths:          lines,
             strokeColor:    '#000000'
             strokeOpacity:  0.3
             strokeWeight:   1
