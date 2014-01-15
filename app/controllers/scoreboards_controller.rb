@@ -24,8 +24,8 @@ class ScoreboardsController < ApplicationController
 
     # TODO: These colors should be set on county basis
     gon.partyColors = {
-      republican: [ '#ffbebf', '#ff7c7e', '#ff3841', '#ff0014' ],
-      democrat:   [ '#b0deed', '#70cfec', '#26bfea', '#00afeb' ],
+      republican: [ '#ffcfc5', '#f4a192', '#f47c6d', '#f15149' ],
+      democrat:   [ '#c4c4d3', '#9997b4', '#73739a', '#4c5986' ],
       other:      [ '#fdfec5', '#fbfe8f', '#fbfe63', '#fbfe56' ]
     }
   end

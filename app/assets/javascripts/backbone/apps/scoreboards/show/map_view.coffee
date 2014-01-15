@@ -92,14 +92,15 @@
 
     precinctColors: (candidates, precinctResult) ->
       # Default (not in range precinct) colors are all the same
-      fillColor        = '#000000'
-      fillOpacity      = 0.3
+      fillColor        = '#ffffff'
+      fillOpacity      = 0.4
       hoverColor       = fillColor
-      hoverOpacity     = 0.3
+      hoverOpacity     = 0.4
 
       if precinctResult?
         # Highlight with opacity if precinct is in range
-        hoverOpacity = 0.8
+        hoverOpacity = 0.9
+        fillOpacity  = 0.7
 
         precinctVotes = precinctResult.get('votes')
         if precinctVotes == 0
@@ -149,9 +150,9 @@
 
           poly = new google.maps.Polygon
             paths:          lines,
-            strokeColor:    '#000000'
-            strokeOpacity:  0.3
-            strokeWeight:   1
+            strokeColor:    '#ffffff'
+            strokeOpacity:  1
+            strokeWeight:   .7
             fillColor:      colors.fillColor
             fillOpacity:    colors.fillOpacity
             data:
@@ -160,7 +161,6 @@
 
           google.maps.event.addListener poly, 'mouseover', ->
             # return if this == selectedPolygon
-            console.log @.data.precinctId
             @setOptions
               fillColor:   @.data.colors.hoverFillColor
               fillOpacity: @.data.colors.hoverFillOpacity
