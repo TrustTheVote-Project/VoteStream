@@ -1,20 +1,16 @@
 <div class='js-trigger'>
-  <%% if @contest: %>
-  <%%= @contest.get('office') %>
-  <%% else: %>
-  No category
-  <%% end %>
+  <%%= @categoryLabel %>
   <%= image_tag "drop-down-arrow.png", class: 'drop-down-arrow' %>
 </div>
-<div class="popover">
+<div class="categories popover">
   <div class="popover-content">
-    <ul class="nav nav-tabs">
-      <li class="js-tab-referenda active"><a href="#"><%= I18n.t 'scoreboard.header.left_menu.tabs.referenda' %></a></li>
-      <li class="js-tab-federal"><a href="#"><%= I18n.t 'scoreboard.header.left_menu.tabs.federal' %></a></li>
-      <li class="js-tab-state"><a href="#"><%= I18n.t 'scoreboard.header.left_menu.tabs.state' %></a></li>
-      <li class="js-tab-local"><a href="#"><%= I18n.t 'scoreboard.header.left_menu.tabs.local' %></a></li>
-      <li class="js-tab-other"><a href="#"><%= I18n.t 'scoreboard.header.left_menu.tabs.other' %></a></li>
+    <ul>
+      <li><a href="#"><%= I18n.t 'scoreboard.header.left_menu.none' %></a></li>
+      <li><a href="#" data-category='federal'><%= I18n.t 'scoreboard.header.left_menu.categories.federal' %></a></li>
+      <li><a href="#" data-category='state'><%= I18n.t 'scoreboard.header.left_menu.categories.state' %></a></li>
+      <li><a href="#" data-category='local'><%= I18n.t 'scoreboard.header.left_menu.categories.local' %></a></li>
+      <li><a href="#" data-category='other'><%= I18n.t 'scoreboard.header.left_menu.categories.other' %></a></li>
+      <li><a href="#" data-category='referendums'><%= I18n.t 'scoreboard.header.left_menu.categories.referenda' %></a></li>
     </ul>
-    <div class="popover-body" id="contests-region"></div>
   </div>
 </div>

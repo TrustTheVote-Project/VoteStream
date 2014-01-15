@@ -10,7 +10,8 @@ en:
     header:
       left_menu:
         label: Select a Category
-        tabs:
+        none: No category
+        categories:
           referenda: All Referenda
           federal: Federal Contests
           state: State Contests

@@ -23,19 +23,11 @@
   class ContestSelectorView extends Marionette.Layout
     template: 'scoreboards/header/_contest_selector'
 
-    ui:
-      popover:      '.popover'
-      tabReferenda: '.js-tab-referenda'
-      tabFederal:   '.js-tab-federal'
-      tabState:     '.js-tab-state'
-      tabLocal:     '.js-tab-local'
-      tabOther:     '.js-tab-other'
-
-    regions:
-      contestsRegion: '#contests-region'
-
     modelEvents:
-      'change:contest': 'render'
+      'change:categoryLabel': 'render'
+
+    ui:
+      popover: '.popover'
 
     closePopover: ->
       @ui.popover.hide()
@@ -47,29 +39,14 @@
           $(po).hide() unless po == @ui.popover[0]
         @ui.popover.toggle()
 
-      'click .js-tab-referenda': (e) -> @showCategory 'referendums', @ui.tabReferenda, e
-      'click .js-tab-federal': (e) -> @showCategory 'federal', @ui.tabFederal, e
-      'click .js-tab-state': (e) -> @showCategory 'state', @ui.tabState, e
-      'click .js-tab-local': (e) -> @showCategory 'local', @ui.tabLocal, e
-      'click .js-tab-other': (e) -> @showCategory 'other', @ui.tabOther, e
+      'click ul a': (e) ->
+        e.preventDefault()
+        link = $(e.target)
+        App.vent.trigger 'category:selected',
+          category: link.data('category'),
+          label: link.text()
 
-    showCategory: (type, tab, e) ->
-      e.preventDefault() if e?
-
-      for t in @tabs
-        if t == tab
-          t.addClass 'active'
-        else
-          t.removeClass 'active'
-
-      contests = App.request "entities:contests:#{type}"
-      console.log contests
-      @.contestsRegion.show new CategoriesView
-        collection: contests
-
-    onShow: ->
-      @tabs = [ @ui.tabReferenda, @ui.tabFederal, @ui.tabState, @ui.tabLocal, @ui.tabOther ]
-      @showCategory 'referendums', @ui.tabReferenda
+        @closePopover()
 
 
   class CategoryView extends Marionette.ItemView

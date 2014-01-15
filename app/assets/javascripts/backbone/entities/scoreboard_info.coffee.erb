@@ -18,12 +18,19 @@
           refcon:           null
           results:          new Entities.Results
 
-          regionLabel:      -> if !@region then "<%= I18n.t 'scoreboard.header.right_menu.tabs.all' %>" else @region.get('name')
+          category:         null
+          categoryLabel:    "<%= I18n.t 'scoreboard.header.left_menu.none' %>"
+
           region:           null
+          regionLabel:      -> if !@region then "<%= I18n.t 'scoreboard.header.right_menu.tabs.all' %>" else @region.get('name')
           percentReporting: -> 29
 
         App.vent.on 'region:selected', (region) ->
           sb.set 'region', region
+
+        App.vent.on 'category:selected', (o) ->
+          sb.set 'category', o.category
+          sb.set 'categoryLabel', o.label
 
         sb.on 'change:region', -> @reloadRefcons()
 
