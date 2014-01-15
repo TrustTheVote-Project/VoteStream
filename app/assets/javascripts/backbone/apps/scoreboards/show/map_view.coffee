@@ -106,8 +106,7 @@
           fillColor = '#cccccc'
         else
           rows = precinctResult.get('rows')
-          leadingResult = rows.first()
-          candidate = candidates.get leadingResult.get 'cid'
+          candidate = candidates.get precinctResult.get 'leader'
           party = candidate.get 'party'
 
           colorRange = @partyColorRange party

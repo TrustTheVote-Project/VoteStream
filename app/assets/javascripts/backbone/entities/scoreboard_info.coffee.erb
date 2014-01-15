@@ -3,7 +3,7 @@
   class Entities.ScoreboardInfo extends Backbone.Model
     reloadRefcons: ->
       refcons = @get 'refcons'
-      refcons.fetchForRegion @get('localityId'), @get('region')
+      refcons.fetchForFilter @get('localityId'), @get('region'), @get('category')
 
   API =
     getScoreboardInfo: ->
@@ -32,6 +32,7 @@
           sb.set 'category', o.category
           sb.set 'categoryLabel', o.label
 
+        sb.on 'change:category', -> @reloadRefcons()
         sb.on 'change:region', -> @reloadRefcons()
 
         sb.on 'change:refcon', ->

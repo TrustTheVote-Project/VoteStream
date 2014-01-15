@@ -6,11 +6,11 @@
   <div class="popover-content">
     <ul>
       <li><a href="#"><%= I18n.t 'scoreboard.header.left_menu.none' %></a></li>
-      <li><a href="#" data-category='federal'><%= I18n.t 'scoreboard.header.left_menu.categories.federal' %></a></li>
-      <li><a href="#" data-category='state'><%= I18n.t 'scoreboard.header.left_menu.categories.state' %></a></li>
-      <li><a href="#" data-category='local'><%= I18n.t 'scoreboard.header.left_menu.categories.local' %></a></li>
-      <li><a href="#" data-category='other'><%= I18n.t 'scoreboard.header.left_menu.categories.other' %></a></li>
-      <li><a href="#" data-category='referendums'><%= I18n.t 'scoreboard.header.left_menu.categories.referenda' %></a></li>
+      <li><a href="#" data-category='Federal'><%= I18n.t 'scoreboard.header.left_menu.categories.federal' %></a></li>
+      <li><a href="#" data-category='State'><%= I18n.t 'scoreboard.header.left_menu.categories.state' %></a></li>
+      <li><a href="#" data-category='MCD'><%= I18n.t 'scoreboard.header.left_menu.categories.local' %></a></li>
+      <li><a href="#" data-category='Other'><%= I18n.t 'scoreboard.header.left_menu.categories.other' %></a></li>
+      <li><a href="#" data-category='<%= DataController::CATEGORY_REFERENDUMS %>'><%= I18n.t 'scoreboard.header.left_menu.categories.referenda' %></a></li>
     </ul>
   </div>
 </div>

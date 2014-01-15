@@ -1,5 +1,7 @@
 class DataController < ApplicationController
 
+  CATEGORY_REFERENDUMS = 'Referendums'
+
   def districts
     contest_id = params[:contest_id]
     if contest_id.present?
@@ -36,12 +38,21 @@ class DataController < ApplicationController
   def refcons
     if (pid = params[:precinct_id]) || (did = params[:district_id])
       region = pid ? Precinct.find(pid) : District.find(did)
-      contests = region.contests
-      referendums = region.referendums
     else
-      locality = Locality.find(params[:locality_id])
-      contests = locality.contests
-      referendums = locality.referendums
+      region = Locality.find(params[:locality_id])
+    end
+
+    cat = params[:category]
+    if cat.blank? || cat == CATEGORY_REFERENDUMS
+      referendums = region.referendums
+    end
+
+    if cat.blank?
+      contests = region.contests
+    elsif cat == CATEGORY_REFERENDUMS
+      contests = nil
+    else
+      contests = region.contests.where(district_type: cat)
     end
 
     render json: list_to_refcons([ contests, referendums ].compact.flatten)

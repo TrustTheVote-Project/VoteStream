@@ -101,10 +101,10 @@
       data
     templateHelpers:
       percent: ->
-        Math.floor(@votes * 100 / @totalVotes)
+        if @totalVotes == 0 then '' else Math.floor(@votes * 100 / @totalVotes)
 
       percentFormatted: ->
-        "#{Math.floor(@votes * 1000 / @totalVotes) / 10.0}%"
+        if @totalVotes == 0 then '' else "#{Math.floor(@votes * 1000 / @totalVotes) / 10.0}%"
 
   class SummaryView extends Marionette.CompositeView
     template: 'scoreboards/show/_refcon_summary'

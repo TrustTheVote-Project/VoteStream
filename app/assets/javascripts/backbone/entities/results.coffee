@@ -10,7 +10,7 @@
   class RefCon extends Backbone.Model
   class Entities.RefCons extends Backbone.Collection
     model: RefCon
-    fetchForRegion: (localityId, region) ->
+    fetchForFilter: (localityId, region, category) ->
       filter = locality_id: localityId
       if region?
         rid = region.get 'id'
@@ -18,6 +18,9 @@
           filter.district_id = rid
         else
           filter.precinct_id = rid
+
+      if category?
+        filter.category = category
 
       @fetch
         url:   '/data/refcons'
