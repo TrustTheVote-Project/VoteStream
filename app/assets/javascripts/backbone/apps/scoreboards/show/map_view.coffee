@@ -8,18 +8,16 @@
       @polygons = []
 
       si = App.request 'entities:scoreboardInfo'
-      res = si.get 'results'
-      res.on 'sync', => @updateColors()
+      @precinctResults = si.get 'precinctResults'
+      @precinctResults.on 'sync', => @updateColors()
 
     updateColors: ->
-      si = App.request 'entities:scoreboardInfo'
-      res = si.get 'results'
-      candidates = res.get 'candidates'
-      precinctResults = res.get 'precinctResults'
+      items     = @precinctResults.get 'items'
+      precincts = @precinctResults.get 'precincts'
 
       for p in @polygons
-        res = precinctResults?.get p.data.precinctId
-        p.data.colors = @precinctColors candidates, res
+        res = precincts.get p.data.precinctId
+        p.data.colors = @precinctColors items, res
         p.setOptions
           fillColor:   p.data.colors.fillColor
           fillOpacity: p.data.colors.fillOpacity
@@ -69,16 +67,16 @@
       poly.setMap(null) for poly in @polygons
       @polygons = []
 
-    partyColorRange: (party) ->
-      if party == 'Republican'
+    colorRange: (colorId) ->
+      if colorId == 'Republican' or colorId == 'YES'
         gon.partyColors.republican
-      else if party == 'Democratic-Farmer-Labor'
+      else if colorId == 'Democratic-Farmer-Labor' or colorId == 'NO'
         gon.partyColors.democrat
       else
         gon.partyColors.other
 
-    colorShade: (range, candidateVotes, precinctVotes) ->
-      p = candidateVotes * 100 / precinctVotes
+    colorShade: (range, itemVotes, precinctVotes) ->
+      p = itemVotes * 100 / precinctVotes
       if p < 0.5
         c = 0
       else if p < 0.6
@@ -90,7 +88,7 @@
 
       range[c]
 
-    precinctColors: (candidates, precinctResult) ->
+    precinctColors: (items, precinctResult) ->
       # Default (not in range precinct) colors are all the same
       fillColor        = '#ffffff'
       fillOpacity      = 0.4
@@ -108,16 +106,13 @@
           fillColor = '#cccccc'
         else
           rows = precinctResult.get('rows')
-          candidate = candidates.get precinctResult.get 'leader'
-          party = candidate.get 'party'
+          leader = items.get precinctResult.get 'leader'
+          leaderVotes = precinctResult.get 'leader_votes'
+          colorId  = leader?.get('party') or leader?.get('name')
 
-          colorRange = @partyColorRange party
-          fillColor = @colorShade colorRange, candidate.get('votes'), precinctVotes
+          colorRange = @colorRange colorId
+          fillColor = @colorShade colorRange, leaderVotes, precinctVotes
           hoverColor = fillColor
-
-      if [ 679, 520, 527 ].indexOf(precinctResult?.get('id')) != -1
-        console.log 'found'
-        fillColor = '#FFFF00'
 
       return {
         fillColor:        fillColor
@@ -131,17 +126,15 @@
       App.execute 'when:fetched', precincts, =>
         @removePreviousPolygons()
 
-        bounds = new google.maps.LatLngBounds()
-
-        si = App.request 'entities:scoreboardInfo'
-        precinctResults = si.get('results').get('precinctResults')
-        candidates = si.get('results').get('candidates')
+        bounds  = new google.maps.LatLngBounds()
+        results = @precinctResults.get 'precincts'
+        items   = @precinctResults.get 'items'
 
         for precinct in precincts.models
           precinctId = precinct.get 'id'
-          res = precinctResults?.get 'id'
+          res = results.get precinctId
           kml = precinct.get 'kml'
-          colors = @precinctColors(candidates, res)
+          colors = @precinctColors(items, res)
 
           lines = @pointsFromKml(kml)
 

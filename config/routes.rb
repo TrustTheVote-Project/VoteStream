@@ -24,6 +24,7 @@ Enrs::Application.routes.draw do
   get '/data/voting_results' => 'data#voting_results'
   get '/data/refcons' => 'data#refcons'
   get '/data/results' => 'data#results'
+  get '/data/precinct_results' => 'data#precinct_results'
 
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".

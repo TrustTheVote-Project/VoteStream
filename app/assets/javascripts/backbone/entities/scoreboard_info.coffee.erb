@@ -1,9 +1,9 @@
 @App.module "Entities", (Entities, App, Backbone, Marionette, $, _) ->
 
   class Entities.ScoreboardInfo extends Backbone.Model
-    reloadRefcons: ->
-      refcons = @get 'refcons'
-      refcons.fetchForFilter @get('localityId'), @get('region'), @get('category')
+    reloadResults: ->
+      results = @get 'results'
+      results.fetchForFilter @get('localityId'), @get('region'), @get('category')
 
   API =
     getScoreboardInfo: ->
@@ -14,9 +14,9 @@
           localityInfo:     gon.locality_info
           electionInfo:     gon.election_info
 
-          refcons:          new Entities.RefCons
-          refcon:           null
-          results:          new Entities.Results
+          results:          new Entities.ResultsCollection
+          result:           null
+          precinctResults:  new Entities.PrecinctResultData
 
           category:         null
           categoryLabel:    "<%= I18n.t 'scoreboard.header.left_menu.none' %>"
@@ -29,21 +29,24 @@
           sb.set 'region', region
 
         App.vent.on 'category:selected', (o) ->
-          sb.set 'category', o.category
+          sb.set 'category',      o.category
           sb.set 'categoryLabel', o.label
 
-        sb.on 'change:category', -> @reloadRefcons()
-        sb.on 'change:region', -> @reloadRefcons()
+        sb.on 'change:region change:category', -> @reloadResults()
 
-        sb.on 'change:refcon', ->
-          results = @get 'results'
-          results.fetchForRefCon @get('refcon'), @get('region')
+        sb.get('results').on 'reset', ->
+          result  = sb.get 'result'
+          results = sb.get 'results'
+          if results.indexOf(result) == -1
+            sb.set 'result', results.first()
 
-        sb.get('refcons').on 'reset', ->
-          si = App.request 'entities:scoreboardInfo'
-          si.set 'refcon', @first() or null
+        sb.on 'change:result', ->
+          result  = sb.get 'result'
+          region  = sb.get 'region'
+          results = sb.get 'precinctResults'
+          results.fetchForResult result, region
 
-        sb.reloadRefcons()
+        sb.reloadResults()
 
       Entities.scoreboardInfo
 

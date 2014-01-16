@@ -13,32 +13,32 @@
       @mapRegion.show new Show.MapView
 
 
-  class RefConRotator
+  class ResultsRotator
     constructor: ->
       @si = App.request 'entities:scoreboardInfo'
-      @refcons = @si.get 'refcons'
+      @results = @si.get 'results'
 
       @initIndex()
-      @si.on 'reset:refcons', => @initIndex()
-      @si.on 'change:refcon', => @initIndex()
+      @si.on 'reset:results change:result', => @initIndex()
 
     initIndex: ->
-      refcon  = @si.get 'refcon'
-      @idx    = @refcons.indexOf refcon
+      result  = @si.get 'result'
+      @idx    = @results.indexOf result
 
     next: ->
       @idx++
-      @idx = 0 if @refcons.length <= @idx
-      @si.set 'refcon', @refcons.at(@idx)
+      @idx = 0 if @results.length <= @idx
+      @si.set 'result', @results.at(@idx)
 
     prev: ->
       @idx--
-      @idx = @refcons.length - 1 if @idx < 0
+      @idx = @results.length - 1 if @idx < 0
       @idx = 0 if @idx < 0
-      @si.set 'refcon', @refcons.at(@idx)
+      @si.set 'result', @results.at(@idx)
 
     hasPrev: -> @idx > 0
-    hasNext: -> @idx < @refcons.length - 1
+    hasNext: -> @idx < @results.length - 1
+
 
   class ResultsSummaryLayout extends Marionette.Layout
     template: 'scoreboards/show/_results_summary_layout'
@@ -49,11 +49,10 @@
       summaryRegion: '#summary-region'
 
     initialize: ->
-      @rotator = new RefConRotator
+      @rotator = new ResultsRotator
 
       @si = App.request 'entities:scoreboardInfo'
-      @si.get('refcons').on 'reset', => @updateLayout()
-      @si.get('results').on 'sync', => @updateLayout()
+      @si.on 'change:result', => @updateLayout()
 
     ui: ->
       prevRefCon: '#js-prev-refcon a'
@@ -74,11 +73,20 @@
         @rotator.next()
 
     updateLayout: ->
-      results = @si.get('results')
-      if results.hasData()
-        @summaryRegion.show new SummaryView
-          model:      results
-          collection: results.get('summary').get('rows')
+      result = @si.get('result')
+      if result?
+        rows = result.get('summary').get('rows')
+        if result.get('type') == 'c'
+          view = new ContestSummaryView
+            model:      result
+            collection: rows
+        else
+          view = new ReferendumSummaryView
+            model:      result
+            collection: rows
+
+        @summaryRegion.show view
+
       else
         @summaryRegion.show new NoRefConView
 
@@ -88,33 +96,57 @@
   class NoRefConView extends Marionette.ItemView
     template: 'scoreboards/show/_no_refcon'
 
-  class SummaryRowView extends Marionette.ItemView
-    template: 'scoreboards/show/_refcon_summary_row'
+
+  class ContestSummaryRowView extends Marionette.ItemView
+    template: 'scoreboards/show/_contest_summary_row'
     tagName:  'li'
     className: ->
-      "#{if @.options.hidden then 'hide' else ''} party-#{(@options.candidate.get('party') || "").toLowerCase().replace(/[^a-z]/g, '')}".trim()
+      "#{if @.options.hidden then 'hide' else ''} party-#{(@model.get('party') || "").toLowerCase().replace(/[^a-z]/g, '')}".trim()
     serializeData: ->
       data = Backbone.Marionette.ItemView.prototype.serializeData.apply @, arguments
       data.totalVotes = @options.totalVotes
-      data.name       = @options.candidate.get('name')
-      data.party      = @options.candidate.get('party')
       data
     templateHelpers:
-      percent: ->
-        if @totalVotes == 0 then '' else Math.floor(@votes * 100 / @totalVotes)
+      percent: -> Math.floor(@votes * 100 / (@totalVotes || 1))
+      percentFormatted: -> "#{Math.floor(@votes * 1000 / (@totalVotes || 1)) / 10.0}%"
 
-      percentFormatted: ->
-        if @totalVotes == 0 then '' else "#{Math.floor(@votes * 1000 / @totalVotes) / 10.0}%"
 
-  class SummaryView extends Marionette.CompositeView
-    template: 'scoreboards/show/_refcon_summary'
-    itemView: SummaryRowView
+  class ReferendumSummaryRowView extends Marionette.ItemView
+    template: 'scoreboards/show/_referendum_summary_row'
+    tagName:  'li'
+    className: ->
+      "response-#{(@model.get('name') || "").toLowerCase().replace(/[^a-z]/g, '')}".trim()
+    serializeData: ->
+      data = Backbone.Marionette.ItemView.prototype.serializeData.apply @, arguments
+      data.totalVotes = @options.totalVotes
+      data
+    templateHelpers:
+      percent: -> Math.floor(@votes * 100 / (@totalVotes || 1))
+      percentFormatted: -> "#{Math.floor(@votes * 1000 / (@totalVotes || 1)) / 10.0}%"
+
+
+  # referendum details region
+  class ReferendumSummaryView extends Marionette.CompositeView
+    template: 'scoreboards/show/_referendum_summary'
+    itemView: ReferendumSummaryRowView
+
+    itemViewContainer: 'ul'
+    itemViewOptions: (m, i) ->
+      return {
+        totalVotes: @model.get('summary').get('votes')
+      }
+
+
+  class ContestSummaryView extends Marionette.CompositeView
+    template: 'scoreboards/show/_contest_summary'
+    itemView: ContestSummaryRowView
+
     itemViewContainer: 'ul'
     itemViewOptions: (m, i) ->
       return {
         hidden:     i > 1,
-        candidate:  @model.get('candidates').get(m.get('cid')),
-        totalVotes: @model.get('summary').get('total_votes') }
+        totalVotes: @model.get('summary').get('votes')
+      }
 
     ui:
       rowsList: 'ul'
@@ -137,5 +169,3 @@
         $('li.hide', @ui.rowsList).hide()
         @ui.showLessBtn.hide()
         @ui.showMoreBtn.show()
-
-

@@ -4,28 +4,9 @@
   class Candidates extends Backbone.Collection
     model: Candidate
 
-  # Contest or Referendum
-  # - type
-  # - id
-  class RefCon extends Backbone.Model
-  class Entities.RefCons extends Backbone.Collection
-    model: RefCon
-    fetchForFilter: (localityId, region, category) ->
-      filter = locality_id: localityId
-      if region?
-        rid = region.get 'id'
-        if region instanceof App.Entities.District
-          filter.district_id = rid
-        else
-          filter.precinct_id = rid
-
-      if category?
-        filter.category = category
-
-      @fetch
-        url:   '/data/refcons'
-        reset: true
-        data:  filter
+  class Response extends Backbone.Model
+  class Responses extends Backbone.Collection
+    model: Response
 
   # Single results row
   # - name
@@ -48,54 +29,83 @@
   # - precinctResults (PrecinctResults ...)
   # - candidates (Candidates ...)
   class Entities.Results extends Backbone.Model
-    initialize: ->
-      @set 'candidates', new Candidates
-      @set 'summary', new ResultsSummary
-      @set 'precinctResults', new PrecinctResults
-
     parse: (data) ->
-      summary = new ResultsSummary data?.summary
-      candidates = new Candidates data?.candidates
-      return {
-        summary:         summary,
-        candidates:      candidates,
-        precinctResults: new PrecinctResults data?.precinctResults }
+      res =
+        type: data.type
+        id:   data.id
+        summary: new ResultsSummary data.summary
 
-    hasData: ->
-      @get('summary')?
+      if data.type == 'c'
+        res.candidates = new Candidates data.candidates
+      else
+        res.responses = new Responses data.responses
 
-    fetchForRefCon: (refcon, region) ->
-      unless refcon?
-        @set 'candidates', null
-        @set 'precinctResults', null
-        @set 'summary', null
-        @trigger 'sync'
-        return
+      res
 
-      rcid = refcon.get('id')
-      rcty = refcon.get('type')
+  class Entities.ResultsCollection extends Backbone.Collection
+    model: Entities.Results
 
-      filter = {}
-      filter.contest_id = rcid if rcty == 'contest'
-      filter.referendum_id = rcid if rcty == 'referendum'
-      rid = region?.get 'id'
-      if region instanceof Entities.District
-        filter.district_id = rid
-      else if region instanceof Entities.Precinct
-        filter.precinct_id = rid
+    fetchForFilter: (localityId, region, category) ->
+      filter = locality_id: localityId
+      if region?
+        rid = region.get 'id'
+        if region instanceof App.Entities.District
+          filter.district_id = rid
+        else
+          filter.precinct_id = rid
+
+      if category?
+        filter.category = category
 
       @fetch
-        url: '/data/results'
+        url:   '/data/refcons'
         reset: true
-        data: filter
+        data:  filter
 
-  # RefCon results summary for individual precinct
-  # - pid
+  # --- Precinct results ---
+
+  class PrecinctRowItem extends Backbone.Model
+  class PrecinctRowItems extends Backbone.Collection
+    model: PrecinctRowItem
+
+  # Results for individual precinct
+  # - id
   # - votes
   # - rows (top 2) (ResultRow collection)
   class PrecinctResult extends Backbone.Model
     initialize: ->
       @set 'rows', new ResultRows @get 'rows'
+  # Collection of results
   class PrecinctResults extends Backbone.Collection
     model: PrecinctResult
 
+  # Results for the given result (recon + region)
+  class Entities.PrecinctResultData extends Backbone.Model
+    initialize: ->
+      @set 'items', new PrecinctRowItems
+      @set 'precincts', new PrecinctResults
+
+    parse: (data) ->
+      @set 'items', new PrecinctRowItems data.items
+      @set 'precincts', new PrecinctResults data.precincts
+
+    fetchForResult: (result, region) ->
+      filter = {}
+
+      rid = result.get('id')
+      if result.get('type') == 'c'
+        filter.contest_id = rid
+      else
+        filter.referendum_id = rid
+
+      if region?
+        rid = region.get 'id'
+        if region instanceof App.Entities.District
+          filter.district_id = rid
+        else
+          filter.precinct_id = rid
+
+      @fetch
+        url:   '/data/precinct_results'
+        reset: true
+        data:  filter

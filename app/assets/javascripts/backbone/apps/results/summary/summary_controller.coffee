@@ -2,7 +2,6 @@
 
   Summary.Controller =
     showSummary: ->
-      console.log 'showSummary'
       layout = new Summary.Layout
 
       layout.on "show", =>
