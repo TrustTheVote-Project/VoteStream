@@ -90,6 +90,12 @@
       @set 'precincts', new PrecinctResults data.precincts
 
     fetchForResult: (result, region) ->
+      if !result?
+        @parse {}
+        @trigger 'reset'
+        @trigger 'sync'
+        return
+
       filter = {}
 
       rid = result.get('id')
