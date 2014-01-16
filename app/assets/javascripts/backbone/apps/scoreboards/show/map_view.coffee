@@ -11,13 +11,24 @@
       @precinctResults = si.get 'precinctResults'
       @precinctResults.on 'sync', => @updateColors()
 
+      @precincts = App.request 'entities:precincts'
+      @infoWindow = new google.maps.InfoWindow()
+      google.maps.event.addListener @infoWindow, 'domready', ->
+        $('.iw-allresults').on 'click', (e) ->
+          e.preventDefault()
+          console.log 'second window'
+
     updateColors: ->
+      @infoWindow.close()
+
       items     = @precinctResults.get 'items'
       precincts = @precinctResults.get 'precincts'
 
       for p in @polygons
         res = precincts.get p.data.precinctId
         p.data.colors = @precinctColors items, res
+        p.data.precinctResult = res
+
         p.setOptions
           fillColor:   p.data.colors.fillColor
           fillOpacity: p.data.colors.fillOpacity
@@ -122,15 +133,15 @@
       }
 
     renderPrecincts: ->
-      precincts = App.request 'entities:precincts'
-      App.execute 'when:fetched', precincts, =>
+      mapView = @
+      App.execute 'when:fetched', @precincts, =>
         @removePreviousPolygons()
 
         bounds  = new google.maps.LatLngBounds()
         results = @precinctResults.get 'precincts'
         items   = @precinctResults.get 'items'
 
-        for precinct in precincts.models
+        for precinct in @precincts.models
           precinctId = precinct.get 'id'
           res = results.get precinctId
           kml = precinct.get 'kml'
@@ -151,6 +162,7 @@
             data:
               precinctId:       precinctId
               colors:           colors
+              precinctResult:   res
 
           google.maps.event.addListener poly, 'mouseover', ->
             # return if this == selectedPolygon
@@ -164,6 +176,49 @@
               fillColor:   @.data.colors.fillColor
               fillOpacity: @.data.colors.fillOpacity
 
+          google.maps.event.addListener poly, 'click', (e) ->
+            # mapView.deselectPolygon()
+
+            @setOptions
+              fillColor:   @.data.colors.hoverFillColor
+              fillOpacity: @.data.colors.hoverFillOpacity
+              
+            # mapView.selectedPolygon = @
+
+            pid = @.data.precinctId
+            precinct = mapView.precincts.get pid
+
+            si = App.request 'entities:scoreboardInfo'
+            result = si.get 'result'
+            title = result.get('summary').get('title')
+
+            results = mapView.precinctResults
+            precinctResult = @.data.precinctResult
+
+            rowsHtml = ""
+            rows  = precinctResult.get('rows')
+            items = results.get('items')
+
+            votes = precinctResult.get('votes')
+            totalDisplayed = 0
+            for row in rows.models
+              i = items.get row.get('id')
+              v = row.get('votes') || 0
+              totalDisplayed += v
+              p = Math.floor((v * 1000) / (votes || 1)) / 10.0
+              rowsHtml += "<tr><td class='iw-n'>#{i.get('name')}</td><td class='iw-v'>#{v}</td><td class='iw-p'>#{p}%</td></tr>"
+
+            if votes > totalDisplayed
+              v = votes - totalDisplayed
+              p = Math.floor((v * 1000) / (votes || 1)) / 10.0
+              rowsHtml += "<tr><td class='iw-n'>Others</td><td class='iw-v'>#{v}</td><td class='iw-p'>#{p}%</td></tr>"
+
+            html = "<div class='precinct-bubble'><h4>#{precinct.get('name')}</h4><p>#{title}</p><table class='iw-rows'>#{rowsHtml}</table><a class='iw-allresults'>All results</a></div>"
+            mapView.infoWindow.setContent html
+            mapView.infoWindow.setPosition e.latLng
+            mapView.infoWindow.open(mapView.map)
+
+            
           @polygons.push poly
           poly.setMap @map
 
