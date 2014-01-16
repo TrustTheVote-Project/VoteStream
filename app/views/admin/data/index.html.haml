@@ -3,6 +3,10 @@
 
 .row-fluid
   .span6
+    = link_to "Full Definitions and Data Reset", :admin_full_reset, class: 'btn btn-danger', confirm: "Are you sure to delete everything?"
+
+.row-fluid
+  .span6
     %h3 Upload definitions
     = form_tag admin_load_definitions_path, multipart: true do
       .row-fluid
