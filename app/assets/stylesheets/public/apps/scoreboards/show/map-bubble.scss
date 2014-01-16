@@ -1,5 +1,7 @@
 .precinct-bubble {
   table {
+    margin: 10px 0;
+
     .iw-n {
       width: 200px;
       font-weight: bold;
@@ -14,5 +16,9 @@
       text-align: right;
       font-weight: bold;
     }
+  }
+
+  .iw-all {
+    text-align: center;
   }
 }

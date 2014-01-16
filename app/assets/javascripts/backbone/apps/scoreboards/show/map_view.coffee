@@ -14,7 +14,7 @@
       @precincts = App.request 'entities:precincts'
       @infoWindow = new google.maps.InfoWindow()
       google.maps.event.addListener @infoWindow, 'domready', ->
-        $('.iw-allresults').on 'click', (e) ->
+        $('.iw-all a').on 'click', (e) ->
           e.preventDefault()
           console.log 'second window'
 
@@ -177,6 +177,7 @@
               fillOpacity: @.data.colors.fillOpacity
 
           google.maps.event.addListener poly, 'click', (e) ->
+            return if !@.data.precinctResult?
             # mapView.deselectPolygon()
 
             @setOptions
@@ -213,7 +214,7 @@
               p = Math.floor((v * 1000) / (votes || 1)) / 10.0
               rowsHtml += "<tr><td class='iw-n'>Others</td><td class='iw-v'>#{v}</td><td class='iw-p'>#{p}%</td></tr>"
 
-            html = "<div class='precinct-bubble'><h4>#{precinct.get('name')}</h4><p>#{title}</p><table class='iw-rows'>#{rowsHtml}</table><a class='iw-allresults'>All results</a></div>"
+            html = "<div class='precinct-bubble'><h4>#{precinct.get('name')}</h4><p>#{title}</p><table class='iw-rows'>#{rowsHtml}</table><div class='iw-all'><a>View All Races</a></div></div>"
             mapView.infoWindow.setContent html
             mapView.infoWindow.setPosition e.latLng
             mapView.infoWindow.open(mapView.map)
