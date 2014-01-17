@@ -2,6 +2,7 @@
 
   class Show.View extends Marionette.Layout
     template: 'scoreboards/show/view'
+    id: 'show'
 
     regions:
       resultsSummaryRegion: '#results-summary-region'
@@ -31,13 +32,13 @@
     next: ->
       @idx++
       @idx = 0 if @results.length <= @idx
-      @si.set 'result', @results.at(@idx)
+      App.vent.trigger 'result:selected', @results.at(@idx)
 
     prev: ->
       @idx--
       @idx = @results.length - 1 if @idx < 0
       @idx = 0 if @idx < 0
-      @si.set 'result', @results.at(@idx)
+      App.vent.trigger 'result:selected', @results.at(@idx)
 
     hasPrev: -> @idx > 0
     hasNext: -> @idx < @results.length - 1

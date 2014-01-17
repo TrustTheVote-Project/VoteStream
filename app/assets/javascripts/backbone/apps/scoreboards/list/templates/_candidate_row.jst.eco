@@ -1,0 +1,4 @@
+<td class='lr-n'><%= @name %></td>
+<td class='lr-a'><%= @party %></td>
+<td class='lr-v'><%= @votes %></td>
+<td class='lr-p'><%= @percentFormatted() %></td>

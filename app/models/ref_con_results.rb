@@ -49,6 +49,8 @@ class RefConResults
     res = {
       summary: {
         title:  referendum.title,
+        subtitle: referendum.subtitle,
+        text:   referendum.question,
         cast:   precincts.sum(:total_cast),
         votes:  results.sum(:votes),
         rows:   responses.map { |r| { name: r.name, votes: response_votes[r.id].to_i } }

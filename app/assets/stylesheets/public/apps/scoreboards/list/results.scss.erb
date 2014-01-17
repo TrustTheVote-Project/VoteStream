@@ -1,0 +1,90 @@
+$republican: <%= AppConfig['party_colors']['republican'] %>;
+$democrat: <%= AppConfig['party_colors']['democrat'] %>;
+$default: #888;
+$padding: 5px;
+$header-height: 15px;
+$unselected-header-bg: #d8d8d8;
+$unselected-header-fg: #444;
+$selected-header-bg: #888;
+$selected-header-fg: #fff;
+
+#list {
+  #map {
+    height: 250px;
+  }
+
+  table {
+    width: 100%;
+    font-size: 85%;
+    table-layout: fixed;
+  }
+
+  .lr-v, .lr-p {
+    width: 50px;
+    text-align: right;
+  }
+  .lr-n {
+    padding-left: $padding;
+  }
+  .lr-p {
+    padding-right: $padding;
+  }
+
+  .lr-n, .lr-a {
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+  }
+  .lr-a {
+    width: 125px;
+  }
+
+  .result {
+    margin-bottom: 10px;
+
+    .header {
+      background: $unselected-header-bg;
+      color: $unselected-header-fg;
+      padding: 0 $padding;
+      position: relative;
+      h5 {
+        margin: 0;
+        line-height: $header-height * 2;
+      }
+    }
+
+    &.selected {
+      .header {
+        background: $selected-header-bg;
+        color: $selected-header-fg;
+        margin-right: $header-height;
+      }
+      .header:after {
+        left: 100%;
+        top: 50%;
+        border: solid transparent;
+        content: " ";
+        height: 0;
+        width: 0;
+        position: absolute;
+        pointer-events: none;
+        border-color: rgba(136, 183, 213, 0);
+        border-left-color: $selected-header-bg;
+        border-width: $header-height;
+        margin-top: -$header-height;
+      }
+    }
+
+    td {
+      color: $default;
+    }
+  }
+
+  .party-republican, .response-yes {
+    td { color: $republican; }
+  }
+
+  .party-democraticfarmerlabor, .response-no {
+    td { color: $democrat; }
+  }
+}

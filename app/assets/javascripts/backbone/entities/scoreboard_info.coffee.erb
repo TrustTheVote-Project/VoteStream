@@ -32,6 +32,9 @@
         App.vent.on 'category:selected', (category) ->
           sb.set 'category', category
 
+        App.vent.on 'result:selected', (result) ->
+          sb.set 'result', result
+
         sb.on 'change:region change:category', -> @reloadResults()
 
         sb.get('results').on 'reset', ->

@@ -4,7 +4,7 @@
     template: 'scoreboards/show/_map'
     id: 'map'
 
-    initialize: ->
+    initialize: (options = {}) ->
       @polygons = []
 
       si = App.request 'entities:scoreboardInfo'
@@ -12,13 +12,14 @@
       @precinctResults.on 'sync', @updateColors, @
 
       @precincts = App.request 'entities:precincts'
-      @infoWindow = new google.maps.InfoWindow()
-      google.maps.event.addListener @infoWindow, 'domready', ->
-        $('.iw-all a').on 'click', (e) ->
-          e.preventDefault()
+      unless options.noBalloons?
+        @infoWindow = new google.maps.InfoWindow()
+        google.maps.event.addListener @infoWindow, 'domready', ->
+          $('.iw-all a').on 'click', (e) ->
+            e.preventDefault()
 
     updateColors: ->
-      @infoWindow.close()
+      @infoWindow?.close()
 
       items     = @precinctResults.get 'items'
       precincts = @precinctResults.get 'precincts'
@@ -43,18 +44,24 @@
       delete @polygons
       delete @precinctResults
       delete @precincts
-      delete @infoWindow
+      delete @infoWindow if @infoWindow?
 
     initMap: ->
       center = new google.maps.LatLng gon.mapCenterLat, gon.mapCenterLon
-      @map = new google.maps.Map @el,
+      mapOptions =
         center:                 center
         zoom:                   gon.mapZoom
-        mapTypeControl:         true
-        mapTypeControlOptions:
-          style: google.maps.MapTypeControlStyle.DROPDOWN_MENU
-        navigationControl:      true
         mapTypeId:              google.maps.MapTypeId.ROADMAP
+
+      if @options.hideControls
+        mapOptions.disableDefaultUI = true
+      else
+        mapOptions.mapTypeControl = true
+        mapOptions.mapTypeControlOptions =
+          style: google.maps.MapTypeControlStyle.DROPDOWN_MENU
+        mapOptions.navigationControl = true
+
+      @map = new google.maps.Map @el, mapOptions
 
       style = [{
           featureType: 'all'
@@ -66,6 +73,12 @@
           featureType: 'road',
           stylers: [ visibility: 'off' ]
         }]
+
+      if @options.whiteBackground
+        style.push {
+          featureType: 'labels'
+          stylers: [ lightness: 75 ]
+        }
 
       styledMapType = new google.maps.StyledMapType style,
         map:  @map
@@ -156,7 +169,7 @@
       @setOptions
         fillColor:   @.data.colors.hoverFillColor
         fillOpacity: @.data.colors.hoverFillOpacity
-        
+
       pid = @.data.precinctId
       precincts = App.request 'entities:precincts'
       precinct = precincts.get pid
@@ -226,9 +239,10 @@
               precinctResult:   res
               mapView:          @
 
-          google.maps.event.addListener poly, 'mouseover', @onPolygonMouseOver
-          google.maps.event.addListener poly, 'mouseout', @onPolygonMouseOut
-          google.maps.event.addListener poly, 'click', @onPolygonClick
+          unless @options.noBalloons
+            google.maps.event.addListener poly, 'mouseover', @onPolygonMouseOver
+            google.maps.event.addListener poly, 'mouseout', @onPolygonMouseOut
+            google.maps.event.addListener poly, 'click', @onPolygonClick
 
           @polygons.push poly
           poly.setMap @map

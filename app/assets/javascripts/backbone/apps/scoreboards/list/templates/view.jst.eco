@@ -1,1 +1,5 @@
-list
+<div class="row">
+  <div class="span4">&nbsp;</div>
+  <div class="span6" id='results-region'></div>
+  <div class="span2" id='map-region'></div>
+</div>
