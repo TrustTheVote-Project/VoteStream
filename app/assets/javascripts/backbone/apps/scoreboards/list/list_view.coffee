@@ -16,8 +16,10 @@
       view = new List.ResultsView
         collection: @results
 
-      @resultsRegion.show view
-      @mapRegion.show new App.ScoreboardsApp.Show.MapView
+      mapView = new App.ScoreboardsApp.Show.MapView
         hideControls: true
         noBalloons: true
         whiteBackground: true
+
+      @resultsRegion.show view
+      @mapRegion.show mapView
