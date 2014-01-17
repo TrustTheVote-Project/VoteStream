@@ -12,9 +12,6 @@
       @resultsSummaryRegion.show @layout
       @mapRegion.show new Show.MapView
 
-    onClose: ->
-      console.log 'show.view.close'
-
 
   class ResultsRotator
     constructor: ->
@@ -25,7 +22,6 @@
       @si.on 'reset:results change:result', @initIndex, @
 
     onClose: ->
-      console.log 'resultsrotator.close'
       @si.off 'reset:results change:result', @initIndex, @
       
     initIndex: ->
@@ -67,7 +63,6 @@
 
     onShow: -> @updateLayout()
     onClose: ->
-      console.log 'resultsSummaryLayout.close'
       @rotator.onClose()
       @si.off 'change:result', @updateLayout, @
 

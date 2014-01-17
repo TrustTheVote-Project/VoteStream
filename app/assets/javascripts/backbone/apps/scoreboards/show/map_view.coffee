@@ -16,7 +16,6 @@
       google.maps.event.addListener @infoWindow, 'domready', ->
         $('.iw-all a').on 'click', (e) ->
           e.preventDefault()
-          console.log 'second window'
 
     updateColors: ->
       @infoWindow.close()
@@ -38,7 +37,7 @@
       @renderPrecincts()
 
     onClose: ->
-      console.log 'map.close'
+      @removePreviousPolygons()
       @precinctResults.off 'sync', @updateColors, @
       delete @map
       delete @polygons
