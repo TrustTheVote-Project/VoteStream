@@ -24,3 +24,10 @@ en:
           all: All Precincts
           districts: Districts
           precincts: Precincts
+
+      view_selector:
+        label: Select a View
+        options:
+          map: Map
+          list: List
+          
