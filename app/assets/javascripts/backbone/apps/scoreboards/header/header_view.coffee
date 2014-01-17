@@ -7,6 +7,7 @@
     regions:
       contestSelectorRegion: '#contest-selector-region'
       regionSelectorRegion:  '#region-selector-region'
+      viewSelectorRegion:    '#view-selector-region'
 
     closePopovers: ->
       @regionSelector.closePopover()
@@ -18,13 +19,15 @@
         model: scoreboardInfo
       @.regionSelectorRegion.show @regionSelector = new RegionSelectorView
         model: scoreboardInfo
+      @.viewSelectorRegion.show new ViewSelectorView
+        model: scoreboardInfo
 
 
   class ContestSelectorView extends Marionette.Layout
     template: 'scoreboards/header/_contest_selector'
 
     modelEvents:
-      'change:categoryLabel': 'render'
+      'change:category': 'render'
 
     ui:
       popover: '.popover'
@@ -42,9 +45,7 @@
       'click ul a': (e) ->
         e.preventDefault()
         link = $(e.target)
-        App.vent.trigger 'category:selected',
-          category: link.data('category'),
-          label: link.text()
+        App.vent.trigger 'category:selected', link.data('category')
 
         @closePopover()
 
@@ -170,3 +171,31 @@
     tagName: 'span'
     modelEvents:
       'change:region': 'render'
+
+
+  class ViewSelectorView extends Marionette.ItemView
+    template: 'scoreboards/header/_view_selector'
+
+    modelEvents:
+      'change:view': 'render'
+
+    ui:
+      popover: '.popover'
+
+    closePopover: ->
+      @ui.popover.hide()
+
+    events:
+      'click .js-trigger': (e) ->
+        e.preventDefault()
+        $(".popover").each (i, po) =>
+          $(po).hide() unless po == @ui.popover[0]
+        @ui.popover.toggle()
+
+      'click ul a': (e) ->
+        e.preventDefault()
+        link = $(e.target)
+        App.navigate link.data('view'), trigger: true
+
+        @closePopover()
+

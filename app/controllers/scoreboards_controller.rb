@@ -29,6 +29,14 @@ class ScoreboardsController < ApplicationController
       other:      [ '#fdfec5', '#fbfe8f', '#fbfe63', '#fbfe56' ]
     }
 
+    gon.categories = {
+      DataController::CATEGORY_REFERENDUMS => I18n.t('scoreboard.header.left_menu.categories.referenda'),
+      'Federal' => I18n.t('scoreboard.header.left_menu.categories.federal'),
+      'State'   => I18n.t('scoreboard.header.left_menu.categories.state'),
+      'MCD'     => I18n.t('scoreboard.header.left_menu.categories.local'),
+      'Other'   => I18n.t('scoreboard.header.left_menu.categories.other')
+    }
+
   end
 
 end

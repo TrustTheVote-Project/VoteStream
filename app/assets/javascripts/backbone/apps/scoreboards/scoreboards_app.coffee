@@ -1,10 +1,19 @@
 @App.module "ScoreboardsApp", (ScoreboardsApp, App, Backbone, Marionette, $, _) ->
   @startWithParent = false
 
+  class ScoreboardsApp.Router extends Marionette.AppRouter
+    appRoutes:
+      ""      : "show"
+      "list"  : "list"
+
   API =
-    showScoreboard: ->
-      ScoreboardsApp.Header.Controller.show()
+    show: ->
       ScoreboardsApp.Show.Controller.show()
 
-  ScoreboardsApp.on "start", ->
-    API.showScoreboard()
+    list: ->
+      ScoreboardsApp.List.Controller.show()
+
+
+  App.addInitializer ->
+    new ScoreboardsApp.Router
+      controller: API

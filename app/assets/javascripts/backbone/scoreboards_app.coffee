@@ -7,10 +7,13 @@
     mainRegion: "#main-region"
 
   App.addInitializer ->
+    App.module("ScoreboardsApp.Header.Controller").show()
     App.module("ScoreboardsApp").start()
 
-  # App.on "initialize:after", ->
-  #   if Backbone.history
-  #     Backbone.history.start()
+  App.rootRoute = ''
+
+  App.on "initialize:after", ->
+    @startHistory()
+    @navigate(@rootRoute, trigger: true) unless @getCurrentRoute()
 
   App

@@ -5,6 +5,7 @@
       results = @get 'results'
       results.fetchForFilter @get('localityId'), @get('region'), @get('category')
 
+
   API =
     getScoreboardInfo: ->
       unless Entities.scoreboardInfo?
@@ -19,7 +20,7 @@
           precinctResults:  new Entities.PrecinctResultData
 
           category:         null
-          categoryLabel:    "<%= I18n.t 'scoreboard.header.left_menu.none' %>"
+          categoryLabel:    -> gon.categories[@category] || "<%= I18n.t 'scoreboard.header.left_menu.none' %>"
 
           region:           null
           regionLabel:      -> if !@region then "<%= I18n.t 'scoreboard.header.right_menu.tabs.all' %>" else @region.get('name')
@@ -28,9 +29,8 @@
         App.vent.on 'region:selected', (region) ->
           sb.set 'region', region
 
-        App.vent.on 'category:selected', (o) ->
-          sb.set 'category',      o.category
-          sb.set 'categoryLabel', o.label
+        App.vent.on 'category:selected', (category) ->
+          sb.set 'category', category
 
         sb.on 'change:region change:category', -> @reloadResults()
 

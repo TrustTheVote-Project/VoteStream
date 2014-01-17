@@ -12,6 +12,9 @@
       @resultsSummaryRegion.show @layout
       @mapRegion.show new Show.MapView
 
+    onClose: ->
+      console.log 'show.view.close'
+
 
   class ResultsRotator
     constructor: ->
@@ -19,8 +22,12 @@
       @results = @si.get 'results'
 
       @initIndex()
-      @si.on 'reset:results change:result', => @initIndex()
+      @si.on 'reset:results change:result', @initIndex, @
 
+    onClose: ->
+      console.log 'resultsrotator.close'
+      @si.off 'reset:results change:result', @initIndex, @
+      
     initIndex: ->
       result  = @si.get 'result'
       @idx    = @results.indexOf result
@@ -52,14 +59,17 @@
       @rotator = new ResultsRotator
 
       @si = App.request 'entities:scoreboardInfo'
-      @si.on 'change:result', => @updateLayout()
+      @si.on 'change:result', @updateLayout, @
 
     ui: ->
       prevRefCon: '#js-prev-refcon a'
       nextRefCon: '#js-next-refcon a'
 
-    onShow: ->
-      @updateLayout()
+    onShow: -> @updateLayout()
+    onClose: ->
+      console.log 'resultsSummaryLayout.close'
+      @rotator.onClose()
+      @si.off 'change:result', @updateLayout, @
 
     events:
       'click #js-prev-refcon a': (e) ->
