@@ -10,11 +10,13 @@ class DataLoader
   end
 
   def load
-    load_election
-    load_districts
-    load_precincts
-    load_contests
-    load_referendums
+    Election.transaction do
+      load_election
+      load_districts
+      load_precincts
+      load_contests
+      load_referendums
+    end
   end
 
   private

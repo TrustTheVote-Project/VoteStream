@@ -27,5 +27,4 @@ describe ResultsLoader do
     p = Precinct.find_by_uid('271230010')
     expect(BallotResponseResult.where(ballot_response_id: b.id, precinct_id: p.id).first.votes).to eq 931
   end
-
 end
