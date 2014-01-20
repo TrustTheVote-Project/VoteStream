@@ -10,17 +10,19 @@
       viewSelectorRegion:     '#view-selector-region'
 
     closePopovers: ->
-      @regionSelector.closePopover()
+      $(".popover", @$el).hide()
 
     onShow: ->
       scoreboardInfo = App.request "entities:scoreboardInfo"
 
       @.categorySelectorRegion.show new CategorySelectorView
         model: scoreboardInfo
-      @.regionSelectorRegion.show @regionSelector = new RegionSelectorView
+      @.regionSelectorRegion.show new RegionSelectorView
         model: scoreboardInfo
       @.viewSelectorRegion.show new ViewSelectorView
         model: scoreboardInfo
+
+      $("body").on "click", => @closePopovers()
 
 
   class CategorySelectorView extends Marionette.Layout
@@ -32,12 +34,10 @@
     ui:
       popover: '.popover'
 
-    closePopover: ->
-      @ui.popover.hide()
-
     events:
       'click .js-trigger': (e) ->
         e.preventDefault()
+        e.stopPropagation()
         $(".popover").each (i, po) =>
           $(po).hide() unless po == @ui.popover[0]
         @ui.popover.toggle()
@@ -46,8 +46,6 @@
         e.preventDefault()
         link = $(e.target)
         App.vent.trigger 'category:selected', link.data('category')
-
-        @closePopover()
 
 
   class RegionSelectorView extends Marionette.Layout
@@ -63,12 +61,10 @@
       precinctsTab: '.js-tab-precincts'
       districtsTab: '.js-tab-districts'
 
-    closePopover: ->
-      @ui.popover.hide()
-
     events:
       'click .js-trigger': (e) ->
         e.preventDefault()
+        e.stopPropagation()
         $(".popover").each (i, po) =>
           $(po).hide() unless po == @ui.popover[0]
         @ui.popover.toggle()
@@ -160,12 +156,10 @@
     ui:
       popover: '.popover'
 
-    closePopover: ->
-      @ui.popover.hide()
-
     events:
       'click .js-trigger': (e) ->
         e.preventDefault()
+        e.stopPropagation()
         $(".popover").each (i, po) =>
           $(po).hide() unless po == @ui.popover[0]
         @ui.popover.toggle()
@@ -173,7 +167,6 @@
       'click ul a': (e) ->
         e.preventDefault()
         link = $(e.target)
+        App.vent.trigger 'view:selected', link.data('view')
         App.navigate link.data('view'), trigger: true
-
-        @closePopover()
 
