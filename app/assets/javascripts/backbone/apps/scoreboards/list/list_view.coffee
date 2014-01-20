@@ -20,6 +20,8 @@
         hideControls: true
         noBalloons: true
         whiteBackground: true
+        noZoom: true
+        noPanning: true
 
       @resultsRegion.show view
       @mapRegion.show mapView

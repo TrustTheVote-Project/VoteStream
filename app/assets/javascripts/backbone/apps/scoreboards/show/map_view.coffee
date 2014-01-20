@@ -61,6 +61,11 @@
           style: google.maps.MapTypeControlStyle.DROPDOWN_MENU
         mapOptions.navigationControl = true
 
+      if @options.noZoom
+        mapOptions.disableDoubleClickZoom = true
+      if @options.noPanning
+        mapOptions.draggable = false
+
       @map = new google.maps.Map @el, mapOptions
 
       style = [{
@@ -77,7 +82,7 @@
       if @options.whiteBackground
         style.push {
           featureType: 'labels'
-          stylers: [ lightness: 75 ]
+          stylers: [ lightness: 100 ]
         }
 
       styledMapType = new google.maps.StyledMapType style,
