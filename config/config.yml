@@ -23,6 +23,9 @@ party_colors:
   republican: "#ec012e"
   democrat:   "#123d74"
 
+# Ordering of candidates in lists: 'vote_order', 'sort_order'
+candidate_ordering: vote_order
+
 admin:
   user: enrsadmin
   pass: enrs23operations$2

@@ -1,6 +1,10 @@
 class RefConResults
 
-  def self.data(params)
+  def initialize(options = {})
+    @order_by_votes = (options[:candidate_ordering] || AppConfig[:candidate_ordering]) != 'sort_order'
+  end
+
+  def data(params)
     if cid = params[:contest_id]
       return contest_data(Contest.find(cid), params)
     elsif rid = params[:referendum_id]
@@ -10,11 +14,11 @@ class RefConResults
     end
   end
 
-  def self.contest_data(contest, params)
+  def contest_data(contest, params)
     precincts  = precincts_for_refcon(contest, params)
     cids       = contest.candidate_ids
     pids       = precincts.map(&:id)
-    candidates = contest.candidates.order(:sort_order)
+    candidates = contest.candidates
     results    = CandidateResult.where(precinct_id: pids, candidate_id: cids)
 
     candidate_votes = results.group('candidate_id').select("sum(votes) v, candidate_id").inject({}) do |m, cr|
@@ -22,23 +26,25 @@ class RefConResults
       m
     end
 
-    res = {
+    ordered = ordered_records(candidates, candidate_votes) do |i, votes|
+      { name: i.name, party: i.party, votes: votes }
+    end
+
+    return {
       summary: {
         title:  contest.office,
         cast:   precincts.sum(:total_cast),
         votes:  results.sum(:votes),
-        rows:   candidates.map { |c| { name: c.name, party: c.party, votes: candidate_votes[c.id].to_i } }
+        rows:   ordered
       }
     }
-
-    return res
   end
 
-  def self.referendum_data(referendum, params)
+  def referendum_data(referendum, params)
     precincts = precincts_for_refcon(referendum, params)
     brids     = referendum.ballot_response_ids
     pids      = precincts.map(&:id)
-    responses = referendum.ballot_responses.order(:sort_order)
+    responses = referendum.ballot_responses
     results   = BallotResponseResult.where(precinct_id: pids, ballot_response_id: brids)
 
     response_votes = results.group('ballot_response_id').select("sum(votes) v, ballot_response_id").inject({}) do |m, br|
@@ -46,21 +52,23 @@ class RefConResults
       m
     end
 
-    res = {
+    ordered = ordered_records(responses, response_votes) do |i, votes|
+      { name: i.name, votes: votes }
+    end
+
+    return {
       summary: {
         title:  referendum.title,
         subtitle: referendum.subtitle,
         text:   referendum.question,
         cast:   precincts.sum(:total_cast),
         votes:  results.sum(:votes),
-        rows:   responses.map { |r| { name: r.name, votes: response_votes[r.id].to_i } }
+        rows:   ordered
       }
     }
-
-    return res
   end
 
-  def self.precinct_results(params)
+  def precinct_results(params)
     if cid = params[:contest_id]
       return contest_precinct_results(Contest.find(cid), params)
     elsif rid = params[:referendum_id]
@@ -70,12 +78,11 @@ class RefConResults
     end
   end
 
-  def self.contest_precinct_results(contest, params)
+  def contest_precinct_results(contest, params)
     precincts  = precincts_for_refcon(contest, params)
     candidates = contest.candidates
     results    = CandidateResult.where(precinct_id: precincts.map(&:id), candidate_id: contest.candidate_ids)
 
-    rows_candidates = candidates.sort_by(&:sort_order)[0, 2]
     precinct_candidate_results = results.group_by(&:precinct_id).inject({}) do |memo, (pid, results)|
       memo[pid] = results
       memo
@@ -83,18 +90,21 @@ class RefConResults
 
     pmap = precincts.map do |p|
       pcr = precinct_candidate_results[p.id] || []
-      sorted_pcr = pcr.sort_by(&:votes).reverse
-      leader = sorted_pcr.first
       candidate_votes = pcr.inject({}) do |memo, r|
         memo[r.candidate_id] = r.votes
         memo
       end
 
+      ordered = ordered_records(candidates, candidate_votes) do |i, votes|
+        { id: i.id, votes: votes }
+      end
+      leader = pcr.sort_by(&:votes).reverse.first
+
       { id:           p.id,
         leader:       leader.try(:candidate_id),
         leader_votes: leader.try(:votes),
         votes:        pcr.sum(&:votes),
-        rows:         rows_candidates.map { |c| { id: c.id, votes: candidate_votes[c.id] }} }
+        rows:         ordered }
     end
 
     return {
@@ -103,7 +113,7 @@ class RefConResults
     }
   end
 
-  def self.referendum_precinct_results(referendum, params)
+  def referendum_precinct_results(referendum, params)
     precincts  = precincts_for_refcon(referendum, params)
     responses  = referendum.ballot_responses
     results    = BallotResponseResult.where(precinct_id: precincts.map(&:id), ballot_response_id: referendum.ballot_response_ids)
@@ -115,18 +125,21 @@ class RefConResults
 
     pmap = precincts.map do |p|
       pcr = precinct_referendum_results[p.id] || []
-      sorted_pcr = pcr.sort_by(&:votes).reverse
-      leader = sorted_pcr.first
       response_votes = pcr.inject({}) do |memo, r|
         memo[r.ballot_response_id] = r.votes
         memo
       end
 
+      ordered = ordered_records(responses, response_votes) do |i, votes|
+        { id: i.id, votes: votes }
+      end
+      leader = pcr.sort_by(&:votes).reverse.first
+
       { id:           p.id,
         leader:       leader.try(:ballot_response_id),
         leader_votes: leader.try(:votes),
         votes:        pcr.sum(&:votes),
-        rows:         responses.sort_by(&:sort_order).map { |r| { id: r.id, votes: response_votes[r.id] }} }
+        rows:         ordered }
     end
 
     return {
@@ -135,7 +148,7 @@ class RefConResults
     }
   end
 
-  def self.precincts_for_refcon(refcon, params)
+  def precincts_for_refcon(refcon, params)
     if pid = params[:precinct_id]
       return refcon.district.precincts.where(id: pid)
     else
@@ -144,24 +157,16 @@ class RefConResults
     end
   end
 
-  # def self.contest_precinct_results(res)
-  #   res.group_by(&:precinct_id).map do |precinct_id, results|
-  #     { id:     precinct_id,
-  #       votes:  results.sum(&:v),
-  #       leader: results.sort_by(&:v).last.candidate_id,
-  #       rows:   results[0, 2].map { |r| { cid: r.candidate_id, votes: r.v } }
-  #     }
-  #   end
-  # end
 
-  # def self.referendum_precinct_results(res)
-  #   res.group_by(&:precinct_id).map do |precinct_id, results|
-  #     { id:     precinct_id,
-  #       votes:  results.sum(&:v),
-  #       leader: results.sort_by(&:v).last.ballot_response_id,
-  #       rows:   results[0, 2].map { |r| { rid: r.ballot_response_id, votes: r.v } }
-  #     }
-  #   end
-  # end
+  def ordered_records(items, items_votes, &block)
+    unordered = items.map do |i|
+      votes = items_votes[i.id].to_i
+      data = block.call i, votes
+      data[:order] = @order_by_votes ? -votes : i.sort_order
+      data
+    end
+
+    return unordered.sort_by { |cv| cv[:order] }.map { |cv| cv.except(:order) }
+  end
 
 end

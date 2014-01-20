@@ -2,7 +2,7 @@ require 'spec_helper'
 
 describe RefConResults do
 
-  let(:contest) { Contest.find_by(uid: '2012-11-06-120000000027-123-0101') }
+  let(:contest)    { Contest.find_by(uid: '2012-11-06-120000000027-123-0101') }
   let(:referendum) { Referendum.find_by(uid: '2012-11-06-120000000027-123-5031') }
   let(:precinct)   { Precinct.find_by(uid: '271230010') }
 
@@ -10,57 +10,77 @@ describe RefConResults do
     load_results_fixture
   end
 
-  it 'should return data for the contest' do
-    d = RefConResults.data(contest_id: contest.id)
-    cs = contest.candidates.order(:sort_order)
+  describe 'contest results' do
 
-    fc = d[:candidates].first
-    lc = d[:candidates].last
-    expect(d[:candidates].size).to eq 11
-    expect(fc[:name]).to eq 'MITT ROMNEY AND PAUL RYAN'
-    expect(fc[:party]).to eq 'Republican'
-    expect(lc[:name]).to eq 'WRITE-IN**'
-    expect(lc[:party]).to eq 'Write-In'
+    it 'should return summary' do
+      d = RefConResults.new.data(contest_id: contest.id)
+      s = d[:summary]
+      expect(s[:title]).to eq "U.S. President & Vice President"
+      expect(s[:cast]).to eq 2173
+      expect(s[:votes]).to eq 2163
+    end
 
-    s = d[:summary]
-    expect(s[:title]).to eq contest.office
-    expect(s[:cast]).to eq 2173
-    expect(s[:votes]).to eq 2163
+    it 'should return results in the vote-order' do
+      d = RefConResults.new(candidate_ordering: 'vote_order').data(contest_id: contest.id)
+      s = d[:summary]
+      rows = s[:rows]
+      expect(rows).to eq [
+        {:name=>"BARACK OBAMA AND JOE BIDEN", :party=>"Democratic-Farmer-Labor", :votes=>1146},
+        {:name=>"MITT ROMNEY AND PAUL RYAN", :party=>"Republican", :votes=>962},
+        {:name=>"GARY JOHNSON AND JIM GRAY", :party=>"Libertarian Party", :votes=>22},
+        {:name=>"JILL STEIN AND CHERI HONKALA", :party=>"Green Party", :votes=>14},
+        {:name=>"WRITE-IN**", :party=>"Write-In", :votes=>14},
+        {:name=>"VIRGIL GOODE AND JIM CLYMER", :party=>"Constitution Party", :votes=>2},
+        {:name=>"JIM CARLSON AND GEORGE MCMAHON", :party=>"Grassroots Party", :votes=>1},
+        {:name=>"JAMES HARRIS AND MAURA DELUCA", :party=>"Socialist Workers Party", :votes=>1},
+        {:name=>"ROSS C. \"ROCKY\" ANDERSON AND LUIS J. RODRIGUEZ", :party=>"Justice Party", :votes=>1},
+        {:name=>"PETA LINDSAY AND YARI OSORIO", :party=>"Socialism and Liberation", :votes=>0},
+        {:name=>"DEAN MORSTAD AND JOSH FRANKE-HYLAND", :party=>"Constitutional Government", :votes=>0}
+      ]
+    end
 
-    expect(d[:precinct_results]).to eq [
-      { id:     precinct.id,
-        votes:  2163,
-        leader: cs[1].id,
-        rows:   [ { cid: cs[0].id, votes: 962 }, { cid: cs[1].id, votes: 1146 } ]
-      } ]
+    it 'should return results in the sort-order' do
+      d = RefConResults.new(candidate_ordering: 'sort_order').data(contest_id: contest.id)
+      s = d[:summary]
+      rows = s[:rows]
+      expect(rows).to eq [
+        {:name=>"MITT ROMNEY AND PAUL RYAN", :party=>"Republican", :votes=>962},
+        {:name=>"BARACK OBAMA AND JOE BIDEN", :party=>"Democratic-Farmer-Labor", :votes=>1146},
+        {:name=>"GARY JOHNSON AND JIM GRAY", :party=>"Libertarian Party", :votes=>22},
+        {:name=>"JAMES HARRIS AND MAURA DELUCA", :party=>"Socialist Workers Party", :votes=>1},
+        {:name=>"VIRGIL GOODE AND JIM CLYMER", :party=>"Constitution Party", :votes=>2},
+        {:name=>"DEAN MORSTAD AND JOSH FRANKE-HYLAND", :party=>"Constitutional Government", :votes=>0},
+        {:name=>"JILL STEIN AND CHERI HONKALA", :party=>"Green Party", :votes=>14},
+        {:name=>"JIM CARLSON AND GEORGE MCMAHON", :party=>"Grassroots Party", :votes=>1},
+        {:name=>"PETA LINDSAY AND YARI OSORIO", :party=>"Socialism and Liberation", :votes=>0},
+        {:name=>"ROSS C. \"ROCKY\" ANDERSON AND LUIS J. RODRIGUEZ", :party=>"Justice Party", :votes=>1},
+        {:name=>"WRITE-IN**", :party=>"Write-In", :votes=>14}
+      ]
+    end
   end
 
-  it 'should return data for the referendum' do
-    d = RefConResults.data(referendum_id: referendum.id)
-    br = referendum.ballot_responses.order(:sort_order)
-    r1 = br.first
-    r2 = br.last
+  describe 'referendum data' do
+    it 'should return data for the referendum' do
+      d = RefConResults.new.data(referendum_id: referendum.id)
+      s = d[:summary]
+      expect(s[:title]).to eq "SCHOOL DISTRICT QUESTION 1 (ISD #625)"
+      expect(s[:subtitle]).to eq "APPROVAL OF SCHOOL DISTRICT REFERENDUM REVENUE AUTHORIZATION"
+      expect(s[:text]).to eq "The School Board of Independent School District No. 99 (Esko) proposes to increase its general education revenue by $341 per pupil unit, increased annually by the rate of inflation.  The proposed referendum revenue authorization would be applicable for 9 years unless otherwise revoked or reduced as provided by law.  The additional revenue will be used to finance school operations.    Shall the increase in the revenue proposed by the School Board of Independent School District No. 99 (Esko) be approved?"
+      expect(s[:cast]).to eq 2173
+      expect(s[:votes]).to eq 1278
+    end
 
-    expect(d[:responses]).to eq [
-      { id: r1.id, name: r1.name },
-      { id: r2.id, name: r2.name }
-    ]
+    it 'should return results in vote-order' do
+      d = RefConResults.new(candidate_ordering: 'vote_order').data(referendum_id: referendum.id)
+      s = d[:summary]
+      expect(s[:rows]).to eq [{:name=>"YES", :votes=>931}, {:name=>"NO", :votes=>347}]
+    end
 
-    s = d[:summary]
-    expect(s[:title]).to eq referendum.title
-    expect(s[:cast]).to eq 2173
-    expect(s[:votes]).to eq 1278
-
-    expect(s[:rows]).to eq [ { rid: r1.id, votes: 931 }, { rid: r2.id, votes: 347 } ]
-
-    expect(d[:precinct_results]).to eq [
-      { id: precinct.id,
-        votes: 1278,
-        leader: r1.id,
-        rows: [ { rid: r1.id, votes: 931 }, { rid: r2.id, votes: 347 } ]
-      } ]
+    it 'should return results in sort-order' do
+      d = RefConResults.new(candidate_ordering: 'sort_order').data(referendum_id: referendum.id)
+      s = d[:summary]
+      expect(s[:rows]).to eq [{:name=>"NO", :votes=>347}, {:name=>"YES", :votes=>931}]
+    end
   end
-
-  it 'should handle the case when there are no contests in region'
 
 end

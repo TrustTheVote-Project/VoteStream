@@ -1975,11 +1975,11 @@
     <electoral_district id="MN-ISD-625"/>
     <ballot_response id="5031-9001">
       <text>YES</text>
-      <sort_order>1</sort_order>
+      <sort_order>2</sort_order>
     </ballot_response>
     <ballot_response id="5031-9002">
       <text>NO</text>
-      <sort_order>2</sort_order>
+      <sort_order>1</sort_order>
     </ballot_response>
   </referendum>
   <state id="120000000027">

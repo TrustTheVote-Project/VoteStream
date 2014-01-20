@@ -59,11 +59,11 @@ class DataController < ApplicationController
   end
 
   def precinct_results
-    render json: RefConResults.precinct_results(params)
+    render json: RefConResults.new.precinct_results(params)
   end
 
   def results
-    render json: RefConResults.data(params)
+    render json: RefConResults.new.data(params)
   end
 
   def voting_results
@@ -76,13 +76,12 @@ class DataController < ApplicationController
 
   def list_to_refcons(list)
     list.map do |rc|
-      # { type: rc.kind_of?(Contest) ? 'contest' : 'referendum', id: rc.id }
       p = params.merge(no_precinct_results: true)
       if rc.kind_of?(Contest)
-        data = RefConResults.contest_data(rc, p)
+        data = RefConResults.new.contest_data(rc, p)
         data[:type] = 'c'
       else
-        data = RefConResults.referendum_data(rc, p)
+        data = RefConResults.new.referendum_data(rc, p)
         data[:type] = 'r'
       end
 
