@@ -13,6 +13,8 @@ class ResultsLoader
     Precinct.transaction do
       remove_old_results
       load_new_results
+
+      DataProcessor.on_results_upload
     end
   end
 

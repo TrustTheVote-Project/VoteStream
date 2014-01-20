@@ -16,6 +16,8 @@ class DataLoader
       load_precincts
       load_contests
       load_referendums
+
+      DataProcessor.on_definitions_upload
     end
   end
 

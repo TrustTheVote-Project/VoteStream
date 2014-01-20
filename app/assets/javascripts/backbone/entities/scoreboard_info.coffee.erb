@@ -24,7 +24,7 @@
 
           region:           null
           regionLabel:      -> if !@region then "<%= I18n.t 'scoreboard.header.right_menu.tabs.all' %>" else @region.get('name')
-          percentReporting: -> 29
+          percentReporting: gon.percentReporting
 
         App.vent.on 'region:selected', (region) ->
           sb.set 'region', region

@@ -33,10 +33,8 @@ class ScoreboardsController < ApplicationController
       'Other'   => I18n.t('scoreboard.header.left_menu.categories.other')
     }
 
-    # Pick the first category with contests
-    dts = Contest.select('DISTINCT district_type').map(&:district_type)
-    district_order = [ 'Federal', 'State', 'MCD', 'Other' ]
-    gon.defaultCategory = (district_order & dts).first || DataController::CATEGORY_REFERENDUMS
+    gon.defaultCategory  = DataProcessor.default_category(locality)
+    gon.percentReporting = DataProcessor.percent_reporting(locality)
   end
 
 end
