@@ -5,9 +5,9 @@
     id: 'header'
 
     regions:
-      contestSelectorRegion: '#contest-selector-region'
-      regionSelectorRegion:  '#region-selector-region'
-      viewSelectorRegion:    '#view-selector-region'
+      categorySelectorRegion: '#category-selector-region'
+      regionSelectorRegion:   '#region-selector-region'
+      viewSelectorRegion:     '#view-selector-region'
 
     closePopovers: ->
       @regionSelector.closePopover()
@@ -15,7 +15,7 @@
     onShow: ->
       scoreboardInfo = App.request "entities:scoreboardInfo"
 
-      @.contestSelectorRegion.show @contestSelector = new ContestSelectorView
+      @.categorySelectorRegion.show new CategorySelectorView
         model: scoreboardInfo
       @.regionSelectorRegion.show @regionSelector = new RegionSelectorView
         model: scoreboardInfo
@@ -23,8 +23,8 @@
         model: scoreboardInfo
 
 
-  class ContestSelectorView extends Marionette.Layout
-    template: 'scoreboards/header/_contest_selector'
+  class CategorySelectorView extends Marionette.Layout
+    template: 'scoreboards/header/_category_selector'
 
     modelEvents:
       'change:category': 'render'
@@ -48,28 +48,6 @@
         App.vent.trigger 'category:selected', link.data('category')
 
         @closePopover()
-
-
-  class CategoryView extends Marionette.ItemView
-    getTemplate: ->
-      if @model instanceof App.Entities.Contest
-        'scoreboards/header/_contest'
-      else
-        'scoreboards/header/_referendum'
-
-    tagName: 'li'
-
-    events:
-      'click a': (e) ->
-        e.preventDefault()
-        info = App.request 'entities:scoreboardInfo'
-        info.set 'contest', @model
-        $(this).parents(".popover").hide()
-
-
-  class CategoriesView extends Marionette.CollectionView
-    tagName: 'ul'
-    itemView: CategoryView
 
 
   class RegionSelectorView extends Marionette.Layout
