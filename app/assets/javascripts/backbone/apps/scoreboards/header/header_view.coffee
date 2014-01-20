@@ -45,6 +45,7 @@
       'click ul a': (e) ->
         e.preventDefault()
         link = $(e.target)
+        @ui.popover.hide()
         App.vent.trigger 'category:selected', link.data('category')
 
 
@@ -70,12 +71,15 @@
         @ui.popover.toggle()
       'click .js-tab-districts': (e) ->
         e.preventDefault()
+        e.stopPropagation()
         @showDistrictsView()
       'click .js-tab-precincts': (e) ->
         e.preventDefault()
+        e.stopPropagation()
         @showPrecinctsView()
       'click .js-tab-all': (e) ->
         e.preventDefault()
+        e.stopPropagation()
         @showAllView()
 
     showDistrictsView: ->
@@ -100,6 +104,9 @@
 
     onShow: ->
       @showAllView()
+
+      App.vent.on 'region:selected', =>
+        @ui.popover.hide()
 
       scoreboardInfo = App.request 'entities:scoreboardInfo'
       @.regionLabelRegion.show new SelectedRegionView
@@ -167,6 +174,6 @@
       'click ul a': (e) ->
         e.preventDefault()
         link = $(e.target)
-        App.vent.trigger 'view:selected', link.data('view')
+        @ui.popover.hide()
         App.navigate link.data('view'), trigger: true
 
