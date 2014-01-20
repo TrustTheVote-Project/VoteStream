@@ -12,11 +12,22 @@
       @precinctResults.on 'sync', @updateColors, @
 
       @precincts = App.request 'entities:precincts'
-      unless options.noBalloons?
+      if options.infoWindow
         @infoWindow = new google.maps.InfoWindow()
+        self = @
         google.maps.event.addListener @infoWindow, 'domready', ->
           $('.iw-all a').on 'click', (e) ->
             e.preventDefault()
+
+            self.infoWindow.close()
+
+            precinct = self.focusedPrecinct
+            self.focusedPrecinct = null
+
+            App.vent.trigger 'region:selected', precinct
+
+            if options.infoWindow != 'simple'
+              App.navigate 'list', trigger: true
 
     updateColors: ->
       @infoWindow?.close()
@@ -168,23 +179,13 @@
         fillColor:   @.data.colors.fillColor
         fillOpacity: @.data.colors.fillOpacity
 
-    onPolygonClick: (e) ->
-      return if !@.data.precinctResult?
-
-      @setOptions
-        fillColor:   @.data.colors.hoverFillColor
-        fillOpacity: @.data.colors.hoverFillOpacity
-
-      pid = @.data.precinctId
-      precincts = App.request 'entities:precincts'
-      precinct = precincts.get pid
-
+    fullInfoWindowHtml: (poly, precinct) ->
       si = App.request 'entities:scoreboardInfo'
       results = si.get 'precinctResults'
       result = si.get 'result'
       title = result.get('summary').get('title')
 
-      precinctResult = @.data.precinctResult
+      precinctResult = poly.data.precinctResult
       rows  = precinctResult.get('rows')
       votes = precinctResult.get('votes')
 
@@ -204,9 +205,30 @@
         p = Math.floor((v * 1000) / (votes || 1)) / 10.0
         rowsHtml += "<tr><td class='iw-n'>Others</td><td class='iw-v'>#{v}</td><td class='iw-p'>#{p}%</td></tr>"
 
-      html = "<div class='precinct-bubble'><h4>#{precinct.get('name')}</h4><p>#{title}</p><table class='iw-rows'>#{rowsHtml}</table><div class='iw-all'><a>View All Races</a></div></div>"
+      "<div class='precinct-bubble'><h5>#{precinct.get('name')}</h5><p>#{title}</p><table class='iw-rows'>#{rowsHtml}</table><div class='iw-all'><a>View All Races</a></div></div>"
+
+    simpleInfoWindowHtml: (poly, precinct) ->
+      "<div class='precinct-bubble'><h5>#{precinct.get('name')}</h5><div class='iw-all'><a href='#'>Set as Region</a></div></div>"
+
+    onPolygonClick: (e) ->
+      return if !@.data.precinctResult?
+
+      @setOptions
+        fillColor:   @.data.colors.hoverFillColor
+        fillOpacity: @.data.colors.hoverFillOpacity
 
       mapView = @.data.mapView
+
+      pid = @.data.precinctId
+      precincts = App.request 'entities:precincts'
+      precinct = precincts.get pid
+      mapView.focusedPrecinct = precinct
+      
+      if mapView.options.infoWindow == 'simple'
+        html = mapView.simpleInfoWindowHtml @, precinct
+      else
+        html = mapView.fullInfoWindowHtml @, precinct
+
       infoWindow = mapView.infoWindow
       infoWindow.setContent html
       infoWindow.setPosition e.latLng
@@ -244,7 +266,7 @@
               precinctResult:   res
               mapView:          @
 
-          unless @options.noBalloons
+          if @options.infoWindow
             google.maps.event.addListener poly, 'mouseover', @onPolygonMouseOver
             google.maps.event.addListener poly, 'mouseout', @onPolygonMouseOut
             google.maps.event.addListener poly, 'click', @onPolygonClick

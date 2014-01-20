@@ -17,11 +17,11 @@
         collection: @results
 
       mapView = new App.ScoreboardsApp.Show.MapView
-        hideControls: true
-        noBalloons: true
-        whiteBackground: true
-        noZoom: true
-        noPanning: true
+        hideControls:     true
+        whiteBackground:  true
+        noZoom:           true
+        noPanning:        true
+        infoWindow:       'simple'
 
       @resultsRegion.show view
       @mapRegion.show mapView

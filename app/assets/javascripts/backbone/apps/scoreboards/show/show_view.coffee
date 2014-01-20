@@ -12,6 +12,7 @@
       @layout = new ResultsSummaryLayout
       @resultsSummaryRegion.show @layout
       @mapRegion.show new Show.MapView
+        infoWindow: true
 
 
   class ResultsRotator
