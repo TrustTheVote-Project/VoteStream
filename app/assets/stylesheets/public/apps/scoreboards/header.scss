@@ -71,6 +71,7 @@
       font-weight: bold;
       color: #494a4d;
       cursor: pointer;
+      text-decoration: none;
 
       .drop-down-arrow {
         margin-left: 7px;
@@ -87,6 +88,10 @@
         height: 11px;
         margin-top: 27px;
       }
+    }
+
+    .non-reporting {
+      color: #888;
     }
 
     .nav-tabs > li {

@@ -1,16 +1,33 @@
 @App.module "ScoreboardsApp.Header", (Header, App, Backbone, Marionette, $, _) ->
 
+  hidePopoversExcept = (exception) ->
+    $(".popover").each (i, po) ->
+      $(po).hide() unless po == exception
+
   class Header.View extends Marionette.Layout
     template: 'scoreboards/header/view'
     id: 'header'
+
+    ui:
+      popover: '.popover.precinct-status'
+
+    events:
+      'click #js-precinct-status': 'onPrecinctStatus'
 
     regions:
       categorySelectorRegion: '#category-selector-region'
       regionSelectorRegion:   '#region-selector-region'
       viewSelectorRegion:     '#view-selector-region'
+      precinctStatusRegion:   '#precinct-status-region'
 
     closePopovers: ->
       $(".popover", @$el).hide()
+
+    onPrecinctStatus: (e) ->
+      e.preventDefault()
+      e.stopPropagation()
+      # hidePopoversExcept @ui.popover[0]
+      @ui.popover.toggle()
 
     onShow: ->
       scoreboardInfo = App.request "entities:scoreboardInfo"
@@ -21,6 +38,8 @@
         model: scoreboardInfo
       @.viewSelectorRegion.show new ViewSelectorView
         model: scoreboardInfo
+      @.precinctStatusRegion.show new ReportingPrecinctsView
+        collection: App.request 'entities:precincts'
 
       $("body").on "click", => @closePopovers()
 
@@ -38,8 +57,7 @@
       'click .js-trigger': (e) ->
         e.preventDefault()
         e.stopPropagation()
-        $(".popover").each (i, po) =>
-          $(po).hide() unless po == @ui.popover[0]
+        hidePopoversExcept @ui.popover[0]
         @ui.popover.toggle()
 
       'click ul a': (e) ->
@@ -66,8 +84,7 @@
       'click .js-trigger': (e) ->
         e.preventDefault()
         e.stopPropagation()
-        $(".popover").each (i, po) =>
-          $(po).hide() unless po == @ui.popover[0]
+        hidePopoversExcept @ui.popover[0]
         @ui.popover.toggle()
       'click .js-tab-districts': (e) ->
         e.preventDefault()
@@ -167,8 +184,7 @@
       'click .js-trigger': (e) ->
         e.preventDefault()
         e.stopPropagation()
-        $(".popover").each (i, po) =>
-          $(po).hide() unless po == @ui.popover[0]
+        hidePopoversExcept @ui.popover[0]
         @ui.popover.toggle()
 
       'click ul a': (e) ->
@@ -176,4 +192,19 @@
         link = $(e.target)
         @ui.popover.hide()
         App.navigate link.data('view'), trigger: true
+
+
+  class ReportingPrecinctView extends Marionette.ItemView
+    template: 'scoreboards/header/_reporting_precinct'
+    tagName: 'li'
+    className: -> if gon.reportingIds.indexOf(@model.get('id')) != -1 then null else 'non-reporting'
+
+    events:
+      'click': (e) ->
+        e.preventDefault()
+        App.vent.trigger 'region:selected', @model
+
+  class ReportingPrecinctsView extends Marionette.CollectionView
+    tagName: 'ul'
+    itemView: ReportingPrecinctView
 

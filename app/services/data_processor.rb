@@ -9,16 +9,25 @@ class DataProcessor
   end
 
   def self.percent_reporting(locality)
-    Rails.cache.fetch("locality:#{locality.id}:percent_reporting") do
+    stats = precinct_stats(locality)
+    v = (stats[:reporting_precinct_ids].count * 100.0) / [ stats[:precinct_count], 1 ].max
+    "%3.1f" % v
+  end
+
+  def self.reporting_precinct_ids(locality)
+    stats = precinct_stats(locality)
+    stats[:reporting_precinct_ids]
+  end
+
+  def self.precinct_stats(locality)
+    Rails.cache.fetch("locality:#{locality.id}:precinct_stats") do
       all_pids  = locality.precinct_ids
       reporting = BallotResponseResult.where(precinct_id: all_pids).select("DISTINCT precinct_id").map(&:precinct_id)
       reporting << CandidateResult.where(precinct_id: all_pids).select("DISTINCT precinct_id").map(&:precinct_id)
-      reporting = reporting.uniq
+      reporting = reporting.flatten.uniq
 
-      puts reporting.count, all_pids.count
-
-      v = (reporting.count * 100.0) / [ all_pids.count, 1 ].max
-      "%3.1f" % v
+      { precinct_count: all_pids.count,
+        reporting_precinct_ids: reporting }
     end
   end
 
