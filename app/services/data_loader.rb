@@ -116,7 +116,7 @@ class DataLoader
       contest_el.css("candidate").each do |candidate_el|
         uid        = candidate_el['id']
         name       = dequote(candidate_el.css('name, text').first.content)
-        party      = dequote(candidate_el.css('> party').first.try(:content))
+        party      = dequote(candidate_el.css('> party_id').first.try(:content))
         sort_order = dequote(candidate_el.css('> sort_order').first.content)
 
         contest.candidates.create_with(name: name, party: party, sort_order: sort_order).find_or_create_by(uid: uid)

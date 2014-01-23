@@ -90,10 +90,6 @@
       }
     }
 
-    .non-reporting {
-      color: #888;
-    }
-
     .nav-tabs > li {
       margin: 0;
     }
@@ -126,6 +122,11 @@
         display: block;
         padding: 3px 6px;
       }
+
+      .non-reporting a {
+        color: #CCC;
+      }
+
       ul {
         list-style: none;
         margin: 0;
