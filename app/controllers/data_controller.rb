@@ -36,23 +36,22 @@ class DataController < ApplicationController
 
   # the list of all referendums and contests in the given locality+region
   def refcons
-    if (pid = params[:precinct_id]) || (did = params[:district_id])
-      region = pid ? Precinct.find(pid) : District.find(did)
-    else
-      region = Locality.find(params[:locality_id])
-    end
+    district_ids = districts_for_region(params)
+
+    filt = {}
+    filt[:district_id] = district_ids unless district_ids.blank?
 
     cat = params[:category]
     if cat.blank? || cat == CATEGORY_REFERENDUMS
-      referendums = region.referendums
+      referendums = Referendum.where(filt)
     end
 
     if cat.blank?
-      contests = region.contests
+      contests = Contest.where(filt)
     elsif cat == CATEGORY_REFERENDUMS
       contests = nil
     else
-      contests = region.contests.where(district_type: cat)
+      contests = Contest.where(filt.merge(district_type: cat))
     end
 
     render json: list_to_refcons([ contests, referendums ].compact.flatten)
@@ -90,4 +89,13 @@ class DataController < ApplicationController
     end
   end
 
+  # picks districts that are related to the given precinct or the precincts related to the given district
+  def districts_for_region(params)
+    if (pid = params[:precinct_id]) || (did = params[:district_id])
+      pids = pid ? [ pid ] : DistrictsPrecinct.where(district_id: did).uniq.pluck("precinct_id")
+      DistrictsPrecinct.where(precinct_id: pids).uniq.pluck("district_id")
+    else
+      nil
+    end
+  end
 end
