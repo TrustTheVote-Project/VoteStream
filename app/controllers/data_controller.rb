@@ -1,7 +1,5 @@
 class DataController < ApplicationController
 
-  CATEGORY_REFERENDUMS = 'Referendums'
-
   def districts
     contest_id = params[:contest_id]
     if contest_id.present?

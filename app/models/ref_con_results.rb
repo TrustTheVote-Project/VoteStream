@@ -1,5 +1,7 @@
 class RefConResults
 
+  CATEGORY_REFERENDUMS = 'Referendums'
+
   def initialize(options = {})
     @order_by_votes = (options[:candidate_ordering] || AppConfig[:candidate_ordering]) != 'sort_order'
   end

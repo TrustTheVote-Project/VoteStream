@@ -4,7 +4,7 @@ class DataProcessor
     Rails.cache.fetch("locality:#{locality.id}:default_category") do
       dts = locality.contests.select('DISTINCT contests.district_type').map(&:district_type)
       district_order = [ 'Federal', 'State', 'MCD', 'Other' ]
-      (district_order & dts).first || DataController::CATEGORY_REFERENDUMS
+      (district_order & dts).first || RefConResults::CATEGORY_REFERENDUMS
     end
   end
 
