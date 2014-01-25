@@ -308,57 +308,57 @@
     <electoral_district id="US-SN-MN"/>
     <candidate id="0101-0301">
       <name>MITT ROMNEY AND PAUL RYAN</name>
-      <party>Republican</party>
+      <party_id>Republican</party_id>
       <sort_order>1</sort_order>
     </candidate>
     <candidate id="0101-0401">
       <name>BARACK OBAMA AND JOE BIDEN</name>
-      <party>Democratic-Farmer-Labor</party>
+      <party_id>Democratic-Farmer-Labor</party_id>
       <sort_order>2</sort_order>
     </candidate>
     <candidate id="0101-0501">
       <name>GARY JOHNSON AND JIM GRAY</name>
-      <party>Libertarian Party</party>
+      <party_id>Libertarian Party</party_id>
       <sort_order>3</sort_order>
     </candidate>
     <candidate id="0101-0601">
       <name>JAMES HARRIS AND MAURA DELUCA</name>
-      <party>Socialist Workers Party</party>
+      <party_id>Socialist Workers Party</party_id>
       <sort_order>4</sort_order>
     </candidate>
     <candidate id="0101-0701">
       <name>VIRGIL GOODE AND JIM CLYMER</name>
-      <party>Constitution Party</party>
+      <party_id>Constitution Party</party_id>
       <sort_order>5</sort_order>
     </candidate>
     <candidate id="0101-0801">
       <name>DEAN MORSTAD AND JOSH FRANKE-HYLAND</name>
-      <party>Constitutional Government</party>
+      <party_id>Constitutional Government</party_id>
       <sort_order>6</sort_order>
     </candidate>
     <candidate id="0101-0901">
       <name>JILL STEIN AND CHERI HONKALA</name>
-      <party>Green Party</party>
+      <party_id>Green Party</party_id>
       <sort_order>7</sort_order>
     </candidate>
     <candidate id="0101-1001">
       <name>JIM CARLSON AND GEORGE MCMAHON</name>
-      <party>Grassroots Party</party>
+      <party_id>Grassroots Party</party_id>
       <sort_order>8</sort_order>
     </candidate>
     <candidate id="0101-1401">
       <name>PETA LINDSAY AND YARI OSORIO</name>
-      <party>Socialism and Liberation</party>
+      <party_id>Socialism and Liberation</party_id>
       <sort_order>9</sort_order>
     </candidate>
     <candidate id="0101-1501">
       <name>ROSS C. "ROCKY" ANDERSON AND LUIS J. RODRIGUEZ</name>
-      <party>Justice Party</party>
+      <party_id>Justice Party</party_id>
       <sort_order>10</sort_order>
     </candidate>
     <candidate id="0101-9901">
       <name>WRITE-IN**</name>
-      <party>Write-In</party>
+      <party_id>Write-In</party_id>
       <sort_order>11</sort_order>
     </candidate>
   </contest>
@@ -368,32 +368,32 @@
     <electoral_district id="US-SN-MN"/>
     <candidate id="0102-0201">
       <name>STEPHEN WILLIAMS</name>
-      <party>Independence</party>
+      <party_id>Independence</party_id>
       <sort_order>1</sort_order>
     </candidate>
     <candidate id="0102-0301">
       <name>KURT BILLS</name>
-      <party>Republican</party>
+      <party_id>Republican</party_id>
       <sort_order>2</sort_order>
     </candidate>
     <candidate id="0102-0401">
       <name>AMY KLOBUCHAR</name>
-      <party>Democratic-Farmer-Labor</party>
+      <party_id>Democratic-Farmer-Labor</party_id>
       <sort_order>3</sort_order>
     </candidate>
     <candidate id="0102-1001">
       <name>TIM DAVIS</name>
-      <party>Grassroots Party</party>
+      <party_id>Grassroots Party</party_id>
       <sort_order>4</sort_order>
     </candidate>
     <candidate id="0102-1101">
       <name>MICHAEL CAVLAN</name>
-      <party>Minnesota Open Progressives</party>
+      <party_id>Minnesota Open Progressives</party_id>
       <sort_order>5</sort_order>
     </candidate>
     <candidate id="0102-9901">
       <name>WRITE-IN**</name>
-      <party>Write-In</party>
+      <party_id>Write-In</party_id>
       <sort_order>6</sort_order>
     </candidate>
   </contest>
@@ -403,22 +403,22 @@
     <electoral_district id="US-HS-MN-4"/>
     <candidate id="0107-0201">
       <name>STEVE CARLSON</name>
-      <party>Independence</party>
+      <party_id>Independence</party_id>
       <sort_order>1</sort_order>
     </candidate>
     <candidate id="0107-0301">
       <name>TONY HERNANDEZ</name>
-      <party>Republican</party>
+      <party_id>Republican</party_id>
       <sort_order>2</sort_order>
     </candidate>
     <candidate id="0107-0401">
       <name>BETTY MCCOLLUM</name>
-      <party>Democratic-Farmer-Labor</party>
+      <party_id>Democratic-Farmer-Labor</party_id>
       <sort_order>3</sort_order>
     </candidate>
     <candidate id="0107-9901">
       <name>WRITE-IN**</name>
-      <party>Write-In</party>
+      <party_id>Write-In</party_id>
       <sort_order>4</sort_order>
     </candidate>
   </contest>
@@ -428,17 +428,17 @@
     <electoral_district id="US-HS-MN-5"/>
     <candidate id="0108-0301">
       <name>CHRIS FIELDS</name>
-      <party>Republican</party>
+      <party_id>Republican</party_id>
       <sort_order>1</sort_order>
     </candidate>
     <candidate id="0108-0401">
       <name>KEITH ELLISON</name>
-      <party>Democratic-Farmer-Labor</party>
+      <party_id>Democratic-Farmer-Labor</party_id>
       <sort_order>2</sort_order>
     </candidate>
     <candidate id="0108-9901">
       <name>WRITE-IN**</name>
-      <party>Write-In</party>
+      <party_id>Write-In</party_id>
       <sort_order>3</sort_order>
     </candidate>
   </contest>
@@ -448,17 +448,17 @@
     <electoral_district id="US-ST-MN-SN-38"/>
     <candidate id="0158-0301">
       <name>ROGER CHAMBERLAIN</name>
-      <party>Republican</party>
+      <party_id>Republican</party_id>
       <sort_order>1</sort_order>
     </candidate>
     <candidate id="0158-0401">
       <name>TIMOTHY HENDERSON</name>
-      <party>Democratic-Farmer-Labor</party>
+      <party_id>Democratic-Farmer-Labor</party_id>
       <sort_order>2</sort_order>
     </candidate>
     <candidate id="0158-9901">
       <name>WRITE-IN**</name>
-      <party>Write-In</party>
+      <party_id>Write-In</party_id>
       <sort_order>3</sort_order>
     </candidate>
   </contest>
@@ -468,17 +468,17 @@
     <electoral_district id="US-ST-MN-SN-41"/>
     <candidate id="0161-0301">
       <name>GINA BAUMAN</name>
-      <party>Republican</party>
+      <party_id>Republican</party_id>
       <sort_order>1</sort_order>
     </candidate>
     <candidate id="0161-0401">
       <name>BARB GOODWIN</name>
-      <party>Democratic-Farmer-Labor</party>
+      <party_id>Democratic-Farmer-Labor</party_id>
       <sort_order>2</sort_order>
     </candidate>
     <candidate id="0161-9901">
       <name>WRITE-IN**</name>
-      <party>Write-In</party>
+      <party_id>Write-In</party_id>
       <sort_order>3</sort_order>
     </candidate>
   </contest>
@@ -488,17 +488,17 @@
     <electoral_district id="US-ST-MN-SN-42"/>
     <candidate id="0162-0301">
       <name>APRIL KING</name>
-      <party>Republican</party>
+      <party_id>Republican</party_id>
       <sort_order>1</sort_order>
     </candidate>
     <candidate id="0162-0401">
       <name>BEV SCALZE</name>
-      <party>Democratic-Farmer-Labor</party>
+      <party_id>Democratic-Farmer-Labor</party_id>
       <sort_order>2</sort_order>
     </candidate>
     <candidate id="0162-9901">
       <name>WRITE-IN**</name>
-      <party>Write-In</party>
+      <party_id>Write-In</party_id>
       <sort_order>3</sort_order>
     </candidate>
   </contest>
@@ -508,17 +508,17 @@
     <electoral_district id="US-ST-MN-SN-43"/>
     <candidate id="0163-0301">
       <name>DUANE E. (SWEDE) JOHNSON</name>
-      <party>Republican</party>
+      <party_id>Republican</party_id>
       <sort_order>1</sort_order>
     </candidate>
     <candidate id="0163-0401">
       <name>CHARLES "CHUCK" WIGER</name>
-      <party>Democratic-Farmer-Labor</party>
+      <party_id>Democratic-Farmer-Labor</party_id>
       <sort_order>2</sort_order>
     </candidate>
     <candidate id="0163-9901">
       <name>WRITE-IN**</name>
-      <party>Write-In</party>
+      <party_id>Write-In</party_id>
       <sort_order>3</sort_order>
     </candidate>
   </contest>
@@ -528,17 +528,17 @@
     <electoral_district id="US-ST-MN-SN-53"/>
     <candidate id="0173-0301">
       <name>TED LILLIE</name>
-      <party>Republican</party>
+      <party_id>Republican</party_id>
       <sort_order>1</sort_order>
     </candidate>
     <candidate id="0173-0401">
       <name>SUSAN KENT</name>
-      <party>Democratic-Farmer-Labor</party>
+      <party_id>Democratic-Farmer-Labor</party_id>
       <sort_order>2</sort_order>
     </candidate>
     <candidate id="0173-9901">
       <name>WRITE-IN**</name>
-      <party>Write-In</party>
+      <party_id>Write-In</party_id>
       <sort_order>3</sort_order>
     </candidate>
   </contest>
@@ -548,22 +548,22 @@
     <electoral_district id="US-ST-MN-SN-64"/>
     <candidate id="0184-0301">
       <name>SHARON ANDERSON</name>
-      <party>Republican</party>
+      <party_id>Republican</party_id>
       <sort_order>1</sort_order>
     </candidate>
     <candidate id="0184-0401">
       <name>DICK COHEN</name>
-      <party>Democratic-Farmer-Labor</party>
+      <party_id>Democratic-Farmer-Labor</party_id>
       <sort_order>2</sort_order>
     </candidate>
     <candidate id="0184-1301">
       <name>SCOTT LARSON</name>
-      <party>Independent</party>
+      <party_id>Independent</party_id>
       <sort_order>3</sort_order>
     </candidate>
     <candidate id="0184-9901">
       <name>WRITE-IN**</name>
-      <party>Write-In</party>
+      <party_id>Write-In</party_id>
       <sort_order>4</sort_order>
     </candidate>
   </contest>
@@ -573,17 +573,17 @@
     <electoral_district id="US-ST-MN-SN-65"/>
     <candidate id="0185-0301">
       <name>RICK KARSCHNIA</name>
-      <party>Republican</party>
+      <party_id>Republican</party_id>
       <sort_order>1</sort_order>
     </candidate>
     <candidate id="0185-0401">
       <name>SANDY PAPPAS</name>
-      <party>Democratic-Farmer-Labor</party>
+      <party_id>Democratic-Farmer-Labor</party_id>
       <sort_order>2</sort_order>
     </candidate>
     <candidate id="0185-9901">
       <name>WRITE-IN**</name>
-      <party>Write-In</party>
+      <party_id>Write-In</party_id>
       <sort_order>3</sort_order>
     </candidate>
   </contest>
@@ -593,17 +593,17 @@
     <electoral_district id="US-ST-MN-SN-66"/>
     <candidate id="0186-0301">
       <name>WAYDE BROOKS</name>
-      <party>Republican</party>
+      <party_id>Republican</party_id>
       <sort_order>1</sort_order>
     </candidate>
     <candidate id="0186-0401">
       <name>JOHN MARTY</name>
-      <party>Democratic-Farmer-Labor</party>
+      <party_id>Democratic-Farmer-Labor</party_id>
       <sort_order>2</sort_order>
     </candidate>
     <candidate id="0186-9901">
       <name>WRITE-IN**</name>
-      <party>Write-In</party>
+      <party_id>Write-In</party_id>
       <sort_order>3</sort_order>
     </candidate>
   </contest>
@@ -613,17 +613,17 @@
     <electoral_district id="US-ST-MN-SN-67"/>
     <candidate id="0187-0301">
       <name>MIKE CAPISTRANT</name>
-      <party>Republican</party>
+      <party_id>Republican</party_id>
       <sort_order>1</sort_order>
     </candidate>
     <candidate id="0187-0401">
       <name>FOUNG HAWJ</name>
-      <party>Democratic-Farmer-Labor</party>
+      <party_id>Democratic-Farmer-Labor</party_id>
       <sort_order>2</sort_order>
     </candidate>
     <candidate id="0187-9901">
       <name>WRITE-IN**</name>
-      <party>Write-In</party>
+      <party_id>Write-In</party_id>
       <sort_order>3</sort_order>
     </candidate>
   </contest>
@@ -633,17 +633,17 @@
     <electoral_district id="US-ST-MN-SH-38B"/>
     <candidate id="0263-0301">
       <name>MATT DEAN</name>
-      <party>Republican</party>
+      <party_id>Republican</party_id>
       <sort_order>1</sort_order>
     </candidate>
     <candidate id="0263-0401">
       <name>GREG M. PARISEAU</name>
-      <party>Democratic-Farmer-Labor</party>
+      <party_id>Democratic-Farmer-Labor</party_id>
       <sort_order>2</sort_order>
     </candidate>
     <candidate id="0263-9901">
       <name>WRITE-IN**</name>
-      <party>Write-In</party>
+      <party_id>Write-In</party_id>
       <sort_order>3</sort_order>
     </candidate>
   </contest>
@@ -653,17 +653,17 @@
     <electoral_district id="US-ST-MN-SH-41A"/>
     <candidate id="0268-0301">
       <name>DALE HELM</name>
-      <party>Republican</party>
+      <party_id>Republican</party_id>
       <sort_order>1</sort_order>
     </candidate>
     <candidate id="0268-0401">
       <name>CONNIE BERNARDY</name>
-      <party>Democratic-Farmer-Labor</party>
+      <party_id>Democratic-Farmer-Labor</party_id>
       <sort_order>2</sort_order>
     </candidate>
     <candidate id="0268-9901">
       <name>WRITE-IN**</name>
-      <party>Write-In</party>
+      <party_id>Write-In</party_id>
       <sort_order>3</sort_order>
     </candidate>
   </contest>
@@ -673,22 +673,22 @@
     <electoral_district id="US-ST-MN-SH-41B"/>
     <candidate id="0269-0301">
       <name>LAURA PALMER</name>
-      <party>Republican</party>
+      <party_id>Republican</party_id>
       <sort_order>1</sort_order>
     </candidate>
     <candidate id="0269-0401">
       <name>CAROLYN LAINE</name>
-      <party>Democratic-Farmer-Labor</party>
+      <party_id>Democratic-Farmer-Labor</party_id>
       <sort_order>2</sort_order>
     </candidate>
     <candidate id="0269-0701">
       <name>TIM UTZ</name>
-      <party>Constitution Party</party>
+      <party_id>Constitution Party</party_id>
       <sort_order>3</sort_order>
     </candidate>
     <candidate id="0269-9901">
       <name>WRITE-IN**</name>
-      <party>Write-In</party>
+      <party_id>Write-In</party_id>
       <sort_order>4</sort_order>
     </candidate>
   </contest>
@@ -698,17 +698,17 @@
     <electoral_district id="US-ST-MN-SH-42A"/>
     <candidate id="0270-0301">
       <name>RUSS BERTSCH</name>
-      <party>Republican</party>
+      <party_id>Republican</party_id>
       <sort_order>1</sort_order>
     </candidate>
     <candidate id="0270-0401">
       <name>BARB YARUSSO</name>
-      <party>Democratic-Farmer-Labor</party>
+      <party_id>Democratic-Farmer-Labor</party_id>
       <sort_order>2</sort_order>
     </candidate>
     <candidate id="0270-9901">
       <name>WRITE-IN**</name>
-      <party>Write-In</party>
+      <party_id>Write-In</party_id>
       <sort_order>3</sort_order>
     </candidate>
   </contest>
@@ -718,17 +718,17 @@
     <electoral_district id="US-ST-MN-SH-42B"/>
     <candidate id="0271-0301">
       <name>KEN RUBENZER</name>
-      <party>Republican</party>
+      <party_id>Republican</party_id>
       <sort_order>1</sort_order>
     </candidate>
     <candidate id="0271-0401">
       <name>JASON "IKE" ISAACSON</name>
-      <party>Democratic-Farmer-Labor</party>
+      <party_id>Democratic-Farmer-Labor</party_id>
       <sort_order>2</sort_order>
     </candidate>
     <candidate id="0271-9901">
       <name>WRITE-IN**</name>
-      <party>Write-In</party>
+      <party_id>Write-In</party_id>
       <sort_order>3</sort_order>
     </candidate>
   </contest>
@@ -738,17 +738,17 @@
     <electoral_district id="US-ST-MN-SH-43A"/>
     <candidate id="0272-0301">
       <name>STACEY STOUT</name>
-      <party>Republican</party>
+      <party_id>Republican</party_id>
       <sort_order>1</sort_order>
     </candidate>
     <candidate id="0272-0401">
       <name>PETER FISCHER</name>
-      <party>Democratic-Farmer-Labor</party>
+      <party_id>Democratic-Farmer-Labor</party_id>
       <sort_order>2</sort_order>
     </candidate>
     <candidate id="0272-9901">
       <name>WRITE-IN**</name>
-      <party>Write-In</party>
+      <party_id>Write-In</party_id>
       <sort_order>3</sort_order>
     </candidate>
   </contest>
@@ -758,17 +758,17 @@
     <electoral_district id="US-ST-MN-SH-43B"/>
     <candidate id="0273-0301">
       <name>KEVIN J. KLEIN</name>
-      <party>Republican</party>
+      <party_id>Republican</party_id>
       <sort_order>1</sort_order>
     </candidate>
     <candidate id="0273-0401">
       <name>LEON M. LILLIE</name>
-      <party>Democratic-Farmer-Labor</party>
+      <party_id>Democratic-Farmer-Labor</party_id>
       <sort_order>2</sort_order>
     </candidate>
     <candidate id="0273-9901">
       <name>WRITE-IN**</name>
-      <party>Write-In</party>
+      <party_id>Write-In</party_id>
       <sort_order>3</sort_order>
     </candidate>
   </contest>
@@ -778,17 +778,17 @@
     <electoral_district id="US-ST-MN-SH-53A"/>
     <candidate id="0292-0301">
       <name>PAM CUNNINGHAM</name>
-      <party>Republican</party>
+      <party_id>Republican</party_id>
       <sort_order>1</sort_order>
     </candidate>
     <candidate id="0292-0401">
       <name>JOANN WARD</name>
-      <party>Democratic-Farmer-Labor</party>
+      <party_id>Democratic-Farmer-Labor</party_id>
       <sort_order>2</sort_order>
     </candidate>
     <candidate id="0292-9901">
       <name>WRITE-IN**</name>
-      <party>Write-In</party>
+      <party_id>Write-In</party_id>
       <sort_order>3</sort_order>
     </candidate>
   </contest>
@@ -798,17 +798,17 @@
     <electoral_district id="US-ST-MN-SH-64A"/>
     <candidate id="0314-0301">
       <name>ANDREW OJEDA</name>
-      <party>Republican</party>
+      <party_id>Republican</party_id>
       <sort_order>1</sort_order>
     </candidate>
     <candidate id="0314-0401">
       <name>ERIN MURPHY</name>
-      <party>Democratic-Farmer-Labor</party>
+      <party_id>Democratic-Farmer-Labor</party_id>
       <sort_order>2</sort_order>
     </candidate>
     <candidate id="0314-9901">
       <name>WRITE-IN**</name>
-      <party>Write-In</party>
+      <party_id>Write-In</party_id>
       <sort_order>3</sort_order>
     </candidate>
   </contest>
@@ -818,17 +818,17 @@
     <electoral_district id="US-ST-MN-SH-64B"/>
     <candidate id="0315-0301">
       <name>BRANDON CARMACK</name>
-      <party>Republican</party>
+      <party_id>Republican</party_id>
       <sort_order>1</sort_order>
     </candidate>
     <candidate id="0315-0401">
       <name>MICHAEL PAYMAR</name>
-      <party>Democratic-Farmer-Labor</party>
+      <party_id>Democratic-Farmer-Labor</party_id>
       <sort_order>2</sort_order>
     </candidate>
     <candidate id="0315-9901">
       <name>WRITE-IN**</name>
-      <party>Write-In</party>
+      <party_id>Write-In</party_id>
       <sort_order>3</sort_order>
     </candidate>
   </contest>
@@ -838,17 +838,17 @@
     <electoral_district id="US-ST-MN-SH-65A"/>
     <candidate id="0316-0301">
       <name>DANIEL LIPP</name>
-      <party>Republican</party>
+      <party_id>Republican</party_id>
       <sort_order>1</sort_order>
     </candidate>
     <candidate id="0316-0401">
       <name>RENA MORAN</name>
-      <party>Democratic-Farmer-Labor</party>
+      <party_id>Democratic-Farmer-Labor</party_id>
       <sort_order>2</sort_order>
     </candidate>
     <candidate id="0316-9901">
       <name>WRITE-IN**</name>
-      <party>Write-In</party>
+      <party_id>Write-In</party_id>
       <sort_order>3</sort_order>
     </candidate>
   </contest>
@@ -858,17 +858,17 @@
     <electoral_district id="US-ST-MN-SH-65B"/>
     <candidate id="0317-0301">
       <name>CARLOS CONWAY</name>
-      <party>Republican</party>
+      <party_id>Republican</party_id>
       <sort_order>1</sort_order>
     </candidate>
     <candidate id="0317-0401">
       <name>CARLOS MARIANI</name>
-      <party>Democratic-Farmer-Labor</party>
+      <party_id>Democratic-Farmer-Labor</party_id>
       <sort_order>2</sort_order>
     </candidate>
     <candidate id="0317-9901">
       <name>WRITE-IN**</name>
-      <party>Write-In</party>
+      <party_id>Write-In</party_id>
       <sort_order>3</sort_order>
     </candidate>
   </contest>
@@ -878,22 +878,22 @@
     <electoral_district id="US-ST-MN-SH-66A"/>
     <candidate id="0318-0201">
       <name>DAVE THOMAS</name>
-      <party>Independence</party>
+      <party_id>Independence</party_id>
       <sort_order>1</sort_order>
     </candidate>
     <candidate id="0318-0301">
       <name>MARK FOTSCH</name>
-      <party>Republican</party>
+      <party_id>Republican</party_id>
       <sort_order>2</sort_order>
     </candidate>
     <candidate id="0318-0401">
       <name>ALICE HAUSMAN</name>
-      <party>Democratic-Farmer-Labor</party>
+      <party_id>Democratic-Farmer-Labor</party_id>
       <sort_order>3</sort_order>
     </candidate>
     <candidate id="0318-9901">
       <name>WRITE-IN**</name>
-      <party>Write-In</party>
+      <party_id>Write-In</party_id>
       <sort_order>4</sort_order>
     </candidate>
   </contest>
@@ -903,17 +903,17 @@
     <electoral_district id="US-ST-MN-SH-66B"/>
     <candidate id="0319-0301">
       <name>BEN BLOMGREN</name>
-      <party>Republican</party>
+      <party_id>Republican</party_id>
       <sort_order>1</sort_order>
     </candidate>
     <candidate id="0319-0401">
       <name>JOHN LESCH</name>
-      <party>Democratic-Farmer-Labor</party>
+      <party_id>Democratic-Farmer-Labor</party_id>
       <sort_order>2</sort_order>
     </candidate>
     <candidate id="0319-9901">
       <name>WRITE-IN**</name>
-      <party>Write-In</party>
+      <party_id>Write-In</party_id>
       <sort_order>3</sort_order>
     </candidate>
   </contest>
@@ -923,17 +923,17 @@
     <electoral_district id="US-ST-MN-SH-67A"/>
     <candidate id="0320-0301">
       <name>CATHY HENNELLY</name>
-      <party>Republican</party>
+      <party_id>Republican</party_id>
       <sort_order>1</sort_order>
     </candidate>
     <candidate id="0320-0401">
       <name>TIM MAHONEY</name>
-      <party>Democratic-Farmer-Labor</party>
+      <party_id>Democratic-Farmer-Labor</party_id>
       <sort_order>2</sort_order>
     </candidate>
     <candidate id="0320-9901">
       <name>WRITE-IN**</name>
-      <party>Write-In</party>
+      <party_id>Write-In</party_id>
       <sort_order>3</sort_order>
     </candidate>
   </contest>
@@ -943,17 +943,17 @@
     <electoral_district id="US-ST-MN-SH-67B"/>
     <candidate id="0321-0301">
       <name>JOHN T. QUINN</name>
-      <party>Republican</party>
+      <party_id>Republican</party_id>
       <sort_order>1</sort_order>
     </candidate>
     <candidate id="0321-0401">
       <name>SHELDON JOHNSON</name>
-      <party>Democratic-Farmer-Labor</party>
+      <party_id>Democratic-Farmer-Labor</party_id>
       <sort_order>2</sort_order>
     </candidate>
     <candidate id="0321-9901">
       <name>WRITE-IN**</name>
-      <party>Write-In</party>
+      <party_id>Write-In</party_id>
       <sort_order>3</sort_order>
     </candidate>
   </contest>
@@ -963,17 +963,17 @@
     <electoral_district id="MN-DV-123-CC-1"/>
     <candidate id="0391-9001">
       <name>FRANK T. MABLEY</name>
-      <party>Nonpartisan</party>
+      <party_id>Nonpartisan</party_id>
       <sort_order>1</sort_order>
     </candidate>
     <candidate id="0391-9004">
       <name>BLAKE C. HUFFMAN</name>
-      <party>Nonpartisan</party>
+      <party_id>Nonpartisan</party_id>
       <sort_order>2</sort_order>
     </candidate>
     <candidate id="0391-9901">
       <name>WRITE-IN**</name>
-      <party>Write-In</party>
+      <party_id>Write-In</party_id>
       <sort_order>3</sort_order>
     </candidate>
   </contest>
@@ -983,17 +983,17 @@
     <electoral_district id="MN-DV-123-CC-2"/>
     <candidate id="0392-9001">
       <name>MARY JO MCGUIRE</name>
-      <party>Nonpartisan</party>
+      <party_id>Nonpartisan</party_id>
       <sort_order>1</sort_order>
     </candidate>
     <candidate id="0392-9002">
       <name>SUE JEFFERS</name>
-      <party>Nonpartisan</party>
+      <party_id>Nonpartisan</party_id>
       <sort_order>2</sort_order>
     </candidate>
     <candidate id="0392-9901">
       <name>WRITE-IN**</name>
-      <party>Write-In</party>
+      <party_id>Write-In</party_id>
       <sort_order>3</sort_order>
     </candidate>
   </contest>
@@ -1003,17 +1003,17 @@
     <electoral_district id="MN-DV-123-CC-7"/>
     <candidate id="0397-9001">
       <name>VICTORIA A. REINHARDT</name>
-      <party>Nonpartisan</party>
+      <party_id>Nonpartisan</party_id>
       <sort_order>1</sort_order>
     </candidate>
     <candidate id="0397-9002">
       <name>DENNIS DUNNIGAN</name>
-      <party>Nonpartisan</party>
+      <party_id>Nonpartisan</party_id>
       <sort_order>2</sort_order>
     </candidate>
     <candidate id="0397-9901">
       <name>WRITE-IN**</name>
-      <party>Write-In</party>
+      <party_id>Write-In</party_id>
       <sort_order>3</sort_order>
     </candidate>
   </contest>
@@ -1023,17 +1023,17 @@
     <electoral_district id="MN-SW-4123"/>
     <candidate id="0432-9001">
       <name>GWEN WILLEMS</name>
-      <party>Nonpartisan</party>
+      <party_id>Nonpartisan</party_id>
       <sort_order>1</sort_order>
     </candidate>
     <candidate id="0432-9002">
       <name>GREG RYAN</name>
-      <party>Nonpartisan</party>
+      <party_id>Nonpartisan</party_id>
       <sort_order>2</sort_order>
     </candidate>
     <candidate id="0432-9901">
       <name>WRITE-IN**</name>
-      <party>Write-In</party>
+      <party_id>Write-In</party_id>
       <sort_order>3</sort_order>
     </candidate>
   </contest>
@@ -1043,12 +1043,12 @@
     <electoral_district id="MN-SW-4123"/>
     <candidate id="0433-9001">
       <name>MARA MAGNUSON HUMPHREY</name>
-      <party>Nonpartisan</party>
+      <party_id>Nonpartisan</party_id>
       <sort_order>1</sort_order>
     </candidate>
     <candidate id="0433-9901">
       <name>WRITE-IN**</name>
-      <party>Write-In</party>
+      <party_id>Write-In</party_id>
       <sort_order>2</sort_order>
     </candidate>
   </contest>
@@ -1058,22 +1058,22 @@
     <electoral_district id="MN-SW-4123"/>
     <candidate id="0435-9001">
       <name>MATT LEDVINA</name>
-      <party>Nonpartisan</party>
+      <party_id>Nonpartisan</party_id>
       <sort_order>1</sort_order>
     </candidate>
     <candidate id="0435-9002">
       <name>MARGARET ANN BEHRENS</name>
-      <party>Nonpartisan</party>
+      <party_id>Nonpartisan</party_id>
       <sort_order>2</sort_order>
     </candidate>
     <candidate id="0435-9003">
       <name>DEE DODGE GEORGE</name>
-      <party>Nonpartisan</party>
+      <party_id>Nonpartisan</party_id>
       <sort_order>3</sort_order>
     </candidate>
     <candidate id="0435-9901">
       <name>WRITE-IN**</name>
-      <party>Write-In</party>
+      <party_id>Write-In</party_id>
       <sort_order>4</sort_order>
     </candidate>
   </contest>
@@ -1083,12 +1083,12 @@
     <electoral_district id="US-MCD-06382"/>
     <candidate id="1001-9001">
       <name>TOM RYAN</name>
-      <party>Nonpartisan</party>
+      <party_id>Nonpartisan</party_id>
       <sort_order>1</sort_order>
     </candidate>
     <candidate id="1001-9901">
       <name>WRITE-IN**</name>
-      <party>Write-In</party>
+      <party_id>Write-In</party_id>
       <sort_order>2</sort_order>
     </candidate>
   </contest>
@@ -1098,12 +1098,12 @@
     <electoral_district id="US-MCD-23318"/>
     <candidate id="1001-9001">
       <name>ROBERT L UZPEN JR</name>
-      <party>Nonpartisan</party>
+      <party_id>Nonpartisan</party_id>
       <sort_order>1</sort_order>
     </candidate>
     <candidate id="1001-9901">
       <name>WRITE-IN**</name>
-      <party>Write-In</party>
+      <party_id>Write-In</party_id>
       <sort_order>2</sort_order>
     </candidate>
   </contest>
@@ -1113,12 +1113,12 @@
     <electoral_district id="US-MCD-35738"/>
     <candidate id="1001-9001">
       <name>JEFFREY E DAINS</name>
-      <party>Nonpartisan</party>
+      <party_id>Nonpartisan</party_id>
       <sort_order>1</sort_order>
     </candidate>
     <candidate id="1001-9901">
       <name>WRITE-IN**</name>
-      <party>Write-In</party>
+      <party_id>Write-In</party_id>
       <sort_order>2</sort_order>
     </candidate>
   </contest>
@@ -1128,12 +1128,12 @@
     <electoral_district id="US-MCD-37502"/>
     <candidate id="1001-9001">
       <name>BILL BLESENER</name>
-      <party>Nonpartisan</party>
+      <party_id>Nonpartisan</party_id>
       <sort_order>1</sort_order>
     </candidate>
     <candidate id="1001-9901">
       <name>WRITE-IN**</name>
-      <party>Write-In</party>
+      <party_id>Write-In</party_id>
       <sort_order>2</sort_order>
     </candidate>
   </contest>
@@ -1143,17 +1143,17 @@
     <electoral_district id="US-MCD-44530"/>
     <candidate id="1001-9001">
       <name>JOE FLAHERTY</name>
-      <party>Nonpartisan</party>
+      <party_id>Nonpartisan</party_id>
       <sort_order>1</sort_order>
     </candidate>
     <candidate id="1001-9002">
       <name>JOHN ELOFSON</name>
-      <party>Nonpartisan</party>
+      <party_id>Nonpartisan</party_id>
       <sort_order>2</sort_order>
     </candidate>
     <candidate id="1001-9901">
       <name>WRITE-IN**</name>
-      <party>Write-In</party>
+      <party_id>Write-In</party_id>
       <sort_order>3</sort_order>
     </candidate>
   </contest>
@@ -1163,17 +1163,17 @@
     <electoral_district id="US-MCD-47104"/>
     <candidate id="1001-9001">
       <name>JOE O'BRIEN</name>
-      <party>Nonpartisan</party>
+      <party_id>Nonpartisan</party_id>
       <sort_order>1</sort_order>
     </candidate>
     <candidate id="1001-9002">
       <name>JOHN R SCHAAF</name>
-      <party>Nonpartisan</party>
+      <party_id>Nonpartisan</party_id>
       <sort_order>2</sort_order>
     </candidate>
     <candidate id="1001-9901">
       <name>WRITE-IN**</name>
-      <party>Write-In</party>
+      <party_id>Write-In</party_id>
       <sort_order>3</sort_order>
     </candidate>
   </contest>
@@ -1183,12 +1183,12 @@
     <electoral_district id="US-MCD-59998"/>
     <candidate id="1001-9001">
       <name>SANDY MARTIN</name>
-      <party>Nonpartisan</party>
+      <party_id>Nonpartisan</party_id>
       <sort_order>1</sort_order>
     </candidate>
     <candidate id="1001-9901">
       <name>WRITE-IN**</name>
-      <party>Write-In</party>
+      <party_id>Write-In</party_id>
       <sort_order>2</sort_order>
     </candidate>
   </contest>
@@ -1198,12 +1198,12 @@
     <electoral_district id="US-MCD-66460"/>
     <candidate id="1001-9001">
       <name>MARC A. JOHANNSEN</name>
-      <party>Nonpartisan</party>
+      <party_id>Nonpartisan</party_id>
       <sort_order>1</sort_order>
     </candidate>
     <candidate id="1001-9901">
       <name>WRITE-IN**</name>
-      <party>Write-In</party>
+      <party_id>Write-In</party_id>
       <sort_order>2</sort_order>
     </candidate>
   </contest>
@@ -1213,17 +1213,17 @@
     <electoral_district id="US-MCD-02026"/>
     <candidate id="1010-9001">
       <name>DAVE MCCLUNG</name>
-      <party>Nonpartisan</party>
+      <party_id>Nonpartisan</party_id>
       <sort_order>1</sort_order>
     </candidate>
     <candidate id="1010-9002">
       <name>BRENDA J HOLDEN</name>
-      <party>Nonpartisan</party>
+      <party_id>Nonpartisan</party_id>
       <sort_order>2</sort_order>
     </candidate>
     <candidate id="1010-9901">
       <name>WRITE-IN**</name>
-      <party>Write-In</party>
+      <party_id>Write-In</party_id>
       <sort_order>3</sort_order>
     </candidate>
   </contest>
@@ -1233,17 +1233,17 @@
     <electoral_district id="US-MCD-23318"/>
     <candidate id="1010-9001">
       <name>JAMES LINDNER</name>
-      <party>Nonpartisan</party>
+      <party_id>Nonpartisan</party_id>
       <sort_order>1</sort_order>
     </candidate>
     <candidate id="1010-9002">
       <name>FAITH KUNY</name>
-      <party>Nonpartisan</party>
+      <party_id>Nonpartisan</party_id>
       <sort_order>2</sort_order>
     </candidate>
     <candidate id="1010-9901">
       <name>WRITE-IN**</name>
-      <party>Write-In</party>
+      <party_id>Write-In</party_id>
       <sort_order>3</sort_order>
     </candidate>
   </contest>
@@ -1253,17 +1253,17 @@
     <electoral_district id="US-MCD-35738"/>
     <candidate id="1010-9001">
       <name>LARA MAC LEAN</name>
-      <party>Nonpartisan</party>
+      <party_id>Nonpartisan</party_id>
       <sort_order>1</sort_order>
     </candidate>
     <candidate id="1010-9002">
       <name>DENISE HAWKINSON</name>
-      <party>Nonpartisan</party>
+      <party_id>Nonpartisan</party_id>
       <sort_order>2</sort_order>
     </candidate>
     <candidate id="1010-9901">
       <name>WRITE-IN**</name>
-      <party>Write-In</party>
+      <party_id>Write-In</party_id>
       <sort_order>3</sort_order>
     </candidate>
   </contest>
@@ -1273,17 +1273,17 @@
     <electoral_district id="US-MCD-37502"/>
     <candidate id="1010-9001">
       <name>MICHAEL MCGRAW</name>
-      <party>Nonpartisan</party>
+      <party_id>Nonpartisan</party_id>
       <sort_order>1</sort_order>
     </candidate>
     <candidate id="1010-9002">
       <name>RICK MONTOUR</name>
-      <party>Nonpartisan</party>
+      <party_id>Nonpartisan</party_id>
       <sort_order>2</sort_order>
     </candidate>
     <candidate id="1010-9901">
       <name>WRITE-IN**</name>
-      <party>Write-In</party>
+      <party_id>Write-In</party_id>
       <sort_order>3</sort_order>
     </candidate>
   </contest>
@@ -1293,27 +1293,27 @@
     <electoral_district id="US-MCD-44530"/>
     <candidate id="1010-9001">
       <name>GARY MEEHLHAUSE</name>
-      <party>Nonpartisan</party>
+      <party_id>Nonpartisan</party_id>
       <sort_order>1</sort_order>
     </candidate>
     <candidate id="1010-9002">
       <name>ROGER STIGNEY</name>
-      <party>Nonpartisan</party>
+      <party_id>Nonpartisan</party_id>
       <sort_order>2</sort_order>
     </candidate>
     <candidate id="1010-9003">
       <name>GARY QUICK</name>
-      <party>Nonpartisan</party>
+      <party_id>Nonpartisan</party_id>
       <sort_order>3</sort_order>
     </candidate>
     <candidate id="1010-9004">
       <name>SHERRY L. GUNN</name>
-      <party>Nonpartisan</party>
+      <party_id>Nonpartisan</party_id>
       <sort_order>4</sort_order>
     </candidate>
     <candidate id="1010-9901">
       <name>WRITE-IN**</name>
-      <party>Write-In</party>
+      <party_id>Write-In</party_id>
       <sort_order>5</sort_order>
     </candidate>
   </contest>
@@ -1323,17 +1323,17 @@
     <electoral_district id="US-MCD-47104"/>
     <candidate id="1010-9001">
       <name>MIKE EGELSTON</name>
-      <party>Nonpartisan</party>
+      <party_id>Nonpartisan</party_id>
       <sort_order>1</sort_order>
     </candidate>
     <candidate id="1010-9002">
       <name>MARTY LONG</name>
-      <party>Nonpartisan</party>
+      <party_id>Nonpartisan</party_id>
       <sort_order>2</sort_order>
     </candidate>
     <candidate id="1010-9901">
       <name>WRITE-IN**</name>
-      <party>Write-In</party>
+      <party_id>Write-In</party_id>
       <sort_order>3</sort_order>
     </candidate>
   </contest>
@@ -1343,37 +1343,37 @@
     <electoral_district id="US-MCD-47221"/>
     <candidate id="1010-9001">
       <name>JAN WALCZAK</name>
-      <party>Nonpartisan</party>
+      <party_id>Nonpartisan</party_id>
       <sort_order>1</sort_order>
     </candidate>
     <candidate id="1010-9002">
       <name>DOUGLAS L EDGE</name>
-      <party>Nonpartisan</party>
+      <party_id>Nonpartisan</party_id>
       <sort_order>2</sort_order>
     </candidate>
     <candidate id="1010-9003">
       <name>SCOTT THORSEN</name>
-      <party>Nonpartisan</party>
+      <party_id>Nonpartisan</party_id>
       <sort_order>3</sort_order>
     </candidate>
     <candidate id="1010-9004">
       <name>DAVE ZICK</name>
-      <party>Nonpartisan</party>
+      <party_id>Nonpartisan</party_id>
       <sort_order>4</sort_order>
     </candidate>
     <candidate id="1010-9005">
       <name>ERIC EKSTRAND</name>
-      <party>Nonpartisan</party>
+      <party_id>Nonpartisan</party_id>
       <sort_order>5</sort_order>
     </candidate>
     <candidate id="1010-9006">
       <name>DAVID L ANDREN</name>
-      <party>Nonpartisan</party>
+      <party_id>Nonpartisan</party_id>
       <sort_order>6</sort_order>
     </candidate>
     <candidate id="1010-9901">
       <name>WRITE-IN**</name>
-      <party>Write-In</party>
+      <party_id>Write-In</party_id>
       <sort_order>7</sort_order>
     </candidate>
   </contest>
@@ -1383,37 +1383,37 @@
     <electoral_district id="US-MCD-59998"/>
     <candidate id="1010-9001">
       <name>LEE MICHAELS</name>
-      <party>Nonpartisan</party>
+      <party_id>Nonpartisan</party_id>
       <sort_order>1</sort_order>
     </candidate>
     <candidate id="1010-9002">
       <name>ADY (ADRIENNE) WICKSTROM</name>
-      <party>Nonpartisan</party>
+      <party_id>Nonpartisan</party_id>
       <sort_order>2</sort_order>
     </candidate>
     <candidate id="1010-9003">
       <name>DOUGLAS BLOMBERG</name>
-      <party>Nonpartisan</party>
+      <party_id>Nonpartisan</party_id>
       <sort_order>3</sort_order>
     </candidate>
     <candidate id="1010-9004">
       <name>EMY JOHNSON</name>
-      <party>Nonpartisan</party>
+      <party_id>Nonpartisan</party_id>
       <sort_order>4</sort_order>
     </candidate>
     <candidate id="1010-9005">
       <name>KIRK POSSEHL</name>
-      <party>Nonpartisan</party>
+      <party_id>Nonpartisan</party_id>
       <sort_order>5</sort_order>
     </candidate>
     <candidate id="1010-9006">
       <name>CORY SPRINGHORN</name>
-      <party>Nonpartisan</party>
+      <party_id>Nonpartisan</party_id>
       <sort_order>6</sort_order>
     </candidate>
     <candidate id="1010-9901">
       <name>WRITE-IN**</name>
-      <party>Write-In</party>
+      <party_id>Write-In</party_id>
       <sort_order>7</sort_order>
     </candidate>
   </contest>
@@ -1423,27 +1423,27 @@
     <electoral_district id="US-MCD-66460"/>
     <candidate id="1010-9001">
       <name>DOUGLAS GERLACH</name>
-      <party>Nonpartisan</party>
+      <party_id>Nonpartisan</party_id>
       <sort_order>1</sort_order>
     </candidate>
     <candidate id="1010-9002">
       <name>MARK A. COHEN</name>
-      <party>Nonpartisan</party>
+      <party_id>Nonpartisan</party_id>
       <sort_order>2</sort_order>
     </candidate>
     <candidate id="1010-9003">
       <name>CRAIG JOHNSON</name>
-      <party>Nonpartisan</party>
+      <party_id>Nonpartisan</party_id>
       <sort_order>3</sort_order>
     </candidate>
     <candidate id="1010-9004">
       <name>JERRY AUGE</name>
-      <party>Nonpartisan</party>
+      <party_id>Nonpartisan</party_id>
       <sort_order>4</sort_order>
     </candidate>
     <candidate id="1010-9901">
       <name>WRITE-IN**</name>
-      <party>Write-In</party>
+      <party_id>Write-In</party_id>
       <sort_order>5</sort_order>
     </candidate>
   </contest>
@@ -1453,27 +1453,27 @@
     <electoral_district id="US-MCD-55852"/>
     <candidate id="1010-9002">
       <name>LISA LALIBERTE</name>
-      <party>Nonpartisan</party>
+      <party_id>Nonpartisan</party_id>
       <sort_order>1</sort_order>
     </candidate>
     <candidate id="1010-9004">
       <name>KAREN SCHAFFER</name>
-      <party>Nonpartisan</party>
+      <party_id>Nonpartisan</party_id>
       <sort_order>2</sort_order>
     </candidate>
     <candidate id="1010-9005">
       <name>BILL HOFFMAN</name>
-      <party>Nonpartisan</party>
+      <party_id>Nonpartisan</party_id>
       <sort_order>3</sort_order>
     </candidate>
     <candidate id="1010-9007">
       <name>JASON ETTEN</name>
-      <party>Nonpartisan</party>
+      <party_id>Nonpartisan</party_id>
       <sort_order>4</sort_order>
     </candidate>
     <candidate id="1010-9901">
       <name>WRITE-IN**</name>
-      <party>Write-In</party>
+      <party_id>Write-In</party_id>
       <sort_order>5</sort_order>
     </candidate>
   </contest>
@@ -1483,37 +1483,37 @@
     <electoral_district id="US-MCD-61996"/>
     <candidate id="1010-9001">
       <name>DAN LAMBERT</name>
-      <party>Nonpartisan</party>
+      <party_id>Nonpartisan</party_id>
       <sort_order>1</sort_order>
     </candidate>
     <candidate id="1010-9002">
       <name>BILL NASH</name>
-      <party>Nonpartisan</party>
+      <party_id>Nonpartisan</party_id>
       <sort_order>2</sort_order>
     </candidate>
     <candidate id="1010-9003">
       <name>TONY EASTER</name>
-      <party>Nonpartisan</party>
+      <party_id>Nonpartisan</party_id>
       <sort_order>3</sort_order>
     </candidate>
     <candidate id="1010-9004">
       <name>LARRY RAYMOND</name>
-      <party>Nonpartisan</party>
+      <party_id>Nonpartisan</party_id>
       <sort_order>4</sort_order>
     </candidate>
     <candidate id="1010-9005">
       <name>BOB NELSON</name>
-      <party>Nonpartisan</party>
+      <party_id>Nonpartisan</party_id>
       <sort_order>5</sort_order>
     </candidate>
     <candidate id="1010-9006">
       <name>JASON LETOURNEAU</name>
-      <party>Nonpartisan</party>
+      <party_id>Nonpartisan</party_id>
       <sort_order>6</sort_order>
     </candidate>
     <candidate id="1010-9901">
       <name>WRITE-IN**</name>
-      <party>Write-In</party>
+      <party_id>Write-In</party_id>
       <sort_order>7</sort_order>
     </candidate>
   </contest>
@@ -1523,27 +1523,27 @@
     <electoral_district id="US-MCD-40382"/>
     <candidate id="1012-9001">
       <name>JULIE WASILUK</name>
-      <party>Nonpartisan</party>
+      <party_id>Nonpartisan</party_id>
       <sort_order>1</sort_order>
     </candidate>
     <candidate id="1012-9002">
       <name>REBECCA CAVE</name>
-      <party>Nonpartisan</party>
+      <party_id>Nonpartisan</party_id>
       <sort_order>2</sort_order>
     </candidate>
     <candidate id="1012-9003">
       <name>MARYLEE ABRAMS</name>
-      <party>Nonpartisan</party>
+      <party_id>Nonpartisan</party_id>
       <sort_order>3</sort_order>
     </candidate>
     <candidate id="1012-9004">
       <name>TRACEY TISCHLER</name>
-      <party>Nonpartisan</party>
+      <party_id>Nonpartisan</party_id>
       <sort_order>4</sort_order>
     </candidate>
     <candidate id="1012-9901">
       <name>WRITE-IN**</name>
-      <party>Write-In</party>
+      <party_id>Write-In</party_id>
       <sort_order>5</sort_order>
     </candidate>
   </contest>
@@ -1553,32 +1553,32 @@
     <electoral_district id="US-MCD-66460"/>
     <candidate id="1012-9001">
       <name>RUDOLPH G MAURINE JR</name>
-      <party>Nonpartisan</party>
+      <party_id>Nonpartisan</party_id>
       <sort_order>1</sort_order>
     </candidate>
     <candidate id="1012-9002">
       <name>SHEILA KELLY</name>
-      <party>Nonpartisan</party>
+      <party_id>Nonpartisan</party_id>
       <sort_order>2</sort_order>
     </candidate>
     <candidate id="1012-9003">
       <name>JAMES FLINN</name>
-      <party>Nonpartisan</party>
+      <party_id>Nonpartisan</party_id>
       <sort_order>3</sort_order>
     </candidate>
     <candidate id="1012-9004">
       <name>JENNIFER NODES</name>
-      <party>Nonpartisan</party>
+      <party_id>Nonpartisan</party_id>
       <sort_order>4</sort_order>
     </candidate>
     <candidate id="1012-9005">
       <name>TERRY NYBLOM</name>
-      <party>Nonpartisan</party>
+      <party_id>Nonpartisan</party_id>
       <sort_order>5</sort_order>
     </candidate>
     <candidate id="1012-9901">
       <name>WRITE-IN**</name>
-      <party>Write-In</party>
+      <party_id>Write-In</party_id>
       <sort_order>6</sort_order>
     </candidate>
   </contest>
@@ -1588,17 +1588,17 @@
     <electoral_district id="US-MCD-06382"/>
     <candidate id="1020-9001">
       <name>JASON BABLER</name>
-      <party>Nonpartisan</party>
+      <party_id>Nonpartisan</party_id>
       <sort_order>1</sort_order>
     </candidate>
     <candidate id="1020-9002">
       <name>DICK SWANSON</name>
-      <party>Nonpartisan</party>
+      <party_id>Nonpartisan</party_id>
       <sort_order>2</sort_order>
     </candidate>
     <candidate id="1020-9901">
       <name>WRITE-IN**</name>
-      <party>Write-In</party>
+      <party_id>Write-In</party_id>
       <sort_order>3</sort_order>
     </candidate>
   </contest>
@@ -1608,32 +1608,32 @@
     <electoral_district id="MN-ISD-622"/>
     <candidate id="5000-9001">
       <name>RICH BENNETT</name>
-      <party>Nonpartisan</party>
+      <party_id>Nonpartisan</party_id>
       <sort_order>1</sort_order>
     </candidate>
     <candidate id="5000-9002">
       <name>BECKY NEVE</name>
-      <party>Nonpartisan</party>
+      <party_id>Nonpartisan</party_id>
       <sort_order>2</sort_order>
     </candidate>
     <candidate id="5000-9003">
       <name>NANCY LIVINGSTON</name>
-      <party>Nonpartisan</party>
+      <party_id>Nonpartisan</party_id>
       <sort_order>3</sort_order>
     </candidate>
     <candidate id="5000-9004">
       <name>THERESA AUGE'</name>
-      <party>Nonpartisan</party>
+      <party_id>Nonpartisan</party_id>
       <sort_order>4</sort_order>
     </candidate>
     <candidate id="5000-9005">
       <name>STEVE HUNT</name>
-      <party>Nonpartisan</party>
+      <party_id>Nonpartisan</party_id>
       <sort_order>5</sort_order>
     </candidate>
     <candidate id="5000-9901">
       <name>WRITE-IN**</name>
-      <party>Write-In</party>
+      <party_id>Write-In</party_id>
       <sort_order>6</sort_order>
     </candidate>
   </contest>
@@ -1643,12 +1643,12 @@
     <electoral_district id="MN-HD-1420"/>
     <candidate id="6000-9001">
       <name>MARK A. WINTERS</name>
-      <party>Nonpartisan</party>
+      <party_id>Nonpartisan</party_id>
       <sort_order>1</sort_order>
     </candidate>
     <candidate id="6000-9901">
       <name>WRITE-IN**</name>
-      <party>Write-In</party>
+      <party_id>Write-In</party_id>
       <sort_order>2</sort_order>
     </candidate>
   </contest>
@@ -1658,12 +1658,12 @@
     <electoral_district id="US-MCD-44530"/>
     <candidate id="6003-9001">
       <name>JOHN B. SWENSON</name>
-      <party>Nonpartisan</party>
+      <party_id>Nonpartisan</party_id>
       <sort_order>1</sort_order>
     </candidate>
     <candidate id="6003-9901">
       <name>WRITE-IN**</name>
-      <party>Write-In</party>
+      <party_id>Write-In</party_id>
       <sort_order>2</sort_order>
     </candidate>
   </contest>
@@ -1673,12 +1673,12 @@
     <electoral_district id="US-MCD-61996"/>
     <candidate id="6003-9001">
       <name>CAROL A. ANDERSON</name>
-      <party>Nonpartisan</party>
+      <party_id>Nonpartisan</party_id>
       <sort_order>1</sort_order>
     </candidate>
     <candidate id="6003-9901">
       <name>WRITE-IN**</name>
-      <party>Write-In</party>
+      <party_id>Write-In</party_id>
       <sort_order>2</sort_order>
     </candidate>
   </contest>
@@ -1688,17 +1688,17 @@
     <electoral_district id="US-ST-MN"/>
     <candidate id="7001-9001">
       <name>LORIE SKJERVEN GILDEA</name>
-      <party>Nonpartisan</party>
+      <party_id>Nonpartisan</party_id>
       <sort_order>1</sort_order>
     </candidate>
     <candidate id="7001-9003">
       <name>DAN GRIFFITH</name>
-      <party>Nonpartisan</party>
+      <party_id>Nonpartisan</party_id>
       <sort_order>2</sort_order>
     </candidate>
     <candidate id="7001-9901">
       <name>WRITE-IN**</name>
-      <party>Write-In</party>
+      <party_id>Write-In</party_id>
       <sort_order>3</sort_order>
     </candidate>
   </contest>
@@ -1708,17 +1708,17 @@
     <electoral_district id="US-ST-MN"/>
     <candidate id="7002-9001">
       <name>DEAN BARKLEY</name>
-      <party>Nonpartisan</party>
+      <party_id>Nonpartisan</party_id>
       <sort_order>1</sort_order>
     </candidate>
     <candidate id="7002-9002">
       <name>BARRY ANDERSON</name>
-      <party>Nonpartisan</party>
+      <party_id>Nonpartisan</party_id>
       <sort_order>2</sort_order>
     </candidate>
     <candidate id="7002-9901">
       <name>WRITE-IN**</name>
-      <party>Write-In</party>
+      <party_id>Write-In</party_id>
       <sort_order>3</sort_order>
     </candidate>
   </contest>
@@ -1728,17 +1728,17 @@
     <electoral_district id="US-ST-MN"/>
     <candidate id="7005-9002">
       <name>TIM TINGELSTAD</name>
-      <party>Nonpartisan</party>
+      <party_id>Nonpartisan</party_id>
       <sort_order>1</sort_order>
     </candidate>
     <candidate id="7005-9003">
       <name>DAVID R. STRAS</name>
-      <party>Nonpartisan</party>
+      <party_id>Nonpartisan</party_id>
       <sort_order>2</sort_order>
     </candidate>
     <candidate id="7005-9901">
       <name>WRITE-IN**</name>
-      <party>Write-In</party>
+      <party_id>Write-In</party_id>
       <sort_order>3</sort_order>
     </candidate>
   </contest>
@@ -1748,12 +1748,12 @@
     <electoral_district id="US-ST-MN"/>
     <candidate id="7015-9001">
       <name>RENEE L. WORKE</name>
-      <party>Nonpartisan</party>
+      <party_id>Nonpartisan</party_id>
       <sort_order>1</sort_order>
     </candidate>
     <candidate id="7015-9901">
       <name>WRITE-IN**</name>
-      <party>Write-In</party>
+      <party_id>Write-In</party_id>
       <sort_order>2</sort_order>
     </candidate>
   </contest>
@@ -1763,12 +1763,12 @@
     <electoral_district id="US-ST-MN"/>
     <candidate id="7016-9001">
       <name>JILL FLASKAMP HALBROOKS</name>
-      <party>Nonpartisan</party>
+      <party_id>Nonpartisan</party_id>
       <sort_order>1</sort_order>
     </candidate>
     <candidate id="7016-9901">
       <name>WRITE-IN**</name>
-      <party>Write-In</party>
+      <party_id>Write-In</party_id>
       <sort_order>2</sort_order>
     </candidate>
   </contest>
@@ -1778,12 +1778,12 @@
     <electoral_district id="MN-JUD-2"/>
     <candidate id="8301-9001">
       <name>JAMES H. CLARK, JR</name>
-      <party>Nonpartisan</party>
+      <party_id>Nonpartisan</party_id>
       <sort_order>1</sort_order>
     </candidate>
     <candidate id="8301-9901">
       <name>WRITE-IN**</name>
-      <party>Write-In</party>
+      <party_id>Write-In</party_id>
       <sort_order>2</sort_order>
     </candidate>
   </contest>
@@ -1793,12 +1793,12 @@
     <electoral_district id="MN-JUD-2"/>
     <candidate id="8304-9001">
       <name>LEZLIE OTT MAREK</name>
-      <party>Nonpartisan</party>
+      <party_id>Nonpartisan</party_id>
       <sort_order>1</sort_order>
     </candidate>
     <candidate id="8304-9901">
       <name>WRITE-IN**</name>
-      <party>Write-In</party>
+      <party_id>Write-In</party_id>
       <sort_order>2</sort_order>
     </candidate>
   </contest>
@@ -1808,12 +1808,12 @@
     <electoral_district id="MN-JUD-2"/>
     <candidate id="8305-9001">
       <name>JOHN B. (JACK) VANDENORTH</name>
-      <party>Nonpartisan</party>
+      <party_id>Nonpartisan</party_id>
       <sort_order>1</sort_order>
     </candidate>
     <candidate id="8305-9901">
       <name>WRITE-IN**</name>
-      <party>Write-In</party>
+      <party_id>Write-In</party_id>
       <sort_order>2</sort_order>
     </candidate>
   </contest>
@@ -1823,12 +1823,12 @@
     <electoral_district id="MN-JUD-2"/>
     <candidate id="8310-9001">
       <name>GARY W. BASTIAN</name>
-      <party>Nonpartisan</party>
+      <party_id>Nonpartisan</party_id>
       <sort_order>1</sort_order>
     </candidate>
     <candidate id="8310-9901">
       <name>WRITE-IN**</name>
-      <party>Write-In</party>
+      <party_id>Write-In</party_id>
       <sort_order>2</sort_order>
     </candidate>
   </contest>
@@ -1838,12 +1838,12 @@
     <electoral_district id="MN-JUD-2"/>
     <candidate id="8311-9001">
       <name>GREGG E. JOHNSON</name>
-      <party>Nonpartisan</party>
+      <party_id>Nonpartisan</party_id>
       <sort_order>1</sort_order>
     </candidate>
     <candidate id="8311-9901">
       <name>WRITE-IN**</name>
-      <party>Write-In</party>
+      <party_id>Write-In</party_id>
       <sort_order>2</sort_order>
     </candidate>
   </contest>
@@ -1853,12 +1853,12 @@
     <electoral_district id="MN-JUD-2"/>
     <candidate id="8313-9001">
       <name>ROBYN ANN MILLENACKER</name>
-      <party>Nonpartisan</party>
+      <party_id>Nonpartisan</party_id>
       <sort_order>1</sort_order>
     </candidate>
     <candidate id="8313-9901">
       <name>WRITE-IN**</name>
-      <party>Write-In</party>
+      <party_id>Write-In</party_id>
       <sort_order>2</sort_order>
     </candidate>
   </contest>
@@ -1868,12 +1868,12 @@
     <electoral_district id="MN-JUD-2"/>
     <candidate id="8318-9001">
       <name>ROBERT A. AWSUMB</name>
-      <party>Nonpartisan</party>
+      <party_id>Nonpartisan</party_id>
       <sort_order>1</sort_order>
     </candidate>
     <candidate id="8318-9901">
       <name>WRITE-IN**</name>
-      <party>Write-In</party>
+      <party_id>Write-In</party_id>
       <sort_order>2</sort_order>
     </candidate>
   </contest>
@@ -1883,12 +1883,12 @@
     <electoral_district id="MN-JUD-2"/>
     <candidate id="8321-9001">
       <name>TERESA R. WARNER</name>
-      <party>Nonpartisan</party>
+      <party_id>Nonpartisan</party_id>
       <sort_order>1</sort_order>
     </candidate>
     <candidate id="8321-9901">
       <name>WRITE-IN**</name>
-      <party>Write-In</party>
+      <party_id>Write-In</party_id>
       <sort_order>2</sort_order>
     </candidate>
   </contest>
@@ -1898,12 +1898,12 @@
     <electoral_district id="MN-JUD-2"/>
     <candidate id="8323-9001">
       <name>EDWARD S. WILSON</name>
-      <party>Nonpartisan</party>
+      <party_id>Nonpartisan</party_id>
       <sort_order>1</sort_order>
     </candidate>
     <candidate id="8323-9901">
       <name>WRITE-IN**</name>
-      <party>Write-In</party>
+      <party_id>Write-In</party_id>
       <sort_order>2</sort_order>
     </candidate>
   </contest>
@@ -1913,12 +1913,12 @@
     <electoral_district id="MN-JUD-2"/>
     <candidate id="8327-9001">
       <name>ELENA L. OSTBY</name>
-      <party>Nonpartisan</party>
+      <party_id>Nonpartisan</party_id>
       <sort_order>1</sort_order>
     </candidate>
     <candidate id="8327-9901">
       <name>WRITE-IN**</name>
-      <party>Write-In</party>
+      <party_id>Write-In</party_id>
       <sort_order>2</sort_order>
     </candidate>
   </contest>
@@ -1928,12 +1928,12 @@
     <electoral_district id="MN-JUD-2"/>
     <candidate id="8328-9001">
       <name>DIANE RUTH ALSHOUSE</name>
-      <party>Nonpartisan</party>
+      <party_id>Nonpartisan</party_id>
       <sort_order>1</sort_order>
     </candidate>
     <candidate id="8328-9901">
       <name>WRITE-IN**</name>
-      <party>Write-In</party>
+      <party_id>Write-In</party_id>
       <sort_order>2</sort_order>
     </candidate>
   </contest>
