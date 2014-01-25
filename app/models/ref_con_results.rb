@@ -23,7 +23,7 @@ class RefConResults
       contests = Contest.where(filt.merge(district_type: cat))
     end
 
-    list_to_refcons([ contests, referendums ].compact.flatten)
+    list_to_refcons([ contests, referendums ].compact.flatten, params)
   end
 
   def data(params)
@@ -193,7 +193,7 @@ class RefConResults
     return unordered.sort_by { |cv| cv[:order] }.map { |cv| cv.except(:order) }
   end
 
-  def list_to_refcons(list)
+  def list_to_refcons(list, params)
     list.map do |rc|
       p = params.merge(no_precinct_results: true)
       if rc.kind_of?(Contest)

@@ -39,6 +39,7 @@ class DataController < ApplicationController
     render json: RefConResults.new.list(params)
   end
 
+  # election results for the given precinct
   def precinct_results
     render json: RefConResults.new.precinct_results(params)
   end
