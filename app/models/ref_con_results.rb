@@ -4,6 +4,28 @@ class RefConResults
     @order_by_votes = (options[:candidate_ordering] || AppConfig[:candidate_ordering]) != 'sort_order'
   end
 
+  def list(params)
+    district_ids = districts_for_region(params)
+
+    filt = {}
+    filt[:district_id] = district_ids unless district_ids.blank?
+
+    cat = params[:category]
+    if cat.blank? || cat == CATEGORY_REFERENDUMS
+      referendums = Referendum.where(filt)
+    end
+
+    if cat.blank?
+      contests = Contest.where(filt)
+    elsif cat == CATEGORY_REFERENDUMS
+      contests = nil
+    else
+      contests = Contest.where(filt.merge(district_type: cat))
+    end
+
+    list_to_refcons([ contests, referendums ].compact.flatten)
+  end
+
   def data(params)
     if cid = params[:contest_id]
       return contest_data(Contest.find(cid), params)
@@ -77,6 +99,8 @@ class RefConResults
       return {}
     end
   end
+
+  private
 
   def contest_precinct_results(contest, params)
     precincts  = precincts_for_refcon(contest, params)
@@ -167,6 +191,32 @@ class RefConResults
     end
 
     return unordered.sort_by { |cv| cv[:order] }.map { |cv| cv.except(:order) }
+  end
+
+  def list_to_refcons(list)
+    list.map do |rc|
+      p = params.merge(no_precinct_results: true)
+      if rc.kind_of?(Contest)
+        data = RefConResults.new.contest_data(rc, p)
+        data[:type] = 'c'
+      else
+        data = RefConResults.new.referendum_data(rc, p)
+        data[:type] = 'r'
+      end
+
+      data[:id] = rc.id
+      data
+    end
+  end
+
+  # picks districts that are related to the given precinct or the precincts related to the given district
+  def districts_for_region(params)
+    if (pid = params[:precinct_id]) || (did = params[:district_id])
+      pids = pid ? [ pid ] : DistrictsPrecinct.where(district_id: did).uniq.pluck("precinct_id")
+      DistrictsPrecinct.where(precinct_id: pids).uniq.pluck("district_id")
+    else
+      nil
+    end
   end
 
 end
