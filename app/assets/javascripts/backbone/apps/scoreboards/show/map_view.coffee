@@ -43,6 +43,9 @@
         p.setOptions
           fillColor:   p.data.colors.fillColor
           fillOpacity: p.data.colors.fillOpacity
+          strokeColor: p.data.colors.strokeColor
+          strokeWeight: p.data.colors.strokeWeight
+          zIndex:       p.data.colors.zIndex
 
     onShow: ->
       @initMap()
@@ -139,15 +142,22 @@
 
     precinctColors: (items, precinctResult) ->
       # Default (not in range precinct) colors are all the same
-      fillColor        = '#ffffff'
-      fillOpacity      = 0.4
-      hoverColor       = fillColor
-      hoverOpacity     = 0.4
+      fillColor     = '#ffffff'
+      fillOpacity   = 0.4
+      hoverColor    = fillColor
+      hoverOpacity  = 0.4
+      strokeColor   = '#ffffff'
+      strokeWeight  = 0.7
+      zIndex        = 1
 
       if precinctResult?
         # Highlight with opacity if precinct is in range
         hoverOpacity = 0.9
         fillOpacity  = 0.7
+        if precinctResult.get('inRegion')
+          strokeColor  = '#000000'
+          strokeWeight = 1
+          zIndex       = 2
 
         precinctVotes = precinctResult.get('votes')
         if precinctVotes == 0
@@ -168,6 +178,9 @@
         fillOpacity:      fillOpacity
         hoverFillColor:   hoverColor
         hoverFillOpacity: hoverOpacity
+        strokeColor:      strokeColor
+        strokeWeight:     strokeWeight
+        zIndex:           zIndex
       }
 
     onPolygonMouseOver: ->
@@ -256,11 +269,12 @@
 
           poly = new google.maps.Polygon
             paths:          lines,
-            strokeColor:    '#ffffff'
+            strokeColor:    colors.strokeColor
             strokeOpacity:  1
-            strokeWeight:   .7
+            strokeWeight:   colors.strokeWeight
             fillColor:      colors.fillColor
             fillOpacity:    colors.fillOpacity
+            zIndex:         colors.zIndex
             data:
               precinctId:       precinctId
               colors:           colors

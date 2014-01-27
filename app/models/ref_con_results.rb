@@ -112,6 +112,7 @@ class RefConResults
       memo
     end
 
+    region_pids = precinct_ids_for_region(params)
     pmap = precincts.map do |p|
       pcr = precinct_candidate_results[p.id] || []
       candidate_votes = pcr.inject({}) do |memo, r|
@@ -125,6 +126,7 @@ class RefConResults
       leader = pcr.sort_by(&:votes).reverse.first
 
       { id:           p.id,
+        inRegion:     (region_pids && region_pids.include?(p.id)) || false,
         leader:       leader.try(:candidate_id),
         leader_votes: leader.try(:votes),
         votes:        pcr.sum(&:votes),
@@ -147,6 +149,7 @@ class RefConResults
       memo
     end
 
+    region_pids = precinct_ids_for_region(params)
     pmap = precincts.map do |p|
       pcr = precinct_referendum_results[p.id] || []
       response_votes = pcr.inject({}) do |memo, r|
@@ -160,6 +163,7 @@ class RefConResults
       leader = pcr.sort_by(&:votes).reverse.first
 
       { id:           p.id,
+        inRegion:     (region_pids && region_pids.include?(p.id)) || false,
         leader:       leader.try(:ballot_response_id),
         leader_votes: leader.try(:votes),
         votes:        pcr.sum(&:votes),
@@ -210,7 +214,7 @@ class RefConResults
 
   def precinct_ids_for_region(params)
     if (pid = params[:precinct_id]) || (did = params[:district_id])
-      pid ? [ pid ] : DistrictsPrecinct.where(district_id: did).uniq.pluck("precinct_id")
+      pid ? [ pid.to_i ] : DistrictsPrecinct.where(district_id: did).uniq.pluck("precinct_id")
     else
       nil
     end
