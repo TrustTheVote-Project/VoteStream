@@ -170,6 +170,8 @@
           colorRange = @colorRange colorId
           fillColor = @colorShade colorRange, leaderVotes, precinctVotes
           hoverColor = fillColor
+      else
+        strokeColor = '#bbbbbb' if @options.whiteBackground
 
       return {
         fillColor:        fillColor
