@@ -41,6 +41,7 @@
     border-bottom: 1px solid #454749;
     text-align: center;
     color: #fff;
+    overflow: hidden;
 
     h1 {
       font-family: "Times New Roman",sans;
@@ -180,6 +181,27 @@
           background-color: rgba(0,0,0,.5);
           -webkit-box-shadow: 0 0 1px rgba(255,255,255,.5);
       }
+    }
+  }
+}
+
+
+/* Landscape phones and down */
+@media (max-width: 480px) {
+  #header {
+    .heading-bar {
+      height: auto;
+      text-align: left;
+      padding: 0 10px;
+    }
+
+    #voting-info {
+      margin-bottom: 10px;
+    }
+
+    .filter-bar {
+      padding: 0 10px;
+      height: auto;
     }
   }
 }

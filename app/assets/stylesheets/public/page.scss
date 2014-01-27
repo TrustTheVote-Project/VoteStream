@@ -7,6 +7,14 @@ $menu_bg: #efd902;
 $menu_fg: #000;
 $subh_bg: #808080;
 
+
+/* Landscape phones and down */
+@media (max-width: 480px) {
+  body {
+    padding: 0;
+  }
+}
+
 .header {
   background: $dark;
   color: $light;

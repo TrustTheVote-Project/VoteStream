@@ -1,3 +1,10 @@
 #main-region {
   margin-top: 20px;
 }
+
+/* Landscape phones and down */
+@media (max-width: 480px) {
+  #main-region {
+    margin-top: 10px;
+  }
+}
