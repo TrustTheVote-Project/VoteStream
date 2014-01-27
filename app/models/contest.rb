@@ -3,6 +3,7 @@ class Contest < ActiveRecord::Base
   DISTRICT_TYPES = %w( federal state mcd )
 
   belongs_to :district
+  has_many   :precincts, through: :district
   has_many   :candidates, dependent: :destroy
 
   validates :uid, presence: true

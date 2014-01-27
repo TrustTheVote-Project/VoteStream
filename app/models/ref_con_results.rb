@@ -39,11 +39,9 @@ class RefConResults
   end
 
   def contest_data(contest, params)
-    precincts  = precincts_for_refcon(contest, params)
     cids       = contest.candidate_ids
-    pids       = precincts.map(&:id)
     candidates = contest.candidates
-    results    = CandidateResult.where(precinct_id: pids, candidate_id: cids)
+    results    = CandidateResult.where(candidate_id: cids)
 
     candidate_votes = results.group('candidate_id').select("sum(votes) v, candidate_id").inject({}) do |m, cr|
       m[cr.candidate_id] = cr.v
@@ -57,7 +55,7 @@ class RefConResults
     return {
       summary: {
         title:  contest.office,
-        cast:   precincts.sum(:total_cast),
+        cast:   contest.precincts.sum(:total_cast),
         votes:  results.sum(:votes),
         rows:   ordered
       }
@@ -65,11 +63,9 @@ class RefConResults
   end
 
   def referendum_data(referendum, params)
-    precincts = precincts_for_refcon(referendum, params)
     brids     = referendum.ballot_response_ids
-    pids      = precincts.map(&:id)
     responses = referendum.ballot_responses
-    results   = BallotResponseResult.where(precinct_id: pids, ballot_response_id: brids)
+    results   = BallotResponseResult.where(ballot_response_id: brids)
 
     response_votes = results.group('ballot_response_id').select("sum(votes) v, ballot_response_id").inject({}) do |m, br|
       m[br.ballot_response_id] = br.v
@@ -85,7 +81,7 @@ class RefConResults
         title:  referendum.title,
         subtitle: referendum.subtitle,
         text:   referendum.question,
-        cast:   precincts.sum(:total_cast),
+        cast:   referendum.precincts.sum(:total_cast),
         votes:  results.sum(:votes),
         rows:   ordered
       }
@@ -105,9 +101,9 @@ class RefConResults
   private
 
   def contest_precinct_results(contest, params)
-    precincts  = precincts_for_refcon(contest, params)
+    precincts  = contest.precincts
     candidates = contest.candidates
-    results    = CandidateResult.where(precinct_id: precincts.map(&:id), candidate_id: contest.candidate_ids)
+    results    = CandidateResult.where(candidate_id: contest.candidate_ids)
 
     precinct_candidate_results = results.group_by(&:precinct_id).inject({}) do |memo, (pid, results)|
       memo[pid] = results
@@ -140,9 +136,9 @@ class RefConResults
   end
 
   def referendum_precinct_results(referendum, params)
-    precincts  = precincts_for_refcon(referendum, params)
+    precincts  = referendum.precincts
     responses  = referendum.ballot_responses
-    results    = BallotResponseResult.where(precinct_id: precincts.map(&:id), ballot_response_id: referendum.ballot_response_ids)
+    results    = BallotResponseResult.where(ballot_response_id: referendum.ballot_response_ids)
 
     precinct_referendum_results = results.group_by(&:precinct_id).inject({}) do |memo, (pid, results)|
       memo[pid] = results
@@ -174,16 +170,6 @@ class RefConResults
     }
   end
 
-  def precincts_for_refcon(refcon, params)
-    if pid = params[:precinct_id]
-      return refcon.district.precincts.where(id: pid)
-    else
-      did = params[:district_id]
-      return !did || refcon.district_id == did.to_i ? refcon.district.precincts : Precinct.none
-    end
-  end
-
-
   def ordered_records(items, items_votes, &block)
     unordered = items.map do |i|
       votes = items_votes[i.id].to_i
@@ -199,10 +185,10 @@ class RefConResults
     list.map do |rc|
       p = params.merge(no_precinct_results: true)
       if rc.kind_of?(Contest)
-        data = RefConResults.new.contest_data(rc, p)
+        data = contest_data(rc, p)
         data[:type] = 'c'
       else
-        data = RefConResults.new.referendum_data(rc, p)
+        data = referendum_data(rc, p)
         data[:type] = 'r'
       end
 
