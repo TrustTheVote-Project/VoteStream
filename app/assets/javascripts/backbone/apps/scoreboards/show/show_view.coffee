@@ -84,11 +84,11 @@
       if result?
         rows = result.get('summary').get('rows')
         if result.get('type') == 'c'
-          view = new ContestSummaryView
+          view = new Show.ContestSummaryView
             model:      result
             collection: rows
         else
-          view = new ReferendumSummaryView
+          view = new Show.ReferendumSummaryView
             model:      result
             collection: rows
 
@@ -133,7 +133,7 @@
 
 
   # referendum details region
-  class ReferendumSummaryView extends Marionette.CompositeView
+  class Show.ReferendumSummaryView extends Marionette.CompositeView
     template: 'scoreboards/show/_referendum_summary'
     itemView: ReferendumSummaryRowView
 
@@ -143,8 +143,14 @@
         totalVotes: @model.get('summary').get('votes')
       }
 
+    ui:
+      title: 'h4'
 
-  class ContestSummaryView extends Marionette.CompositeView
+    onShow: ->
+      if !@options.simpleVersion
+        @ui.title.show()
+
+  class Show.ContestSummaryView extends Marionette.CompositeView
     template: 'scoreboards/show/_contest_summary'
     itemView: ContestSummaryRowView
 
@@ -156,13 +162,17 @@
       }
 
     ui:
+      title: 'h4'
       rowsList: 'ul'
       showMoreBtn: '#js-show-more'
       showLessBtn: '#js-show-less'
 
     onShow: ->
-      if @collection.length > 2
+      if @collection.length > 2 and !@options.simpleVersion
         @ui.showMoreBtn.show()
+
+      if !@options.simpleVersion
+        @ui.title.show()
 
     events:
       'click #js-show-more': (e) ->

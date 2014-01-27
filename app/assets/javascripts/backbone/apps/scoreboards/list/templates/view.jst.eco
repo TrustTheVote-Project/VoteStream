@@ -1,4 +1,7 @@
 <div class="row">
   <div class="span9" id='results-region'></div>
-  <div class="span3" id='map-region'></div>
+  <div class="span3">
+    <div id='summary-region'></div>
+    <div id='map-region'></div>
+  </div>
 </div>

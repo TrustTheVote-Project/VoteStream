@@ -1,3 +1,3 @@
-<h4><%= @summary.get('title') %></h4>
+<h4 class='hide'><%= @summary.get('title') %></h4>
 
 <ul></ul>
