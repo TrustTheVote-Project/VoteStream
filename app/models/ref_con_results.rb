@@ -130,7 +130,7 @@ class RefConResults
         leader:       leader.try(:candidate_id),
         leader_votes: leader.try(:votes),
         votes:        pcr.sum(&:votes),
-        rows:         ordered }
+        rows:         ordered[0, 2] }
     end
 
     return {
@@ -167,7 +167,7 @@ class RefConResults
         leader:       leader.try(:ballot_response_id),
         leader_votes: leader.try(:votes),
         votes:        pcr.sum(&:votes),
-        rows:         ordered }
+        rows:         ordered[0, 2] }
     end
 
     return {
