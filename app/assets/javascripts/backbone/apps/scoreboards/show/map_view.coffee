@@ -74,6 +74,7 @@
 
       if @options.noZoom
         mapOptions.disableDoubleClickZoom = true
+        mapOptions.scrollwheel = false
       if @options.noPanning
         mapOptions.draggable = false
 
