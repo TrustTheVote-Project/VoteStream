@@ -143,17 +143,15 @@
     precinctColors: (items, precinctResult) ->
       # Default (not in range precinct) colors are all the same
       fillColor     = '#ffffff'
-      fillOpacity   = 0.4
+      fillOpacity   = 0.7
       hoverColor    = fillColor
-      hoverOpacity  = 0.4
+      hoverOpacity  = 0.9
       strokeColor   = '#ffffff'
       strokeWeight  = 0.7
       zIndex        = 1
 
       if precinctResult?
         # Highlight with opacity if precinct is in range
-        hoverOpacity = 0.9
-        fillOpacity  = 0.7
         if precinctResult.get('inRegion')
           strokeColor  = '#000000'
           strokeWeight = 1
@@ -225,23 +223,23 @@
       "<div class='precinct-bubble'><h5>#{precinct.get('name')}</h5><div class='iw-all'><a href='#'>Set as Region</a></div></div>"
 
     onPolygonClick: (e) ->
-      return if !@.data.precinctResult?
-
       @setOptions
         fillColor:   @.data.colors.hoverFillColor
         fillOpacity: @.data.colors.hoverFillOpacity
 
       mapView = @.data.mapView
+      if @.data.precinctResult?
+        pid = @.data.precinctId
+        precincts = App.request 'entities:precincts'
+        precinct = precincts.get pid
+        mapView.focusedPrecinct = precinct
 
-      pid = @.data.precinctId
-      precincts = App.request 'entities:precincts'
-      precinct = precincts.get pid
-      mapView.focusedPrecinct = precinct
-      
-      if mapView.options.infoWindow == 'simple'
-        html = mapView.simpleInfoWindowHtml @, precinct
+        if mapView.options.infoWindow == 'simple'
+          html = mapView.simpleInfoWindowHtml @, precinct
+        else
+          html = mapView.fullInfoWindowHtml @, precinct
       else
-        html = mapView.fullInfoWindowHtml @, precinct
+        html = "<%= I18n.t 'scoreboard.not_voting' %>"
 
       infoWindow = mapView.infoWindow
       infoWindow.setContent html
