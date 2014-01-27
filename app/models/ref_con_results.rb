@@ -39,9 +39,11 @@ class RefConResults
   end
 
   def contest_data(contest, params)
+    pids       = precinct_ids_for_region(params)
     cids       = contest.candidate_ids
     candidates = contest.candidates
     results    = CandidateResult.where(candidate_id: cids)
+    results = results.where(precinct_id: pids) unless pids.blank?
 
     candidate_votes = results.group('candidate_id').select("sum(votes) v, candidate_id").inject({}) do |m, cr|
       m[cr.candidate_id] = cr.v
@@ -55,7 +57,6 @@ class RefConResults
     return {
       summary: {
         title:  contest.office,
-        cast:   contest.precincts.sum(:total_cast),
         votes:  results.sum(:votes),
         rows:   ordered
       }
@@ -63,9 +64,11 @@ class RefConResults
   end
 
   def referendum_data(referendum, params)
+    pids       = precinct_ids_for_region(params)
     brids     = referendum.ballot_response_ids
     responses = referendum.ballot_responses
     results   = BallotResponseResult.where(ballot_response_id: brids)
+    results = results.where(precinct_id: pids) unless pids.blank?
 
     response_votes = results.group('ballot_response_id').select("sum(votes) v, ballot_response_id").inject({}) do |m, br|
       m[br.ballot_response_id] = br.v
@@ -81,7 +84,6 @@ class RefConResults
         title:  referendum.title,
         subtitle: referendum.subtitle,
         text:   referendum.question,
-        cast:   referendum.precincts.sum(:total_cast),
         votes:  results.sum(:votes),
         rows:   ordered
       }
@@ -199,9 +201,16 @@ class RefConResults
 
   # picks districts that are related to the given precinct or the precincts related to the given district
   def districts_for_region(params)
-    if (pid = params[:precinct_id]) || (did = params[:district_id])
-      pids = pid ? [ pid ] : DistrictsPrecinct.where(district_id: did).uniq.pluck("precinct_id")
+    if (pids = precinct_ids_for_region(params))
       DistrictsPrecinct.where(precinct_id: pids).uniq.pluck("district_id")
+    else
+      nil
+    end
+  end
+
+  def precinct_ids_for_region(params)
+    if (pid = params[:precinct_id]) || (did = params[:district_id])
+      pid ? [ pid ] : DistrictsPrecinct.where(district_id: did).uniq.pluck("precinct_id")
     else
       nil
     end
