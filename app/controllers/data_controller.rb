@@ -1,28 +1,18 @@
 class DataController < ApplicationController
 
   def districts
-    contest_id = params[:contest_id]
-    if contest_id.present?
-      contest   = Contest.find(contest_id)
-      districts = [ contest.district ]
-    else
-      locality  = Locality.find(params[:locality_id])
-      districts = locality.districts
-    end
+    locality  = Locality.find(params[:locality_id])
+    districts = locality.focused_districts.includes(:precincts)
 
-    districts = districts.includes(:precincts)
-    render json: districts.map { |d| { id: d.id, name: d.name, pids: d.precinct_ids } }
+    order = %w{ Federal State MCD }
+    ordered = districts.sort_by { |d| "#{order.index(d.district_type) || 5}#{d.name.downcase}" }
+
+    render json: ordered.map { |d| { id: d.id, name: d.name.titleize, pids: d.precinct_ids } }
   end
 
   def precincts
-    contest_id = params[:contest_id]
-    if contest_id.present?
-      contest   = Contest.find(contest_id)
-      precincts = contest.district.precincts
-    else
-      locality  = Locality.find(params[:locality_id])
-      precincts = locality.precincts
-    end
+    locality  = Locality.find(params[:locality_id])
+    precincts = locality.precincts
 
     render json: precincts.map { |p| { id: p.id, name: p.name, kml: p.kml } }
   end

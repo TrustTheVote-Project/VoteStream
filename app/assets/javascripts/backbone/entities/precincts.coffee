@@ -9,12 +9,6 @@
         data:
           locality_id: localityId
 
-    fetchForContest: (contest) ->
-      @fetch
-        url: '/data/precincts'
-        data:
-          contest_id: contest.get('id')
-
   class Entities.PrecinctsSection extends Backbone.Model
     initialize: ->
       @set('precincts', new Entities.Precincts(@get('precincts')))
@@ -22,19 +16,6 @@
     model: Entities.PrecinctsSection
 
   API =
-    getContestPrecincts: ->
-      unless Entities.contestPrecincts?
-        scoreboardInfo = App.request "entities:scoreboardInfo"
-
-        Entities.contestPrecincts = new Entities.Precincts
-        Entities.contestPrecincts.fetchForContest scoreboardInfo.get('contest')
-
-        scoreboardInfo.on 'change:contest', ->
-          Entities.contestPrecincts.fetchForContest scoreboardInfo.get('contest')
-
-      Entities.contestPrecincts
-
-
     getPrecincts: ->
       unless Entities.precincts?
         scoreboardInfo = App.request "entities:scoreboardInfo"
@@ -43,4 +24,3 @@
       Entities.precincts
 
   App.reqres.setHandler 'entities:precincts', -> API.getPrecincts()
-  App.reqres.setHandler 'entities:contestPrecincts', -> API.getContestPrecincts()

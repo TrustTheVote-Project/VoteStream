@@ -31,6 +31,14 @@ class DataProcessor
     end
   end
 
+  def self.focused_district_ids(locality)
+    Rails.cache.fetch("locality:#{locality.id}:focused_district_ids") do
+      precinct_count = locality.precincts.count
+      precinct_ids   = locality.precinct_ids
+      DistrictsPrecinct.select("district_id").where([ "precinct_id IN (?)", precinct_ids ]).group("district_id").having("count(*) < #{precinct_count}")
+    end
+  end
+
   def self.on_definitions_upload
     on_results_upload
   end

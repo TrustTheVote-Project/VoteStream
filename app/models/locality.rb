@@ -12,4 +12,8 @@ class Locality < ActiveRecord::Base
   validates :name, presence: true
   validates :locality_type, presence: true
 
+  def focused_districts
+    District.where(id: DataProcessor.focused_district_ids(self))
+  end
+
 end
