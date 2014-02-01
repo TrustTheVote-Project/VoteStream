@@ -123,14 +123,15 @@ class RefConResults
       ordered = ordered_records(candidates, candidate_votes) do |i, votes|
         { id: i.id, votes: votes }
       end
-      leader = pcr.sort_by(&:votes).reverse.first
 
-      { id:           p.id,
-        inRegion:     (region_pids && region_pids.include?(p.id)) || false,
-        leader:       leader.try(:candidate_id),
-        leader_votes: leader.try(:votes),
-        votes:        pcr.sum(&:votes),
-        rows:         ordered[0, 2] }
+      li = leader_info(pcr)
+
+      { id:       p.id,
+        inRegion: (region_pids && region_pids.include?(p.id)) || false,
+        leader:   li[:leader].try(:candidate_id),
+        leaderAdvantage: li[:advantage],
+        votes:    li[:total_votes],
+        rows:     ordered[0, 2] }
     end
 
     return {
@@ -160,19 +161,43 @@ class RefConResults
       ordered = ordered_records(responses, response_votes) do |i, votes|
         { id: i.id, votes: votes }
       end
-      leader = pcr.sort_by(&:votes).reverse.first
+
+      li = leader_info(pcr)
 
       { id:           p.id,
         inRegion:     (region_pids && region_pids.include?(p.id)) || false,
-        leader:       leader.try(:ballot_response_id),
-        leader_votes: leader.try(:votes),
-        votes:        pcr.sum(&:votes),
+        leader:       li[:leader].try(:ballot_response_id),
+        leaderAdvantage: li[:advantage],
+        votes:        li[:total_votes],
         rows:         ordered[0, 2] }
     end
 
     return {
       items: responses.map { |r| { id: r.id, name: r.name } },
       precincts: pmap
+    }
+  end
+
+  def leader_info(pcr)
+    total_votes = pcr.sum(&:votes)
+
+    if total_votes > 0
+      pcr_s        = pcr.sort_by(&:votes).reverse
+      leader       = pcr_s[0]
+      leader_votes = leader.try(:votes).to_i
+      runner_votes = pcr_s[1].try(:votes).to_i
+      leader_perc  = leader_votes * 100 / total_votes
+      runner_perc  = runner_votes * 100 / total_votes
+      advantage    = leader_perc - runner_perc
+    else
+      leader       = nil
+      advantage    = 0
+    end
+
+    return {
+      total_votes: total_votes,
+      leader: leader,
+      advantage: advantage
     }
   end
 

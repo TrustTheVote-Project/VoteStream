@@ -127,14 +127,11 @@
       else
         gon.partyColors.other
 
-    colorShade: (range, itemVotes, precinctVotes) ->
-      p = itemVotes * 100 / precinctVotes
-      if p < 0.5
+    colorShade: (range, leaderAdvantage) ->
+      if leaderAdvantage < gon.mapColorThreshold.lower
         c = 0
-      else if p < 0.6
+      else if leaderAdvantage < gon.mapColorThreshold.upper
         c = 1
-      else if p < 0.7
-        c = 2
       else
         c = 3
 
@@ -164,11 +161,11 @@
         else
           rows = precinctResult.get('rows')
           leader = items.get precinctResult.get 'leader'
-          leaderVotes = precinctResult.get 'leader_votes'
+          leaderAdvantage = precinctResult.get 'leaderAdvantage'
           colorId  = leader?.get('party') or leader?.get('name')
 
           colorRange = @colorRange colorId
-          fillColor = @colorShade colorRange, leaderVotes, precinctVotes
+          fillColor = @colorShade colorRange, leaderAdvantage
           hoverColor = fillColor
       else
         strokeColor = '#bbbbbb' if @options.whiteBackground

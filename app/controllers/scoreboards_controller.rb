@@ -25,6 +25,11 @@ class ScoreboardsController < ApplicationController
       other:      [ '#fdfec5', '#fbfe8f', '#fbfe63', '#fbfe56' ]
     }
 
+    gon.mapColorThreshold = {
+      lower: AppConfig['map_color_threshold']['lower'],
+      upper: AppConfig['map_color_threshold']['upper']
+    }
+
     gon.categories = {
       RefConResults::CATEGORY_REFERENDUMS => I18n.t('scoreboard.header.left_menu.categories.referenda'),
       'Federal' => I18n.t('scoreboard.header.left_menu.categories.federal'),
