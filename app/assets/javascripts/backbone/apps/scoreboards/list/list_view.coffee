@@ -12,8 +12,6 @@
     initialize: ->
       @si = App.request 'entities:scoreboardInfo'
       @results = @si.get 'results'
-      @si.on 'change:result', =>
-        @showSummary()
 
     onShow: ->
       view = new List.ResultsView
@@ -30,7 +28,12 @@
       @mapRegion.show mapView
       @showSummary()
 
-    showSummary: ->
+      @si.on 'change:result', @showSummary
+
+    onClose: ->
+      @si.off 'change:result', @showSummary
+
+    showSummary: =>
       result = @si.get('result')
       if result?
         rows = result.get('summary').get('rows')

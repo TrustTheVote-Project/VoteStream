@@ -1,10 +1,21 @@
 @App.module "Entities", (Entities, App, Backbone, Marionette, $, _) ->
 
   class Entities.ScoreboardInfo extends Backbone.Model
-    reloadResults: ->
+    reloadResults: (options = {}) ->
+      return if @noResultsReload
+      @preselectedRefconId = options.refconId
       results = @get 'results'
       results.fetchForFilter @get('localityId'), @get('region'), @get('category')
 
+    pickResult: ->
+      results = @get 'results'
+      if @preselectedRefconId?
+        result = results.get @preselectedRefconId
+        @preselectedRefconId = null
+      result || results.first()
+
+    disableResultsReload: -> @noResultsReload = true
+    enableResultsReload: -> @noResultsReload = false
 
   API =
     getScoreboardInfo: ->
@@ -26,6 +37,15 @@
           regionLabel:      -> if !@region then "<%= I18n.t 'scoreboard.header.right_menu.tabs.all' %>" else @region.get('name')
           percentReporting: gon.percentReporting
 
+        App.vent.on 'filters:set', (options = {}) ->
+          sb.disableResultsReload()
+          App.vent.trigger 'region:selected', options.region
+          App.vent.trigger 'category:selected', options.category or gon.defaultCategory
+          sb.enableResultsReload()
+
+          sb.reloadResults
+            refconId: options.refconId
+
         App.vent.on 'region:selected', (region) ->
           sb.set 'region', region
 
@@ -38,10 +58,8 @@
         sb.on 'change:region change:category', -> @reloadResults()
 
         sb.get('results').on 'reset', ->
-          result  = sb.get 'result'
-          results = sb.get 'results'
-          if results.indexOf(result) == -1
-            sb.set 'result', results.first()
+          result = sb.pickResult()
+          sb.set 'result', result
 
         sb.on 'change:result', ->
           result  = sb.get 'result'
@@ -49,7 +67,7 @@
           results = sb.get 'precinctResults'
           results.fetchForResult result, region
 
-        sb.reloadResults()
+        # sb.reloadResults()
 
       Entities.scoreboardInfo
 
