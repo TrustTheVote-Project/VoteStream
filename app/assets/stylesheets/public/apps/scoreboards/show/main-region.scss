@@ -3,6 +3,12 @@
   overflow: hidden;
 }
 
+@media (max-width: 767px) {
+  #map-region {
+    padding: 0 25px;
+  }
+}
+
 /* Landscape phones and down */
 @media (max-width: 480px) {
   #main-region {

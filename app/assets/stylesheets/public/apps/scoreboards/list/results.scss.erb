@@ -80,6 +80,31 @@ $selected-header-fg: #fff;
   }
 }
 
+@media (max-width: 767px) {
+  #list {
+    overflow-x: scroll;
+  }
+
+  #list > .row {
+    width: 150%;
+  }
+
+  #list #results-region {
+    float: left;
+    width: 48%;
+  }
+
+  #list #sidebar {
+    float: left;
+    margin-left: 4%;
+    width: 48%;
+  }
+
+  #list #map-region {
+    padding: 0;
+  }
+}
+
 /* Landscape phones and down */
 @media (max-width: 480px) {
   #list .lr-a {
