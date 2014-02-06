@@ -121,11 +121,11 @@
 
     colorShade: (leaderAdvantage) ->
       if leaderAdvantage < gon.colorScheme.threshold.lower
-        s = 0
+        c = 2
       else if leaderAdvantage < gon.colorScheme.threshold.upper
         c = 1
       else
-        c = 2
+        c = 0
 
       gon.colorScheme.saturation[c]
 
