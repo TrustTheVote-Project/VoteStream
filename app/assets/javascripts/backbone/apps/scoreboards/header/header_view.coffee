@@ -13,6 +13,8 @@
 
     events:
       'click #js-precinct-status': 'onPrecinctStatus'
+      'click #js-tweet': 'onTweet'
+      'click #js-facebook-share': 'onFacebookShare'
 
     regions:
       categorySelectorRegion: '#category-selector-region'
@@ -26,8 +28,19 @@
     onPrecinctStatus: (e) ->
       e.preventDefault()
       e.stopPropagation()
-      # hidePopoversExcept @ui.popover[0]
       @ui.popover.toggle()
+
+    onTweet: (e) ->
+      e.preventDefault()
+      url = document.location.href
+      text = gon.tweetText
+      window.open "http://twitter.com/intent/tweet?url=#{encodeURIComponent(url)}&text=#{encodeURIComponent(text)}"
+
+    onFacebookShare: (e) ->
+      e.preventDefault()
+      url = document.location.href
+      window.open "https://www.facebook.com/sharer/sharer.php?u=#{encodeURIComponent(url)}"
+
 
     onShow: ->
       scoreboardInfo = App.request "entities:scoreboardInfo"

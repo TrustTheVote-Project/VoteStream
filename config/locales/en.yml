@@ -7,6 +7,8 @@ en:
     footer: TrustTheVote Project, powered by Open Source Election Technology Foundation
 
   scoreboard:
+    tweet: 'Find me in en.myl'
+
     header:
       left_menu:
         label: Select a Category

@@ -39,6 +39,8 @@ class ScoreboardsController < ApplicationController
       }
     }
 
+    gon.tweetText = I18n.t('scoreboard.tweet')
+
     gon.categories = {
       RefConResults::CATEGORY_REFERENDUMS => I18n.t('scoreboard.header.left_menu.categories.referenda'),
       'Federal' => I18n.t('scoreboard.header.left_menu.categories.federal'),

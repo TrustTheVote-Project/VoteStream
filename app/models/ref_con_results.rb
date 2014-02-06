@@ -64,11 +64,11 @@ class RefConResults
   end
 
   def referendum_data(referendum, params)
-    pids       = precinct_ids_for_region(params)
+    pids      = precinct_ids_for_region(params)
     brids     = referendum.ballot_response_ids
     responses = referendum.ballot_responses
     results   = BallotResponseResult.where(ballot_response_id: brids)
-    results = results.where(precinct_id: pids) unless pids.blank?
+    results   = results.where(precinct_id: pids) unless pids.blank?
 
     response_votes = results.group('ballot_response_id').select("sum(votes) v, ballot_response_id").inject({}) do |m, br|
       m[br.ballot_response_id] = br.v
