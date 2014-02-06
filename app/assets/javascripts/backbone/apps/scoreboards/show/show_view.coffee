@@ -25,7 +25,7 @@
 
     onClose: ->
       @si.off 'reset:results change:result', @initIndex, @
-      
+
     initIndex: ->
       result  = @si.get 'result'
       @idx    = @results.indexOf result
@@ -108,7 +108,7 @@
     template: 'scoreboards/show/_contest_summary_row'
     tagName:  'li'
     className: ->
-      "#{if @.options.hidden then 'hide' else ''} party-#{(@model.get('party') || "").toLowerCase().replace(/[^a-z]/g, '')}".trim()
+      if @.options.hidden then 'hide' else ''
     serializeData: ->
       data = Backbone.Marionette.ItemView.prototype.serializeData.apply @, arguments
       data.totalVotes = @options.totalVotes
@@ -116,13 +116,15 @@
     templateHelpers:
       percent: -> Math.floor(@votes * 100 / (@totalVotes || 1))
       percentFormatted: -> "#{Math.floor(@votes * 1000 / (@totalVotes || 1)) / 10.0}%"
+    onShow: ->
+      c = @model.get('c')
+      $("h5", @$el).css(color: c)
+      $(".filler", @$el).css(background: c)
 
 
   class ReferendumSummaryRowView extends Marionette.ItemView
     template: 'scoreboards/show/_referendum_summary_row'
     tagName:  'li'
-    className: ->
-      "response-#{(@model.get('name') || "").toLowerCase().replace(/[^a-z]/g, '')}".trim()
     serializeData: ->
       data = Backbone.Marionette.ItemView.prototype.serializeData.apply @, arguments
       data.totalVotes = @options.totalVotes
@@ -130,6 +132,10 @@
     templateHelpers:
       percent: -> Math.floor(@votes * 100 / (@totalVotes || 1))
       percentFormatted: -> "#{Math.floor(@votes * 1000 / (@totalVotes || 1)) / 10.0}%"
+    onShow: ->
+      c = @model.get('c')
+      $("h5", @$el).css(color: c)
+      $(".filler", @$el).css(background: c)
 
 
   # referendum details region

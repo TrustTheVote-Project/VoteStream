@@ -5,9 +5,9 @@ class ScoreboardsController < ApplicationController
   end
 
   def show
-    locality = Locality.find(params[:locality])
-    state = locality.state
-    election = state.elections.first
+    locality          = Locality.find(params[:locality])
+    state             = locality.state
+    election          = state.elections.first
 
     gon.locality_id   = locality.id
     gon.locality_name = locality.name
@@ -18,16 +18,25 @@ class ScoreboardsController < ApplicationController
     gon.mapCenterLon  = 45.005988
     gon.mapZoom       = 11
 
-    # TODO: These colors should be set on county basis
-    gon.partyColors = {
-      republican: [ '#ffcfc5', '#f4a192', '#f47c6d', '#f15149' ],
-      democrat:   [ '#c4c4d3', '#9997b4', '#73739a', '#4c5986' ],
-      other:      [ '#fdfec5', '#fbfe8f', '#fbfe63', '#fbfe56' ]
-    }
+    colors     = AppConfig['map_color']['colors']
+    threshold  = AppConfig['map_color']['threshold']
+    saturation = AppConfig['map_color']['saturation']
+    gon.colorScheme = {
+      colors: {
+        notVoting:    colors['not_voting'],
+        notReporting: colors['not_reporting']
+      },
 
-    gon.mapColorThreshold = {
-      lower: AppConfig['map_color_threshold']['lower'],
-      upper: AppConfig['map_color_threshold']['upper']
+      saturation: [
+        saturation['high'],
+        saturation['middle'],
+        saturation['low']
+      ],
+
+      threshold: {
+        lower: threshold['lower'],
+        upper: threshold['upper']
+      }
     }
 
     gon.categories = {

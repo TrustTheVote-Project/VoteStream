@@ -50,8 +50,8 @@ class RefConResults
       m
     end
 
-    ordered = ordered_records(candidates, candidate_votes) do |i, votes|
-      { name: i.name, party: i.party, votes: votes }
+    ordered = ordered_records(candidates, candidate_votes) do |c, votes, idx|
+      { name: c.name, party: c.party, votes: votes, c: ColorScheme.candidate_color(c, idx) }
     end
 
     return {
@@ -75,8 +75,8 @@ class RefConResults
       m
     end
 
-    ordered = ordered_records(responses, response_votes) do |i, votes|
-      { name: i.name, votes: votes }
+    ordered = ordered_records(responses, response_votes) do |b, votes, idx|
+      { name: b.name, votes: votes, c: ColorScheme.ballot_response_color(b, idx) }
     end
 
     return {
@@ -112,6 +112,8 @@ class RefConResults
       memo
     end
 
+    rating = CandidateResult.where(candidate_id: contest.candidate_ids).select("candidate_id, sum(votes) v").group('candidate_id').order("v desc").map(&:candidate_id)
+
     region_pids = precinct_ids_for_region(params)
     pmap = precincts.map do |p|
       pcr = precinct_candidate_results[p.id] || []
@@ -120,16 +122,18 @@ class RefConResults
         memo
       end
 
-      ordered = ordered_records(candidates, candidate_votes) do |i, votes|
+      ordered = ordered_records(candidates, candidate_votes) do |i, votes, idx|
         { id: i.id, votes: votes }
       end
 
       li = leader_info(pcr)
+      candidate = li[:leader].try(:candidate)
+      idx = rating.index(candidate.try(:id))
 
       { id:       p.id,
         inRegion: (region_pids && region_pids.include?(p.id)) || false,
-        leader:   li[:leader].try(:candidate_id),
-        leaderAdvantage: li[:advantage],
+        c:        ColorScheme.candidate_color(candidate, idx),
+        adv:      li[:advantage],
         votes:    li[:total_votes],
         rows:     ordered[0, 2] }
     end
@@ -143,12 +147,15 @@ class RefConResults
   def referendum_precinct_results(referendum, params)
     precincts  = referendum.precincts
     responses  = referendum.ballot_responses
-    results    = BallotResponseResult.where(ballot_response_id: referendum.ballot_response_ids)
+    ids        = referendum.ballot_response_ids
+    results    = BallotResponseResult.where(ballot_response_id: ids)
 
     precinct_referendum_results = results.group_by(&:precinct_id).inject({}) do |memo, (pid, results)|
       memo[pid] = results
       memo
     end
+
+    rating = ids
 
     region_pids = precinct_ids_for_region(params)
     pmap = precincts.map do |p|
@@ -158,18 +165,20 @@ class RefConResults
         memo
       end
 
-      ordered = ordered_records(responses, response_votes) do |i, votes|
+      ordered = ordered_records(responses, response_votes) do |i, votes, idx|
         { id: i.id, votes: votes }
       end
 
       li = leader_info(pcr)
+      ballot_response = li[:leader].try(:ballot_response)
+      idx = rating.index(ballot_response.try(:id))
 
-      { id:           p.id,
-        inRegion:     (region_pids && region_pids.include?(p.id)) || false,
-        leader:       li[:leader].try(:ballot_response_id),
-        leaderAdvantage: li[:advantage],
-        votes:        li[:total_votes],
-        rows:         ordered[0, 2] }
+      { id:       p.id,
+        inRegion: (region_pids && region_pids.include?(p.id)) || false,
+        c:        ColorScheme.ballot_response_color(ballot_response, idx),
+        adv:      li[:advantage],
+        votes:    li[:total_votes],
+        rows:     ordered[0, 2] }
     end
 
     return {
@@ -204,12 +213,18 @@ class RefConResults
   def ordered_records(items, items_votes, &block)
     unordered = items.map do |i|
       votes = items_votes[i.id].to_i
-      data = block.call i, votes
-      data[:order] = @order_by_votes ? -votes : i.sort_order
-      data
+      { order: @order_by_votes ? -votes : i.sort_order, item: i }
     end
 
-    return unordered.sort_by { |cv| cv[:order] }.map { |cv| cv.except(:order) }
+    ordered = unordered.sort_by { |cv| cv[:order] }.map { |cv| cv[:item] }
+
+    idx = 0
+    return ordered.map do |i|
+      votes = items_votes[i.id].to_i
+      data = block.call i, votes, idx
+      idx += 1
+      data
+    end
   end
 
   def list_to_refcons(list, params)
@@ -244,5 +259,4 @@ class RefConResults
       nil
     end
   end
-
 end

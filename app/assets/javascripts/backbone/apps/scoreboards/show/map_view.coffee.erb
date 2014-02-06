@@ -119,28 +119,20 @@
       poly.setMap(null) for poly in @polygons
       @polygons = []
 
-    colorRange: (colorId) ->
-      if colorId == 'Republican' or colorId == 'YES'
-        gon.partyColors.republican
-      else if colorId == 'Democratic-Farmer-Labor' or colorId == 'NO'
-        gon.partyColors.democrat
-      else
-        gon.partyColors.other
-
-    colorShade: (range, leaderAdvantage) ->
-      if leaderAdvantage < gon.mapColorThreshold.lower
-        c = 0
-      else if leaderAdvantage < gon.mapColorThreshold.upper
+    colorShade: (leaderAdvantage) ->
+      if leaderAdvantage < gon.colorScheme.threshold.lower
+        s = 0
+      else if leaderAdvantage < gon.colorScheme.threshold.upper
         c = 1
       else
-        c = 3
+        c = 2
 
-      range[c]
+      gon.colorScheme.saturation[c]
 
     precinctColors: (items, precinctResult) ->
       # Default (not in range precinct) colors are all the same
-      fillColor     = '#ffffff'
-      fillOpacity   = 0.7
+      fillColor     = gon.colorScheme.colors.notVoting
+      fillOpacity   = 1
       hoverColor    = fillColor
       hoverOpacity  = 0.9
       strokeColor   = '#ffffff'
@@ -149,23 +141,25 @@
 
       if precinctResult?
         # Highlight with opacity if precinct is in range
-        if precinctResult.get('inRegion')
+        inRegion = precinctResult.get('inRegion')
+        if inRegion
           strokeColor  = '#000000'
-          strokeWeight = 1
+          strokeWeight = .5
           zIndex       = 2
 
         precinctVotes = precinctResult.get('votes')
         if precinctVotes == 0
           # Precinct is not reporting
-          fillColor = '#cccccc'
+          fillColor = gon.colorScheme.colors.notReporting
+
+          # NOTE: Just to keep contrast right with something configurable
+          unless inRegion
+            strokeColor = gon.colorScheme.colors.notVoting
         else
           rows = precinctResult.get('rows')
-          leader = items.get precinctResult.get 'leader'
-          leaderAdvantage = precinctResult.get 'leaderAdvantage'
-          colorId  = leader?.get('party') or leader?.get('name')
-
-          colorRange = @colorRange colorId
-          fillColor = @colorShade colorRange, leaderAdvantage
+          fillColor = precinctResult.get 'c'
+          leaderAdvantage = precinctResult.get 'adv'
+          fillOpacity = @colorShade leaderAdvantage
           hoverColor = fillColor
       else
         strokeColor = '#bbbbbb' if @options.whiteBackground

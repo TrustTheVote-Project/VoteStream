@@ -47,5 +47,5 @@
             model:      result
             collection: rows
             simpleVersion: true
-    
+
         @summaryRegion.show view

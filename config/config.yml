@@ -4,13 +4,29 @@ google_maps:
 # when TRUE rejects imperfect XML files
 enable_strict_vipplus_parsing: true
 
-party_colors:
-  republican: "#ec012e"
-  democrat:   "#123d74"
+map_color:
+  colors:
+    republican:     '#dc1521'
+    democrat:       '#023582'
+    other:          '#998675'
 
-map_color_threshold:
-  lower: 10
-  upper: 20
+    nonpartisan1:   '#67aee8'
+    nonpartisan2:   '#e5a433'
+
+    referenda_yes:  '#7fc7b2'
+    referenda_no:   '#1b4764'
+
+    not_voting:     '#cccccc'
+    not_reporting:  '#ffffff'
+
+  threshold:
+    lower:  10
+    upper:  20
+
+  saturation:
+    high:   0.7
+    middle: 0.5
+    low:    0.3
 
 # Ordering of candidates in lists: 'vote_order', 'sort_order'
 candidate_ordering: vote_order

@@ -3,8 +3,6 @@
   class CandidateRow extends Marionette.ItemView
     template: 'scoreboards/list/_candidate_row'
     tagName: 'tr'
-    className: ->
-      "party-#{(@model.get('party') || "").toLowerCase().replace(/[^a-z]/g, '')}".trim()
     serializeData: ->
       data = Backbone.Marionette.ItemView.prototype.serializeData.apply @, arguments
       data.totalVotes = @options.totalVotes
@@ -12,6 +10,9 @@
     templateHelpers:
       percent: -> Math.floor(@votes * 100 / (@totalVotes || 1))
       percentFormatted: -> "#{Math.floor(@votes * 1000 / (@totalVotes || 1)) / 10.0}%"
+    onShow: ->
+      c = @model.get('c')
+      $("td", @$el).css(color: c)
 
   class ContestResultView extends Marionette.CompositeView
     template: 'scoreboards/list/_contest_result'
@@ -30,13 +31,11 @@
         $(".result").removeClass 'selected'
         @$el.addClass 'selected'
         App.vent.trigger 'result:selected', @model
-        
+
 
   class ResponseRow extends Marionette.ItemView
     template: 'scoreboards/list/_response_row'
     tagName: 'tr'
-    className: ->
-      "response-#{(@model.get('name') || "").toLowerCase().replace(/[^a-z]/g, '')}"
     serializeData: ->
       data = Backbone.Marionette.ItemView.prototype.serializeData.apply @, arguments
       data.totalVotes = @options.totalVotes
@@ -44,6 +43,9 @@
     templateHelpers:
       percent: -> Math.floor(@votes * 100 / (@totalVotes || 1))
       percentFormatted: -> "#{Math.floor(@votes * 1000 / (@totalVotes || 1)) / 10.0}%"
+    onShow: ->
+      c = @model.get('c')
+      $("td", @$el).css(color: c)
 
   class ReferendumResultView extends Marionette.CompositeView
     template: 'scoreboards/list/_referendum_result'
