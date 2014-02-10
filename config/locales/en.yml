@@ -7,7 +7,7 @@ en:
     footer: TrustTheVote Project, powered by Open Source Election Technology Foundation
 
   scoreboard:
-    tweet: 'Find me in en.myl'
+    tweet: Latest election results at:
 
     header:
       left_menu:
@@ -32,5 +32,5 @@ en:
         options:
           map: Map
           list: List
-          
+
     not_voting: Not voting

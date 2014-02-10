@@ -15,6 +15,7 @@
       'click #js-precinct-status': 'onPrecinctStatus'
       'click #js-tweet': 'onTweet'
       'click #js-facebook-share': 'onFacebookShare'
+      'click #js-gplus': 'onGooglePlus'
 
     regions:
       categorySelectorRegion: '#category-selector-region'
@@ -40,6 +41,12 @@
       e.preventDefault()
       url = document.location.href
       window.open "https://www.facebook.com/sharer/sharer.php?u=#{encodeURIComponent(url)}"
+
+    onGooglePlus: (e) ->
+      e.preventDefault()
+      url = document.location.href
+      window.open "https://plus.google.com/share?url=#{encodeURIComponent(url)}"
+
 
 
     onShow: ->
