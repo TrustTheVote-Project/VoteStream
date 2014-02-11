@@ -139,7 +139,7 @@ class RefConResults
     end
 
     return {
-      items: candidates.map { |c| { id: c.id, name: c.name, party: c.party } },
+      items: candidates.map { |c| { id: c.id, name: c.name, party: { name: c.party.name, abbr: c.party.abbr } } },
       precincts: pmap
     }
   end

@@ -4,7 +4,7 @@ class ColorScheme
     c = 'not_reporting'
 
     if candidate
-      party = candidate.party.downcase.strip
+      party = candidate.party.name.downcase.strip
 
       if party == 'republican'
         c = 'republican'

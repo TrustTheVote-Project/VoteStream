@@ -12,7 +12,7 @@ describe ColorScheme do
     specify { expect(cc('Nonpartisan', 1)).to   eq colors['nonpartisan2'] }
 
     def cc(party, index = 0)
-      c = build(:candidate, party: party)
+      c = build(:candidate, party: build(:party, name: party))
       ColorScheme.candidate_color(c, index)
     end
   end

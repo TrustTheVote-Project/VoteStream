@@ -203,7 +203,11 @@
         v = row.get('votes') || 0
         totalDisplayed += v
         p = Math.floor((v * 1000) / (votes || 1)) / 10.0
-        rowsHtml += "<tr><td class='iw-n'>#{i.get('name')}</td><td class='iw-v'>#{v}</td><td class='iw-p'>#{p}%</td></tr>"
+        party = i.get('party')
+        name = i.get('name')
+        if party?
+          name = "#{name} (#{party.abbr})"
+        rowsHtml += "<tr><td class='iw-n'>#{name}</td><td class='iw-v'>#{v}</td><td class='iw-p'>#{p}%</td></tr>"
 
       if votes > totalDisplayed
         v = votes - totalDisplayed
