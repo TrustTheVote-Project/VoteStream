@@ -16,7 +16,7 @@ end
 def load_def_fixture
   cleanup_data
   State.create_with(uid: "120000000027", name: "State of Minnesota").find_or_create_by(code: "MN")
-  l = DataLoader.new(fixture('RamseyCounty2012Definition.xml'))
+  l = DataLoader.new(fixture('ramsey-defs.xml'))
   l.load
 end
 

@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140107080956) do
+ActiveRecord::Schema.define(version: 20140210100706) do
 
   create_table "ballot_response_results", force: true do |t|
     t.integer "ballot_response_id"
@@ -45,8 +45,8 @@ ActiveRecord::Schema.define(version: 20140107080956) do
     t.string  "uid",        null: false
     t.integer "contest_id"
     t.string  "name"
-    t.string  "party"
     t.integer "sort_order"
+    t.integer "party_id",   null: false
   end
 
   add_index "candidates", ["contest_id"], name: "index_candidates_on_contest_id", using: :btree
@@ -100,6 +100,15 @@ ActiveRecord::Schema.define(version: 20140107080956) do
 
   add_index "localities", ["state_id"], name: "index_localities_on_state_id", using: :btree
   add_index "localities", ["uid"], name: "index_localities_on_uid", unique: true, using: :btree
+
+  create_table "parties", force: true do |t|
+    t.string  "uid",        null: false
+    t.integer "sort_order"
+    t.string  "name",       null: false
+    t.string  "abbr",       null: false
+  end
+
+  add_index "parties", ["uid"], name: "index_parties_on_uid", unique: true, using: :btree
 
   create_table "polling_locations", force: true do |t|
     t.integer "precinct_id"

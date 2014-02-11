@@ -11,9 +11,11 @@ class DataLoader
 
   def load
     Election.transaction do
+      load_locality
       load_election
       load_districts
       load_precincts
+      load_parties
       load_contests
       load_referendums
 
@@ -22,6 +24,17 @@ class DataLoader
   end
 
   private
+
+  def load_locality
+    state_el = @doc.css("vip_object > state").first
+    state = State.find_by(uid: state_el['id'])
+
+    locality_el = state_el.css("> locality").first
+    name = locality_el.css("> name").first.content
+    type = locality_el.css("> type").first.content
+    uid  = locality_el['id']
+    Locality.create_with(name: name, locality_type: type, state: state).find_or_create_by(uid: uid)
+  end
 
   def load_election
     election_el = @doc.css("vip_object > election").first
@@ -70,7 +83,7 @@ class DataLoader
       locality_el.css('precinct').each do |precinct_el|
         uid      = precinct_el['id']
         name     = dequote(precinct_el.css('> name').first.content)
-        kml      = (precinct_el.css('> geometry kml coordinates') || []).map { |c| c.content }
+        kml      = (precinct_el.css('Polygon coordinates') || []).map { |c| c.content }
 
         if kml.blank?
           raise_strict InvalidFormat.new("Precinct #{uid} has no geometry KML")
@@ -78,8 +91,7 @@ class DataLoader
 
         precinct = locality.precincts.create_with(name: name, kml: kml).find_or_create_by(uid: uid)
 
-        precinct_el.css('> electoral_district_id').each do |electoral_district_id_el|
-          uid = electoral_district_id_el.content
+        precinct_el.css('electoral_district_id').map { |el| el.content }.uniq.each do |uid|
           precinct.districts << @districts[uid]
         end
 
@@ -100,13 +112,26 @@ class DataLoader
     address_el = polling_location_el.css('> address').first
 
     precinct.create_polling_location({
-      name:  dequote(polling_location_el.css('> name').first.content),
+      name:  dequote(address_el.css('> location_name').first.content),
       line1: dequote(address_el.css('> line1').first.content),
       line2: dequote(address_el.css('> line2').first.try(:content)),
       city:  dequote(address_el.css('> city').first.content),
       state: dequote(address_el.css('> state').first.content),
       zip:   dequote(address_el.css('> zip').first.content)
     })
+  end
+
+  def load_parties
+    return if @doc.css('vip_object > party').size == 0
+
+    @doc.css('vip_object > party').each do |party_el|
+      uid = party_el['id']
+      name = dequote(party_el.css('name').first.content)
+      abbr = dequote(party_el.css('abbreviation').first.content)
+      sort_order = dequote(party_el.css('sort_order').first.content).to_i
+
+      Party.create_with(name: name, abbr: abbr, sort_order: sort_order).find_or_create_by(uid: uid)
+    end
   end
 
   def load_contests
@@ -116,9 +141,10 @@ class DataLoader
       contest_el.css("candidate").each do |candidate_el|
         uid        = candidate_el['id']
         name       = dequote(candidate_el.css('name, text').first.content)
-        party      = dequote(candidate_el.css('> party_id').first.try(:content))
+        party_uid  = dequote(candidate_el.css('> party_id').first.try(:content))
         sort_order = dequote(candidate_el.css('> sort_order').first.content)
 
+        party      = Party.find_by!(uid: party_uid)
         contest.candidates.create_with(name: name, party: party, sort_order: sort_order).find_or_create_by(uid: uid)
       end
     end
@@ -129,7 +155,7 @@ class DataLoader
       uid         = contest_el['id']
       office      = dequote(contest_el.css("office, title").first.content)
       sort_order  = dequote(contest_el.css("sort_order").first.content)
-      district_id = contest_el.css("> electoral_district").first['id']
+      district_id = dequote(contest_el.css("> electoral_district_id").first.content)
       district    = District.find_by_uid(district_id)
       if district
         contest   = Contest.create_with(office: office, sort_order: sort_order, district: district).find_or_create_by(uid: uid)
@@ -161,7 +187,7 @@ class DataLoader
       subtitle    = dequote(referendum_el.css("subtitle").first.content)
       question    = dequote(referendum_el.css("text").first.content)
       sort_order  = dequote(referendum_el.css("sort_order").first.content)
-      district_id = referendum_el.css("> electoral_district").first['id']
+      district_id = dequote(referendum_el.css("> electoral_district_id").first.content)
       district    = District.find_by_uid(district_id)
       if district
         referendum = Referendum.create_with(title: title, subtitle: subtitle, question: question, sort_order: sort_order, district: district).find_or_create_by(uid: uid)
@@ -186,6 +212,7 @@ class DataLoader
     if AppConfig['enable_strict_vipplus_parsing']
       raise ex
     else
+      puts ex.message
       Rails.logger.error ex.message
     end
   end

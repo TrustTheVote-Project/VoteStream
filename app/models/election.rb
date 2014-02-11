@@ -1,6 +1,6 @@
 class Election < ActiveRecord::Base
 
-  FEDERAL = "Federal"
+  GENERAL = "general"
 
   belongs_to :state
 

@@ -7,7 +7,7 @@ en:
     footer: TrustTheVote Project, powered by Open Source Election Technology Foundation
 
   scoreboard:
-    tweet: Latest election results at:
+    tweet: 'Latest election results at:'
 
     header:
       left_menu:
