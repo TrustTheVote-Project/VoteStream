@@ -1,6 +1,4 @@
-class DataLoader
-
-  class InvalidFormat < StandardError; end
+class DataLoader < BaseLoader
 
   def initialize(xml_source)
     @xml_source = xml_source
@@ -204,16 +202,4 @@ class DataLoader
     District.create_with(name: name, district_type: type).find_or_create_by(uid: district_el['id'])
   end
 
-  def dequote(v)
-    v.blank? ? v : v.gsub(/(^["']|["']$)/, '')
-  end
-
-  def raise_strict(ex)
-    if AppConfig['enable_strict_vipplus_parsing']
-      raise ex
-    else
-      puts ex.message
-      Rails.logger.error ex.message
-    end
-  end
 end

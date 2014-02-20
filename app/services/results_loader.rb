@@ -1,15 +1,17 @@
-class ResultsLoader
-
-  class InvalidFormat < StandardError; end
+class ResultsLoader < BaseLoader
 
   def initialize(xml_source)
     @xml_source = xml_source
     @doc = Nokogiri::XML(xml_source)
     @doc.remove_namespaces!
-    @districts = {}
   end
 
   def load
+    @districts = {}
+    @precinct_ids = {}
+    @candidate_ids = {}
+    @ballot_response_ids = {}
+
     Precinct.transaction do
       remove_old_results
       load_new_results
@@ -26,6 +28,46 @@ class ResultsLoader
   end
 
   def load_new_results
+    @doc.css('contest_result').each do |cr_el|
+      precinct_uid = dequote(cr_el.css('> jurisdiction_id').first.content)
+      precinct_id = @precinct_ids[precinct_uid]
+
+      unless precinct_id
+        precinct = Precinct.find_by!(uid: precinct_uid)
+        precinct_id = @precinct_ids[precinct_uid] = precinct.id
+        precinct.total_cast = cr_el.css('> total_votes').first.content
+        precinct.save
+      end
+
+      if cr_el.css('> contest_id').length > 0
+        load_contest_results(precinct_id, cr_el)
+      elsif cr_el.css('> referendum_id').length > 0
+        load_referendum_results(precinct_id, cr_el)
+      else
+        raise InvalidFormat.new("Neither contest_id, nor referendum_id elements found")
+      end
+    end
+  end
+
+  def load_contest_results(precinct_id, cr_el)
+    cr_el.css('ballot_line_result').each do |blr_el|
+      candidate_uid = dequote(blr_el.css('> candidate_id').first.content)
+      candidate_id = @candidate_ids[candidate_uid] || (@candidate_ids[candidate_uid] = Candidate.find_by!(uid: candidate_uid).id)
+
+      CandidateResult.create!(precinct_id: precinct_id, candidate_id: candidate_id, votes: blr_el.css('votes').first.content)
+    end
+  end
+
+  def load_referendum_results(precinct_id, cr_el)
+    cr_el.css('ballot_line_result').each do |blr_el|
+      ballot_response_uid = dequote(blr_el.css('> ballot_response_id').first.content)
+      ballot_response_id = @ballot_response_ids[ballot_response_uid] || (@ballot_response_ids[ballot_response_uid] = BallotResponse.find_by!(uid: ballot_response_uid).id)
+
+      BallotResponseResult.create!(precinct_id: precinct_id, ballot_response_id: ballot_response_id, votes: blr_el.css('votes').first.content)
+    end
+  end
+
+  def temp
     for_each_precinct do |precinct_el, precinct|
       precinct.total_cast = precinct_el.css('total_cast').first.content
       precinct.save

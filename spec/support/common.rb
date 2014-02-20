@@ -23,6 +23,6 @@ end
 def load_results_fixture
   load_def_fixture
 
-  l = ResultsLoader.new(fixture('ramsey-results-sample.xml'))
+  l = ResultsLoader.new(fixture('ramsey-results-1.xml'))
   l.load
 end

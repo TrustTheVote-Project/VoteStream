@@ -51,7 +51,7 @@ class RefConResults
     end
 
     ordered = ordered_records(candidates, candidate_votes) do |c, votes, idx|
-      { name: c.name, party: c.party, votes: votes, c: ColorScheme.candidate_color(c, idx) }
+      { name: c.name, party: { name: c.party.name, abbr: c.party.abbr }, votes: votes, c: ColorScheme.candidate_color(c, idx) }
     end
 
     return {
