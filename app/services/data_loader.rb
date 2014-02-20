@@ -154,7 +154,7 @@ class DataLoader
     @doc.css("vip_object > contest").each do |contest_el|
       uid         = contest_el['id']
       office      = dequote(contest_el.css("office, title").first.content)
-      sort_order  = dequote(contest_el.css("sort_order").first.content)
+      sort_order  = dequote(contest_el.css("> ballot_placement").first.content)
       district_id = dequote(contest_el.css("> electoral_district_id").first.content)
       district    = District.find_by_uid(district_id)
       if district
@@ -186,7 +186,7 @@ class DataLoader
       title       = dequote(referendum_el.css("title").first.content)
       subtitle    = dequote(referendum_el.css("subtitle").first.content)
       question    = dequote(referendum_el.css("text").first.content)
-      sort_order  = dequote(referendum_el.css("sort_order").first.content)
+      sort_order  = dequote(referendum_el.css("> ballot_placement").first.content)
       district_id = dequote(referendum_el.css("> electoral_district_id").first.content)
       district    = District.find_by_uid(district_id)
       if district
