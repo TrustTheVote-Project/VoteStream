@@ -1,0 +1,2300 @@
+<?xml version="1.0" encoding="utf-8"?>
+<vip_object xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" schemaVersion="5.0">
+  <source id="100000000000">
+    <name>State of Minnesota</name>
+    <vip_id>27</vip_id>
+    <datetime>2012-11-02T20:33:19</datetime>
+    <description>Ramsey County Elections is the official source of election results. This feed provides unofficial informational vote tallies on an election
+ in progress.</description>
+    <organization_url>http://www.sos.state.mn.us/</organization_url>
+  </source>
+
+  <contest_result id="2012-11-06-27-123-0101-result-271230010" certification="unofficial_partial"> <!-- ARDEN HILLS P-1 -->
+    <jurisdiction_id>"271230010"</jurisdiction_id> 
+    <contest_id>"2012-11-06-27-123-contest-1"</contest_id> <!-- U.S. President & Vice President -->
+    <total_votes>2173</total_votes>
+    <total_valid_votes>2173</total_valid_votes>
+    <ballot_line_result id="0101-0301-result-271230010" certification="unofficial_partial"> <!-- MITT ROMNEY AND PAUL RYAN -->
+      <jurisdiction_id>"271230010"</jurisdiction_id>
+      <vote_type>unspecified</vote_type>
+      <entire_district>No</entire_district>
+      <candidate_id>"2012-11-06-27-123-contest-1-1"</candidate_id> 
+      <votes>962</votes>
+    </ballot_line_result>
+    <ballot_line_result id="0101-0401-result-271230010" certification="unofficial_partial"> <!-- BARACK OBAMA AND JOE BIDEN -->
+      <jurisdiction_id>"271230010"</jurisdiction_id>
+      <vote_type>unspecified</vote_type>
+      <entire_district>No</entire_district>
+      <candidate_id>"2012-11-06-27-123-contest-1-2"</candidate_id> 
+      <votes>1146</votes>
+    </ballot_line_result>
+    <ballot_line_result id="0101-0501-result-271230010" certification="unofficial_partial"> <!-- GARY JOHNSON AND JIM GRAY -->
+      <jurisdiction_id>"271230010"</jurisdiction_id>
+      <vote_type>unspecified</vote_type>
+      <entire_district>No</entire_district>
+      <candidate_id>"2012-11-06-27-123-contest-1-3"</candidate_id> 
+      <votes>22</votes>
+    </ballot_line_result>
+    <ballot_line_result id="0101-0601-result-271230010" certification="unofficial_partial"> <!-- JAMES HARRIS AND MAURA DELUCA -->
+      <jurisdiction_id>"271230010"</jurisdiction_id>
+      <vote_type>unspecified</vote_type>
+      <entire_district>No</entire_district>
+      <candidate_id>"2012-11-06-27-123-contest-1-4"</candidate_id> 
+      <votes>1</votes>
+    </ballot_line_result>
+    <ballot_line_result id="0101-0701-result-271230010" certification="unofficial_partial"> <!-- VIRGIL GOODE AND JIM CLYMER -->
+      <jurisdiction_id>"271230010"</jurisdiction_id>
+      <vote_type>unspecified</vote_type>
+      <entire_district>No</entire_district>
+      <candidate_id>"2012-11-06-27-123-contest-1-5"</candidate_id> 
+      <votes>2</votes>
+    </ballot_line_result>
+    <ballot_line_result id="0101-0801-result-271230010" certification="unofficial_partial"> <!-- DEAN MORSTAD AND JOSH FRANKE-HYLAND -->
+      <jurisdiction_id>"271230010"</jurisdiction_id>
+      <vote_type>unspecified</vote_type>
+      <entire_district>No</entire_district>
+      <candidate_id>"2012-11-06-27-123-contest-1-6"</candidate_id> 
+      <votes>0</votes>
+    </ballot_line_result>
+    <ballot_line_result id="0101-0901-result-271230010" certification="unofficial_partial"> <!-- JILL STEIN AND CHERI HONKALA -->
+      <jurisdiction_id>"271230010"</jurisdiction_id>
+      <vote_type>unspecified</vote_type>
+      <entire_district>No</entire_district>
+      <candidate_id>"2012-11-06-27-123-contest-1-7"</candidate_id> 
+      <votes>14</votes>
+    </ballot_line_result>
+    <ballot_line_result id="0101-1001-result-271230010" certification="unofficial_partial"> <!-- JIM CARLSON AND GEORGE MCMAHON -->
+      <jurisdiction_id>"271230010"</jurisdiction_id>
+      <vote_type>unspecified</vote_type>
+      <entire_district>No</entire_district>
+      <candidate_id>"2012-11-06-27-123-contest-1-8"</candidate_id> 
+      <votes>1</votes>
+    </ballot_line_result>
+    <ballot_line_result id="0101-1401-result-271230010" certification="unofficial_partial"> <!-- PETA LINDSAY AND YARI OSORIO -->
+      <jurisdiction_id>"271230010"</jurisdiction_id>
+      <vote_type>unspecified</vote_type>
+      <entire_district>No</entire_district>
+      <candidate_id>"2012-11-06-27-123-contest-1-9"</candidate_id> 
+      <votes>0</votes>
+    </ballot_line_result>
+    <ballot_line_result id="0101-1501-result-271230010" certification="unofficial_partial"> <!-- ROSS C. "ROCKY" ANDERSON AND LUIS J. RODRIGUEZ -->
+      <jurisdiction_id>"271230010"</jurisdiction_id>
+      <vote_type>unspecified</vote_type>
+      <entire_district>No</entire_district>
+      <candidate_id>"2012-11-06-27-123-contest-1-10"</candidate_id> 
+      <votes>1</votes>
+    </ballot_line_result>
+    <ballot_line_result id="0101-9901-result-271230010" certification="unofficial_partial"> <!-- WRITE-IN** -->
+      <jurisdiction_id>"271230010"</jurisdiction_id>
+      <vote_type>unspecified</vote_type>
+      <entire_district>No</entire_district>
+      <candidate_id>"2012-11-06-27-123-contest-1-11"</candidate_id> 
+      <votes>14</votes>
+    </ballot_line_result>
+</contest_result>
+
+  <contest_result id="2012-11-06-27-123-0102-result-271230010" certification="unofficial_partial"> <!-- ARDEN HILLS P-1 -->
+    <jurisdiction_id>"271230010"</jurisdiction_id> 
+    <contest_id>"2012-11-06-27-123-contest-2"</contest_id> <!-- U.S. Senator -->
+    <total_votes>2173</total_votes>
+    <total_valid_votes>2173</total_valid_votes>
+    <ballot_line_result id="0102-0201-result-271230010" certification="unofficial_partial"> <!-- STEPHEN WILLIAMS -->
+      <jurisdiction_id>"271230010"</jurisdiction_id>
+      <vote_type>unspecified</vote_type>
+      <entire_district>No</entire_district>
+      <candidate_id>"2012-11-06-27-123-contest-2-1"</candidate_id> 
+      <votes>44</votes>
+    </ballot_line_result>
+    <ballot_line_result id="0102-0301-result-271230010" certification="unofficial_partial"> <!-- KURT BILLS -->
+      <jurisdiction_id>"271230010"</jurisdiction_id>
+      <vote_type>unspecified</vote_type>
+      <entire_district>No</entire_district>
+      <candidate_id>"2012-11-06-27-123-contest-2-2"</candidate_id> 
+      <votes>686</votes>
+    </ballot_line_result>
+    <ballot_line_result id="0102-0401-result-271230010" certification="unofficial_partial"> <!-- AMY KLOBUCHAR -->
+      <jurisdiction_id>"271230010"</jurisdiction_id>
+      <vote_type>unspecified</vote_type>
+      <entire_district>No</entire_district>
+      <candidate_id>"2012-11-06-27-123-contest-2-3"</candidate_id> 
+      <votes>1343</votes>
+    </ballot_line_result>
+    <ballot_line_result id="0102-1001-result-271230010" certification="unofficial_partial"> <!-- TIM DAVIS -->
+      <jurisdiction_id>"271230010"</jurisdiction_id>
+      <vote_type>unspecified</vote_type>
+      <entire_district>No</entire_district>
+      <candidate_id>"2012-11-06-27-123-contest-2-4"</candidate_id> 
+      <votes>16</votes>
+    </ballot_line_result>
+    <ballot_line_result id="0102-1101-result-271230010" certification="unofficial_partial"> <!-- MICHAEL CAVLAN -->
+      <jurisdiction_id>"271230010"</jurisdiction_id>
+      <vote_type>unspecified</vote_type>
+      <entire_district>No</entire_district>
+      <candidate_id>"2012-11-06-27-123-contest-2-5"</candidate_id> 
+      <votes>11</votes>
+    </ballot_line_result>
+    <ballot_line_result id="0102-9901-result-271230010" certification="unofficial_partial"> <!-- WRITE-IN** -->
+      <jurisdiction_id>"271230010"</jurisdiction_id>
+      <vote_type>unspecified</vote_type>
+      <entire_district>No</entire_district>
+      <candidate_id>"2012-11-06-27-123-contest-2-6"</candidate_id> 
+      <votes>1</votes>
+    </ballot_line_result>
+</contest_result>
+
+  <contest_result id="2012-11-06-27-123-0107-result-271230010" certification="unofficial_partial"> <!-- ARDEN HILLS P-1 -->
+    <jurisdiction_id>"271230010"</jurisdiction_id> 
+    <contest_id>"2012-11-06-27-123-contest-3"</contest_id> <!-- U.S. Representative District 4 -->
+    <total_votes>2173</total_votes>
+    <total_valid_votes>2173</total_valid_votes>
+    <ballot_line_result id="0107-0201-result-271230010" certification="unofficial_partial"> <!-- STEVE CARLSON -->
+      <jurisdiction_id>"271230010"</jurisdiction_id>
+      <vote_type>unspecified</vote_type>
+      <entire_district>No</entire_district>
+      <candidate_id>"2012-11-06-27-123-contest-3-1"</candidate_id> 
+      <votes>126</votes>
+    </ballot_line_result>
+    <ballot_line_result id="0107-0301-result-271230010" certification="unofficial_partial"> <!-- TONY HERNANDEZ -->
+      <jurisdiction_id>"271230010"</jurisdiction_id>
+      <vote_type>unspecified</vote_type>
+      <entire_district>No</entire_district>
+      <candidate_id>"2012-11-06-27-123-contest-3-2"</candidate_id> 
+      <votes>810</votes>
+    </ballot_line_result>
+    <ballot_line_result id="0107-0401-result-271230010" certification="unofficial_partial"> <!-- BETTY MCCOLLUM -->
+      <jurisdiction_id>"271230010"</jurisdiction_id>
+      <vote_type>unspecified</vote_type>
+      <entire_district>No</entire_district>
+      <candidate_id>"2012-11-06-27-123-contest-3-3"</candidate_id> 
+      <votes>1120</votes>
+    </ballot_line_result>
+    <ballot_line_result id="0107-9901-result-271230010" certification="unofficial_partial"> <!-- WRITE-IN** -->
+      <jurisdiction_id>"271230010"</jurisdiction_id>
+      <vote_type>unspecified</vote_type>
+      <entire_district>No</entire_district>
+      <candidate_id>"2012-11-06-27-123-contest-3-4"</candidate_id> 
+      <votes>1</votes>
+    </ballot_line_result>
+</contest_result>
+
+  <contest_result id="2012-11-06-27-123-0162-result-271230010" certification="unofficial_partial"> <!-- ARDEN HILLS P-1 -->
+    <jurisdiction_id>"271230010"</jurisdiction_id> 
+    <contest_id>"2012-11-06-27-123-contest-7"</contest_id> <!-- State Senator District 42 -->
+    <total_votes>2173</total_votes>
+    <total_valid_votes>2173</total_valid_votes>
+    <ballot_line_result id="0162-0301-result-271230010" certification="unofficial_partial"> <!-- APRIL KING -->
+      <jurisdiction_id>"271230010"</jurisdiction_id>
+      <vote_type>unspecified</vote_type>
+      <entire_district>No</entire_district>
+      <candidate_id>"2012-11-06-27-123-contest-7-1"</candidate_id> 
+      <votes>987</votes>
+    </ballot_line_result>
+    <ballot_line_result id="0162-0401-result-271230010" certification="unofficial_partial"> <!-- BEV SCALZE -->
+      <jurisdiction_id>"271230010"</jurisdiction_id>
+      <vote_type>unspecified</vote_type>
+      <entire_district>No</entire_district>
+      <candidate_id>"2012-11-06-27-123-contest-7-2"</candidate_id> 
+      <votes>1054</votes>
+    </ballot_line_result>
+    <ballot_line_result id="0162-9901-result-271230010" certification="unofficial_partial"> <!-- WRITE-IN** -->
+      <jurisdiction_id>"271230010"</jurisdiction_id>
+      <vote_type>unspecified</vote_type>
+      <entire_district>No</entire_district>
+      <candidate_id>"2012-11-06-27-123-contest-7-3"</candidate_id> 
+      <votes>2</votes>
+    </ballot_line_result>
+</contest_result>
+
+  <contest_result id="2012-11-06-27-123-0270-result-271230010" certification="unofficial_partial"> <!-- ARDEN HILLS P-1 -->
+    <jurisdiction_id>"271230010"</jurisdiction_id> 
+    <contest_id>"2012-11-06-27-123-contest-17"</contest_id> <!-- State Representative District 42A -->
+    <total_votes>2173</total_votes>
+    <total_valid_votes>2173</total_valid_votes>
+    <ballot_line_result id="0270-0301-result-271230010" certification="unofficial_partial"> <!-- RUSS BERTSCH -->
+      <jurisdiction_id>"271230010"</jurisdiction_id>
+      <vote_type>unspecified</vote_type>
+      <entire_district>No</entire_district>
+      <candidate_id>"2012-11-06-27-123-contest-17-1"</candidate_id> 
+      <votes>952</votes>
+    </ballot_line_result>
+    <ballot_line_result id="0270-0401-result-271230010" certification="unofficial_partial"> <!-- BARB YARUSSO -->
+      <jurisdiction_id>"271230010"</jurisdiction_id>
+      <vote_type>unspecified</vote_type>
+      <entire_district>No</entire_district>
+      <candidate_id>"2012-11-06-27-123-contest-17-2"</candidate_id> 
+      <votes>1078</votes>
+    </ballot_line_result>
+    <ballot_line_result id="0270-9901-result-271230010" certification="unofficial_partial"> <!-- WRITE-IN** -->
+      <jurisdiction_id>"271230010"</jurisdiction_id>
+      <vote_type>unspecified</vote_type>
+      <entire_district>No</entire_district>
+      <candidate_id>"2012-11-06-27-123-contest-17-3"</candidate_id> 
+      <votes>3</votes>
+    </ballot_line_result>
+</contest_result>
+
+  <contest_result id="2012-11-06-27-123-0351-result-271230010" certification="unofficial_partial"> <!-- ARDEN HILLS P-1 -->
+    <jurisdiction_id>"271230010"</jurisdiction_id> 
+    <referendum_id>"2012-11-06-27-123-contest-78"</referendum_id> <!-- Constitutional Amendment 1 -->
+    <total_votes>2173</total_votes>
+    <total_valid_votes>2173</total_valid_votes>
+    <ballot_line_result id="0351-9001-result-271230010" certification="unofficial_partial"> <!-- YES -->
+      <jurisdiction_id>"271230010"</jurisdiction_id>
+      <vote_type>unspecified</vote_type>
+      <entire_district>No</entire_district>
+      <ballot_response_id>"2012-11-06-27-123-contest-78-1"</ballot_response_id> 
+      <votes>932</votes>
+    </ballot_line_result>
+    <ballot_line_result id="0351-9002-result-271230010" certification="unofficial_partial"> <!-- NO -->
+      <jurisdiction_id>"271230010"</jurisdiction_id>
+      <vote_type>unspecified</vote_type>
+      <entire_district>No</entire_district>
+      <ballot_response_id>"2012-11-06-27-123-contest-78-2"</ballot_response_id> 
+      <votes>1206</votes>
+    </ballot_line_result>
+</contest_result>
+
+  <contest_result id="2012-11-06-27-123-0352-result-271230010" certification="unofficial_partial"> <!-- ARDEN HILLS P-1 -->
+    <jurisdiction_id>"271230010"</jurisdiction_id> 
+    <referendum_id>"2012-11-06-27-123-contest-79"</referendum_id> <!-- Constitutional Amendment 2 -->
+    <total_votes>2173</total_votes>
+    <total_valid_votes>2173</total_valid_votes>
+    <ballot_line_result id="0352-9001-result-271230010" certification="unofficial_partial"> <!-- YES -->
+      <jurisdiction_id>"271230010"</jurisdiction_id>
+      <vote_type>unspecified</vote_type>
+      <entire_district>No</entire_district>
+      <ballot_response_id>"2012-11-06-27-123-contest-79-1"</ballot_response_id> 
+      <votes>943</votes>
+    </ballot_line_result>
+    <ballot_line_result id="0352-9002-result-271230010" certification="unofficial_partial"> <!-- NO -->
+      <jurisdiction_id>"271230010"</jurisdiction_id>
+      <vote_type>unspecified</vote_type>
+      <entire_district>No</entire_district>
+      <ballot_response_id>"2012-11-06-27-123-contest-79-2"</ballot_response_id> 
+      <votes>1194</votes>
+    </ballot_line_result>
+</contest_result>
+
+  <contest_result id="2012-11-06-27-123-0391-result-271230010" certification="unofficial_partial"> <!-- ARDEN HILLS P-1 -->
+    <jurisdiction_id>"271230010"</jurisdiction_id> 
+    <contest_id>"2012-11-06-27-123-contest-30"</contest_id> <!-- County Commissioner District 1 -->
+    <total_votes>2173</total_votes>
+    <total_valid_votes>2173</total_valid_votes>
+    <ballot_line_result id="0391-9001-result-271230010" certification="unofficial_partial"> <!-- FRANK T. MABLEY -->
+      <jurisdiction_id>"271230010"</jurisdiction_id>
+      <vote_type>unspecified</vote_type>
+      <entire_district>No</entire_district>
+      <candidate_id>"2012-11-06-27-123-contest-30-1"</candidate_id> 
+      <votes>805</votes>
+    </ballot_line_result>
+    <ballot_line_result id="0391-9004-result-271230010" certification="unofficial_partial"> <!-- BLAKE C. HUFFMAN -->
+      <jurisdiction_id>"271230010"</jurisdiction_id>
+      <vote_type>unspecified</vote_type>
+      <entire_district>No</entire_district>
+      <candidate_id>"2012-11-06-27-123-contest-30-2"</candidate_id> 
+      <votes>812</votes>
+    </ballot_line_result>
+    <ballot_line_result id="0391-9901-result-271230010" certification="unofficial_partial"> <!-- WRITE-IN** -->
+      <jurisdiction_id>"271230010"</jurisdiction_id>
+      <vote_type>unspecified</vote_type>
+      <entire_district>No</entire_district>
+      <candidate_id>"2012-11-06-27-123-contest-30-3"</candidate_id> 
+      <votes>7</votes>
+    </ballot_line_result>
+</contest_result>
+
+  <contest_result id="2012-11-06-27-123-0432-result-271230010" certification="unofficial_partial"> <!-- ARDEN HILLS P-1 -->
+    <jurisdiction_id>"271230010"</jurisdiction_id> 
+    <contest_id>"2012-11-06-27-123-contest-33"</contest_id> <!-- Soil and Water Supervisor District 2 -->
+    <total_votes>2173</total_votes>
+    <total_valid_votes>2173</total_valid_votes>
+    <ballot_line_result id="0432-9001-result-271230010" certification="unofficial_partial"> <!-- GWEN WILLEMS -->
+      <jurisdiction_id>"271230010"</jurisdiction_id>
+      <vote_type>unspecified</vote_type>
+      <entire_district>No</entire_district>
+      <candidate_id>"2012-11-06-27-123-contest-33-1"</candidate_id> 
+      <votes>699</votes>
+    </ballot_line_result>
+    <ballot_line_result id="0432-9002-result-271230010" certification="unofficial_partial"> <!-- GREG RYAN -->
+      <jurisdiction_id>"271230010"</jurisdiction_id>
+      <vote_type>unspecified</vote_type>
+      <entire_district>No</entire_district>
+      <candidate_id>"2012-11-06-27-123-contest-33-2"</candidate_id> 
+      <votes>593</votes>
+    </ballot_line_result>
+    <ballot_line_result id="0432-9901-result-271230010" certification="unofficial_partial"> <!-- WRITE-IN** -->
+      <jurisdiction_id>"271230010"</jurisdiction_id>
+      <vote_type>unspecified</vote_type>
+      <entire_district>No</entire_district>
+      <candidate_id>"2012-11-06-27-123-contest-33-3"</candidate_id> 
+      <votes>8</votes>
+    </ballot_line_result>
+</contest_result>
+
+  <contest_result id="2012-11-06-27-123-0433-result-271230010" certification="unofficial_partial"> <!-- ARDEN HILLS P-1 -->
+    <jurisdiction_id>"271230010"</jurisdiction_id> 
+    <contest_id>"2012-11-06-27-123-contest-34"</contest_id> <!-- Soil and Water Supervisor District 3 -->
+    <total_votes>2173</total_votes>
+    <total_valid_votes>2173</total_valid_votes>
+    <ballot_line_result id="0433-9001-result-271230010" certification="unofficial_partial"> <!-- MARA MAGNUSON HUMPHREY -->
+      <jurisdiction_id>"271230010"</jurisdiction_id>
+      <vote_type>unspecified</vote_type>
+      <entire_district>No</entire_district>
+      <candidate_id>"2012-11-06-27-123-contest-34-1"</candidate_id> 
+      <votes>1164</votes>
+    </ballot_line_result>
+    <ballot_line_result id="0433-9901-result-271230010" certification="unofficial_partial"> <!-- WRITE-IN** -->
+      <jurisdiction_id>"271230010"</jurisdiction_id>
+      <vote_type>unspecified</vote_type>
+      <entire_district>No</entire_district>
+      <candidate_id>"2012-11-06-27-123-contest-34-2"</candidate_id> 
+      <votes>18</votes>
+    </ballot_line_result>
+</contest_result>
+
+  <contest_result id="2012-11-06-27-123-0435-result-271230010" certification="unofficial_partial"> <!-- ARDEN HILLS P-1 -->
+    <jurisdiction_id>"271230010"</jurisdiction_id> 
+    <contest_id>"2012-11-06-27-123-contest-35"</contest_id> <!-- Soil and Water Supervisor District 5 -->
+    <total_votes>2173</total_votes>
+    <total_valid_votes>2173</total_valid_votes>
+    <ballot_line_result id="0435-9001-result-271230010" certification="unofficial_partial"> <!-- MATT LEDVINA -->
+      <jurisdiction_id>"271230010"</jurisdiction_id>
+      <vote_type>unspecified</vote_type>
+      <entire_district>No</entire_district>
+      <candidate_id>"2012-11-06-27-123-contest-35-1"</candidate_id> 
+      <votes>528</votes>
+    </ballot_line_result>
+    <ballot_line_result id="0435-9002-result-271230010" certification="unofficial_partial"> <!-- MARGARET ANN BEHRENS -->
+      <jurisdiction_id>"271230010"</jurisdiction_id>
+      <vote_type>unspecified</vote_type>
+      <entire_district>No</entire_district>
+      <candidate_id>"2012-11-06-27-123-contest-35-2"</candidate_id> 
+      <votes>524</votes>
+    </ballot_line_result>
+    <ballot_line_result id="0435-9003-result-271230010" certification="unofficial_partial"> <!-- DEE DODGE GEORGE -->
+      <jurisdiction_id>"271230010"</jurisdiction_id>
+      <vote_type>unspecified</vote_type>
+      <entire_district>No</entire_district>
+      <candidate_id>"2012-11-06-27-123-contest-35-3"</candidate_id> 
+      <votes>188</votes>
+    </ballot_line_result>
+    <ballot_line_result id="0435-9901-result-271230010" certification="unofficial_partial"> <!-- WRITE-IN** -->
+      <jurisdiction_id>"271230010"</jurisdiction_id>
+      <vote_type>unspecified</vote_type>
+      <entire_district>No</entire_district>
+      <candidate_id>"2012-11-06-27-123-contest-35-4"</candidate_id> 
+      <votes>6</votes>
+    </ballot_line_result>
+</contest_result>
+
+  <contest_result id="2012-11-06-27-123-1010-result-271230010" certification="unofficial_partial"> <!-- ARDEN HILLS P-1 -->
+    <jurisdiction_id>"271230010"</jurisdiction_id> 
+    <contest_id>"2012-11-06-27-123-contest-54"</contest_id> <!-- Council Member (Arden Hills) (Elect 2) -->
+    <total_votes>2173</total_votes>
+    <total_valid_votes>2173</total_valid_votes>
+    <ballot_line_result id="1010-9001-result-271230010" certification="unofficial_partial"> <!-- DAVE MCCLUNG -->
+      <jurisdiction_id>"271230010"</jurisdiction_id>
+      <vote_type>unspecified</vote_type>
+      <entire_district>No</entire_district>
+      <candidate_id>"2012-11-06-27-123-contest-54-1"</candidate_id> 
+      <votes>1112</votes>
+    </ballot_line_result>
+    <ballot_line_result id="1010-9002-result-271230010" certification="unofficial_partial"> <!-- BRENDA J HOLDEN -->
+      <jurisdiction_id>"271230010"</jurisdiction_id>
+      <vote_type>unspecified</vote_type>
+      <entire_district>No</entire_district>
+      <candidate_id>"2012-11-06-27-123-contest-54-2"</candidate_id> 
+      <votes>1105</votes>
+    </ballot_line_result>
+    <ballot_line_result id="1010-9901-result-271230010" certification="unofficial_partial"> <!-- WRITE-IN** -->
+      <jurisdiction_id>"271230010"</jurisdiction_id>
+      <vote_type>unspecified</vote_type>
+      <entire_district>No</entire_district>
+      <candidate_id>"2012-11-06-27-123-contest-54-7"</candidate_id> 
+      <votes>36</votes>
+    </ballot_line_result>
+</contest_result>
+
+  <contest_result id="2012-11-06-27-123-7001-result-271230010" certification="unofficial_partial"> <!-- ARDEN HILLS P-1 -->
+    <jurisdiction_id>"271230010"</jurisdiction_id> 
+    <contest_id>"2012-11-06-27-123-contest-62"</contest_id> <!-- Chief Justice - Supreme Court -->
+    <total_votes>2173</total_votes>
+    <total_valid_votes>2173</total_valid_votes>
+    <ballot_line_result id="7001-9001-result-271230010" certification="unofficial_partial"> <!-- LORIE SKJERVEN GILDEA -->
+      <jurisdiction_id>"271230010"</jurisdiction_id>
+      <vote_type>unspecified</vote_type>
+      <entire_district>No</entire_district>
+      <candidate_id>"2012-11-06-27-123-contest-62-1"</candidate_id> 
+      <votes>986</votes>
+    </ballot_line_result>
+    <ballot_line_result id="7001-9003-result-271230010" certification="unofficial_partial"> <!-- DAN GRIFFITH -->
+      <jurisdiction_id>"271230010"</jurisdiction_id>
+      <vote_type>unspecified</vote_type>
+      <entire_district>No</entire_district>
+      <candidate_id>"2012-11-06-27-123-contest-62-2"</candidate_id> 
+      <votes>523</votes>
+    </ballot_line_result>
+    <ballot_line_result id="7001-9901-result-271230010" certification="unofficial_partial"> <!-- WRITE-IN** -->
+      <jurisdiction_id>"271230010"</jurisdiction_id>
+      <vote_type>unspecified</vote_type>
+      <entire_district>No</entire_district>
+      <candidate_id>"2012-11-06-27-123-contest-62-3"</candidate_id> 
+      <votes>9</votes>
+    </ballot_line_result>
+</contest_result>
+
+  <contest_result id="2012-11-06-27-123-7002-result-271230010" certification="unofficial_partial"> <!-- ARDEN HILLS P-1 -->
+    <jurisdiction_id>"271230010"</jurisdiction_id> 
+    <contest_id>"2012-11-06-27-123-contest-63"</contest_id> <!-- Associate Justice - Supreme Court 1 -->
+    <total_votes>2173</total_votes>
+    <total_valid_votes>2173</total_valid_votes>
+    <ballot_line_result id="7002-9001-result-271230010" certification="unofficial_partial"> <!-- DEAN BARKLEY -->
+      <jurisdiction_id>"271230010"</jurisdiction_id>
+      <vote_type>unspecified</vote_type>
+      <entire_district>No</entire_district>
+      <candidate_id>"2012-11-06-27-123-contest-63-1"</candidate_id> 
+      <votes>539</votes>
+    </ballot_line_result>
+    <ballot_line_result id="7002-9002-result-271230010" certification="unofficial_partial"> <!-- BARRY ANDERSON -->
+      <jurisdiction_id>"271230010"</jurisdiction_id>
+      <vote_type>unspecified</vote_type>
+      <entire_district>No</entire_district>
+      <candidate_id>"2012-11-06-27-123-contest-63-2"</candidate_id> 
+      <votes>929</votes>
+    </ballot_line_result>
+    <ballot_line_result id="7002-9901-result-271230010" certification="unofficial_partial"> <!-- WRITE-IN** -->
+      <jurisdiction_id>"271230010"</jurisdiction_id>
+      <vote_type>unspecified</vote_type>
+      <entire_district>No</entire_district>
+      <candidate_id>"2012-11-06-27-123-contest-63-3"</candidate_id> 
+      <votes>6</votes>
+    </ballot_line_result>
+</contest_result>
+
+  <contest_result id="2012-11-06-27-123-7005-result-271230010" certification="unofficial_partial"> <!-- ARDEN HILLS P-1 -->
+    <jurisdiction_id>"271230010"</jurisdiction_id> 
+    <contest_id>"2012-11-06-27-123-contest-64"</contest_id> <!-- Associate Justice - Supreme Court 4 -->
+    <total_votes>2173</total_votes>
+    <total_valid_votes>2173</total_valid_votes>
+    <ballot_line_result id="7005-9002-result-271230010" certification="unofficial_partial"> <!-- TIM TINGELSTAD -->
+      <jurisdiction_id>"271230010"</jurisdiction_id>
+      <vote_type>unspecified</vote_type>
+      <entire_district>No</entire_district>
+      <candidate_id>"2012-11-06-27-123-contest-64-1"</candidate_id> 
+      <votes>546</votes>
+    </ballot_line_result>
+    <ballot_line_result id="7005-9003-result-271230010" certification="unofficial_partial"> <!-- DAVID R. STRAS -->
+      <jurisdiction_id>"271230010"</jurisdiction_id>
+      <vote_type>unspecified</vote_type>
+      <entire_district>No</entire_district>
+      <candidate_id>"2012-11-06-27-123-contest-64-2"</candidate_id> 
+      <votes>871</votes>
+    </ballot_line_result>
+    <ballot_line_result id="7005-9901-result-271230010" certification="unofficial_partial"> <!-- WRITE-IN** -->
+      <jurisdiction_id>"271230010"</jurisdiction_id>
+      <vote_type>unspecified</vote_type>
+      <entire_district>No</entire_district>
+      <candidate_id>"2012-11-06-27-123-contest-64-3"</candidate_id> 
+      <votes>9</votes>
+    </ballot_line_result>
+</contest_result>
+
+  <contest_result id="2012-11-06-27-123-7015-result-271230010" certification="unofficial_partial"> <!-- ARDEN HILLS P-1 -->
+    <jurisdiction_id>"271230010"</jurisdiction_id> 
+    <contest_id>"2012-11-06-27-123-contest-65"</contest_id> <!-- Judge - Court of Appeals 6 -->
+    <total_votes>2173</total_votes>
+    <total_valid_votes>2173</total_valid_votes>
+    <ballot_line_result id="7015-9001-result-271230010" certification="unofficial_partial"> <!-- RENEE L. WORKE -->
+      <jurisdiction_id>"271230010"</jurisdiction_id>
+      <vote_type>unspecified</vote_type>
+      <entire_district>No</entire_district>
+      <candidate_id>"2012-11-06-27-123-contest-65-1"</candidate_id> 
+      <votes>1133</votes>
+    </ballot_line_result>
+    <ballot_line_result id="7015-9901-result-271230010" certification="unofficial_partial"> <!-- WRITE-IN** -->
+      <jurisdiction_id>"271230010"</jurisdiction_id>
+      <vote_type>unspecified</vote_type>
+      <entire_district>No</entire_district>
+      <candidate_id>"2012-11-06-27-123-contest-65-2"</candidate_id> 
+      <votes>16</votes>
+    </ballot_line_result>
+</contest_result>
+
+  <contest_result id="2012-11-06-27-123-7016-result-271230010" certification="unofficial_partial"> <!-- ARDEN HILLS P-1 -->
+    <jurisdiction_id>"271230010"</jurisdiction_id> 
+    <contest_id>"2012-11-06-27-123-contest-66"</contest_id> <!-- Judge - Court of Appeals 7 -->
+    <total_votes>2173</total_votes>
+    <total_valid_votes>2173</total_valid_votes>
+    <ballot_line_result id="7016-9001-result-271230010" certification="unofficial_partial"> <!-- JILL FLASKAMP HALBROOKS -->
+      <jurisdiction_id>"271230010"</jurisdiction_id>
+      <vote_type>unspecified</vote_type>
+      <entire_district>No</entire_district>
+      <candidate_id>"2012-11-06-27-123-contest-66-1"</candidate_id> 
+      <votes>1126</votes>
+    </ballot_line_result>
+    <ballot_line_result id="7016-9901-result-271230010" certification="unofficial_partial"> <!-- WRITE-IN** -->
+      <jurisdiction_id>"271230010"</jurisdiction_id>
+      <vote_type>unspecified</vote_type>
+      <entire_district>No</entire_district>
+      <candidate_id>"2012-11-06-27-123-contest-66-2"</candidate_id> 
+      <votes>16</votes>
+    </ballot_line_result>
+</contest_result>
+
+  <contest_result id="2012-11-06-27-123-8301-result-271230010" certification="unofficial_partial"> <!-- ARDEN HILLS P-1 -->
+    <jurisdiction_id>"271230010"</jurisdiction_id> 
+    <contest_id>"2012-11-06-27-123-contest-67"</contest_id> <!-- Judge - 2nd District Court 2 -->
+    <total_votes>2173</total_votes>
+    <total_valid_votes>2173</total_valid_votes>
+    <ballot_line_result id="8301-9001-result-271230010" certification="unofficial_partial"> <!-- JAMES H. CLARK, JR -->
+      <jurisdiction_id>"271230010"</jurisdiction_id>
+      <vote_type>unspecified</vote_type>
+      <entire_district>No</entire_district>
+      <candidate_id>"2012-11-06-27-123-contest-67-1"</candidate_id> 
+      <votes>1133</votes>
+    </ballot_line_result>
+    <ballot_line_result id="8301-9901-result-271230010" certification="unofficial_partial"> <!-- WRITE-IN** -->
+      <jurisdiction_id>"271230010"</jurisdiction_id>
+      <vote_type>unspecified</vote_type>
+      <entire_district>No</entire_district>
+      <candidate_id>"2012-11-06-27-123-contest-67-2"</candidate_id> 
+      <votes>12</votes>
+    </ballot_line_result>
+</contest_result>
+
+  <contest_result id="2012-11-06-27-123-8304-result-271230010" certification="unofficial_partial"> <!-- ARDEN HILLS P-1 -->
+    <jurisdiction_id>"271230010"</jurisdiction_id> 
+    <contest_id>"2012-11-06-27-123-contest-68"</contest_id> <!-- Judge - 2nd District Court 5 -->
+    <total_votes>2173</total_votes>
+    <total_valid_votes>2173</total_valid_votes>
+    <ballot_line_result id="8304-9001-result-271230010" certification="unofficial_partial"> <!-- LEZLIE OTT MAREK -->
+      <jurisdiction_id>"271230010"</jurisdiction_id>
+      <vote_type>unspecified</vote_type>
+      <entire_district>No</entire_district>
+      <candidate_id>"2012-11-06-27-123-contest-68-1"</candidate_id> 
+      <votes>1115</votes>
+    </ballot_line_result>
+    <ballot_line_result id="8304-9901-result-271230010" certification="unofficial_partial"> <!-- WRITE-IN** -->
+      <jurisdiction_id>"271230010"</jurisdiction_id>
+      <vote_type>unspecified</vote_type>
+      <entire_district>No</entire_district>
+      <candidate_id>"2012-11-06-27-123-contest-68-2"</candidate_id> 
+      <votes>12</votes>
+    </ballot_line_result>
+</contest_result>
+
+  <contest_result id="2012-11-06-27-123-8305-result-271230010" certification="unofficial_partial"> <!-- ARDEN HILLS P-1 -->
+    <jurisdiction_id>"271230010"</jurisdiction_id> 
+    <contest_id>"2012-11-06-27-123-contest-69"</contest_id> <!-- Judge - 2nd District Court 6 -->
+    <total_votes>2173</total_votes>
+    <total_valid_votes>2173</total_valid_votes>
+    <ballot_line_result id="8305-9001-result-271230010" certification="unofficial_partial"> <!-- JOHN B. (JACK) VANDENORTH -->
+      <jurisdiction_id>"271230010"</jurisdiction_id>
+      <vote_type>unspecified</vote_type>
+      <entire_district>No</entire_district>
+      <candidate_id>"2012-11-06-27-123-contest-69-1"</candidate_id> 
+      <votes>1114</votes>
+    </ballot_line_result>
+    <ballot_line_result id="8305-9901-result-271230010" certification="unofficial_partial"> <!-- WRITE-IN** -->
+      <jurisdiction_id>"271230010"</jurisdiction_id>
+      <vote_type>unspecified</vote_type>
+      <entire_district>No</entire_district>
+      <candidate_id>"2012-11-06-27-123-contest-69-2"</candidate_id> 
+      <votes>13</votes>
+    </ballot_line_result>
+</contest_result>
+
+  <contest_result id="2012-11-06-27-123-8310-result-271230010" certification="unofficial_partial"> <!-- ARDEN HILLS P-1 -->
+    <jurisdiction_id>"271230010"</jurisdiction_id> 
+    <contest_id>"2012-11-06-27-123-contest-70"</contest_id> <!-- Judge - 2nd District Court 11 -->
+    <total_votes>2173</total_votes>
+    <total_valid_votes>2173</total_valid_votes>
+    <ballot_line_result id="8310-9001-result-271230010" certification="unofficial_partial"> <!-- GARY W. BASTIAN -->
+      <jurisdiction_id>"271230010"</jurisdiction_id>
+      <vote_type>unspecified</vote_type>
+      <entire_district>No</entire_district>
+      <candidate_id>"2012-11-06-27-123-contest-70-1"</candidate_id> 
+      <votes>1115</votes>
+    </ballot_line_result>
+    <ballot_line_result id="8310-9901-result-271230010" certification="unofficial_partial"> <!-- WRITE-IN** -->
+      <jurisdiction_id>"271230010"</jurisdiction_id>
+      <vote_type>unspecified</vote_type>
+      <entire_district>No</entire_district>
+      <candidate_id>"2012-11-06-27-123-contest-70-2"</candidate_id> 
+      <votes>13</votes>
+    </ballot_line_result>
+</contest_result>
+
+  <contest_result id="2012-11-06-27-123-8311-result-271230010" certification="unofficial_partial"> <!-- ARDEN HILLS P-1 -->
+    <jurisdiction_id>"271230010"</jurisdiction_id> 
+    <contest_id>"2012-11-06-27-123-contest-71"</contest_id> <!-- Judge - 2nd District Court 12 -->
+    <total_votes>2173</total_votes>
+    <total_valid_votes>2173</total_valid_votes>
+    <ballot_line_result id="8311-9001-result-271230010" certification="unofficial_partial"> <!-- GREGG E. JOHNSON -->
+      <jurisdiction_id>"271230010"</jurisdiction_id>
+      <vote_type>unspecified</vote_type>
+      <entire_district>No</entire_district>
+      <candidate_id>"2012-11-06-27-123-contest-71-1"</candidate_id> 
+      <votes>1111</votes>
+    </ballot_line_result>
+    <ballot_line_result id="8311-9901-result-271230010" certification="unofficial_partial"> <!-- WRITE-IN** -->
+      <jurisdiction_id>"271230010"</jurisdiction_id>
+      <vote_type>unspecified</vote_type>
+      <entire_district>No</entire_district>
+      <candidate_id>"2012-11-06-27-123-contest-71-2"</candidate_id> 
+      <votes>9</votes>
+    </ballot_line_result>
+</contest_result>
+
+  <contest_result id="2012-11-06-27-123-8313-result-271230010" certification="unofficial_partial"> <!-- ARDEN HILLS P-1 -->
+    <jurisdiction_id>"271230010"</jurisdiction_id> 
+    <contest_id>"2012-11-06-27-123-contest-72"</contest_id> <!-- Judge - 2nd District Court 14 -->
+    <total_votes>2173</total_votes>
+    <total_valid_votes>2173</total_valid_votes>
+    <ballot_line_result id="8313-9001-result-271230010" certification="unofficial_partial"> <!-- ROBYN ANN MILLENACKER -->
+      <jurisdiction_id>"271230010"</jurisdiction_id>
+      <vote_type>unspecified</vote_type>
+      <entire_district>No</entire_district>
+      <candidate_id>"2012-11-06-27-123-contest-72-1"</candidate_id> 
+      <votes>1109</votes>
+    </ballot_line_result>
+    <ballot_line_result id="8313-9901-result-271230010" certification="unofficial_partial"> <!-- WRITE-IN** -->
+      <jurisdiction_id>"271230010"</jurisdiction_id>
+      <vote_type>unspecified</vote_type>
+      <entire_district>No</entire_district>
+      <candidate_id>"2012-11-06-27-123-contest-72-2"</candidate_id> 
+      <votes>11</votes>
+    </ballot_line_result>
+</contest_result>
+
+  <contest_result id="2012-11-06-27-123-8318-result-271230010" certification="unofficial_partial"> <!-- ARDEN HILLS P-1 -->
+    <jurisdiction_id>"271230010"</jurisdiction_id> 
+    <contest_id>"2012-11-06-27-123-contest-73"</contest_id> <!-- Judge - 2nd District Court 19 -->
+    <total_votes>2173</total_votes>
+    <total_valid_votes>2173</total_valid_votes>
+    <ballot_line_result id="8318-9001-result-271230010" certification="unofficial_partial"> <!-- ROBERT A. AWSUMB -->
+      <jurisdiction_id>"271230010"</jurisdiction_id>
+      <vote_type>unspecified</vote_type>
+      <entire_district>No</entire_district>
+      <candidate_id>"2012-11-06-27-123-contest-73-1"</candidate_id> 
+      <votes>1115</votes>
+    </ballot_line_result>
+    <ballot_line_result id="8318-9901-result-271230010" certification="unofficial_partial"> <!-- WRITE-IN** -->
+      <jurisdiction_id>"271230010"</jurisdiction_id>
+      <vote_type>unspecified</vote_type>
+      <entire_district>No</entire_district>
+      <candidate_id>"2012-11-06-27-123-contest-73-2"</candidate_id> 
+      <votes>9</votes>
+    </ballot_line_result>
+</contest_result>
+
+  <contest_result id="2012-11-06-27-123-8321-result-271230010" certification="unofficial_partial"> <!-- ARDEN HILLS P-1 -->
+    <jurisdiction_id>"271230010"</jurisdiction_id> 
+    <contest_id>"2012-11-06-27-123-contest-74"</contest_id> <!-- Judge - 2nd District Court 22 -->
+    <total_votes>2173</total_votes>
+    <total_valid_votes>2173</total_valid_votes>
+    <ballot_line_result id="8321-9001-result-271230010" certification="unofficial_partial"> <!-- TERESA R. WARNER -->
+      <jurisdiction_id>"271230010"</jurisdiction_id>
+      <vote_type>unspecified</vote_type>
+      <entire_district>No</entire_district>
+      <candidate_id>"2012-11-06-27-123-contest-74-1"</candidate_id> 
+      <votes>1110</votes>
+    </ballot_line_result>
+    <ballot_line_result id="8321-9901-result-271230010" certification="unofficial_partial"> <!-- WRITE-IN** -->
+      <jurisdiction_id>"271230010"</jurisdiction_id>
+      <vote_type>unspecified</vote_type>
+      <entire_district>No</entire_district>
+      <candidate_id>"2012-11-06-27-123-contest-74-2"</candidate_id> 
+      <votes>11</votes>
+    </ballot_line_result>
+</contest_result>
+
+  <contest_result id="2012-11-06-27-123-8323-result-271230010" certification="unofficial_partial"> <!-- ARDEN HILLS P-1 -->
+    <jurisdiction_id>"271230010"</jurisdiction_id> 
+    <contest_id>"2012-11-06-27-123-contest-75"</contest_id> <!-- Judge - 2nd District Court 24 -->
+    <total_votes>2173</total_votes>
+    <total_valid_votes>2173</total_valid_votes>
+    <ballot_line_result id="8323-9001-result-271230010" certification="unofficial_partial"> <!-- EDWARD S. WILSON -->
+      <jurisdiction_id>"271230010"</jurisdiction_id>
+      <vote_type>unspecified</vote_type>
+      <entire_district>No</entire_district>
+      <candidate_id>"2012-11-06-27-123-contest-75-1"</candidate_id> 
+      <votes>1109</votes>
+    </ballot_line_result>
+    <ballot_line_result id="8323-9901-result-271230010" certification="unofficial_partial"> <!-- WRITE-IN** -->
+      <jurisdiction_id>"271230010"</jurisdiction_id>
+      <vote_type>unspecified</vote_type>
+      <entire_district>No</entire_district>
+      <candidate_id>"2012-11-06-27-123-contest-75-2"</candidate_id> 
+      <votes>9</votes>
+    </ballot_line_result>
+</contest_result>
+
+  <contest_result id="2012-11-06-27-123-8327-result-271230010" certification="unofficial_partial"> <!-- ARDEN HILLS P-1 -->
+    <jurisdiction_id>"271230010"</jurisdiction_id> 
+    <contest_id>"2012-11-06-27-123-contest-76"</contest_id> <!-- Judge - 2nd District Court 28 -->
+    <total_votes>2173</total_votes>
+    <total_valid_votes>2173</total_valid_votes>
+    <ballot_line_result id="8327-9001-result-271230010" certification="unofficial_partial"> <!-- ELENA L. OSTBY -->
+      <jurisdiction_id>"271230010"</jurisdiction_id>
+      <vote_type>unspecified</vote_type>
+      <entire_district>No</entire_district>
+      <candidate_id>"2012-11-06-27-123-contest-76-1"</candidate_id> 
+      <votes>1117</votes>
+    </ballot_line_result>
+    <ballot_line_result id="8327-9901-result-271230010" certification="unofficial_partial"> <!-- WRITE-IN** -->
+      <jurisdiction_id>"271230010"</jurisdiction_id>
+      <vote_type>unspecified</vote_type>
+      <entire_district>No</entire_district>
+      <candidate_id>"2012-11-06-27-123-contest-76-2"</candidate_id> 
+      <votes>10</votes>
+    </ballot_line_result>
+</contest_result>
+
+  <contest_result id="2012-11-06-27-123-8328-result-271230010" certification="unofficial_partial"> <!-- ARDEN HILLS P-1 -->
+    <jurisdiction_id>"271230010"</jurisdiction_id> 
+    <contest_id>"2012-11-06-27-123-contest-77"</contest_id> <!-- Judge - 2nd District Court 29 -->
+    <total_votes>2173</total_votes>
+    <total_valid_votes>2173</total_valid_votes>
+    <ballot_line_result id="8328-9001-result-271230010" certification="unofficial_partial"> <!-- DIANE RUTH ALSHOUSE -->
+      <jurisdiction_id>"271230010"</jurisdiction_id>
+      <vote_type>unspecified</vote_type>
+      <entire_district>No</entire_district>
+      <candidate_id>"2012-11-06-27-123-contest-77-1"</candidate_id> 
+      <votes>1118</votes>
+    </ballot_line_result>
+    <ballot_line_result id="8328-9901-result-271230010" certification="unofficial_partial"> <!-- WRITE-IN** -->
+      <jurisdiction_id>"271230010"</jurisdiction_id>
+      <vote_type>unspecified</vote_type>
+      <entire_district>No</entire_district>
+      <candidate_id>"2012-11-06-27-123-contest-77-2"</candidate_id> 
+      <votes>11</votes>
+    </ballot_line_result>
+</contest_result>
+
+  <contest_result id="2012-11-06-27-123-0101-result-271230020" certification="unofficial_partial"> <!-- ARDEN HILLS P-2 -->
+    <jurisdiction_id>"271230020"</jurisdiction_id> 
+    <contest_id>"2012-11-06-27-123-contest-1"</contest_id> <!-- U.S. President & Vice President -->
+    <total_votes>1736</total_votes>
+    <total_valid_votes>1736</total_valid_votes>
+    <ballot_line_result id="0101-0301-result-271230020" certification="unofficial_partial"> <!-- MITT ROMNEY AND PAUL RYAN -->
+      <jurisdiction_id>"271230020"</jurisdiction_id>
+      <vote_type>unspecified</vote_type>
+      <entire_district>No</entire_district>
+      <candidate_id>"2012-11-06-27-123-contest-1-1"</candidate_id> 
+      <votes>1063</votes>
+    </ballot_line_result>
+    <ballot_line_result id="0101-0401-result-271230020" certification="unofficial_partial"> <!-- BARACK OBAMA AND JOE BIDEN -->
+      <jurisdiction_id>"271230020"</jurisdiction_id>
+      <vote_type>unspecified</vote_type>
+      <entire_district>No</entire_district>
+      <candidate_id>"2012-11-06-27-123-contest-1-2"</candidate_id> 
+      <votes>615</votes>
+    </ballot_line_result>
+    <ballot_line_result id="0101-0501-result-271230020" certification="unofficial_partial"> <!-- GARY JOHNSON AND JIM GRAY -->
+      <jurisdiction_id>"271230020"</jurisdiction_id>
+      <vote_type>unspecified</vote_type>
+      <entire_district>No</entire_district>
+      <candidate_id>"2012-11-06-27-123-contest-1-3"</candidate_id> 
+      <votes>28</votes>
+    </ballot_line_result>
+    <ballot_line_result id="0101-0601-result-271230020" certification="unofficial_partial"> <!-- JAMES HARRIS AND MAURA DELUCA -->
+      <jurisdiction_id>"271230020"</jurisdiction_id>
+      <vote_type>unspecified</vote_type>
+      <entire_district>No</entire_district>
+      <candidate_id>"2012-11-06-27-123-contest-1-4"</candidate_id> 
+      <votes>0</votes>
+    </ballot_line_result>
+    <ballot_line_result id="0101-0701-result-271230020" certification="unofficial_partial"> <!-- VIRGIL GOODE AND JIM CLYMER -->
+      <jurisdiction_id>"271230020"</jurisdiction_id>
+      <vote_type>unspecified</vote_type>
+      <entire_district>No</entire_district>
+      <candidate_id>"2012-11-06-27-123-contest-1-5"</candidate_id> 
+      <votes>0</votes>
+    </ballot_line_result>
+    <ballot_line_result id="0101-0801-result-271230020" certification="unofficial_partial"> <!-- DEAN MORSTAD AND JOSH FRANKE-HYLAND -->
+      <jurisdiction_id>"271230020"</jurisdiction_id>
+      <vote_type>unspecified</vote_type>
+      <entire_district>No</entire_district>
+      <candidate_id>"2012-11-06-27-123-contest-1-6"</candidate_id> 
+      <votes>0</votes>
+    </ballot_line_result>
+    <ballot_line_result id="0101-0901-result-271230020" certification="unofficial_partial"> <!-- JILL STEIN AND CHERI HONKALA -->
+      <jurisdiction_id>"271230020"</jurisdiction_id>
+      <vote_type>unspecified</vote_type>
+      <entire_district>No</entire_district>
+      <candidate_id>"2012-11-06-27-123-contest-1-7"</candidate_id> 
+      <votes>10</votes>
+    </ballot_line_result>
+    <ballot_line_result id="0101-1001-result-271230020" certification="unofficial_partial"> <!-- JIM CARLSON AND GEORGE MCMAHON -->
+      <jurisdiction_id>"271230020"</jurisdiction_id>
+      <vote_type>unspecified</vote_type>
+      <entire_district>No</entire_district>
+      <candidate_id>"2012-11-06-27-123-contest-1-8"</candidate_id> 
+      <votes>1</votes>
+    </ballot_line_result>
+    <ballot_line_result id="0101-1401-result-271230020" certification="unofficial_partial"> <!-- PETA LINDSAY AND YARI OSORIO -->
+      <jurisdiction_id>"271230020"</jurisdiction_id>
+      <vote_type>unspecified</vote_type>
+      <entire_district>No</entire_district>
+      <candidate_id>"2012-11-06-27-123-contest-1-9"</candidate_id> 
+      <votes>0</votes>
+    </ballot_line_result>
+    <ballot_line_result id="0101-1501-result-271230020" certification="unofficial_partial"> <!-- ROSS C. "ROCKY" ANDERSON AND LUIS J. RODRIGUEZ -->
+      <jurisdiction_id>"271230020"</jurisdiction_id>
+      <vote_type>unspecified</vote_type>
+      <entire_district>No</entire_district>
+      <candidate_id>"2012-11-06-27-123-contest-1-10"</candidate_id> 
+      <votes>0</votes>
+    </ballot_line_result>
+    <ballot_line_result id="0101-9901-result-271230020" certification="unofficial_partial"> <!-- WRITE-IN** -->
+      <jurisdiction_id>"271230020"</jurisdiction_id>
+      <vote_type>unspecified</vote_type>
+      <entire_district>No</entire_district>
+      <candidate_id>"2012-11-06-27-123-contest-1-11"</candidate_id> 
+      <votes>13</votes>
+    </ballot_line_result>
+</contest_result>
+
+  <contest_result id="2012-11-06-27-123-0102-result-271230020" certification="unofficial_partial"> <!-- ARDEN HILLS P-2 -->
+    <jurisdiction_id>"271230020"</jurisdiction_id> 
+    <contest_id>"2012-11-06-27-123-contest-2"</contest_id> <!-- U.S. Senator -->
+    <total_votes>1736</total_votes>
+    <total_valid_votes>1736</total_valid_votes>
+    <ballot_line_result id="0102-0201-result-271230020" certification="unofficial_partial"> <!-- STEPHEN WILLIAMS -->
+      <jurisdiction_id>"271230020"</jurisdiction_id>
+      <vote_type>unspecified</vote_type>
+      <entire_district>No</entire_district>
+      <candidate_id>"2012-11-06-27-123-contest-2-1"</candidate_id> 
+      <votes>45</votes>
+    </ballot_line_result>
+    <ballot_line_result id="0102-0301-result-271230020" certification="unofficial_partial"> <!-- KURT BILLS -->
+      <jurisdiction_id>"271230020"</jurisdiction_id>
+      <vote_type>unspecified</vote_type>
+      <entire_district>No</entire_district>
+      <candidate_id>"2012-11-06-27-123-contest-2-2"</candidate_id> 
+      <votes>806</votes>
+    </ballot_line_result>
+    <ballot_line_result id="0102-0401-result-271230020" certification="unofficial_partial"> <!-- AMY KLOBUCHAR -->
+      <jurisdiction_id>"271230020"</jurisdiction_id>
+      <vote_type>unspecified</vote_type>
+      <entire_district>No</entire_district>
+      <candidate_id>"2012-11-06-27-123-contest-2-3"</candidate_id> 
+      <votes>746</votes>
+    </ballot_line_result>
+    <ballot_line_result id="0102-1001-result-271230020" certification="unofficial_partial"> <!-- TIM DAVIS -->
+      <jurisdiction_id>"271230020"</jurisdiction_id>
+      <vote_type>unspecified</vote_type>
+      <entire_district>No</entire_district>
+      <candidate_id>"2012-11-06-27-123-contest-2-4"</candidate_id> 
+      <votes>9</votes>
+    </ballot_line_result>
+    <ballot_line_result id="0102-1101-result-271230020" certification="unofficial_partial"> <!-- MICHAEL CAVLAN -->
+      <jurisdiction_id>"271230020"</jurisdiction_id>
+      <vote_type>unspecified</vote_type>
+      <entire_district>No</entire_district>
+      <candidate_id>"2012-11-06-27-123-contest-2-5"</candidate_id> 
+      <votes>5</votes>
+    </ballot_line_result>
+    <ballot_line_result id="0102-9901-result-271230020" certification="unofficial_partial"> <!-- WRITE-IN** -->
+      <jurisdiction_id>"271230020"</jurisdiction_id>
+      <vote_type>unspecified</vote_type>
+      <entire_district>No</entire_district>
+      <candidate_id>"2012-11-06-27-123-contest-2-6"</candidate_id> 
+      <votes>1</votes>
+    </ballot_line_result>
+</contest_result>
+
+  <contest_result id="2012-11-06-27-123-0107-result-271230020" certification="unofficial_partial"> <!-- ARDEN HILLS P-2 -->
+    <jurisdiction_id>"271230020"</jurisdiction_id> 
+    <contest_id>"2012-11-06-27-123-contest-3"</contest_id> <!-- U.S. Representative District 4 -->
+    <total_votes>1736</total_votes>
+    <total_valid_votes>1736</total_valid_votes>
+    <ballot_line_result id="0107-0201-result-271230020" certification="unofficial_partial"> <!-- STEVE CARLSON -->
+      <jurisdiction_id>"271230020"</jurisdiction_id>
+      <vote_type>unspecified</vote_type>
+      <entire_district>No</entire_district>
+      <candidate_id>"2012-11-06-27-123-contest-3-1"</candidate_id> 
+      <votes>85</votes>
+    </ballot_line_result>
+    <ballot_line_result id="0107-0301-result-271230020" certification="unofficial_partial"> <!-- TONY HERNANDEZ -->
+      <jurisdiction_id>"271230020"</jurisdiction_id>
+      <vote_type>unspecified</vote_type>
+      <entire_district>No</entire_district>
+      <candidate_id>"2012-11-06-27-123-contest-3-2"</candidate_id> 
+      <votes>872</votes>
+    </ballot_line_result>
+    <ballot_line_result id="0107-0401-result-271230020" certification="unofficial_partial"> <!-- BETTY MCCOLLUM -->
+      <jurisdiction_id>"271230020"</jurisdiction_id>
+      <vote_type>unspecified</vote_type>
+      <entire_district>No</entire_district>
+      <candidate_id>"2012-11-06-27-123-contest-3-3"</candidate_id> 
+      <votes>560</votes>
+    </ballot_line_result>
+    <ballot_line_result id="0107-9901-result-271230020" certification="unofficial_partial"> <!-- WRITE-IN** -->
+      <jurisdiction_id>"271230020"</jurisdiction_id>
+      <vote_type>unspecified</vote_type>
+      <entire_district>No</entire_district>
+      <candidate_id>"2012-11-06-27-123-contest-3-4"</candidate_id> 
+      <votes>1</votes>
+    </ballot_line_result>
+</contest_result>
+
+  <contest_result id="2012-11-06-27-123-0162-result-271230020" certification="unofficial_partial"> <!-- ARDEN HILLS P-2 -->
+    <jurisdiction_id>"271230020"</jurisdiction_id> 
+    <contest_id>"2012-11-06-27-123-contest-7"</contest_id> <!-- State Senator District 42 -->
+    <total_votes>1736</total_votes>
+    <total_valid_votes>1736</total_valid_votes>
+    <ballot_line_result id="0162-0301-result-271230020" certification="unofficial_partial"> <!-- APRIL KING -->
+      <jurisdiction_id>"271230020"</jurisdiction_id>
+      <vote_type>unspecified</vote_type>
+      <entire_district>No</entire_district>
+      <candidate_id>"2012-11-06-27-123-contest-7-1"</candidate_id> 
+      <votes>965</votes>
+    </ballot_line_result>
+    <ballot_line_result id="0162-0401-result-271230020" certification="unofficial_partial"> <!-- BEV SCALZE -->
+      <jurisdiction_id>"271230020"</jurisdiction_id>
+      <vote_type>unspecified</vote_type>
+      <entire_district>No</entire_district>
+      <candidate_id>"2012-11-06-27-123-contest-7-2"</candidate_id> 
+      <votes>530</votes>
+    </ballot_line_result>
+    <ballot_line_result id="0162-9901-result-271230020" certification="unofficial_partial"> <!-- WRITE-IN** -->
+      <jurisdiction_id>"271230020"</jurisdiction_id>
+      <vote_type>unspecified</vote_type>
+      <entire_district>No</entire_district>
+      <candidate_id>"2012-11-06-27-123-contest-7-3"</candidate_id> 
+      <votes>3</votes>
+    </ballot_line_result>
+</contest_result>
+
+  <contest_result id="2012-11-06-27-123-0270-result-271230020" certification="unofficial_partial"> <!-- ARDEN HILLS P-2 -->
+    <jurisdiction_id>"271230020"</jurisdiction_id> 
+    <contest_id>"2012-11-06-27-123-contest-17"</contest_id> <!-- State Representative District 42A -->
+    <total_votes>1736</total_votes>
+    <total_valid_votes>1736</total_valid_votes>
+    <ballot_line_result id="0270-0301-result-271230020" certification="unofficial_partial"> <!-- RUSS BERTSCH -->
+      <jurisdiction_id>"271230020"</jurisdiction_id>
+      <vote_type>unspecified</vote_type>
+      <entire_district>No</entire_district>
+      <candidate_id>"2012-11-06-27-123-contest-17-1"</candidate_id> 
+      <votes>917</votes>
+    </ballot_line_result>
+    <ballot_line_result id="0270-0401-result-271230020" certification="unofficial_partial"> <!-- BARB YARUSSO -->
+      <jurisdiction_id>"271230020"</jurisdiction_id>
+      <vote_type>unspecified</vote_type>
+      <entire_district>No</entire_district>
+      <candidate_id>"2012-11-06-27-123-contest-17-2"</candidate_id> 
+      <votes>553</votes>
+    </ballot_line_result>
+    <ballot_line_result id="0270-9901-result-271230020" certification="unofficial_partial"> <!-- WRITE-IN** -->
+      <jurisdiction_id>"271230020"</jurisdiction_id>
+      <vote_type>unspecified</vote_type>
+      <entire_district>No</entire_district>
+      <candidate_id>"2012-11-06-27-123-contest-17-3"</candidate_id> 
+      <votes>2</votes>
+    </ballot_line_result>
+</contest_result>
+
+  <contest_result id="2012-11-06-27-123-0351-result-271230020" certification="unofficial_partial"> <!-- ARDEN HILLS P-2 -->
+    <jurisdiction_id>"271230020"</jurisdiction_id> 
+    <referendum_id>"2012-11-06-27-123-contest-78"</referendum_id> <!-- Constitutional Amendment 1 -->
+    <total_votes>1736</total_votes>
+    <total_valid_votes>1736</total_valid_votes>
+    <ballot_line_result id="0351-9001-result-271230020" certification="unofficial_partial"> <!-- YES -->
+      <jurisdiction_id>"271230020"</jurisdiction_id>
+      <vote_type>unspecified</vote_type>
+      <entire_district>No</entire_district>
+      <ballot_response_id>"2012-11-06-27-123-contest-78-1"</ballot_response_id> 
+      <votes>980</votes>
+    </ballot_line_result>
+    <ballot_line_result id="0351-9002-result-271230020" certification="unofficial_partial"> <!-- NO -->
+      <jurisdiction_id>"271230020"</jurisdiction_id>
+      <vote_type>unspecified</vote_type>
+      <entire_district>No</entire_district>
+      <ballot_response_id>"2012-11-06-27-123-contest-78-2"</ballot_response_id> 
+      <votes>722</votes>
+    </ballot_line_result>
+</contest_result>
+
+  <contest_result id="2012-11-06-27-123-0352-result-271230020" certification="unofficial_partial"> <!-- ARDEN HILLS P-2 -->
+    <jurisdiction_id>"271230020"</jurisdiction_id> 
+    <referendum_id>"2012-11-06-27-123-contest-79"</referendum_id> <!-- Constitutional Amendment 2 -->
+    <total_votes>1736</total_votes>
+    <total_valid_votes>1736</total_valid_votes>
+    <ballot_line_result id="0352-9001-result-271230020" certification="unofficial_partial"> <!-- YES -->
+      <jurisdiction_id>"271230020"</jurisdiction_id>
+      <vote_type>unspecified</vote_type>
+      <entire_district>No</entire_district>
+      <ballot_response_id>"2012-11-06-27-123-contest-79-1"</ballot_response_id> 
+      <votes>958</votes>
+    </ballot_line_result>
+    <ballot_line_result id="0352-9002-result-271230020" certification="unofficial_partial"> <!-- NO -->
+      <jurisdiction_id>"271230020"</jurisdiction_id>
+      <vote_type>unspecified</vote_type>
+      <entire_district>No</entire_district>
+      <ballot_response_id>"2012-11-06-27-123-contest-79-2"</ballot_response_id> 
+      <votes>734</votes>
+    </ballot_line_result>
+</contest_result>
+
+  <contest_result id="2012-11-06-27-123-0391-result-271230020" certification="unofficial_partial"> <!-- ARDEN HILLS P-2 -->
+    <jurisdiction_id>"271230020"</jurisdiction_id> 
+    <contest_id>"2012-11-06-27-123-contest-30"</contest_id> <!-- County Commissioner District 1 -->
+    <total_votes>1736</total_votes>
+    <total_valid_votes>1736</total_valid_votes>
+    <ballot_line_result id="0391-9001-result-271230020" certification="unofficial_partial"> <!-- FRANK T. MABLEY -->
+      <jurisdiction_id>"271230020"</jurisdiction_id>
+      <vote_type>unspecified</vote_type>
+      <entire_district>No</entire_district>
+      <candidate_id>"2012-11-06-27-123-contest-30-1"</candidate_id> 
+      <votes>410</votes>
+    </ballot_line_result>
+    <ballot_line_result id="0391-9004-result-271230020" certification="unofficial_partial"> <!-- BLAKE C. HUFFMAN -->
+      <jurisdiction_id>"271230020"</jurisdiction_id>
+      <vote_type>unspecified</vote_type>
+      <entire_district>No</entire_district>
+      <candidate_id>"2012-11-06-27-123-contest-30-2"</candidate_id> 
+      <votes>649</votes>
+    </ballot_line_result>
+    <ballot_line_result id="0391-9901-result-271230020" certification="unofficial_partial"> <!-- WRITE-IN** -->
+      <jurisdiction_id>"271230020"</jurisdiction_id>
+      <vote_type>unspecified</vote_type>
+      <entire_district>No</entire_district>
+      <candidate_id>"2012-11-06-27-123-contest-30-3"</candidate_id> 
+      <votes>13</votes>
+    </ballot_line_result>
+</contest_result>
+
+  <contest_result id="2012-11-06-27-123-0432-result-271230020" certification="unofficial_partial"> <!-- ARDEN HILLS P-2 -->
+    <jurisdiction_id>"271230020"</jurisdiction_id> 
+    <contest_id>"2012-11-06-27-123-contest-33"</contest_id> <!-- Soil and Water Supervisor District 2 -->
+    <total_votes>1736</total_votes>
+    <total_valid_votes>1736</total_valid_votes>
+    <ballot_line_result id="0432-9001-result-271230020" certification="unofficial_partial"> <!-- GWEN WILLEMS -->
+      <jurisdiction_id>"271230020"</jurisdiction_id>
+      <vote_type>unspecified</vote_type>
+      <entire_district>No</entire_district>
+      <candidate_id>"2012-11-06-27-123-contest-33-1"</candidate_id> 
+      <votes>461</votes>
+    </ballot_line_result>
+    <ballot_line_result id="0432-9002-result-271230020" certification="unofficial_partial"> <!-- GREG RYAN -->
+      <jurisdiction_id>"271230020"</jurisdiction_id>
+      <vote_type>unspecified</vote_type>
+      <entire_district>No</entire_district>
+      <candidate_id>"2012-11-06-27-123-contest-33-2"</candidate_id> 
+      <votes>442</votes>
+    </ballot_line_result>
+    <ballot_line_result id="0432-9901-result-271230020" certification="unofficial_partial"> <!-- WRITE-IN** -->
+      <jurisdiction_id>"271230020"</jurisdiction_id>
+      <vote_type>unspecified</vote_type>
+      <entire_district>No</entire_district>
+      <candidate_id>"2012-11-06-27-123-contest-33-3"</candidate_id> 
+      <votes>15</votes>
+    </ballot_line_result>
+</contest_result>
+
+  <contest_result id="2012-11-06-27-123-0433-result-271230020" certification="unofficial_partial"> <!-- ARDEN HILLS P-2 -->
+    <jurisdiction_id>"271230020"</jurisdiction_id> 
+    <contest_id>"2012-11-06-27-123-contest-34"</contest_id> <!-- Soil and Water Supervisor District 3 -->
+    <total_votes>1736</total_votes>
+    <total_valid_votes>1736</total_valid_votes>
+    <ballot_line_result id="0433-9001-result-271230020" certification="unofficial_partial"> <!-- MARA MAGNUSON HUMPHREY -->
+      <jurisdiction_id>"271230020"</jurisdiction_id>
+      <vote_type>unspecified</vote_type>
+      <entire_district>No</entire_district>
+      <candidate_id>"2012-11-06-27-123-contest-34-1"</candidate_id> 
+      <votes>844</votes>
+    </ballot_line_result>
+    <ballot_line_result id="0433-9901-result-271230020" certification="unofficial_partial"> <!-- WRITE-IN** -->
+      <jurisdiction_id>"271230020"</jurisdiction_id>
+      <vote_type>unspecified</vote_type>
+      <entire_district>No</entire_district>
+      <candidate_id>"2012-11-06-27-123-contest-34-2"</candidate_id> 
+      <votes>25</votes>
+    </ballot_line_result>
+</contest_result>
+
+  <contest_result id="2012-11-06-27-123-0435-result-271230020" certification="unofficial_partial"> <!-- ARDEN HILLS P-2 -->
+    <jurisdiction_id>"271230020"</jurisdiction_id> 
+    <contest_id>"2012-11-06-27-123-contest-35"</contest_id> <!-- Soil and Water Supervisor District 5 -->
+    <total_votes>1736</total_votes>
+    <total_valid_votes>1736</total_valid_votes>
+    <ballot_line_result id="0435-9001-result-271230020" certification="unofficial_partial"> <!-- MATT LEDVINA -->
+      <jurisdiction_id>"271230020"</jurisdiction_id>
+      <vote_type>unspecified</vote_type>
+      <entire_district>No</entire_district>
+      <candidate_id>"2012-11-06-27-123-contest-35-1"</candidate_id> 
+      <votes>402</votes>
+    </ballot_line_result>
+    <ballot_line_result id="0435-9002-result-271230020" certification="unofficial_partial"> <!-- MARGARET ANN BEHRENS -->
+      <jurisdiction_id>"271230020"</jurisdiction_id>
+      <vote_type>unspecified</vote_type>
+      <entire_district>No</entire_district>
+      <candidate_id>"2012-11-06-27-123-contest-35-2"</candidate_id> 
+      <votes>343</votes>
+    </ballot_line_result>
+    <ballot_line_result id="0435-9003-result-271230020" certification="unofficial_partial"> <!-- DEE DODGE GEORGE -->
+      <jurisdiction_id>"271230020"</jurisdiction_id>
+      <vote_type>unspecified</vote_type>
+      <entire_district>No</entire_district>
+      <candidate_id>"2012-11-06-27-123-contest-35-3"</candidate_id> 
+      <votes>133</votes>
+    </ballot_line_result>
+    <ballot_line_result id="0435-9901-result-271230020" certification="unofficial_partial"> <!-- WRITE-IN** -->
+      <jurisdiction_id>"271230020"</jurisdiction_id>
+      <vote_type>unspecified</vote_type>
+      <entire_district>No</entire_district>
+      <candidate_id>"2012-11-06-27-123-contest-35-4"</candidate_id> 
+      <votes>12</votes>
+    </ballot_line_result>
+</contest_result>
+
+  <contest_result id="2012-11-06-27-123-1010-result-271230020" certification="unofficial_partial"> <!-- ARDEN HILLS P-2 -->
+    <jurisdiction_id>"271230020"</jurisdiction_id> 
+    <contest_id>"2012-11-06-27-123-contest-54"</contest_id> <!-- Council Member (Arden Hills) (Elect 2) -->
+    <total_votes>1736</total_votes>
+    <total_valid_votes>1736</total_valid_votes>
+    <ballot_line_result id="1010-9001-result-271230020" certification="unofficial_partial"> <!-- DAVE MCCLUNG -->
+      <jurisdiction_id>"271230020"</jurisdiction_id>
+      <vote_type>unspecified</vote_type>
+      <entire_district>No</entire_district>
+      <candidate_id>"2012-11-06-27-123-contest-54-1"</candidate_id> 
+      <votes>824</votes>
+    </ballot_line_result>
+    <ballot_line_result id="1010-9002-result-271230020" certification="unofficial_partial"> <!-- BRENDA J HOLDEN -->
+      <jurisdiction_id>"271230020"</jurisdiction_id>
+      <vote_type>unspecified</vote_type>
+      <entire_district>No</entire_district>
+      <candidate_id>"2012-11-06-27-123-contest-54-2"</candidate_id> 
+      <votes>741</votes>
+    </ballot_line_result>
+    <ballot_line_result id="1010-9901-result-271230020" certification="unofficial_partial"> <!-- WRITE-IN** -->
+      <jurisdiction_id>"271230020"</jurisdiction_id>
+      <vote_type>unspecified</vote_type>
+      <entire_district>No</entire_district>
+      <candidate_id>"2012-11-06-27-123-contest-54-7"</candidate_id> 
+      <votes>26</votes>
+    </ballot_line_result>
+</contest_result>
+
+  <contest_result id="2012-11-06-27-123-7001-result-271230020" certification="unofficial_partial"> <!-- ARDEN HILLS P-2 -->
+    <jurisdiction_id>"271230020"</jurisdiction_id> 
+    <contest_id>"2012-11-06-27-123-contest-62"</contest_id> <!-- Chief Justice - Supreme Court -->
+    <total_votes>1736</total_votes>
+    <total_valid_votes>1736</total_valid_votes>
+    <ballot_line_result id="7001-9001-result-271230020" certification="unofficial_partial"> <!-- LORIE SKJERVEN GILDEA -->
+      <jurisdiction_id>"271230020"</jurisdiction_id>
+      <vote_type>unspecified</vote_type>
+      <entire_district>No</entire_district>
+      <candidate_id>"2012-11-06-27-123-contest-62-1"</candidate_id> 
+      <votes>645</votes>
+    </ballot_line_result>
+    <ballot_line_result id="7001-9003-result-271230020" certification="unofficial_partial"> <!-- DAN GRIFFITH -->
+      <jurisdiction_id>"271230020"</jurisdiction_id>
+      <vote_type>unspecified</vote_type>
+      <entire_district>No</entire_district>
+      <candidate_id>"2012-11-06-27-123-contest-62-2"</candidate_id> 
+      <votes>446</votes>
+    </ballot_line_result>
+    <ballot_line_result id="7001-9901-result-271230020" certification="unofficial_partial"> <!-- WRITE-IN** -->
+      <jurisdiction_id>"271230020"</jurisdiction_id>
+      <vote_type>unspecified</vote_type>
+      <entire_district>No</entire_district>
+      <candidate_id>"2012-11-06-27-123-contest-62-3"</candidate_id> 
+      <votes>7</votes>
+    </ballot_line_result>
+</contest_result>
+
+  <contest_result id="2012-11-06-27-123-7002-result-271230020" certification="unofficial_partial"> <!-- ARDEN HILLS P-2 -->
+    <jurisdiction_id>"271230020"</jurisdiction_id> 
+    <contest_id>"2012-11-06-27-123-contest-63"</contest_id> <!-- Associate Justice - Supreme Court 1 -->
+    <total_votes>1736</total_votes>
+    <total_valid_votes>1736</total_valid_votes>
+    <ballot_line_result id="7002-9001-result-271230020" certification="unofficial_partial"> <!-- DEAN BARKLEY -->
+      <jurisdiction_id>"271230020"</jurisdiction_id>
+      <vote_type>unspecified</vote_type>
+      <entire_district>No</entire_district>
+      <candidate_id>"2012-11-06-27-123-contest-63-1"</candidate_id> 
+      <votes>436</votes>
+    </ballot_line_result>
+    <ballot_line_result id="7002-9002-result-271230020" certification="unofficial_partial"> <!-- BARRY ANDERSON -->
+      <jurisdiction_id>"271230020"</jurisdiction_id>
+      <vote_type>unspecified</vote_type>
+      <entire_district>No</entire_district>
+      <candidate_id>"2012-11-06-27-123-contest-63-2"</candidate_id> 
+      <votes>629</votes>
+    </ballot_line_result>
+    <ballot_line_result id="7002-9901-result-271230020" certification="unofficial_partial"> <!-- WRITE-IN** -->
+      <jurisdiction_id>"271230020"</jurisdiction_id>
+      <vote_type>unspecified</vote_type>
+      <entire_district>No</entire_district>
+      <candidate_id>"2012-11-06-27-123-contest-63-3"</candidate_id> 
+      <votes>7</votes>
+    </ballot_line_result>
+</contest_result>
+
+  <contest_result id="2012-11-06-27-123-7005-result-271230020" certification="unofficial_partial"> <!-- ARDEN HILLS P-2 -->
+    <jurisdiction_id>"271230020"</jurisdiction_id> 
+    <contest_id>"2012-11-06-27-123-contest-64"</contest_id> <!-- Associate Justice - Supreme Court 4 -->
+    <total_votes>1736</total_votes>
+    <total_valid_votes>1736</total_valid_votes>
+    <ballot_line_result id="7005-9002-result-271230020" certification="unofficial_partial"> <!-- TIM TINGELSTAD -->
+      <jurisdiction_id>"271230020"</jurisdiction_id>
+      <vote_type>unspecified</vote_type>
+      <entire_district>No</entire_district>
+      <candidate_id>"2012-11-06-27-123-contest-64-1"</candidate_id> 
+      <votes>494</votes>
+    </ballot_line_result>
+    <ballot_line_result id="7005-9003-result-271230020" certification="unofficial_partial"> <!-- DAVID R. STRAS -->
+      <jurisdiction_id>"271230020"</jurisdiction_id>
+      <vote_type>unspecified</vote_type>
+      <entire_district>No</entire_district>
+      <candidate_id>"2012-11-06-27-123-contest-64-2"</candidate_id> 
+      <votes>537</votes>
+    </ballot_line_result>
+    <ballot_line_result id="7005-9901-result-271230020" certification="unofficial_partial"> <!-- WRITE-IN** -->
+      <jurisdiction_id>"271230020"</jurisdiction_id>
+      <vote_type>unspecified</vote_type>
+      <entire_district>No</entire_district>
+      <candidate_id>"2012-11-06-27-123-contest-64-3"</candidate_id> 
+      <votes>7</votes>
+    </ballot_line_result>
+</contest_result>
+
+  <contest_result id="2012-11-06-27-123-7015-result-271230020" certification="unofficial_partial"> <!-- ARDEN HILLS P-2 -->
+    <jurisdiction_id>"271230020"</jurisdiction_id> 
+    <contest_id>"2012-11-06-27-123-contest-65"</contest_id> <!-- Judge - Court of Appeals 6 -->
+    <total_votes>1736</total_votes>
+    <total_valid_votes>1736</total_valid_votes>
+    <ballot_line_result id="7015-9001-result-271230020" certification="unofficial_partial"> <!-- RENEE L. WORKE -->
+      <jurisdiction_id>"271230020"</jurisdiction_id>
+      <vote_type>unspecified</vote_type>
+      <entire_district>No</entire_district>
+      <candidate_id>"2012-11-06-27-123-contest-65-1"</candidate_id> 
+      <votes>891</votes>
+    </ballot_line_result>
+    <ballot_line_result id="7015-9901-result-271230020" certification="unofficial_partial"> <!-- WRITE-IN** -->
+      <jurisdiction_id>"271230020"</jurisdiction_id>
+      <vote_type>unspecified</vote_type>
+      <entire_district>No</entire_district>
+      <candidate_id>"2012-11-06-27-123-contest-65-2"</candidate_id> 
+      <votes>11</votes>
+    </ballot_line_result>
+</contest_result>
+
+  <contest_result id="2012-11-06-27-123-7016-result-271230020" certification="unofficial_partial"> <!-- ARDEN HILLS P-2 -->
+    <jurisdiction_id>"271230020"</jurisdiction_id> 
+    <contest_id>"2012-11-06-27-123-contest-66"</contest_id> <!-- Judge - Court of Appeals 7 -->
+    <total_votes>1736</total_votes>
+    <total_valid_votes>1736</total_valid_votes>
+    <ballot_line_result id="7016-9001-result-271230020" certification="unofficial_partial"> <!-- JILL FLASKAMP HALBROOKS -->
+      <jurisdiction_id>"271230020"</jurisdiction_id>
+      <vote_type>unspecified</vote_type>
+      <entire_district>No</entire_district>
+      <candidate_id>"2012-11-06-27-123-contest-66-1"</candidate_id> 
+      <votes>875</votes>
+    </ballot_line_result>
+    <ballot_line_result id="7016-9901-result-271230020" certification="unofficial_partial"> <!-- WRITE-IN** -->
+      <jurisdiction_id>"271230020"</jurisdiction_id>
+      <vote_type>unspecified</vote_type>
+      <entire_district>No</entire_district>
+      <candidate_id>"2012-11-06-27-123-contest-66-2"</candidate_id> 
+      <votes>8</votes>
+    </ballot_line_result>
+</contest_result>
+
+  <contest_result id="2012-11-06-27-123-8301-result-271230020" certification="unofficial_partial"> <!-- ARDEN HILLS P-2 -->
+    <jurisdiction_id>"271230020"</jurisdiction_id> 
+    <contest_id>"2012-11-06-27-123-contest-67"</contest_id> <!-- Judge - 2nd District Court 2 -->
+    <total_votes>1736</total_votes>
+    <total_valid_votes>1736</total_valid_votes>
+    <ballot_line_result id="8301-9001-result-271230020" certification="unofficial_partial"> <!-- JAMES H. CLARK, JR -->
+      <jurisdiction_id>"271230020"</jurisdiction_id>
+      <vote_type>unspecified</vote_type>
+      <entire_district>No</entire_district>
+      <candidate_id>"2012-11-06-27-123-contest-67-1"</candidate_id> 
+      <votes>868</votes>
+    </ballot_line_result>
+    <ballot_line_result id="8301-9901-result-271230020" certification="unofficial_partial"> <!-- WRITE-IN** -->
+      <jurisdiction_id>"271230020"</jurisdiction_id>
+      <vote_type>unspecified</vote_type>
+      <entire_district>No</entire_district>
+      <candidate_id>"2012-11-06-27-123-contest-67-2"</candidate_id> 
+      <votes>9</votes>
+    </ballot_line_result>
+</contest_result>
+
+  <contest_result id="2012-11-06-27-123-8304-result-271230020" certification="unofficial_partial"> <!-- ARDEN HILLS P-2 -->
+    <jurisdiction_id>"271230020"</jurisdiction_id> 
+    <contest_id>"2012-11-06-27-123-contest-68"</contest_id> <!-- Judge - 2nd District Court 5 -->
+    <total_votes>1736</total_votes>
+    <total_valid_votes>1736</total_valid_votes>
+    <ballot_line_result id="8304-9001-result-271230020" certification="unofficial_partial"> <!-- LEZLIE OTT MAREK -->
+      <jurisdiction_id>"271230020"</jurisdiction_id>
+      <vote_type>unspecified</vote_type>
+      <entire_district>No</entire_district>
+      <candidate_id>"2012-11-06-27-123-contest-68-1"</candidate_id> 
+      <votes>870</votes>
+    </ballot_line_result>
+    <ballot_line_result id="8304-9901-result-271230020" certification="unofficial_partial"> <!-- WRITE-IN** -->
+      <jurisdiction_id>"271230020"</jurisdiction_id>
+      <vote_type>unspecified</vote_type>
+      <entire_district>No</entire_district>
+      <candidate_id>"2012-11-06-27-123-contest-68-2"</candidate_id> 
+      <votes>4</votes>
+    </ballot_line_result>
+</contest_result>
+
+  <contest_result id="2012-11-06-27-123-8305-result-271230020" certification="unofficial_partial"> <!-- ARDEN HILLS P-2 -->
+    <jurisdiction_id>"271230020"</jurisdiction_id> 
+    <contest_id>"2012-11-06-27-123-contest-69"</contest_id> <!-- Judge - 2nd District Court 6 -->
+    <total_votes>1736</total_votes>
+    <total_valid_votes>1736</total_valid_votes>
+    <ballot_line_result id="8305-9001-result-271230020" certification="unofficial_partial"> <!-- JOHN B. (JACK) VANDENORTH -->
+      <jurisdiction_id>"271230020"</jurisdiction_id>
+      <vote_type>unspecified</vote_type>
+      <entire_district>No</entire_district>
+      <candidate_id>"2012-11-06-27-123-contest-69-1"</candidate_id> 
+      <votes>867</votes>
+    </ballot_line_result>
+    <ballot_line_result id="8305-9901-result-271230020" certification="unofficial_partial"> <!-- WRITE-IN** -->
+      <jurisdiction_id>"271230020"</jurisdiction_id>
+      <vote_type>unspecified</vote_type>
+      <entire_district>No</entire_district>
+      <candidate_id>"2012-11-06-27-123-contest-69-2"</candidate_id> 
+      <votes>5</votes>
+    </ballot_line_result>
+</contest_result>
+
+  <contest_result id="2012-11-06-27-123-8310-result-271230020" certification="unofficial_partial"> <!-- ARDEN HILLS P-2 -->
+    <jurisdiction_id>"271230020"</jurisdiction_id> 
+    <contest_id>"2012-11-06-27-123-contest-70"</contest_id> <!-- Judge - 2nd District Court 11 -->
+    <total_votes>1736</total_votes>
+    <total_valid_votes>1736</total_valid_votes>
+    <ballot_line_result id="8310-9001-result-271230020" certification="unofficial_partial"> <!-- GARY W. BASTIAN -->
+      <jurisdiction_id>"271230020"</jurisdiction_id>
+      <vote_type>unspecified</vote_type>
+      <entire_district>No</entire_district>
+      <candidate_id>"2012-11-06-27-123-contest-70-1"</candidate_id> 
+      <votes>865</votes>
+    </ballot_line_result>
+    <ballot_line_result id="8310-9901-result-271230020" certification="unofficial_partial"> <!-- WRITE-IN** -->
+      <jurisdiction_id>"271230020"</jurisdiction_id>
+      <vote_type>unspecified</vote_type>
+      <entire_district>No</entire_district>
+      <candidate_id>"2012-11-06-27-123-contest-70-2"</candidate_id> 
+      <votes>6</votes>
+    </ballot_line_result>
+</contest_result>
+
+  <contest_result id="2012-11-06-27-123-8311-result-271230020" certification="unofficial_partial"> <!-- ARDEN HILLS P-2 -->
+    <jurisdiction_id>"271230020"</jurisdiction_id> 
+    <contest_id>"2012-11-06-27-123-contest-71"</contest_id> <!-- Judge - 2nd District Court 12 -->
+    <total_votes>1736</total_votes>
+    <total_valid_votes>1736</total_valid_votes>
+    <ballot_line_result id="8311-9001-result-271230020" certification="unofficial_partial"> <!-- GREGG E. JOHNSON -->
+      <jurisdiction_id>"271230020"</jurisdiction_id>
+      <vote_type>unspecified</vote_type>
+      <entire_district>No</entire_district>
+      <candidate_id>"2012-11-06-27-123-contest-71-1"</candidate_id> 
+      <votes>858</votes>
+    </ballot_line_result>
+    <ballot_line_result id="8311-9901-result-271230020" certification="unofficial_partial"> <!-- WRITE-IN** -->
+      <jurisdiction_id>"271230020"</jurisdiction_id>
+      <vote_type>unspecified</vote_type>
+      <entire_district>No</entire_district>
+      <candidate_id>"2012-11-06-27-123-contest-71-2"</candidate_id> 
+      <votes>8</votes>
+    </ballot_line_result>
+</contest_result>
+
+  <contest_result id="2012-11-06-27-123-8313-result-271230020" certification="unofficial_partial"> <!-- ARDEN HILLS P-2 -->
+    <jurisdiction_id>"271230020"</jurisdiction_id> 
+    <contest_id>"2012-11-06-27-123-contest-72"</contest_id> <!-- Judge - 2nd District Court 14 -->
+    <total_votes>1736</total_votes>
+    <total_valid_votes>1736</total_valid_votes>
+    <ballot_line_result id="8313-9001-result-271230020" certification="unofficial_partial"> <!-- ROBYN ANN MILLENACKER -->
+      <jurisdiction_id>"271230020"</jurisdiction_id>
+      <vote_type>unspecified</vote_type>
+      <entire_district>No</entire_district>
+      <candidate_id>"2012-11-06-27-123-contest-72-1"</candidate_id> 
+      <votes>863</votes>
+    </ballot_line_result>
+    <ballot_line_result id="8313-9901-result-271230020" certification="unofficial_partial"> <!-- WRITE-IN** -->
+      <jurisdiction_id>"271230020"</jurisdiction_id>
+      <vote_type>unspecified</vote_type>
+      <entire_district>No</entire_district>
+      <candidate_id>"2012-11-06-27-123-contest-72-2"</candidate_id> 
+      <votes>5</votes>
+    </ballot_line_result>
+</contest_result>
+
+  <contest_result id="2012-11-06-27-123-8318-result-271230020" certification="unofficial_partial"> <!-- ARDEN HILLS P-2 -->
+    <jurisdiction_id>"271230020"</jurisdiction_id> 
+    <contest_id>"2012-11-06-27-123-contest-73"</contest_id> <!-- Judge - 2nd District Court 19 -->
+    <total_votes>1736</total_votes>
+    <total_valid_votes>1736</total_valid_votes>
+    <ballot_line_result id="8318-9001-result-271230020" certification="unofficial_partial"> <!-- ROBERT A. AWSUMB -->
+      <jurisdiction_id>"271230020"</jurisdiction_id>
+      <vote_type>unspecified</vote_type>
+      <entire_district>No</entire_district>
+      <candidate_id>"2012-11-06-27-123-contest-73-1"</candidate_id> 
+      <votes>858</votes>
+    </ballot_line_result>
+    <ballot_line_result id="8318-9901-result-271230020" certification="unofficial_partial"> <!-- WRITE-IN** -->
+      <jurisdiction_id>"271230020"</jurisdiction_id>
+      <vote_type>unspecified</vote_type>
+      <entire_district>No</entire_district>
+      <candidate_id>"2012-11-06-27-123-contest-73-2"</candidate_id> 
+      <votes>6</votes>
+    </ballot_line_result>
+</contest_result>
+
+  <contest_result id="2012-11-06-27-123-8321-result-271230020" certification="unofficial_partial"> <!-- ARDEN HILLS P-2 -->
+    <jurisdiction_id>"271230020"</jurisdiction_id> 
+    <contest_id>"2012-11-06-27-123-contest-74"</contest_id> <!-- Judge - 2nd District Court 22 -->
+    <total_votes>1736</total_votes>
+    <total_valid_votes>1736</total_valid_votes>
+    <ballot_line_result id="8321-9001-result-271230020" certification="unofficial_partial"> <!-- TERESA R. WARNER -->
+      <jurisdiction_id>"271230020"</jurisdiction_id>
+      <vote_type>unspecified</vote_type>
+      <entire_district>No</entire_district>
+      <candidate_id>"2012-11-06-27-123-contest-74-1"</candidate_id> 
+      <votes>863</votes>
+    </ballot_line_result>
+    <ballot_line_result id="8321-9901-result-271230020" certification="unofficial_partial"> <!-- WRITE-IN** -->
+      <jurisdiction_id>"271230020"</jurisdiction_id>
+      <vote_type>unspecified</vote_type>
+      <entire_district>No</entire_district>
+      <candidate_id>"2012-11-06-27-123-contest-74-2"</candidate_id> 
+      <votes>5</votes>
+    </ballot_line_result>
+</contest_result>
+
+  <contest_result id="2012-11-06-27-123-8323-result-271230020" certification="unofficial_partial"> <!-- ARDEN HILLS P-2 -->
+    <jurisdiction_id>"271230020"</jurisdiction_id> 
+    <contest_id>"2012-11-06-27-123-contest-75"</contest_id> <!-- Judge - 2nd District Court 24 -->
+    <total_votes>1736</total_votes>
+    <total_valid_votes>1736</total_valid_votes>
+    <ballot_line_result id="8323-9001-result-271230020" certification="unofficial_partial"> <!-- EDWARD S. WILSON -->
+      <jurisdiction_id>"271230020"</jurisdiction_id>
+      <vote_type>unspecified</vote_type>
+      <entire_district>No</entire_district>
+      <candidate_id>"2012-11-06-27-123-contest-75-1"</candidate_id> 
+      <votes>862</votes>
+    </ballot_line_result>
+    <ballot_line_result id="8323-9901-result-271230020" certification="unofficial_partial"> <!-- WRITE-IN** -->
+      <jurisdiction_id>"271230020"</jurisdiction_id>
+      <vote_type>unspecified</vote_type>
+      <entire_district>No</entire_district>
+      <candidate_id>"2012-11-06-27-123-contest-75-2"</candidate_id> 
+      <votes>4</votes>
+    </ballot_line_result>
+</contest_result>
+
+  <contest_result id="2012-11-06-27-123-8327-result-271230020" certification="unofficial_partial"> <!-- ARDEN HILLS P-2 -->
+    <jurisdiction_id>"271230020"</jurisdiction_id> 
+    <contest_id>"2012-11-06-27-123-contest-76"</contest_id> <!-- Judge - 2nd District Court 28 -->
+    <total_votes>1736</total_votes>
+    <total_valid_votes>1736</total_valid_votes>
+    <ballot_line_result id="8327-9001-result-271230020" certification="unofficial_partial"> <!-- ELENA L. OSTBY -->
+      <jurisdiction_id>"271230020"</jurisdiction_id>
+      <vote_type>unspecified</vote_type>
+      <entire_district>No</entire_district>
+      <candidate_id>"2012-11-06-27-123-contest-76-1"</candidate_id> 
+      <votes>860</votes>
+    </ballot_line_result>
+    <ballot_line_result id="8327-9901-result-271230020" certification="unofficial_partial"> <!-- WRITE-IN** -->
+      <jurisdiction_id>"271230020"</jurisdiction_id>
+      <vote_type>unspecified</vote_type>
+      <entire_district>No</entire_district>
+      <candidate_id>"2012-11-06-27-123-contest-76-2"</candidate_id> 
+      <votes>4</votes>
+    </ballot_line_result>
+</contest_result>
+
+  <contest_result id="2012-11-06-27-123-8328-result-271230020" certification="unofficial_partial"> <!-- ARDEN HILLS P-2 -->
+    <jurisdiction_id>"271230020"</jurisdiction_id> 
+    <contest_id>"2012-11-06-27-123-contest-77"</contest_id> <!-- Judge - 2nd District Court 29 -->
+    <total_votes>1736</total_votes>
+    <total_valid_votes>1736</total_valid_votes>
+    <ballot_line_result id="8328-9001-result-271230020" certification="unofficial_partial"> <!-- DIANE RUTH ALSHOUSE -->
+      <jurisdiction_id>"271230020"</jurisdiction_id>
+      <vote_type>unspecified</vote_type>
+      <entire_district>No</entire_district>
+      <candidate_id>"2012-11-06-27-123-contest-77-1"</candidate_id> 
+      <votes>863</votes>
+    </ballot_line_result>
+    <ballot_line_result id="8328-9901-result-271230020" certification="unofficial_partial"> <!-- WRITE-IN** -->
+      <jurisdiction_id>"271230020"</jurisdiction_id>
+      <vote_type>unspecified</vote_type>
+      <entire_district>No</entire_district>
+      <candidate_id>"2012-11-06-27-123-contest-77-2"</candidate_id> 
+      <votes>7</votes>
+    </ballot_line_result>
+</contest_result>
+
+  <contest_result id="2012-11-06-27-123-0101-result-271230030" certification="unofficial_partial"> <!-- ARDEN HILLS P-3 -->
+    <jurisdiction_id>"271230030"</jurisdiction_id> 
+    <contest_id>"2012-11-06-27-123-contest-1"</contest_id> <!-- U.S. President & Vice President -->
+    <total_votes>1886</total_votes>
+    <total_valid_votes>1886</total_valid_votes>
+    <ballot_line_result id="0101-0301-result-271230030" certification="unofficial_partial"> <!-- MITT ROMNEY AND PAUL RYAN -->
+      <jurisdiction_id>"271230030"</jurisdiction_id>
+      <vote_type>unspecified</vote_type>
+      <entire_district>No</entire_district>
+      <candidate_id>"2012-11-06-27-123-contest-1-1"</candidate_id> 
+      <votes>816</votes>
+    </ballot_line_result>
+    <ballot_line_result id="0101-0401-result-271230030" certification="unofficial_partial"> <!-- BARACK OBAMA AND JOE BIDEN -->
+      <jurisdiction_id>"271230030"</jurisdiction_id>
+      <vote_type>unspecified</vote_type>
+      <entire_district>No</entire_district>
+      <candidate_id>"2012-11-06-27-123-contest-1-2"</candidate_id> 
+      <votes>1023</votes>
+    </ballot_line_result>
+    <ballot_line_result id="0101-0501-result-271230030" certification="unofficial_partial"> <!-- GARY JOHNSON AND JIM GRAY -->
+      <jurisdiction_id>"271230030"</jurisdiction_id>
+      <vote_type>unspecified</vote_type>
+      <entire_district>No</entire_district>
+      <candidate_id>"2012-11-06-27-123-contest-1-3"</candidate_id> 
+      <votes>22</votes>
+    </ballot_line_result>
+    <ballot_line_result id="0101-0601-result-271230030" certification="unofficial_partial"> <!-- JAMES HARRIS AND MAURA DELUCA -->
+      <jurisdiction_id>"271230030"</jurisdiction_id>
+      <vote_type>unspecified</vote_type>
+      <entire_district>No</entire_district>
+      <candidate_id>"2012-11-06-27-123-contest-1-4"</candidate_id> 
+      <votes>2</votes>
+    </ballot_line_result>
+    <ballot_line_result id="0101-0701-result-271230030" certification="unofficial_partial"> <!-- VIRGIL GOODE AND JIM CLYMER -->
+      <jurisdiction_id>"271230030"</jurisdiction_id>
+      <vote_type>unspecified</vote_type>
+      <entire_district>No</entire_district>
+      <candidate_id>"2012-11-06-27-123-contest-1-5"</candidate_id> 
+      <votes>2</votes>
+    </ballot_line_result>
+    <ballot_line_result id="0101-0801-result-271230030" certification="unofficial_partial"> <!-- DEAN MORSTAD AND JOSH FRANKE-HYLAND -->
+      <jurisdiction_id>"271230030"</jurisdiction_id>
+      <vote_type>unspecified</vote_type>
+      <entire_district>No</entire_district>
+      <candidate_id>"2012-11-06-27-123-contest-1-6"</candidate_id> 
+      <votes>1</votes>
+    </ballot_line_result>
+    <ballot_line_result id="0101-0901-result-271230030" certification="unofficial_partial"> <!-- JILL STEIN AND CHERI HONKALA -->
+      <jurisdiction_id>"271230030"</jurisdiction_id>
+      <vote_type>unspecified</vote_type>
+      <entire_district>No</entire_district>
+      <candidate_id>"2012-11-06-27-123-contest-1-7"</candidate_id> 
+      <votes>8</votes>
+    </ballot_line_result>
+    <ballot_line_result id="0101-1001-result-271230030" certification="unofficial_partial"> <!-- JIM CARLSON AND GEORGE MCMAHON -->
+      <jurisdiction_id>"271230030"</jurisdiction_id>
+      <vote_type>unspecified</vote_type>
+      <entire_district>No</entire_district>
+      <candidate_id>"2012-11-06-27-123-contest-1-8"</candidate_id> 
+      <votes>1</votes>
+    </ballot_line_result>
+    <ballot_line_result id="0101-1401-result-271230030" certification="unofficial_partial"> <!-- PETA LINDSAY AND YARI OSORIO -->
+      <jurisdiction_id>"271230030"</jurisdiction_id>
+      <vote_type>unspecified</vote_type>
+      <entire_district>No</entire_district>
+      <candidate_id>"2012-11-06-27-123-contest-1-9"</candidate_id> 
+      <votes>0</votes>
+    </ballot_line_result>
+    <ballot_line_result id="0101-1501-result-271230030" certification="unofficial_partial"> <!-- ROSS C. "ROCKY" ANDERSON AND LUIS J. RODRIGUEZ -->
+      <jurisdiction_id>"271230030"</jurisdiction_id>
+      <vote_type>unspecified</vote_type>
+      <entire_district>No</entire_district>
+      <candidate_id>"2012-11-06-27-123-contest-1-10"</candidate_id> 
+      <votes>1</votes>
+    </ballot_line_result>
+    <ballot_line_result id="0101-9901-result-271230030" certification="unofficial_partial"> <!-- WRITE-IN** -->
+      <jurisdiction_id>"271230030"</jurisdiction_id>
+      <vote_type>unspecified</vote_type>
+      <entire_district>No</entire_district>
+      <candidate_id>"2012-11-06-27-123-contest-1-11"</candidate_id> 
+      <votes>6</votes>
+    </ballot_line_result>
+</contest_result>
+
+  <contest_result id="2012-11-06-27-123-0102-result-271230030" certification="unofficial_partial"> <!-- ARDEN HILLS P-3 -->
+    <jurisdiction_id>"271230030"</jurisdiction_id> 
+    <contest_id>"2012-11-06-27-123-contest-2"</contest_id> <!-- U.S. Senator -->
+    <total_votes>1886</total_votes>
+    <total_valid_votes>1886</total_valid_votes>
+    <ballot_line_result id="0102-0201-result-271230030" certification="unofficial_partial"> <!-- STEPHEN WILLIAMS -->
+      <jurisdiction_id>"271230030"</jurisdiction_id>
+      <vote_type>unspecified</vote_type>
+      <entire_district>No</entire_district>
+      <candidate_id>"2012-11-06-27-123-contest-2-1"</candidate_id> 
+      <votes>35</votes>
+    </ballot_line_result>
+    <ballot_line_result id="0102-0301-result-271230030" certification="unofficial_partial"> <!-- KURT BILLS -->
+      <jurisdiction_id>"271230030"</jurisdiction_id>
+      <vote_type>unspecified</vote_type>
+      <entire_district>No</entire_district>
+      <candidate_id>"2012-11-06-27-123-contest-2-2"</candidate_id> 
+      <votes>572</votes>
+    </ballot_line_result>
+    <ballot_line_result id="0102-0401-result-271230030" certification="unofficial_partial"> <!-- AMY KLOBUCHAR -->
+      <jurisdiction_id>"271230030"</jurisdiction_id>
+      <vote_type>unspecified</vote_type>
+      <entire_district>No</entire_district>
+      <candidate_id>"2012-11-06-27-123-contest-2-3"</candidate_id> 
+      <votes>1220</votes>
+    </ballot_line_result>
+    <ballot_line_result id="0102-1001-result-271230030" certification="unofficial_partial"> <!-- TIM DAVIS -->
+      <jurisdiction_id>"271230030"</jurisdiction_id>
+      <vote_type>unspecified</vote_type>
+      <entire_district>No</entire_district>
+      <candidate_id>"2012-11-06-27-123-contest-2-4"</candidate_id> 
+      <votes>12</votes>
+    </ballot_line_result>
+    <ballot_line_result id="0102-1101-result-271230030" certification="unofficial_partial"> <!-- MICHAEL CAVLAN -->
+      <jurisdiction_id>"271230030"</jurisdiction_id>
+      <vote_type>unspecified</vote_type>
+      <entire_district>No</entire_district>
+      <candidate_id>"2012-11-06-27-123-contest-2-5"</candidate_id> 
+      <votes>8</votes>
+    </ballot_line_result>
+    <ballot_line_result id="0102-9901-result-271230030" certification="unofficial_partial"> <!-- WRITE-IN** -->
+      <jurisdiction_id>"271230030"</jurisdiction_id>
+      <vote_type>unspecified</vote_type>
+      <entire_district>No</entire_district>
+      <candidate_id>"2012-11-06-27-123-contest-2-6"</candidate_id> 
+      <votes>0</votes>
+    </ballot_line_result>
+</contest_result>
+
+  <contest_result id="2012-11-06-27-123-0107-result-271230030" certification="unofficial_partial"> <!-- ARDEN HILLS P-3 -->
+    <jurisdiction_id>"271230030"</jurisdiction_id> 
+    <contest_id>"2012-11-06-27-123-contest-3"</contest_id> <!-- U.S. Representative District 4 -->
+    <total_votes>1886</total_votes>
+    <total_valid_votes>1886</total_valid_votes>
+    <ballot_line_result id="0107-0201-result-271230030" certification="unofficial_partial"> <!-- STEVE CARLSON -->
+      <jurisdiction_id>"271230030"</jurisdiction_id>
+      <vote_type>unspecified</vote_type>
+      <entire_district>No</entire_district>
+      <candidate_id>"2012-11-06-27-123-contest-3-1"</candidate_id> 
+      <votes>93</votes>
+    </ballot_line_result>
+    <ballot_line_result id="0107-0301-result-271230030" certification="unofficial_partial"> <!-- TONY HERNANDEZ -->
+      <jurisdiction_id>"271230030"</jurisdiction_id>
+      <vote_type>unspecified</vote_type>
+      <entire_district>No</entire_district>
+      <candidate_id>"2012-11-06-27-123-contest-3-2"</candidate_id> 
+      <votes>717</votes>
+    </ballot_line_result>
+    <ballot_line_result id="0107-0401-result-271230030" certification="unofficial_partial"> <!-- BETTY MCCOLLUM -->
+      <jurisdiction_id>"271230030"</jurisdiction_id>
+      <vote_type>unspecified</vote_type>
+      <entire_district>No</entire_district>
+      <candidate_id>"2012-11-06-27-123-contest-3-3"</candidate_id> 
+      <votes>974</votes>
+    </ballot_line_result>
+    <ballot_line_result id="0107-9901-result-271230030" certification="unofficial_partial"> <!-- WRITE-IN** -->
+      <jurisdiction_id>"271230030"</jurisdiction_id>
+      <vote_type>unspecified</vote_type>
+      <entire_district>No</entire_district>
+      <candidate_id>"2012-11-06-27-123-contest-3-4"</candidate_id> 
+      <votes>1</votes>
+    </ballot_line_result>
+</contest_result>
+
+  <contest_result id="2012-11-06-27-123-0162-result-271230030" certification="unofficial_partial"> <!-- ARDEN HILLS P-3 -->
+    <jurisdiction_id>"271230030"</jurisdiction_id> 
+    <contest_id>"2012-11-06-27-123-contest-7"</contest_id> <!-- State Senator District 42 -->
+    <total_votes>1886</total_votes>
+    <total_valid_votes>1886</total_valid_votes>
+    <ballot_line_result id="0162-0301-result-271230030" certification="unofficial_partial"> <!-- APRIL KING -->
+      <jurisdiction_id>"271230030"</jurisdiction_id>
+      <vote_type>unspecified</vote_type>
+      <entire_district>No</entire_district>
+      <candidate_id>"2012-11-06-27-123-contest-7-1"</candidate_id> 
+      <votes>821</votes>
+    </ballot_line_result>
+    <ballot_line_result id="0162-0401-result-271230030" certification="unofficial_partial"> <!-- BEV SCALZE -->
+      <jurisdiction_id>"271230030"</jurisdiction_id>
+      <vote_type>unspecified</vote_type>
+      <entire_district>No</entire_district>
+      <candidate_id>"2012-11-06-27-123-contest-7-2"</candidate_id> 
+      <votes>956</votes>
+    </ballot_line_result>
+    <ballot_line_result id="0162-9901-result-271230030" certification="unofficial_partial"> <!-- WRITE-IN** -->
+      <jurisdiction_id>"271230030"</jurisdiction_id>
+      <vote_type>unspecified</vote_type>
+      <entire_district>No</entire_district>
+      <candidate_id>"2012-11-06-27-123-contest-7-3"</candidate_id> 
+      <votes>2</votes>
+    </ballot_line_result>
+</contest_result>
+
+  <contest_result id="2012-11-06-27-123-0270-result-271230030" certification="unofficial_partial"> <!-- ARDEN HILLS P-3 -->
+    <jurisdiction_id>"271230030"</jurisdiction_id> 
+    <contest_id>"2012-11-06-27-123-contest-17"</contest_id> <!-- State Representative District 42A -->
+    <total_votes>1886</total_votes>
+    <total_valid_votes>1886</total_valid_votes>
+    <ballot_line_result id="0270-0301-result-271230030" certification="unofficial_partial"> <!-- RUSS BERTSCH -->
+      <jurisdiction_id>"271230030"</jurisdiction_id>
+      <vote_type>unspecified</vote_type>
+      <entire_district>No</entire_district>
+      <candidate_id>"2012-11-06-27-123-contest-17-1"</candidate_id> 
+      <votes>809</votes>
+    </ballot_line_result>
+    <ballot_line_result id="0270-0401-result-271230030" certification="unofficial_partial"> <!-- BARB YARUSSO -->
+      <jurisdiction_id>"271230030"</jurisdiction_id>
+      <vote_type>unspecified</vote_type>
+      <entire_district>No</entire_district>
+      <candidate_id>"2012-11-06-27-123-contest-17-2"</candidate_id> 
+      <votes>958</votes>
+    </ballot_line_result>
+    <ballot_line_result id="0270-9901-result-271230030" certification="unofficial_partial"> <!-- WRITE-IN** -->
+      <jurisdiction_id>"271230030"</jurisdiction_id>
+      <vote_type>unspecified</vote_type>
+      <entire_district>No</entire_district>
+      <candidate_id>"2012-11-06-27-123-contest-17-3"</candidate_id> 
+      <votes>1</votes>
+    </ballot_line_result>
+</contest_result>
+
+  <contest_result id="2012-11-06-27-123-0351-result-271230030" certification="unofficial_partial"> <!-- ARDEN HILLS P-3 -->
+    <jurisdiction_id>"271230030"</jurisdiction_id> 
+    <referendum_id>"2012-11-06-27-123-contest-78"</referendum_id> <!-- Constitutional Amendment 1 -->
+    <total_votes>1886</total_votes>
+    <total_valid_votes>1886</total_valid_votes>
+    <ballot_line_result id="0351-9001-result-271230030" certification="unofficial_partial"> <!-- YES -->
+      <jurisdiction_id>"271230030"</jurisdiction_id>
+      <vote_type>unspecified</vote_type>
+      <entire_district>No</entire_district>
+      <ballot_response_id>"2012-11-06-27-123-contest-78-1"</ballot_response_id> 
+      <votes>775</votes>
+    </ballot_line_result>
+    <ballot_line_result id="0351-9002-result-271230030" certification="unofficial_partial"> <!-- NO -->
+      <jurisdiction_id>"271230030"</jurisdiction_id>
+      <vote_type>unspecified</vote_type>
+      <entire_district>No</entire_district>
+      <ballot_response_id>"2012-11-06-27-123-contest-78-2"</ballot_response_id> 
+      <votes>1084</votes>
+    </ballot_line_result>
+</contest_result>
+
+  <contest_result id="2012-11-06-27-123-0352-result-271230030" certification="unofficial_partial"> <!-- ARDEN HILLS P-3 -->
+    <jurisdiction_id>"271230030"</jurisdiction_id> 
+    <referendum_id>"2012-11-06-27-123-contest-79"</referendum_id> <!-- Constitutional Amendment 2 -->
+    <total_votes>1886</total_votes>
+    <total_valid_votes>1886</total_valid_votes>
+    <ballot_line_result id="0352-9001-result-271230030" certification="unofficial_partial"> <!-- YES -->
+      <jurisdiction_id>"271230030"</jurisdiction_id>
+      <vote_type>unspecified</vote_type>
+      <entire_district>No</entire_district>
+      <ballot_response_id>"2012-11-06-27-123-contest-79-1"</ballot_response_id> 
+      <votes>837</votes>
+    </ballot_line_result>
+    <ballot_line_result id="0352-9002-result-271230030" certification="unofficial_partial"> <!-- NO -->
+      <jurisdiction_id>"271230030"</jurisdiction_id>
+      <vote_type>unspecified</vote_type>
+      <entire_district>No</entire_district>
+      <ballot_response_id>"2012-11-06-27-123-contest-79-2"</ballot_response_id> 
+      <votes>1023</votes>
+    </ballot_line_result>
+</contest_result>
+
+  <contest_result id="2012-11-06-27-123-0391-result-271230030" certification="unofficial_partial"> <!-- ARDEN HILLS P-3 -->
+    <jurisdiction_id>"271230030"</jurisdiction_id> 
+    <contest_id>"2012-11-06-27-123-contest-30"</contest_id> <!-- County Commissioner District 1 -->
+    <total_votes>1886</total_votes>
+    <total_valid_votes>1886</total_valid_votes>
+    <ballot_line_result id="0391-9001-result-271230030" certification="unofficial_partial"> <!-- FRANK T. MABLEY -->
+      <jurisdiction_id>"271230030"</jurisdiction_id>
+      <vote_type>unspecified</vote_type>
+      <entire_district>No</entire_district>
+      <candidate_id>"2012-11-06-27-123-contest-30-1"</candidate_id> 
+      <votes>641</votes>
+    </ballot_line_result>
+    <ballot_line_result id="0391-9004-result-271230030" certification="unofficial_partial"> <!-- BLAKE C. HUFFMAN -->
+      <jurisdiction_id>"271230030"</jurisdiction_id>
+      <vote_type>unspecified</vote_type>
+      <entire_district>No</entire_district>
+      <candidate_id>"2012-11-06-27-123-contest-30-2"</candidate_id> 
+      <votes>727</votes>
+    </ballot_line_result>
+    <ballot_line_result id="0391-9901-result-271230030" certification="unofficial_partial"> <!-- WRITE-IN** -->
+      <jurisdiction_id>"271230030"</jurisdiction_id>
+      <vote_type>unspecified</vote_type>
+      <entire_district>No</entire_district>
+      <candidate_id>"2012-11-06-27-123-contest-30-3"</candidate_id> 
+      <votes>13</votes>
+    </ballot_line_result>
+</contest_result>
+
+  <contest_result id="2012-11-06-27-123-0432-result-271230030" certification="unofficial_partial"> <!-- ARDEN HILLS P-3 -->
+    <jurisdiction_id>"271230030"</jurisdiction_id> 
+    <contest_id>"2012-11-06-27-123-contest-33"</contest_id> <!-- Soil and Water Supervisor District 2 -->
+    <total_votes>1886</total_votes>
+    <total_valid_votes>1886</total_valid_votes>
+    <ballot_line_result id="0432-9001-result-271230030" certification="unofficial_partial"> <!-- GWEN WILLEMS -->
+      <jurisdiction_id>"271230030"</jurisdiction_id>
+      <vote_type>unspecified</vote_type>
+      <entire_district>No</entire_district>
+      <candidate_id>"2012-11-06-27-123-contest-33-1"</candidate_id> 
+      <votes>640</votes>
+    </ballot_line_result>
+    <ballot_line_result id="0432-9002-result-271230030" certification="unofficial_partial"> <!-- GREG RYAN -->
+      <jurisdiction_id>"271230030"</jurisdiction_id>
+      <vote_type>unspecified</vote_type>
+      <entire_district>No</entire_district>
+      <candidate_id>"2012-11-06-27-123-contest-33-2"</candidate_id> 
+      <votes>557</votes>
+    </ballot_line_result>
+    <ballot_line_result id="0432-9901-result-271230030" certification="unofficial_partial"> <!-- WRITE-IN** -->
+      <jurisdiction_id>"271230030"</jurisdiction_id>
+      <vote_type>unspecified</vote_type>
+      <entire_district>No</entire_district>
+      <candidate_id>"2012-11-06-27-123-contest-33-3"</candidate_id> 
+      <votes>10</votes>
+    </ballot_line_result>
+</contest_result>
+
+  <contest_result id="2012-11-06-27-123-0433-result-271230030" certification="unofficial_partial"> <!-- ARDEN HILLS P-3 -->
+    <jurisdiction_id>"271230030"</jurisdiction_id> 
+    <contest_id>"2012-11-06-27-123-contest-34"</contest_id> <!-- Soil and Water Supervisor District 3 -->
+    <total_votes>1886</total_votes>
+    <total_valid_votes>1886</total_valid_votes>
+    <ballot_line_result id="0433-9001-result-271230030" certification="unofficial_partial"> <!-- MARA MAGNUSON HUMPHREY -->
+      <jurisdiction_id>"271230030"</jurisdiction_id>
+      <vote_type>unspecified</vote_type>
+      <entire_district>No</entire_district>
+      <candidate_id>"2012-11-06-27-123-contest-34-1"</candidate_id> 
+      <votes>1119</votes>
+    </ballot_line_result>
+    <ballot_line_result id="0433-9901-result-271230030" certification="unofficial_partial"> <!-- WRITE-IN** -->
+      <jurisdiction_id>"271230030"</jurisdiction_id>
+      <vote_type>unspecified</vote_type>
+      <entire_district>No</entire_district>
+      <candidate_id>"2012-11-06-27-123-contest-34-2"</candidate_id> 
+      <votes>18</votes>
+    </ballot_line_result>
+</contest_result>
+
+  <contest_result id="2012-11-06-27-123-0435-result-271230030" certification="unofficial_partial"> <!-- ARDEN HILLS P-3 -->
+    <jurisdiction_id>"271230030"</jurisdiction_id> 
+    <contest_id>"2012-11-06-27-123-contest-35"</contest_id> <!-- Soil and Water Supervisor District 5 -->
+    <total_votes>1886</total_votes>
+    <total_valid_votes>1886</total_valid_votes>
+    <ballot_line_result id="0435-9001-result-271230030" certification="unofficial_partial"> <!-- MATT LEDVINA -->
+      <jurisdiction_id>"271230030"</jurisdiction_id>
+      <vote_type>unspecified</vote_type>
+      <entire_district>No</entire_district>
+      <candidate_id>"2012-11-06-27-123-contest-35-1"</candidate_id> 
+      <votes>468</votes>
+    </ballot_line_result>
+    <ballot_line_result id="0435-9002-result-271230030" certification="unofficial_partial"> <!-- MARGARET ANN BEHRENS -->
+      <jurisdiction_id>"271230030"</jurisdiction_id>
+      <vote_type>unspecified</vote_type>
+      <entire_district>No</entire_district>
+      <candidate_id>"2012-11-06-27-123-contest-35-2"</candidate_id> 
+      <votes>521</votes>
+    </ballot_line_result>
+    <ballot_line_result id="0435-9003-result-271230030" certification="unofficial_partial"> <!-- DEE DODGE GEORGE -->
+      <jurisdiction_id>"271230030"</jurisdiction_id>
+      <vote_type>unspecified</vote_type>
+      <entire_district>No</entire_district>
+      <candidate_id>"2012-11-06-27-123-contest-35-3"</candidate_id> 
+      <votes>186</votes>
+    </ballot_line_result>
+    <ballot_line_result id="0435-9901-result-271230030" certification="unofficial_partial"> <!-- WRITE-IN** -->
+      <jurisdiction_id>"271230030"</jurisdiction_id>
+      <vote_type>unspecified</vote_type>
+      <entire_district>No</entire_district>
+      <candidate_id>"2012-11-06-27-123-contest-35-4"</candidate_id> 
+      <votes>8</votes>
+    </ballot_line_result>
+</contest_result>
+
+  <contest_result id="2012-11-06-27-123-1010-result-271230030" certification="unofficial_partial"> <!-- ARDEN HILLS P-3 -->
+    <jurisdiction_id>"271230030"</jurisdiction_id> 
+    <contest_id>"2012-11-06-27-123-contest-54"</contest_id> <!-- Council Member (Arden Hills) (Elect 2) -->
+    <total_votes>1886</total_votes>
+    <total_valid_votes>1886</total_valid_votes>
+    <ballot_line_result id="1010-9001-result-271230030" certification="unofficial_partial"> <!-- DAVE MCCLUNG -->
+      <jurisdiction_id>"271230030"</jurisdiction_id>
+      <vote_type>unspecified</vote_type>
+      <entire_district>No</entire_district>
+      <candidate_id>"2012-11-06-27-123-contest-54-1"</candidate_id> 
+      <votes>1133</votes>
+    </ballot_line_result>
+    <ballot_line_result id="1010-9002-result-271230030" certification="unofficial_partial"> <!-- BRENDA J HOLDEN -->
+      <jurisdiction_id>"271230030"</jurisdiction_id>
+      <vote_type>unspecified</vote_type>
+      <entire_district>No</entire_district>
+      <candidate_id>"2012-11-06-27-123-contest-54-2"</candidate_id> 
+      <votes>929</votes>
+    </ballot_line_result>
+    <ballot_line_result id="1010-9901-result-271230030" certification="unofficial_partial"> <!-- WRITE-IN** -->
+      <jurisdiction_id>"271230030"</jurisdiction_id>
+      <vote_type>unspecified</vote_type>
+      <entire_district>No</entire_district>
+      <candidate_id>"2012-11-06-27-123-contest-54-7"</candidate_id> 
+      <votes>41</votes>
+    </ballot_line_result>
+</contest_result>
+
+  <contest_result id="2012-11-06-27-123-7001-result-271230030" certification="unofficial_partial"> <!-- ARDEN HILLS P-3 -->
+    <jurisdiction_id>"271230030"</jurisdiction_id> 
+    <contest_id>"2012-11-06-27-123-contest-62"</contest_id> <!-- Chief Justice - Supreme Court -->
+    <total_votes>1886</total_votes>
+    <total_valid_votes>1886</total_valid_votes>
+    <ballot_line_result id="7001-9001-result-271230030" certification="unofficial_partial"> <!-- LORIE SKJERVEN GILDEA -->
+      <jurisdiction_id>"271230030"</jurisdiction_id>
+      <vote_type>unspecified</vote_type>
+      <entire_district>No</entire_district>
+      <candidate_id>"2012-11-06-27-123-contest-62-1"</candidate_id> 
+      <votes>875</votes>
+    </ballot_line_result>
+    <ballot_line_result id="7001-9003-result-271230030" certification="unofficial_partial"> <!-- DAN GRIFFITH -->
+      <jurisdiction_id>"271230030"</jurisdiction_id>
+      <vote_type>unspecified</vote_type>
+      <entire_district>No</entire_district>
+      <candidate_id>"2012-11-06-27-123-contest-62-2"</candidate_id> 
+      <votes>503</votes>
+    </ballot_line_result>
+    <ballot_line_result id="7001-9901-result-271230030" certification="unofficial_partial"> <!-- WRITE-IN** -->
+      <jurisdiction_id>"271230030"</jurisdiction_id>
+      <vote_type>unspecified</vote_type>
+      <entire_district>No</entire_district>
+      <candidate_id>"2012-11-06-27-123-contest-62-3"</candidate_id> 
+      <votes>4</votes>
+    </ballot_line_result>
+</contest_result>
+
+  <contest_result id="2012-11-06-27-123-7002-result-271230030" certification="unofficial_partial"> <!-- ARDEN HILLS P-3 -->
+    <jurisdiction_id>"271230030"</jurisdiction_id> 
+    <contest_id>"2012-11-06-27-123-contest-63"</contest_id> <!-- Associate Justice - Supreme Court 1 -->
+    <total_votes>1886</total_votes>
+    <total_valid_votes>1886</total_valid_votes>
+    <ballot_line_result id="7002-9001-result-271230030" certification="unofficial_partial"> <!-- DEAN BARKLEY -->
+      <jurisdiction_id>"271230030"</jurisdiction_id>
+      <vote_type>unspecified</vote_type>
+      <entire_district>No</entire_district>
+      <candidate_id>"2012-11-06-27-123-contest-63-1"</candidate_id> 
+      <votes>488</votes>
+    </ballot_line_result>
+    <ballot_line_result id="7002-9002-result-271230030" certification="unofficial_partial"> <!-- BARRY ANDERSON -->
+      <jurisdiction_id>"271230030"</jurisdiction_id>
+      <vote_type>unspecified</vote_type>
+      <entire_district>No</entire_district>
+      <candidate_id>"2012-11-06-27-123-contest-63-2"</candidate_id> 
+      <votes>874</votes>
+    </ballot_line_result>
+    <ballot_line_result id="7002-9901-result-271230030" certification="unofficial_partial"> <!-- WRITE-IN** -->
+      <jurisdiction_id>"271230030"</jurisdiction_id>
+      <vote_type>unspecified</vote_type>
+      <entire_district>No</entire_district>
+      <candidate_id>"2012-11-06-27-123-contest-63-3"</candidate_id> 
+      <votes>3</votes>
+    </ballot_line_result>
+</contest_result>
+
+  <contest_result id="2012-11-06-27-123-7005-result-271230030" certification="unofficial_partial"> <!-- ARDEN HILLS P-3 -->
+    <jurisdiction_id>"271230030"</jurisdiction_id> 
+    <contest_id>"2012-11-06-27-123-contest-64"</contest_id> <!-- Associate Justice - Supreme Court 4 -->
+    <total_votes>1886</total_votes>
+    <total_valid_votes>1886</total_valid_votes>
+    <ballot_line_result id="7005-9002-result-271230030" certification="unofficial_partial"> <!-- TIM TINGELSTAD -->
+      <jurisdiction_id>"271230030"</jurisdiction_id>
+      <vote_type>unspecified</vote_type>
+      <entire_district>No</entire_district>
+      <candidate_id>"2012-11-06-27-123-contest-64-1"</candidate_id> 
+      <votes>529</votes>
+    </ballot_line_result>
+    <ballot_line_result id="7005-9003-result-271230030" certification="unofficial_partial"> <!-- DAVID R. STRAS -->
+      <jurisdiction_id>"271230030"</jurisdiction_id>
+      <vote_type>unspecified</vote_type>
+      <entire_district>No</entire_district>
+      <candidate_id>"2012-11-06-27-123-contest-64-2"</candidate_id> 
+      <votes>791</votes>
+    </ballot_line_result>
+    <ballot_line_result id="7005-9901-result-271230030" certification="unofficial_partial"> <!-- WRITE-IN** -->
+      <jurisdiction_id>"271230030"</jurisdiction_id>
+      <vote_type>unspecified</vote_type>
+      <entire_district>No</entire_district>
+      <candidate_id>"2012-11-06-27-123-contest-64-3"</candidate_id> 
+      <votes>3</votes>
+    </ballot_line_result>
+</contest_result>
+
+  <contest_result id="2012-11-06-27-123-7015-result-271230030" certification="unofficial_partial"> <!-- ARDEN HILLS P-3 -->
+    <jurisdiction_id>"271230030"</jurisdiction_id> 
+    <contest_id>"2012-11-06-27-123-contest-65"</contest_id> <!-- Judge - Court of Appeals 6 -->
+    <total_votes>1886</total_votes>
+    <total_valid_votes>1886</total_valid_votes>
+    <ballot_line_result id="7015-9001-result-271230030" certification="unofficial_partial"> <!-- RENEE L. WORKE -->
+      <jurisdiction_id>"271230030"</jurisdiction_id>
+      <vote_type>unspecified</vote_type>
+      <entire_district>No</entire_district>
+      <candidate_id>"2012-11-06-27-123-contest-65-1"</candidate_id> 
+      <votes>1117</votes>
+    </ballot_line_result>
+    <ballot_line_result id="7015-9901-result-271230030" certification="unofficial_partial"> <!-- WRITE-IN** -->
+      <jurisdiction_id>"271230030"</jurisdiction_id>
+      <vote_type>unspecified</vote_type>
+      <entire_district>No</entire_district>
+      <candidate_id>"2012-11-06-27-123-contest-65-2"</candidate_id> 
+      <votes>12</votes>
+    </ballot_line_result>
+</contest_result>
+
+  <contest_result id="2012-11-06-27-123-7016-result-271230030" certification="unofficial_partial"> <!-- ARDEN HILLS P-3 -->
+    <jurisdiction_id>"271230030"</jurisdiction_id> 
+    <contest_id>"2012-11-06-27-123-contest-66"</contest_id> <!-- Judge - Court of Appeals 7 -->
+    <total_votes>1886</total_votes>
+    <total_valid_votes>1886</total_valid_votes>
+    <ballot_line_result id="7016-9001-result-271230030" certification="unofficial_partial"> <!-- JILL FLASKAMP HALBROOKS -->
+      <jurisdiction_id>"271230030"</jurisdiction_id>
+      <vote_type>unspecified</vote_type>
+      <entire_district>No</entire_district>
+      <candidate_id>"2012-11-06-27-123-contest-66-1"</candidate_id> 
+      <votes>1109</votes>
+    </ballot_line_result>
+    <ballot_line_result id="7016-9901-result-271230030" certification="unofficial_partial"> <!-- WRITE-IN** -->
+      <jurisdiction_id>"271230030"</jurisdiction_id>
+      <vote_type>unspecified</vote_type>
+      <entire_district>No</entire_district>
+      <candidate_id>"2012-11-06-27-123-contest-66-2"</candidate_id> 
+      <votes>8</votes>
+    </ballot_line_result>
+</contest_result>
+
+  <contest_result id="2012-11-06-27-123-8301-result-271230030" certification="unofficial_partial"> <!-- ARDEN HILLS P-3 -->
+    <jurisdiction_id>"271230030"</jurisdiction_id> 
+    <contest_id>"2012-11-06-27-123-contest-67"</contest_id> <!-- Judge - 2nd District Court 2 -->
+    <total_votes>1886</total_votes>
+    <total_valid_votes>1886</total_valid_votes>
+    <ballot_line_result id="8301-9001-result-271230030" certification="unofficial_partial"> <!-- JAMES H. CLARK, JR -->
+      <jurisdiction_id>"271230030"</jurisdiction_id>
+      <vote_type>unspecified</vote_type>
+      <entire_district>No</entire_district>
+      <candidate_id>"2012-11-06-27-123-contest-67-1"</candidate_id> 
+      <votes>1103</votes>
+    </ballot_line_result>
+    <ballot_line_result id="8301-9901-result-271230030" certification="unofficial_partial"> <!-- WRITE-IN** -->
+      <jurisdiction_id>"271230030"</jurisdiction_id>
+      <vote_type>unspecified</vote_type>
+      <entire_district>No</entire_district>
+      <candidate_id>"2012-11-06-27-123-contest-67-2"</candidate_id> 
+      <votes>11</votes>
+    </ballot_line_result>
+</contest_result>
+
+  <contest_result id="2012-11-06-27-123-8304-result-271230030" certification="unofficial_partial"> <!-- ARDEN HILLS P-3 -->
+    <jurisdiction_id>"271230030"</jurisdiction_id> 
+    <contest_id>"2012-11-06-27-123-contest-68"</contest_id> <!-- Judge - 2nd District Court 5 -->
+    <total_votes>1886</total_votes>
+    <total_valid_votes>1886</total_valid_votes>
+    <ballot_line_result id="8304-9001-result-271230030" certification="unofficial_partial"> <!-- LEZLIE OTT MAREK -->
+      <jurisdiction_id>"271230030"</jurisdiction_id>
+      <vote_type>unspecified</vote_type>
+      <entire_district>No</entire_district>
+      <candidate_id>"2012-11-06-27-123-contest-68-1"</candidate_id> 
+      <votes>1104</votes>
+    </ballot_line_result>
+    <ballot_line_result id="8304-9901-result-271230030" certification="unofficial_partial"> <!-- WRITE-IN** -->
+      <jurisdiction_id>"271230030"</jurisdiction_id>
+      <vote_type>unspecified</vote_type>
+      <entire_district>No</entire_district>
+      <candidate_id>"2012-11-06-27-123-contest-68-2"</candidate_id> 
+      <votes>9</votes>
+    </ballot_line_result>
+</contest_result>
+
+  <contest_result id="2012-11-06-27-123-8305-result-271230030" certification="unofficial_partial"> <!-- ARDEN HILLS P-3 -->
+    <jurisdiction_id>"271230030"</jurisdiction_id> 
+    <contest_id>"2012-11-06-27-123-contest-69"</contest_id> <!-- Judge - 2nd District Court 6 -->
+    <total_votes>1886</total_votes>
+    <total_valid_votes>1886</total_valid_votes>
+    <ballot_line_result id="8305-9001-result-271230030" certification="unofficial_partial"> <!-- JOHN B. (JACK) VANDENORTH -->
+      <jurisdiction_id>"271230030"</jurisdiction_id>
+      <vote_type>unspecified</vote_type>
+      <entire_district>No</entire_district>
+      <candidate_id>"2012-11-06-27-123-contest-69-1"</candidate_id> 
+      <votes>1090</votes>
+    </ballot_line_result>
+    <ballot_line_result id="8305-9901-result-271230030" certification="unofficial_partial"> <!-- WRITE-IN** -->
+      <jurisdiction_id>"271230030"</jurisdiction_id>
+      <vote_type>unspecified</vote_type>
+      <entire_district>No</entire_district>
+      <candidate_id>"2012-11-06-27-123-contest-69-2"</candidate_id> 
+      <votes>10</votes>
+    </ballot_line_result>
+</contest_result>
+
+  <contest_result id="2012-11-06-27-123-8310-result-271230030" certification="unofficial_partial"> <!-- ARDEN HILLS P-3 -->
+    <jurisdiction_id>"271230030"</jurisdiction_id> 
+    <contest_id>"2012-11-06-27-123-contest-70"</contest_id> <!-- Judge - 2nd District Court 11 -->
+    <total_votes>1886</total_votes>
+    <total_valid_votes>1886</total_valid_votes>
+    <ballot_line_result id="8310-9001-result-271230030" certification="unofficial_partial"> <!-- GARY W. BASTIAN -->
+      <jurisdiction_id>"271230030"</jurisdiction_id>
+      <vote_type>unspecified</vote_type>
+      <entire_district>No</entire_district>
+      <candidate_id>"2012-11-06-27-123-contest-70-1"</candidate_id> 
+      <votes>1102</votes>
+    </ballot_line_result>
+    <ballot_line_result id="8310-9901-result-271230030" certification="unofficial_partial"> <!-- WRITE-IN** -->
+      <jurisdiction_id>"271230030"</jurisdiction_id>
+      <vote_type>unspecified</vote_type>
+      <entire_district>No</entire_district>
+      <candidate_id>"2012-11-06-27-123-contest-70-2"</candidate_id> 
+      <votes>11</votes>
+    </ballot_line_result>
+</contest_result>
+
+  <contest_result id="2012-11-06-27-123-8311-result-271230030" certification="unofficial_partial"> <!-- ARDEN HILLS P-3 -->
+    <jurisdiction_id>"271230030"</jurisdiction_id> 
+    <contest_id>"2012-11-06-27-123-contest-71"</contest_id> <!-- Judge - 2nd District Court 12 -->
+    <total_votes>1886</total_votes>
+    <total_valid_votes>1886</total_valid_votes>
+    <ballot_line_result id="8311-9001-result-271230030" certification="unofficial_partial"> <!-- GREGG E. JOHNSON -->
+      <jurisdiction_id>"271230030"</jurisdiction_id>
+      <vote_type>unspecified</vote_type>
+      <entire_district>No</entire_district>
+      <candidate_id>"2012-11-06-27-123-contest-71-1"</candidate_id> 
+      <votes>1097</votes>
+    </ballot_line_result>
+    <ballot_line_result id="8311-9901-result-271230030" certification="unofficial_partial"> <!-- WRITE-IN** -->
+      <jurisdiction_id>"271230030"</jurisdiction_id>
+      <vote_type>unspecified</vote_type>
+      <entire_district>No</entire_district>
+      <candidate_id>"2012-11-06-27-123-contest-71-2"</candidate_id> 
+      <votes>10</votes>
+    </ballot_line_result>
+</contest_result>
+
+  <contest_result id="2012-11-06-27-123-8313-result-271230030" certification="unofficial_partial"> <!-- ARDEN HILLS P-3 -->
+    <jurisdiction_id>"271230030"</jurisdiction_id> 
+    <contest_id>"2012-11-06-27-123-contest-72"</contest_id> <!-- Judge - 2nd District Court 14 -->
+    <total_votes>1886</total_votes>
+    <total_valid_votes>1886</total_valid_votes>
+    <ballot_line_result id="8313-9001-result-271230030" certification="unofficial_partial"> <!-- ROBYN ANN MILLENACKER -->
+      <jurisdiction_id>"271230030"</jurisdiction_id>
+      <vote_type>unspecified</vote_type>
+      <entire_district>No</entire_district>
+      <candidate_id>"2012-11-06-27-123-contest-72-1"</candidate_id> 
+      <votes>1089</votes>
+    </ballot_line_result>
+    <ballot_line_result id="8313-9901-result-271230030" certification="unofficial_partial"> <!-- WRITE-IN** -->
+      <jurisdiction_id>"271230030"</jurisdiction_id>
+      <vote_type>unspecified</vote_type>
+      <entire_district>No</entire_district>
+      <candidate_id>"2012-11-06-27-123-contest-72-2"</candidate_id> 
+      <votes>12</votes>
+    </ballot_line_result>
+</contest_result>
+
+  <contest_result id="2012-11-06-27-123-8318-result-271230030" certification="unofficial_partial"> <!-- ARDEN HILLS P-3 -->
+    <jurisdiction_id>"271230030"</jurisdiction_id> 
+    <contest_id>"2012-11-06-27-123-contest-73"</contest_id> <!-- Judge - 2nd District Court 19 -->
+    <total_votes>1886</total_votes>
+    <total_valid_votes>1886</total_valid_votes>
+    <ballot_line_result id="8318-9001-result-271230030" certification="unofficial_partial"> <!-- ROBERT A. AWSUMB -->
+      <jurisdiction_id>"271230030"</jurisdiction_id>
+      <vote_type>unspecified</vote_type>
+      <entire_district>No</entire_district>
+      <candidate_id>"2012-11-06-27-123-contest-73-1"</candidate_id> 
+      <votes>1088</votes>
+    </ballot_line_result>
+    <ballot_line_result id="8318-9901-result-271230030" certification="unofficial_partial"> <!-- WRITE-IN** -->
+      <jurisdiction_id>"271230030"</jurisdiction_id>
+      <vote_type>unspecified</vote_type>
+      <entire_district>No</entire_district>
+      <candidate_id>"2012-11-06-27-123-contest-73-2"</candidate_id> 
+      <votes>8</votes>
+    </ballot_line_result>
+</contest_result>
+
+  <contest_result id="2012-11-06-27-123-8321-result-271230030" certification="unofficial_partial"> <!-- ARDEN HILLS P-3 -->
+    <jurisdiction_id>"271230030"</jurisdiction_id> 
+    <contest_id>"2012-11-06-27-123-contest-74"</contest_id> <!-- Judge - 2nd District Court 22 -->
+    <total_votes>1886</total_votes>
+    <total_valid_votes>1886</total_valid_votes>
+    <ballot_line_result id="8321-9001-result-271230030" certification="unofficial_partial"> <!-- TERESA R. WARNER -->
+      <jurisdiction_id>"271230030"</jurisdiction_id>
+      <vote_type>unspecified</vote_type>
+      <entire_district>No</entire_district>
+      <candidate_id>"2012-11-06-27-123-contest-74-1"</candidate_id> 
+      <votes>1085</votes>
+    </ballot_line_result>
+    <ballot_line_result id="8321-9901-result-271230030" certification="unofficial_partial"> <!-- WRITE-IN** -->
+      <jurisdiction_id>"271230030"</jurisdiction_id>
+      <vote_type>unspecified</vote_type>
+      <entire_district>No</entire_district>
+      <candidate_id>"2012-11-06-27-123-contest-74-2"</candidate_id> 
+      <votes>12</votes>
+    </ballot_line_result>
+</contest_result>
+
+  <contest_result id="2012-11-06-27-123-8323-result-271230030" certification="unofficial_partial"> <!-- ARDEN HILLS P-3 -->
+    <jurisdiction_id>"271230030"</jurisdiction_id> 
+    <contest_id>"2012-11-06-27-123-contest-75"</contest_id> <!-- Judge - 2nd District Court 24 -->
+    <total_votes>1886</total_votes>
+    <total_valid_votes>1886</total_valid_votes>
+    <ballot_line_result id="8323-9001-result-271230030" certification="unofficial_partial"> <!-- EDWARD S. WILSON -->
+      <jurisdiction_id>"271230030"</jurisdiction_id>
+      <vote_type>unspecified</vote_type>
+      <entire_district>No</entire_district>
+      <candidate_id>"2012-11-06-27-123-contest-75-1"</candidate_id> 
+      <votes>1088</votes>
+    </ballot_line_result>
+    <ballot_line_result id="8323-9901-result-271230030" certification="unofficial_partial"> <!-- WRITE-IN** -->
+      <jurisdiction_id>"271230030"</jurisdiction_id>
+      <vote_type>unspecified</vote_type>
+      <entire_district>No</entire_district>
+      <candidate_id>"2012-11-06-27-123-contest-75-2"</candidate_id> 
+      <votes>11</votes>
+    </ballot_line_result>
+</contest_result>
+
+  <contest_result id="2012-11-06-27-123-8327-result-271230030" certification="unofficial_partial"> <!-- ARDEN HILLS P-3 -->
+    <jurisdiction_id>"271230030"</jurisdiction_id> 
+    <contest_id>"2012-11-06-27-123-contest-76"</contest_id> <!-- Judge - 2nd District Court 28 -->
+    <total_votes>1886</total_votes>
+    <total_valid_votes>1886</total_valid_votes>
+    <ballot_line_result id="8327-9001-result-271230030" certification="unofficial_partial"> <!-- ELENA L. OSTBY -->
+      <jurisdiction_id>"271230030"</jurisdiction_id>
+      <vote_type>unspecified</vote_type>
+      <entire_district>No</entire_district>
+      <candidate_id>"2012-11-06-27-123-contest-76-1"</candidate_id> 
+      <votes>1096</votes>
+    </ballot_line_result>
+    <ballot_line_result id="8327-9901-result-271230030" certification="unofficial_partial"> <!-- WRITE-IN** -->
+      <jurisdiction_id>"271230030"</jurisdiction_id>
+      <vote_type>unspecified</vote_type>
+      <entire_district>No</entire_district>
+      <candidate_id>"2012-11-06-27-123-contest-76-2"</candidate_id> 
+      <votes>8</votes>
+    </ballot_line_result>
+</contest_result>
+
+  <contest_result id="2012-11-06-27-123-8328-result-271230030" certification="unofficial_partial"> <!-- ARDEN HILLS P-3 -->
+    <jurisdiction_id>"271230030"</jurisdiction_id> 
+    <contest_id>"2012-11-06-27-123-contest-77"</contest_id> <!-- Judge - 2nd District Court 29 -->
+    <total_votes>1886</total_votes>
+    <total_valid_votes>1886</total_valid_votes>
+    <ballot_line_result id="8328-9001-result-271230030" certification="unofficial_partial"> <!-- DIANE RUTH ALSHOUSE -->
+      <jurisdiction_id>"271230030"</jurisdiction_id>
+      <vote_type>unspecified</vote_type>
+      <entire_district>No</entire_district>
+      <candidate_id>"2012-11-06-27-123-contest-77-1"</candidate_id> 
+      <votes>1088</votes>
+    </ballot_line_result>
+    <ballot_line_result id="8328-9901-result-271230030" certification="unofficial_partial"> <!-- WRITE-IN** -->
+      <jurisdiction_id>"271230030"</jurisdiction_id>
+      <vote_type>unspecified</vote_type>
+      <entire_district>No</entire_district>
+      <candidate_id>"2012-11-06-27-123-contest-77-2"</candidate_id> 
+      <votes>11</votes>
+    </ballot_line_result>
+</contest_result>
+</vip_object>
