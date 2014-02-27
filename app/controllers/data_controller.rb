@@ -22,9 +22,14 @@ class DataController < ApplicationController
     render json: locality.precincts.map { |p| { id: p.id, kml: p.kml } }
   end
 
+  # the list of all refcons grouped
+  def all_refcons
+    render json: RefConResults.new.all_refcons(params)
+  end
+
   # the list of all referendums and contests in the given locality+region
-  def refcons
-    render json: RefConResults.new.list(params)
+  def region_refcons
+    render json: RefConResults.new.region_refcons(params)
   end
 
   # election results for the given precinct
@@ -32,9 +37,9 @@ class DataController < ApplicationController
     render json: RefConResults.new.precinct_results(params)
   end
 
-  def results
-    render json: RefConResults.new.data(params)
-  end
+  # def results
+  #   render json: RefConResults.new.data(params)
+  # end
 
   def voting_results
     locality = Locality.find(params[:locality_id])

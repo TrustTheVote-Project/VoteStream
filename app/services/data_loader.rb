@@ -156,7 +156,8 @@ class DataLoader < BaseLoader
       district_id = dequote(contest_el.css("> electoral_district_id").first.content)
       district    = District.find_by_uid(district_id)
       if district
-        contest   = Contest.create_with(office: office, sort_order: sort_order, district: district).find_or_create_by(uid: uid)
+        locality_id = district.precincts.first.locality_id
+        contest   = Contest.create_with(office: office, sort_order: sort_order, district: district, locality_id: locality_id).find_or_create_by(uid: uid)
         block.call(contest_el, contest)
       else
         raise_strict InvalidFormat.new("District with ID '#{district_id}' was not found")
@@ -188,7 +189,8 @@ class DataLoader < BaseLoader
       district_id = dequote(referendum_el.css("> electoral_district_id").first.content)
       district    = District.find_by_uid(district_id)
       if district
-        referendum = Referendum.create_with(title: title, subtitle: subtitle, question: question, sort_order: sort_order, district: district).find_or_create_by(uid: uid)
+        locality_id = district.precincts.first.locality_id
+        referendum = Referendum.create_with(title: title, subtitle: subtitle, question: question, sort_order: sort_order, district: district, district_type: district.district_type, locality_id: locality_id).find_or_create_by(uid: uid)
         block.call(referendum_el, referendum)
       else
         raise_strict InvalidFormat.new("District with ID '#{district_id}' was not found")

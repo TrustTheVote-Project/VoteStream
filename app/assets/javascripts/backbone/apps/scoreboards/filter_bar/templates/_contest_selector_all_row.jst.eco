@@ -1,0 +1,1 @@
+<a href='#' data-id='all' data-type='<%= @type %>'>All <%= @name %></a>

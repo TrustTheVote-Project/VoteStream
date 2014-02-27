@@ -5,7 +5,7 @@
       return if @noResultsReload
       @preselectedRefconId = options.refconId
       results = @get 'results'
-      results.fetchForFilter @get('localityId'), @get('region'), @get('category')
+      results.fetchForFilter @get('localityId'), @get('region'), @get('refcon')
 
     pickResult: ->
       results = @get 'results'
@@ -30,8 +30,14 @@
           result:           null
           precinctResults:  new Entities.PrecinctResultData
 
-          category:         gon.defaultCategory
-          categoryLabel:    -> gon.categories[@category] || "<%= I18n.t 'scoreboard.header.left_menu.none' %>"
+          refcon:           new Backbone.Model({ name: 'All Federal Contests', type: 'all', id: 'federal' })
+          refconLabel:      ->
+            type = @refcon.get('type')
+            if type == 'all'
+              id = @refcon.get('id')
+              gon.categories[id]
+            else
+              @refcon.get('name')
 
           region:           null
           regionLabel:      -> if !@region then "<%= I18n.t 'scoreboard.header.right_menu.tabs.all' %>" else @region.get('name')
@@ -40,7 +46,7 @@
         App.vent.on 'filters:set', (options = {}) ->
           sb.disableResultsReload()
           App.vent.trigger 'region:selected', options.region
-          App.vent.trigger 'category:selected', options.category or gon.defaultCategory
+          # App.vent.trigger 'category:selected', options.category or gon.defaultCategory
           sb.enableResultsReload()
 
           sb.reloadResults
@@ -49,13 +55,16 @@
         App.vent.on 'region:selected', (region) ->
           sb.set 'region', region
 
-        App.vent.on 'category:selected', (category) ->
-          sb.set 'category', category
+        App.vent.on 'refcon:selected', (refcon) ->
+          sb.set 'refcon', refcon
+
+        # App.vent.on 'category:selected', (category) ->
+        #   sb.set 'category', category
 
         App.vent.on 'result:selected', (result) ->
           sb.set 'result', result
 
-        sb.on 'change:region change:category', -> @reloadResults()
+        sb.on 'change:region change:refcon', -> @reloadResults()
 
         sb.get('results').on 'reset', ->
           result = sb.pickResult()

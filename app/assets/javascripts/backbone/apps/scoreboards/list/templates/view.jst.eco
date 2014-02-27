@@ -1,3 +1,4 @@
+<div id='filter-bar-region'></div>
 <div class="row">
   <div class="span9" id='results-region'></div>
   <div class="span3" id='sidebar'>

@@ -7,7 +7,7 @@
     mainRegion: "#main-region"
 
   App.addInitializer ->
-    App.module("ScoreboardsApp.Header.Controller").show()
+    App.module("HeaderApp").start()
     App.module("ScoreboardsApp").start()
 
   App.rootRoute = "map/#{gon.defaultCategory}/-/-"

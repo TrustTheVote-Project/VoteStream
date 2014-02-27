@@ -10,9 +10,9 @@ class ScoreboardsController < ApplicationController
     election          = state.elections.first
 
     gon.locality_id   = locality.id
-    gon.locality_name = locality.name
-    gon.locality_info = "#{locality.name}, #{state.name}"
-    gon.election_info = "#{election.held_on.strftime('%B %e, %Y')} General Election"
+    gon.locality_name = locality.name.titleize
+    gon.locality_info = "#{locality.name.titleize}, #{state.name}"
+    gon.election_info = "#{election.held_on.strftime('%Y')} General Election"
 
     gon.mapCenterLat  = -93.147
     gon.mapCenterLon  = 45.005988
@@ -42,11 +42,11 @@ class ScoreboardsController < ApplicationController
     gon.tweetText = I18n.t('scoreboard.tweet')
 
     gon.categories = {
-      RefConResults::CATEGORY_REFERENDUMS => I18n.t('scoreboard.header.left_menu.categories.referenda'),
-      'Federal' => I18n.t('scoreboard.header.left_menu.categories.federal'),
-      'State'   => I18n.t('scoreboard.header.left_menu.categories.state'),
-      'MCD'     => I18n.t('scoreboard.header.left_menu.categories.local'),
-      'Other'   => I18n.t('scoreboard.header.left_menu.categories.other')
+      'referenda' => I18n.t('scoreboard.header.left_menu.categories.referenda'),
+      'federal'   => I18n.t('scoreboard.header.left_menu.categories.federal'),
+      'state'     => I18n.t('scoreboard.header.left_menu.categories.state'),
+      'mcd'       => I18n.t('scoreboard.header.left_menu.categories.local'),
+      'other'     => I18n.t('scoreboard.header.left_menu.categories.other')
     }
 
     gon.defaultCategory  = DataProcessor.default_category(locality)

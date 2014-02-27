@@ -5,6 +5,7 @@
     id: 'list'
 
     regions:
+      filterBarRegion: '#filter-bar-region'
       resultsRegion: '#results-region'
       summaryRegion: '#summary-region'
       mapRegion: '#map-region'
@@ -24,6 +25,8 @@
         noPanning:        true
         infoWindow:       'simple'
 
+      @filterBarRegion.show new App.ScoreboardsApp.FilterBar.View
+        model: App.request('entities:scoreboardInfo')
       @resultsRegion.show view
       @mapRegion.show mapView
       @showSummary()

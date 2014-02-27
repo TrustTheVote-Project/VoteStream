@@ -1,6 +1,13 @@
-#main-region {
-  margin-top: 20px;
-  overflow: hidden;
+@import 'public/_mixins';
+
+#filter-bar-region {
+  margin-bottom: 20px;
+
+  .dropdown-menu {
+    max-height: 150px;
+    overflow-y: scroll;
+    @include force-scrollbar();
+  }
 }
 
 @media (max-width: 767px) {
@@ -11,7 +18,7 @@
 
 /* Landscape phones and down */
 @media (max-width: 480px) {
-  #main-region {
-    margin-top: 10px;
+  #filter-bar-region {
+    margin-bottom: 10px;
   }
 }

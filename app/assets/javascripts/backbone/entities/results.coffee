@@ -45,7 +45,7 @@
   class Entities.ResultsCollection extends Backbone.Collection
     model: Entities.Results
 
-    fetchForFilter: (localityId, region, category) ->
+    fetchForFilter: (localityId, region, refcon) ->
       filter = locality_id: localityId
       if region?
         rid = region.get 'id'
@@ -54,11 +54,18 @@
         else
           filter.precinct_id = rid
 
-      if category?
-        filter.category = category
+      if refcon?
+        type = refcon.get('type')
+        id = refcon.get('id')
+        if type == 'all'
+          filter.category = id
+        else if type == 'c'
+          filter.contest_id = id
+        else if type == 'r'
+          filter.referendum_id = id
 
       @fetch
-        url:   '/data/refcons'
+        url:   '/data/region_refcons'
         reset: true
         data:  filter
 

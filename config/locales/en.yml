@@ -10,8 +10,15 @@ en:
     tweet: 'Latest election results at:'
 
     header:
+      breadcrumbs:
+        referenda: All Referenda
+        federal: Federal Contests
+        state: State Contests
+        local: Local Contests
+        other: Other Contests
+
       left_menu:
-        label: Select a Category
+        label: Select contest or category
         none: No category
         categories:
           referenda: All Referenda
@@ -21,16 +28,14 @@ en:
           other: Other Contests
 
       right_menu:
-        label: Select a Region
+        label: Select region
         tabs:
           all: All Precincts
           districts: Districts
           precincts: Precincts
-
+      
       view_selector:
-        label: Select a View
-        options:
-          map: Map
-          list: List
+        map: Map view
+        list: List view
 
     not_voting: Not voting

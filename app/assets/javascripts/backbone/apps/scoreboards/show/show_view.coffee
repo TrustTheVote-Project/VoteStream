@@ -5,11 +5,15 @@
     id: 'show'
 
     regions:
+      filterBarRegion: '#filter-bar-region'
       resultsSummaryRegion: '#results-summary-region'
       mapRegion: '#map-region'
 
     onShow: ->
       @layout = new ResultsSummaryLayout
+
+      @filterBarRegion.show new App.ScoreboardsApp.FilterBar.View
+        model: App.request('entities:scoreboardInfo')
       @resultsSummaryRegion.show @layout
       @mapRegion.show new Show.MapView
         infoWindow: true

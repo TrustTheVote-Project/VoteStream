@@ -1,0 +1,12 @@
+<div class="row-fluid" id="header-bar">
+  <div class="span9">
+    <div class="election-meta"><%= I18n.t "front.title" %> - <%%= @electionInfo %></div>
+    <div class="election-locality"><%%= @localityInfo %> <%= image_tag "live.png" %></div>
+  </div>
+  <div class="span3 header-share">
+    <a href='#' id='js-facebook-share'><%= image_tag "share-facebook.png" %></a>
+    <a href='#' id='js-tweet'><%= image_tag "share-twitter.png" %></a>
+    <a href='#' id='js-gplus'><%= image_tag "gplus-16.png" %></a>
+    <%= image_tag "ttv.png" %>
+  </div>
+</div>

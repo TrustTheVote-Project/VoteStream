@@ -6,37 +6,53 @@ class RefConResults
     @order_by_votes = (options[:candidate_ordering] || AppConfig[:candidate_ordering]) != 'sort_order'
   end
 
-  def list(params)
+  def all_refcons(params)
+    { federal: refcons_of_type('federal', params),
+      state:   refcons_of_type('state', params),
+      mcd:     refcons_of_type('mcd', params),
+      other:   refcons_of_type('other', params) }
+  end
+
+  def refcons_of_type(district_type, params)
+    contests = Contest.where(district_type: district_type, locality_id: params[:locality_id]).select("id, office as name, sort_order")
+    refs     = Referendum.where(district_type: district_type, locality_id: params[:locality_id]).select("id, title as name, sort_order")
+    [ contests, refs ].flatten.sort_by(&:sort_order).map { |i| { id: i.id, name: i.name, type: i.kind_of?(Contest) ? 'c' : 'r' } }
+  end
+
+  def region_refcons(params)
     district_ids = districts_for_region(params)
 
     filt = {}
     filt[:district_id] = district_ids unless district_ids.blank?
 
     cat = params[:category]
-    if cat.blank? || cat == CATEGORY_REFERENDUMS
-      referendums = Referendum.where(filt)
-    end
-
     if cat.blank?
-      contests = Contest.where(filt)
-    elsif cat == CATEGORY_REFERENDUMS
-      contests = nil
+      if contest_id = params[:contest_id]
+        contests = Contest.where(filt).where(id: contest_id)
+      elsif referendum_id = params[:referendum_id]
+        referendums = Referendum.where(filt).where(id: referendum_id)
+      else
+        contests = Contest.where(filt)
+      end
+    elsif cat == 'referenda'
+      referendums = Referendum.where(filt)
     else
-      contests = Contest.where(filt.merge(district_type: cat))
+      contests = Contest.where(filt).where(district_type: cat)
+      referendums = Referendum.where(filt).where(district_type: cat)
     end
 
     list_to_refcons([ contests, referendums ].compact.flatten, params)
   end
 
-  def data(params)
-    if cid = params[:contest_id]
-      return contest_data(Contest.find(cid), params)
-    elsif rid = params[:referendum_id]
-      return referendum_data(Referendum.find(rid), params)
-    else
-      return {}
-    end
-  end
+  # def data(params)
+  #   if cid = params[:contest_id]
+  #     return contest_data(Contest.find(cid), params)
+  #   elsif rid = params[:referendum_id]
+  #     return referendum_data(Referendum.find(rid), params)
+  #   else
+  #     return {}
+  #   end
+  # end
 
   def contest_data(contest, params)
     pids       = precinct_ids_for_region(params)

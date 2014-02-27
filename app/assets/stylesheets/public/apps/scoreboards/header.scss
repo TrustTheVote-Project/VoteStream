@@ -1,40 +1,54 @@
 @import "compass";
 
-#header {
-  .reporting {
+$section-border: 1px solid #e6e6e6;
+$section-padding: 10px;
+
+#header-bar {
+  padding: $section-padding 0;
+  border-bottom: $section-border;
+
+  .election-meta {
+    font-weight: 800;
+  }
+
+  .election-locality {
+    font-size: 24px;
+    font-weight: 800;
+  }
+
+  .header-share {
     text-align: right;
   }
+}
 
-  .title-bar {
-    height: 28px;
-    background: #cacacf;
-    @include background-image(linear-gradient(#fbfcfc, #cacfcf));
-    border-bottom: 2px solid #555;
+#filter-bar {
+  padding: $section-padding 0;
+  border-bottom: $section-border;
 
-    h1 {
-      font-size: 100%;
-      display: inline-block;
-      line-height: 28px;
-      margin: 0;
-    }
-
-    .title {
-      margin-left: 10px;
-      img {
-        margin: 2px 0;
-      }
-    }
-
-    .share {
-      margin-right: 10px;
-      line-height: 28px;
-
-      img {
-        margin-left: 10px;
-      }
-    }
+  label {
+    font-weight: 800;
   }
 
+  .btn {
+    background: #ebebeb;
+    border-radius: 0;
+    border: none;
+  }
+}
+
+#bread-crumbs {
+  padding: $section-padding 0;
+  border-bottom: $section-border;
+
+  line-height: 30px;
+
+  .view-selector {
+    text-align: right;
+  }
+}
+
+
+#header {
   .heading-bar {
     height: 94px;
     background-color: #494a4d;

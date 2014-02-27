@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140210100706) do
+ActiveRecord::Schema.define(version: 20140227112204) do
 
   create_table "ballot_response_results", force: true do |t|
     t.integer "ballot_response_id"
@@ -58,10 +58,12 @@ ActiveRecord::Schema.define(version: 20140210100706) do
     t.string  "office"
     t.string  "sort_order"
     t.string  "district_type"
+    t.integer "locality_id"
   end
 
   add_index "contests", ["district_id"], name: "index_contests_on_district_id", using: :btree
   add_index "contests", ["district_type"], name: "index_contests_on_district_type", using: :btree
+  add_index "contests", ["locality_id"], name: "index_contests_on_locality_id", using: :btree
   add_index "contests", ["uid"], name: "index_contests_on_uid", unique: true, using: :btree
 
   create_table "districts", force: true do |t|
@@ -135,14 +137,17 @@ ActiveRecord::Schema.define(version: 20140210100706) do
 
   create_table "referendums", force: true do |t|
     t.integer "district_id"
-    t.string  "uid",         null: false
-    t.string  "title",       null: false
-    t.text    "subtitle",    null: false
-    t.text    "question",    null: false
+    t.string  "uid",           null: false
+    t.string  "title",         null: false
+    t.text    "subtitle",      null: false
+    t.text    "question",      null: false
     t.string  "sort_order"
+    t.integer "locality_id"
+    t.string  "district_type"
   end
 
   add_index "referendums", ["district_id"], name: "index_referendums_on_district_id", using: :btree
+  add_index "referendums", ["locality_id"], name: "index_referendums_on_locality_id", using: :btree
   add_index "referendums", ["uid"], name: "index_referendums_on_uid", unique: true, using: :btree
 
   create_table "states", force: true do |t|
