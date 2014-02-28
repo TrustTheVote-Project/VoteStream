@@ -1,0 +1,9 @@
+<div class='span3 refcon-nav' id='js-prev-refcon'>
+  <a href="#">&nbsp;</a>
+</div>
+<div class='span6 info'>
+  Contest <%= @current %> of <%= @total %>
+</div>
+<div class="span3 refcon-nav" id="js-next-refcon">
+  <a href="#">&nbsp;</a>
+</div>

@@ -48,29 +48,25 @@
     hasPrev: -> @idx > 0
     hasNext: -> @idx < @results.length - 1
 
-
-  class ResultsSummaryLayout extends Marionette.Layout
-    template: 'scoreboards/show/_results_summary_layout'
-    tagName:   'table'
-    className: ''
-
-    regions:
-      summaryRegion: '#summary-region'
+  class SummaryPagination extends Marionette.ItemView
+    template: 'scoreboards/show/_summary_pagination'
+    className: 'row-fluid'
 
     initialize: ->
       @rotator = new ResultsRotator
 
       @si = App.request 'entities:scoreboardInfo'
-      @si.on 'change:result', @updateLayout, @
+      @si.on 'change:result change:results', @updateView, @
 
     ui: ->
       prevRefCon: '#js-prev-refcon a'
       nextRefCon: '#js-next-refcon a'
 
-    onShow: -> @updateLayout()
-    onClose: ->
-      @rotator.onClose()
-      @si.off 'change:result', @updateLayout, @
+    serializeData: ->
+      return {
+        current: @rotator.idx + 1
+        total:   @rotator.results.length
+      }
 
     events:
       'click #js-prev-refcon a': (e) ->
@@ -82,6 +78,35 @@
         e.preventDefault()
         return if $(e.target).attr('disabled')
         @rotator.next()
+
+    updateView: ->
+      @render()
+      if @rotator.hasPrev() then @ui.prevRefCon.removeAttr('disabled') else @ui.prevRefCon.attr('disabled', true)
+      if @rotator.hasNext() then @ui.nextRefCon.removeAttr('disabled') else @ui.nextRefCon.attr('disabled', true)
+
+    onShow: -> @updateView()
+    onClose: ->
+      @rotator.onClose()
+      @si.off 'change:results change:result', @updateView, @
+
+
+  class ResultsSummaryLayout extends Marionette.Layout
+    template: 'scoreboards/show/_results_summary_layout'
+    className: 'span12'
+
+    regions:
+      summaryPagination: '#summary-pagination'
+      summaryRegion: '#summary-region'
+
+    initialize: ->
+      @si = App.request 'entities:scoreboardInfo'
+      @si.on 'change:result', @updateLayout, @
+
+    onShow: ->
+      @summaryPagination.show new SummaryPagination
+      @updateLayout()
+
+    onClose: -> @si.off('change:result', @updateLayout, @)
 
     updateLayout: ->
       result = @si.get('result')
@@ -100,9 +125,6 @@
 
       else
         @summaryRegion.show new NoRefConView
-
-      if @rotator.hasPrev() then @ui.prevRefCon.removeAttr('disabled') else @ui.prevRefCon.attr('disabled', true)
-      if @rotator.hasNext() then @ui.nextRefCon.removeAttr('disabled') else @ui.nextRefCon.attr('disabled', true)
 
   class NoRefConView extends Marionette.ItemView
     template: 'scoreboards/show/_no_refcon'

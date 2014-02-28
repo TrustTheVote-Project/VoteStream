@@ -1,24 +1,26 @@
 $bar-base: #e1e5e5;
 
-#results-summary-region {
-  #js-next-refcon { text-align: right; }
+#js-next-refcon, #js-prev-refcon {
+  a {
+    display: block;
+    width: 20px;
+    height: 20px;
+    background-size: 20px;
+    background-repeat: no-repeat;
+    text-decoration: none;
 
-  .refcon-nav {
-    
-    a {
-      display: block;
-      width: 25px;
-
-      color: #000;
-      font-size: 18px;
-
-      &[disabled] {
-        color: #ddd;
-        cursor: default;
-      }
+    &[disabled] {
+      opacity: .5;
+      cursor: default;
     }
   }
 }
+
+#summary-pagination .info { text-align: center; }
+#js-prev-refcon a { background-image: image-url('contest_carousel_left_icon_normal.png'); }
+#js-next-refcon a { float: right; background-image: image-url('contest_carousel_right_icon_normal.png'); }
+
+
 
 #summary-region {
   width: 100%;

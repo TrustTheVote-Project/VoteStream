@@ -1,9 +1,2 @@
-<tr>
-  <td class="refcon-nav" id="js-prev-refcon">
-    <a href="#">&lt;</a>
-  </td>
-  <td id="summary-region"></td>
-  <td class="refcon-nav" id="js-next-refcon">
-    <a href="#">&gt;</a>
-  </td>
-</tr>
+<div id='summary-pagination'></div>
+<div id='summary-region'></div>
