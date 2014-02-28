@@ -1,1 +1,1 @@
-Results: <%= @refconLabel() %> / <%= @regionLabel() %>
+<label>Results:</label> <%= @refconLabel() %> / <%= @regionLabel() %>

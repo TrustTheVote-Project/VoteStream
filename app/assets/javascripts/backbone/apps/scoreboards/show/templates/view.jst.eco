@@ -1,5 +1,7 @@
 <div id="filter-bar-region"></div>
-<div class="row">
-  <div class="span4" id="results-summary-region"></div>
-  <div class="span8" id="map-region"></div>
+<div id="content">
+  <div class="row-fluid">
+    <div class="span4" id="results-summary-region"></div>
+    <div class="span8" id="map-region"></div>
+  </div>
 </div>

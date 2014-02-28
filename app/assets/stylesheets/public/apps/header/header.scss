@@ -1,0 +1,113 @@
+@import "compass";
+@import "public/_config";
+
+#header {
+  padding: 0 $side-padding;
+  border-bottom: 3px solid #CDCCCB;
+}
+
+#header-bar {
+  padding: 20px 0;
+  color: $header-color;
+
+  .election-meta {
+    font-weight: 800;
+    margin-bottom: 5px;
+  }
+
+  .election-info {
+    color: #858585;
+  }
+
+  .election-locality {
+    font-size: 27px;
+    font-weight: 800;
+  }
+
+  .header-share {
+    text-align: right;
+  }
+
+  #js-tweet, #js-facebook-share, #js-gplus {
+    display: inline-block;
+    width: 30px;
+    height: 30px;
+  }
+  #js-tweet {
+    background: image-url('twitter_icon_normal.png') transparent 0 0 no-repeat;
+    &:hover {
+      background: image-url('twitter_icon_hover.png') transparent 0 0 no-repeat;
+    }
+  }
+  #js-facebook-share {
+    background: image-url('facebook_icon_normal.png') transparent 0 0 no-repeat;
+    &:hover {
+      background: image-url('facebook_icon_hover.png') transparent 0 0 no-repeat;
+    }
+  }
+  #js-gplus {
+    background: image-url('googleplus_icon_normal.png') transparent 0 0 no-repeat;
+    &:hover {
+      background: image-url('googleplus_icon_hover.png') transparent 0 0 no-repeat;
+    }
+  }
+
+  .ttv-logo {
+    display: inline-block;
+    margin-left: 20px;
+  }
+}
+
+#filter-bar {
+  padding: $section-padding $side-padding 20px;
+  border-bottom: $section-border;
+  background: #F3F3F3;
+  color: $filter-bar-color;
+
+  label {
+    font-size: 80%;
+    font-weight: 800;
+    text-transform: uppercase;
+    padding-left: 12px;
+  }
+
+  a {
+    color: $filter-bar-color;
+  }
+
+  .btn.dropdown-toggle, .dropdown-menu {
+    border-radius: 0;
+  }
+
+  .btn-group .btn.dropdown-toggle {
+    background: #DDDCDC;
+    border: none;
+  }
+
+  .btn-group.open .btn.dropdown-toggle {
+    background: #989898;
+    color: #fff;
+    box-shadow: none;
+    -webkit-box-shadow: none;
+    text-shadow: none;
+  }
+
+  .dropdown-menu > li > a:hover {
+    background: #DDDCDC;
+  }
+}
+
+#bread-crumbs {
+  padding: $section-padding $side-padding;
+  border-bottom: $section-border;
+
+  line-height: 30px;
+
+  .view-selector {
+    text-align: right;
+  }
+}
+
+#content {
+  padding: 0 $side-padding;
+}

@@ -1,0 +1,26 @@
+.btn-group .btn, .dropdown-menu {
+  border-radius: 0;
+  -moz-border-radius: 0;
+}
+
+.btn-group .btn {
+  background: #DDDCDC;
+  border: none;
+}
+
+.btn-group > .btn:first-child, .btn-group > .btn:last-child {
+  border-radius: 0;
+  -moz-border-radius: 0;
+}
+
+.btn-group.open .btn, .btn-group > .btn.active {
+  background: #989898;
+  color: #fff;
+  box-shadow: none;
+  -webkit-box-shadow: none;
+  text-shadow: none;
+}
+
+.dropdown-menu > li > a:hover {
+  background: #DDDCDC;
+}

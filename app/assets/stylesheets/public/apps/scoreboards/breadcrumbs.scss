@@ -1,0 +1,22 @@
+@import "public/_config";
+
+$bc-font-size: 18px;
+
+#bread-crumbs {
+  padding: $section-padding $side-padding;
+  border-bottom: $section-border;
+  color: $header-color;
+  font-size: $bc-font-size;
+
+  line-height: 30px;
+
+  .view-selector {
+    text-align: right;
+  }
+
+  label {
+    display: inline;
+    font-size: $bc-font-size;
+    font-weight: 800;
+  }
+}

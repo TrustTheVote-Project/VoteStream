@@ -1,0 +1,25 @@
+@import "compass";
+@import "public/_config";
+
+#filter-bar {
+  padding: $section-padding $side-padding 20px;
+  border-bottom: $section-border;
+  background: #F3F3F3;
+  color: $filter-bar-color;
+
+  label {
+    font-size: 80%;
+    font-weight: 800;
+    text-transform: uppercase;
+    padding-left: 12px;
+  }
+
+  a {
+    color: $filter-bar-color;
+  }
+
+}
+
+#content {
+  padding: 0 $side-padding;
+}
