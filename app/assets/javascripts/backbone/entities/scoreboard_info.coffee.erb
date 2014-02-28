@@ -3,8 +3,9 @@
   class Entities.ScoreboardInfo extends Backbone.Model
     reloadResults: (options = {}) ->
       return if @noResultsReload
-      @preselectedRefconId = options.refconId
+      @preselectedRefconId = options.refcon?.id
       results = @get 'results'
+      console.log @get('refcon')
       results.fetchForFilter @get('localityId'), @get('region'), @get('refcon')
 
     pickResult: ->
@@ -30,7 +31,7 @@
           result:           null
           precinctResults:  new Entities.PrecinctResultData
 
-          refcon:           new Backbone.Model({ name: 'All Federal Contests', type: 'all', id: 'federal' })
+          refcon:           App.request('entities:refcon:all-federal')
           refconLabel:      ->
             type = @refcon.get('type')
             if type == 'all'
@@ -45,12 +46,18 @@
           view:             null
 
         App.vent.on 'filters:set', (options = {}) ->
+          su = App.request 'entities:scoreboardUrl'
+          su.disable()
           sb.disableResultsReload()
-          App.vent.trigger 'region:selected', options.region
+          if options.region?
+            App.vent.trigger 'region:selected', options.region
+          if options.refcon?
+            App.vent.trigger 'refcon:selected', options.refcon
           sb.enableResultsReload()
+          su.enableAndUpdate()
 
           sb.reloadResults
-            refconId: options.refconId
+            refcon: options.refcon
 
         App.vent.on 'region:selected', (region) ->
           sb.set 'region', region

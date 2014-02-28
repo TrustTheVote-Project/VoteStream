@@ -53,27 +53,27 @@
       @.federalDropdownRegion.show new SelectorView
         name: 'Federal'
         itemView: ContestSelectorRow
-        prependedCollection: new Backbone.Collection([ { id: 'federal', name: 'All Federal Contests', type: 'all' } ])
+        prependedCollection: new Backbone.Collection([ App.request("entities:refcon:all-federal") ])
         model: scoreboardInfo
         collection: App.request 'entities:refcons:federal'
       @.stateDropdownRegion.show new SelectorView
         name: 'State'
         itemView: ContestSelectorRow
-        prependedCollection: new Backbone.Collection([ { id: 'state', name: 'All State Contests', type: 'all' } ])
+        prependedCollection: new Backbone.Collection([ App.request("entities:refcon:all-state") ])
         model: scoreboardInfo
         collection: App.request 'entities:refcons:state'
       @.localDropdownRegion.show new SelectorView
         name: 'Local'
         itemView: ContestSelectorRow
-        prependedCollection: new Backbone.Collection([ { id: 'mcd', name: 'All Local Contests', type: 'all' } ])
+        prependedCollection: new Backbone.Collection([ App.request("entities:refcon:all-local") ])
         model: scoreboardInfo
         collection: App.request 'entities:refcons:local'
       @.otherDropdownRegion.show new SelectorView
         name: 'Other'
         itemView: ContestSelectorRow
         prependedCollection: new Backbone.Collection([
-          { id: 'other', name: 'All Other Contests', type: 'all' },
-          { id: 'referenda', name: 'All Referenda', type: 'all' }
+          App.request("entities:refcon:all-other"),
+          App.request("entities:refcon:all-referenda")
         ])
         model: scoreboardInfo
         collection: App.request 'entities:refcons:other'

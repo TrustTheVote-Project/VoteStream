@@ -3,33 +3,40 @@
 
   class ScoreboardsApp.Router extends Marionette.AppRouter
     appRoutes:
-      "map(/:category)(/:regionType)(/:regionId)(/:refconId)"   : "show"
-      "list(/:category)(/:regionType)(/:regionId)(/:refconId)"  : "list"
+      "map(/:ctype/:cid)(/:rtype)(/:rid)"  : "show"
+      "list(/:ctype/:cid)(/:rtype)(/:rid)" : "list"
 
-  setParams = (category, regionType, regionId, refconId) ->
-    if regionType == 'd'
-      districts = App.request 'entities:districts'
-      App.execute 'when:fetched', districts, ->
-        district = districts.get regionId
-        App.vent.trigger 'filters:set',
-          region:   district
-          category: category
-          refconId: refconId
+  setParams = (ctype, cid, rtype, rid) ->
+    waitingFor = []
+    if ctype == 'c' or ctype == 'r'
+      waitingFor.push App.request('entities:refcons')
+    if rtype == 'd'
+      waitingFor.push App.request('entities:districts')
+    if rtype == 'p'
+      waitingFor.push App.request('entities:precincts')
 
-    else if regionType == 'p'
-      precincts = App.request 'entities:precincts'
-      App.execute 'when:fetched', precincts, ->
-        precinct = precincts.get regionId
-        App.vent.trigger 'filters:set',
-          region:   precinct
-          category: category
-          refconId: refconId
+    App.execute 'when:fetched', waitingFor, ->
+      refcon = null
+      if ctype == 'a'
+        refcon = App.request "entities:refcon:all-#{cid}"
+      else if ctype == 'c' or ctype == 'r'
+        refcons = App.request 'entities:refcons'
+        all = refcons.get('all')
+        refcon = all.findWhere
+          type: ctype
+          id:   cid
 
-    else if regionType == '-'
+      region = null
+      if rtype == 'd'
+        districts = App.request 'entities:districts'
+        region = districts.get rid
+      else if rtype == 'p'
+        precincts = App.request 'entities:precincts'
+        region = precincts.get rid
+        
       App.vent.trigger 'filters:set',
-        region:   null
-        category: category
-        refconId: refconId
+        region: region
+        refcon: refcon
 
 
   API =
