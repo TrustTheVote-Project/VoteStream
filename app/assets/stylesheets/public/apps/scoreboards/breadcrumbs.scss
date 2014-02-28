@@ -20,3 +20,26 @@ $bc-font-size: 18px;
     font-weight: 800;
   }
 }
+
+$selector-icon-size: 24px;
+$selector-icon-padding: 0px;
+
+#map-view-selector, #list-view-selector {
+  padding-left: $selector-icon-size + $selector-icon-padding;
+  background-position: 0 0;
+  background-repeat: no-repeat;
+  background-size: $selector-icon-size $selector-icon-size;
+}
+
+#map-view-selector {
+  background-image: image-url('mapview_icon_normal.png');
+  &.active {
+    background-image: image-url('mapview_icon_selected.png');
+  }
+}
+#list-view-selector {
+  background-image: image-url('listview_icon_normal.png');
+  &.active {
+    background-image: image-url('listview_icon_selected.png');
+  }
+}

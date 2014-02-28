@@ -1,24 +1,11 @@
-@import 'public/_mixins';
+@import 'public/_config';
 
-#filter-bar-region {
-  margin-bottom: 20px;
-
-  .dropdown-menu {
-    max-height: 150px;
-    overflow-y: scroll;
-    @include force-scrollbar();
-  }
+#content {
+  padding: 0 $side-padding;
 }
 
 @media (max-width: 767px) {
   #map-region {
     padding: 0 25px;
-  }
-}
-
-/* Landscape phones and down */
-@media (max-width: 480px) {
-  #filter-bar-region {
-    margin-bottom: 10px;
   }
 }

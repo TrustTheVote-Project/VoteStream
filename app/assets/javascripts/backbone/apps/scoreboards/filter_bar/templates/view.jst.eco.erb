@@ -1,17 +1,22 @@
 <div id="filter-bar">
   <div class="row-fluid">
       <div class="span4">
-        <label><%= I18n.t 'scoreboard.header.left_menu.label' %></label>
+        <label class="dropdown-label"><%= I18n.t 'scoreboard.header.left_menu.label' %></label>
         <span id='federal-dropdown-region'></span>
         <span id='state-dropdown-region'></span>
         <span id='local-dropdown-region'></span>
         <span id='other-dropdown-region'></span>
       </div>
 
-      <div class="span8">
-        <label><%= I18n.t 'scoreboard.header.right_menu.label' %></label>
+      <div class="span6">
+        <label class="dropdown-label"><%= I18n.t 'scoreboard.header.right_menu.label' %></label>
         <span id='district-dropdown-region'></span>
         <span id='precinct-dropdown-region'></span>
+      </div>
+
+      <div class="span2">
+        <label>Reporting: <%%= gon.percentReporting %>%</label>
+        <a href="#advanced-filters" id="js-advanced-filters">Advanced Filters &raquo;</a>
       </div>
   </div>
 </div>

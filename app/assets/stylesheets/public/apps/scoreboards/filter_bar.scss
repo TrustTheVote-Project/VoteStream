@@ -1,4 +1,5 @@
 @import "compass";
+@import 'public/_mixins';
 @import "public/_config";
 
 #filter-bar {
@@ -11,15 +12,29 @@
     font-size: 80%;
     font-weight: 800;
     text-transform: uppercase;
-    padding-left: 12px;
+    &.dropdown-label {
+      padding-left: 12px;
+    }
   }
 
   a {
     color: $filter-bar-color;
   }
 
+  .dropdown-menu {
+    max-height: 150px;
+    overflow-y: scroll;
+    @include force-scrollbar();
+  }
 }
 
-#content {
-  padding: 0 $side-padding;
+#filter-bar-region {
+  margin-bottom: 20px;
+}
+
+/* Landscape phones and down */
+@media (max-width: 480px) {
+  #filter-bar-region {
+    margin-bottom: 10px;
+  }
 }
