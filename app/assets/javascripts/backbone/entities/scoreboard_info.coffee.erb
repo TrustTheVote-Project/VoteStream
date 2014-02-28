@@ -42,11 +42,11 @@
           region:           null
           regionLabel:      -> if !@region then "<%= I18n.t 'scoreboard.header.right_menu.tabs.all' %>" else @region.get('name')
           percentReporting: gon.percentReporting
+          view:             null
 
         App.vent.on 'filters:set', (options = {}) ->
           sb.disableResultsReload()
           App.vent.trigger 'region:selected', options.region
-          # App.vent.trigger 'category:selected', options.category or gon.defaultCategory
           sb.enableResultsReload()
 
           sb.reloadResults
@@ -57,9 +57,6 @@
 
         App.vent.on 'refcon:selected', (refcon) ->
           sb.set 'refcon', refcon
-
-        # App.vent.on 'category:selected', (category) ->
-        #   sb.set 'category', category
 
         App.vent.on 'result:selected', (result) ->
           sb.set 'result', result
@@ -75,8 +72,6 @@
           region  = sb.get 'region'
           results = sb.get 'precinctResults'
           results.fetchForResult result, region
-
-        # sb.reloadResults()
 
       Entities.scoreboardInfo
 

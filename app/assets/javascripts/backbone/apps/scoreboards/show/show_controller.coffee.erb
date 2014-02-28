@@ -3,7 +3,7 @@
   Show.Controller =
     show: ->
       si = App.request 'entities:scoreboardInfo'
-      si.set 'view', '<%= I18n.t "scoreboard.header.view_selector.options.map" %>'
+      si.set 'view', 'map'
 
       view = new Show.View
       App.mainRegion.show view
