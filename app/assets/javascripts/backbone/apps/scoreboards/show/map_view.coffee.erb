@@ -204,7 +204,7 @@
       "<div class='precinct-bubble'><div class='iw-c'><h5>#{precinct.get('name')}</h5><table class='iw-rows'>#{rowsHtml}</table></div><div class='iw-all'><a>View all contests for this precinct</a></div></div>"
 
     simpleInfoWindowHtml: (poly, precinct) ->
-      "<div class='precinct-bubble'><h5>#{precinct.get('name')}</h5><div class='iw-all'><a href='#'>Set as Region</a></div></div>"
+      "<div class='precinct-bubble'><div class='iw-c'><h5>#{precinct.get('name')}</h5></div><div class='iw-all'><a href='#'>Set as Region</a></div></div>"
 
     onPolygonClick: (e) ->
       @setOptions
