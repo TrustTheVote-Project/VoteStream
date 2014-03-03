@@ -6,31 +6,15 @@
 
     initialize: (options = {}) ->
       @polygons = []
+      @options = options
 
       si = App.request 'entities:scoreboardInfo'
       @precinctResults = si.get 'precinctResults'
       @precinctResults.on 'sync', @updateColors, @
-
       @precincts = App.request 'entities:precincts'
-      if options.infoWindow
-        @infoWindow = new google.maps.InfoWindow()
-        self = @
-        google.maps.event.addListener @infoWindow, 'domready', ->
-          $('.iw-all a').on 'click', (e) ->
-            e.preventDefault()
-
-            self.infoWindow.close()
-
-            precinct = self.focusedPrecinct
-            self.focusedPrecinct = null
-
-            App.vent.trigger 'region:selected', precinct
-
-            if options.infoWindow != 'simple'
-              App.navigate 'list', trigger: true
 
     updateColors: ->
-      @infoWindow?.close()
+      @closeInfoWindow()
 
       items     = @precinctResults.get 'items'
       precincts = @precinctResults.get 'precincts'
@@ -52,13 +36,18 @@
       @renderPrecincts()
 
     onClose: ->
+      @closeInfoWindow()
       @removePreviousPolygons()
       @precinctResults.off 'sync', @updateColors, @
       delete @map
       delete @polygons
       delete @precinctResults
       delete @precincts
-      delete @infoWindow if @infoWindow?
+
+    closeInfoWindow: ->
+      if window.infoBubble?
+        window.infoBubble.close()
+        window.infoBubble = null
 
     initMap: ->
       center = new google.maps.LatLng gon.mapCenterLat, gon.mapCenterLon
@@ -203,18 +192,16 @@
         v = row.get('votes') || 0
         totalDisplayed += v
         p = Math.floor((v * 1000) / (votes || 1)) / 10.0
-        party = i.get('party')
+        color = i.get('c')
         name = i.get('name')
-        if party?
-          name = "#{name} (#{party.abbr})"
-        rowsHtml += "<tr><td class='iw-n'>#{name}</td><td class='iw-v'>#{v}</td><td class='iw-p'>#{p}%</td></tr>"
+        rowsHtml += "<tr style='color: #{color};'><td class='iw-n'>#{name}</td><td class='iw-v'>#{v}</td><td class='iw-p'>#{p}%</td></tr>"
 
       if votes > totalDisplayed
         v = votes - totalDisplayed
         p = Math.floor((v * 1000) / (votes || 1)) / 10.0
-        rowsHtml += "<tr><td class='iw-n'>Others</td><td class='iw-v'>#{v}</td><td class='iw-p'>#{p}%</td></tr>"
+        rowsHtml += "<tr class='other'><td class='iw-n'>Others</td><td class='iw-v'>#{v}</td><td class='iw-p'>#{p}%</td></tr>"
 
-      "<div class='precinct-bubble'><h5>#{precinct.get('name')}</h5><p>#{title}</p><table class='iw-rows'>#{rowsHtml}</table><div class='iw-all'><a>View All Races</a></div></div>"
+      "<div class='precinct-bubble'><div class='iw-c'><h5>#{precinct.get('name')}</h5><table class='iw-rows'>#{rowsHtml}</table></div><div class='iw-all'><a>View all contests for this precinct</a></div></div>"
 
     simpleInfoWindowHtml: (poly, precinct) ->
       "<div class='precinct-bubble'><h5>#{precinct.get('name')}</h5><div class='iw-all'><a href='#'>Set as Region</a></div></div>"
@@ -238,10 +225,33 @@
       else
         html = "<%= I18n.t 'scoreboard.not_voting' %>"
 
-      infoWindow = mapView.infoWindow
-      infoWindow.setContent html
-      infoWindow.setPosition e.latLng
-      infoWindow.open(mapView.map)
+      # close previous bubble
+      mapView.closeInfoWindow()
+
+      window.infoBubble = ib = new InfoBubble
+        content: html
+        position: e.latLng
+        map: mapView.map
+        padding: 0
+        borderRadius: 0
+        hideCloseButton: true
+        shadowStyle: 0
+      $(ib.arrowInner_).css
+        borderColor: '#f3f3f3 transparent transparent'
+
+      self = mapView
+      $(ib.bubble_).on 'click', (e) ->
+        return unless e.target.tagName == 'A'
+
+        precinct = self.focusedPrecinct
+        self.focusedPrecinct = null
+
+        App.vent.trigger 'region:selected', precinct
+
+        if self.options.infoWindow != 'simple'
+          App.navigate 'list', trigger: true
+
+      ib.open()
 
     renderPrecincts: ->
       App.execute 'when:fetched', @precincts, =>

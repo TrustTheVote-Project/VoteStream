@@ -155,7 +155,7 @@ class RefConResults
     end
 
     return {
-      items: candidates.map { |c| { id: c.id, name: c.name, party: { name: c.party.name, abbr: c.party.abbr } } },
+      items: candidates.map { |c| { id: c.id, name: c.name, party: { name: c.party.name, abbr: c.party.abbr }, c: ColorScheme.candidate_color(c, candidates.index(c)) } },
       precincts: pmap
     }
   end
@@ -198,7 +198,7 @@ class RefConResults
     end
 
     return {
-      items: responses.map { |r| { id: r.id, name: r.name } },
+      items: responses.map { |r| { id: r.id, name: r.name, c: ColorScheme.ballot_response_color(r, responses.index(r)) } },
       precincts: pmap
     }
   end

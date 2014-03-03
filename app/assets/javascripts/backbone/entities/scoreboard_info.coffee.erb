@@ -5,7 +5,6 @@
       return if @noResultsReload
       @preselectedRefconId = options.refcon?.id
       results = @get 'results'
-      console.log @get('refcon')
       results.fetchForFilter @get('localityId'), @get('region'), @get('refcon')
 
     pickResult: ->
