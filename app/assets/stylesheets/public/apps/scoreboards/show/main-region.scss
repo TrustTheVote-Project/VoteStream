@@ -1,9 +1,3 @@
-@import 'public/_config';
-
-#content {
-  padding: 0 $side-padding;
-}
-
 @media (max-width: 767px) {
   #map-region {
     padding: 0 25px;

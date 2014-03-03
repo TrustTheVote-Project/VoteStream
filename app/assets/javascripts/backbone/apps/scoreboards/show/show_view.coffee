@@ -144,7 +144,7 @@
       percentFormatted: -> "#{Math.floor(@votes * 1000 / (@totalVotes || 1)) / 10.0}%"
     onShow: ->
       c = @model.get('c')
-      $("h5", @$el).css(color: c)
+      $("h5, .percent", @$el).css(color: c)
       $(".filler", @$el).css(background: c)
 
 
