@@ -27,6 +27,18 @@ Enrs::Application.routes.draw do
   get '/data/region_refcons' => 'data#region_refcons'
   get '/data/precinct_results' => 'data#precinct_results'
 
+  # API
+  namespace :resources, module: 'api' do
+    namespace :v1, module: nil, format: 'json' do
+      get '/elections'             => 'v1#elections'
+      get '/election_districts'    => 'v1#election_districts'
+      get '/election_localities'   => 'v1#election_localities'
+      get '/election_ballot_style' => 'v1#election_ballot_style'
+      get '/election_contests'     => 'v1#election_contests'
+      get '/election_referenda'    => 'v1#election_referenda'
+    end
+  end
+
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".
 
