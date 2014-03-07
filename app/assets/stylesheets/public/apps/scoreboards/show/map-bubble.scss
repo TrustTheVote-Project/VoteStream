@@ -3,6 +3,9 @@ $main-color: #093A52;
 .precinct-bubble {
   h5 {
     margin-top: 0;
+    padding-bottom: 10px;
+    border-bottom: 1px solid #d7d4d4;
+    margin-bottom: 10px;
     font-size: 17.5px;
     color: $main-color;
   }
