@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140227112204) do
+ActiveRecord::Schema.define(version: 20140307094204) do
 
   create_table "ballot_response_results", force: true do |t|
     t.integer "ballot_response_id"

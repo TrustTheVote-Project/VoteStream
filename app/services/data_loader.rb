@@ -27,11 +27,15 @@ class DataLoader < BaseLoader
     state_el = @doc.css("vip_object > state").first
     state = State.find_by(uid: state_el['id'])
 
-    locality_el = state_el.css("> locality").first
-    name = locality_el.css("> name").first.content
-    type = locality_el.css("> type").first.content
-    uid  = locality_el['id']
-    Locality.create_with(name: name, locality_type: type, state: state).find_or_create_by(uid: uid)
+    if state
+      locality_el = state_el.css("> locality").first
+      name = locality_el.css("> name").first.content
+      type = locality_el.css("> type").first.content
+      uid  = locality_el['id']
+      Locality.create_with(name: name, locality_type: type, state: state).find_or_create_by(uid: uid)
+    else
+      raise InvalidFormat.new("State with ID '#{state_el['id']}' was not found")
+    end
   end
 
   def load_election
@@ -43,12 +47,16 @@ class DataLoader < BaseLoader
     type      = dequote(election_el.css("> election_type").first.content)
     statewide = dequote(election_el.css("> statewide").first.content).upcase == "YES"
 
-    state = State.find_by_uid!(state_uid)
-    state.elections.create_with({
-      held_on:        date,
-      election_type:  type,
-      statewide:      statewide
-    }).find_or_create_by(uid: uid)
+    state = State.find_by_uid(state_uid)
+    if state
+      state.elections.create_with({
+        held_on:        date,
+        election_type:  type,
+        statewide:      statewide
+      }).find_or_create_by(uid: uid)
+    else
+      raise InvalidFormat.new("State with ID '#{state_uid}' was not found")
+    end
   end
 
   def for_each_state

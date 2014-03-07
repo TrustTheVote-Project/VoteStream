@@ -4,7 +4,7 @@ states = [
   ["AR", "Arkansas"],
   ["AS", "American Samoa"],
   ["AZ", "Arizona"],
-  ["CA", "California"],
+  ["CA", "California", "06"],
   ["CO", "Colorado"],
   ["CT", "Connecticut"],
   ["DC", "District of Columbia"],
