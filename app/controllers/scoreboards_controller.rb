@@ -49,7 +49,6 @@ class ScoreboardsController < ApplicationController
       'other'     => I18n.t('scoreboard.header.left_menu.categories.other')
     }
 
-    gon.defaultCategory  = DataProcessor.default_category(locality)
     gon.percentReporting = DataProcessor.percent_reporting(locality)
     gon.reportingIds     = DataProcessor.reporting_precinct_ids(locality)
   end

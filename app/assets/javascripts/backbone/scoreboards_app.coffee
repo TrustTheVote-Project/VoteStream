@@ -10,7 +10,7 @@
     App.module("HeaderApp").start()
     App.module("ScoreboardsApp").start()
 
-  App.rootRoute = "map/#{gon.defaultCategory}/-/-"
+  App.rootRoute = "map"
 
   App.on "initialize:after", ->
     @startHistory()
