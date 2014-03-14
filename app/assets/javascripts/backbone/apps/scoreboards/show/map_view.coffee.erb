@@ -120,6 +120,10 @@ InfoBubble.prototype.panToView = ->
       @map.mapTypes.set 'map-style', styledMapType
       @map.setMapTypeId 'map-style'
 
+      if @options.infoWindow
+        google.maps.event.addListener @map, 'click', () =>
+          @closeInfoWindow()
+
     pointFromPair: (pair) ->
       coords = pair.split(',')
       new google.maps.LatLng parseFloat(coords[1]), parseFloat(coords[0])
