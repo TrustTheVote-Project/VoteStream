@@ -1,3 +1,27 @@
+# alternative panning to fit just the bubble
+InfoBubble.prototype.panToView = ->
+  projection = @getProjection()
+
+  return if !projection
+  return if !@bubble_
+
+  anchorHeight = @getAnchorHeight_()
+  height       = @bubble_.offsetHeight + anchorHeight
+  map          = @get('map')
+  mapDiv       = map.getDiv()
+  mapHeight    = mapDiv.offsetHeight
+  latLng       = @getPosition()
+  centerPos    = projection.fromLatLngToContainerPixel(map.getCenter())
+  pos          = projection.fromLatLngToContainerPixel(latLng)
+
+  padding      = 20 # 20 pixels padding around bubble
+  yDelta       = (height + padding) - pos.y
+
+  if yDelta > 0
+    centerPos.y -= yDelta
+    map.panTo(projection.fromContainerPixelToLatLng(centerPos))
+
+
 @App.module "ScoreboardsApp.Show", (Show, App, Backbone, Marionette, $, _) ->
 
   class Show.MapView extends Marionette.ItemView
