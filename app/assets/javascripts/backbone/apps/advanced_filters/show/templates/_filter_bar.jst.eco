@@ -6,7 +6,7 @@
       </div>
 
       <div class="span2">
-        <a href="#election-metadata">View Election Metadata &raquo;</a>
+        <a href="#election-metadata" onclick="return false;" id="js-election-metadata">View Election Metadata &raquo;</a>
       </div>
   </div>
 </div>
