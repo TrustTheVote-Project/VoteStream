@@ -1,0 +1,12 @@
+<div id="filter-bar">
+  <div class="row-fluid">
+      <div class="span10">
+        <a href="#" onclick="window.history.back(); return false;">&laquo; Return to Previous Screen</a>
+        <h3>Advanced Filters</h3>
+      </div>
+
+      <div class="span2">
+        <a href="#election-metadata">View Election Metadata &raquo;</a>
+      </div>
+  </div>
+</div>

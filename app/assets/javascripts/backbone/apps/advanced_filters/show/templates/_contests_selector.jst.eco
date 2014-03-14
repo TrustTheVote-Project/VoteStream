@@ -1,0 +1,12 @@
+<div class="box">
+  <div class="box-header">
+    Contests
+  </div>
+
+  <div class="box-content">
+    <div id="federal-contests-region"></div>
+    <div id="state-contests-region"></div>
+    <div id="local-contests-region"></div>
+    <div id="other-contests-region"></div>
+  </div>
+</div>

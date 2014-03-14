@@ -1,0 +1,20 @@
+<div class="box">
+  <div class="box-header">
+    Locations
+  </div>
+
+  <div class="box-content">
+    <div class="row-fluid">
+      <div class="span6">
+        <div id="federal-districts-region"></div>
+        <div id="state-districts-region"></div>
+        <div id="city-districts-region"></div>
+        <div id="other-districts-region"></div>
+      </div>
+
+      <div class="span6">
+        <div id="precincts-region"></div>
+      </div>
+    </div>
+  </div>
+</div>

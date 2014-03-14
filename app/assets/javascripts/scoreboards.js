@@ -3,9 +3,10 @@
 //= require backbone.marionette
 //= require infobubble
 //= require_tree ./backbone/config
-//= require backbone/scoreboards_app
+//= require backbone/main_app
 //= require_tree ./backbone/entities
 //= require_tree ./backbone/apps/header
 //= require_tree ./backbone/apps/scoreboards
+//= require_tree ./backbone/apps/advanced_filters
 
 App.start();

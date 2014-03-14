@@ -1,0 +1,79 @@
+$box-header-bg: #808080;
+$box-header-fg: #ffffff;
+$box-content-bg: #F3F3F3;
+$box-content-fg: #000000;
+
+$selector-header-fg: #093A52;
+$selector-controls-fg: #093A52;
+$selector-stats-fg: #B4B3B4;
+
+#advanced-filters-show {
+  #filter-bar {
+    height: 53px;
+
+    h3 {
+      margin: 0;
+    }
+  }
+
+  .save-as {
+    margin: 20px 0;
+    text-align: right;
+    label {
+      display: inline-block;
+      color: #808080;
+      font-weight: 800;
+    }
+
+    a {
+      display: inline-block;
+      margin-left: 10px;
+    }
+
+    .btn {
+      background: #4AA5D6;
+      border: 0;
+    }
+  }
+
+  .box-header {
+    color: $box-header-fg;
+    background: $box-header-bg;
+    padding: 5px 20px;
+    font-size: 16px;
+    font-weight: 800;
+  }
+
+  .box-content {
+    color: $box-content-fg;
+    background: $box-content-bg;
+    padding: 10px 20px;
+  }
+
+  .selector {
+    select {
+      width: 100%;
+    }
+
+    .js-select-all:after {
+      content: '|';
+      display: inline-block;
+      padding: 0 0 0 5px;
+    }
+  }
+
+  .selector-header {
+    color: $selector-header-fg;
+    font-weight: 800;
+  }
+
+  .selector-controls {
+    a {
+      color: $selector-controls-fg;
+    }
+  }
+  .selector-stats-region span {
+    color: $selector-stats-fg;
+    display: inline;
+  }
+}

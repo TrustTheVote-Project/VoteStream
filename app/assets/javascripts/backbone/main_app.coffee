@@ -9,6 +9,7 @@
   App.addInitializer ->
     App.module("HeaderApp").start()
     App.module("ScoreboardsApp").start()
+    App.module("AdvancedFiltersApp").start()
 
   App.rootRoute = "map"
 

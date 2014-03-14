@@ -1,0 +1,8 @@
+<div class="selector-header"><%= @title %></div>
+<div class="selector-controls">
+  <a href="" class="js-select-all">Select All</a>
+  <a href="" class="js-deselect-all">Deselect All</a>
+  <span class="selector-stats-region"></span>
+</div>
+<div class="selector-list options-region">
+</div>
