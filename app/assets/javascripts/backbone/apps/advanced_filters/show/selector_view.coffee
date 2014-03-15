@@ -17,7 +17,8 @@
 
     onShow: ->
       @selectionStatsRegion.show new SelectionStatsView()
-      @optionsRegion.show new OptionsView({ rows: @options.rows or 5 })
+      console.log @options
+      @optionsRegion.show new OptionsView rows: @options.rows or 5, collection: @options.collection
 
 
   class SelectionStatsView extends Marionette.ItemView
@@ -26,6 +27,10 @@
 
   class OptionView extends Marionette.ItemView
     template: 'advanced_filters/show/_selector_view_option'
+    tagName: 'option'
+
+    onShow: ->
+      @$el.attr value: @model.get('id')
 
   class OptionsView extends Marionette.CollectionView
     itemView: OptionView

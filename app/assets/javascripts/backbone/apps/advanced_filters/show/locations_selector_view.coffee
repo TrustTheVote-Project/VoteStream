@@ -15,4 +15,4 @@
       @stateDistrictsRegion.show new Show.SelectorView title: 'State'
       @cityDistrictsRegion.show new Show.SelectorView title: 'City/Town'
       @otherDistrictsRegion.show new Show.SelectorView title: 'Other'
-      @precinctsRegion.show new Show.SelectorView title: 'Precincts', rows: 30
+      @precinctsRegion.show new Show.SelectorView title: 'Precincts', rows: 30, collection: App.request 'entities:precincts'

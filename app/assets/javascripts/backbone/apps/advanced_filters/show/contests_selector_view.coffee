@@ -10,7 +10,7 @@
       otherContestsRegion:   '#other-contests-region'
 
     onShow: ->
-      @federalContestsRegion.show new Show.SelectorView title: 'Federal'
-      @stateContestsRegion.show new Show.SelectorView title: 'State'
-      @localContestsRegion.show new Show.SelectorView title: 'Local'
-      @otherContestsRegion.show new Show.SelectorView title: 'Other'
+      @federalContestsRegion.show new Show.SelectorView title: 'Federal', collection: App.request("entities:refcons:federal")
+      @stateContestsRegion.show new Show.SelectorView title: 'State', collection: App.request("entities:refcons:state")
+      @localContestsRegion.show new Show.SelectorView title: 'Local', collection: App.request("entities:refcons:local")
+      @otherContestsRegion.show new Show.SelectorView title: 'Other', collection: App.request("entities:refcons:other")
