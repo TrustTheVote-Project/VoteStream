@@ -44,16 +44,6 @@ class RefConResults
     list_to_refcons([ contests, referendums ].compact.flatten, params)
   end
 
-  # def data(params)
-  #   if cid = params[:contest_id]
-  #     return contest_data(Contest.find(cid), params)
-  #   elsif rid = params[:referendum_id]
-  #     return referendum_data(Referendum.find(rid), params)
-  #   else
-  #     return {}
-  #   end
-  # end
-
   def contest_data(contest, params)
     pids       = precinct_ids_for_region(params)
     cids       = contest.candidate_ids

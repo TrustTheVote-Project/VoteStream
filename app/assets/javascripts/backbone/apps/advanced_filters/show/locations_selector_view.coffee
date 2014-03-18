@@ -11,8 +11,8 @@
       precinctsRegion:        '#precincts-region'
 
     onShow: ->
-      @federalDistrictsRegion.show new Show.SelectorView title: 'Federal'
-      @stateDistrictsRegion.show new Show.SelectorView title: 'State'
-      @cityDistrictsRegion.show new Show.SelectorView title: 'City/Town'
-      @otherDistrictsRegion.show new Show.SelectorView title: 'Other'
+      @federalDistrictsRegion.show new Show.SelectorView title: 'Federal', collection: App.request 'entities:districts:federal'
+      @stateDistrictsRegion.show new Show.SelectorView title: 'State', collection: App.request 'entities:districts:state'
+      @cityDistrictsRegion.show new Show.SelectorView title: 'City/Town', collection: App.request 'entities:districts:local'
+      @otherDistrictsRegion.show new Show.SelectorView title: 'Other', collection: App.request 'entities:districts:other'
       @precinctsRegion.show new Show.SelectorView title: 'Precincts', rows: 30, collection: App.request 'entities:precincts'

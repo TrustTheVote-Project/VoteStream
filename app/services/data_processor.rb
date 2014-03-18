@@ -31,11 +31,12 @@ class DataProcessor
     end
   end
 
+  # returns IDs of districts that doesn't cover whole range of precincts
   def self.focused_district_ids(locality)
     Rails.cache.fetch("locality:#{locality.id}:focused_district_ids") do
       precinct_count = locality.precincts.count
       precinct_ids   = locality.precinct_ids
-      DistrictsPrecinct.select("district_id").where([ "precinct_id IN (?)", precinct_ids ]).group("district_id").having("count(*) < #{precinct_count}")
+      DistrictsPrecinct.where(precinct_id: precinct_ids).group("district_id").having("count(*) < #{precinct_count}").pluck(:district_id)
     end
   end
 

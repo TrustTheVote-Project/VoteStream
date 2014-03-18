@@ -17,7 +17,6 @@
 
     onShow: ->
       @selectionStatsRegion.show new SelectionStatsView()
-      console.log @options
       @optionsRegion.show new OptionsView rows: @options.rows or 5, collection: @options.collection
 
 

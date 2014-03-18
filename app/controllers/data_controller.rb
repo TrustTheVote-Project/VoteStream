@@ -4,10 +4,16 @@ class DataController < ApplicationController
     locality  = Locality.find(params[:locality_id])
     districts = locality.focused_districts.includes(:precincts)
 
-    order = %w{ Federal State MCD }
-    ordered = districts.sort_by { |d| "#{order.index(d.district_type) || 5}#{d.name.downcase}" }
+    if params[:grouped]
+      grouped = districts.group_by(&:district_type)
+      @json   = Hash[grouped.map { |t, ds| [ (t || 'other').downcase, ds.map { |d| { id: d.id, name: d.name.titleize } } ] }]
+    else
+      order   = %w{ Federal State MCD }
+      ordered = districts.sort_by { |d| "#{order.index(d.district_type) || 5}#{d.name.downcase}" }
+      @json   = ordered.map { |d| { id: d.id, name: d.name.titleize, pids: d.precinct_ids } }
+    end
 
-    render json: ordered.map { |d| { id: d.id, name: d.name.titleize, pids: d.precinct_ids } }
+    render json: @json
   end
 
   def precincts
