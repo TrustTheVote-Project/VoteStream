@@ -10,7 +10,8 @@
       otherContestsRegion:   '#other-contests-region'
 
     onShow: ->
-      @federalContestsRegion.show new Show.SelectorView title: 'Federal', collection: App.request("entities:refcons:federal")
-      @stateContestsRegion.show new Show.SelectorView title: 'State', collection: App.request("entities:refcons:state")
-      @localContestsRegion.show new Show.SelectorView title: 'Local', collection: App.request("entities:refcons:local")
-      @otherContestsRegion.show new Show.SelectorView title: 'Other', collection: App.request("entities:refcons:other")
+      sel = new Backbone.Collection()
+      @federalContestsRegion.show new Show.SelectorView title: 'Federal', collection: App.request("entities:refcons:federal"), selection: sel
+      @stateContestsRegion.show new Show.SelectorView title: 'State', collection: App.request("entities:refcons:state"), selection: sel
+      @localContestsRegion.show new Show.SelectorView title: 'Local', collection: App.request("entities:refcons:local"), selection: sel
+      @otherContestsRegion.show new Show.SelectorView title: 'Other', collection: App.request("entities:refcons:other"), selection: sel

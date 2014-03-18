@@ -1,0 +1,27 @@
+@import 'public/_mixins';
+
+.selection {
+  @include force-scrollbar();
+  background: #fff;
+  overflow-y: scroll;
+  margin-bottom: 10px;
+  border: 1px solid #CDCCCB;
+  padding: 5px;
+
+  > div {
+    padding: 2px;
+    padding-left: 22px;
+    line-height: 20px;
+
+    background: image-url('checkbox-unchecked.png') 0 0 no-repeat;
+    cursor: pointer;
+
+    -moz-user-select: none;
+    -webkit-user-select: none;
+    -ms-user-select: none;
+
+    &.selected {
+      background-image: image-url('checkbox-checked.png');
+    }
+  }
+}

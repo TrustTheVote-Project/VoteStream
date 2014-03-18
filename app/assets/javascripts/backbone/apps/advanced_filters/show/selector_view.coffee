@@ -8,6 +8,10 @@
       selectionStatsRegion: '.selector-stats-region'
       optionsRegion:        '.options-region'
 
+    events:
+      'click .js-select-all':   'onSelectAll'
+      'click .js-deselect-all': 'onDeselectAll'
+
     initialize: (options) -> @options = options
 
     serializeData: ->
@@ -16,8 +20,20 @@
       data
 
     onShow: ->
-      @selectionStatsRegion.show new SelectionStatsView()
-      @optionsRegion.show new OptionsView rows: @options.rows or 5, collection: @options.collection
+      @optionsView = new OptionsView collection: @options.collection, selection: @options.selection, rows: @options.rows
+
+      @selectionStatsRegion.show new SelectionStatsView selection: @options.selection
+      @optionsRegion.show @optionsView
+
+    onSelectAll: (e) ->
+      e.preventDefault()
+      @options.selection?.add(m) for m in @options.collection.models
+      @optionsView.render()
+
+    onDeselectAll: (e) ->
+      e.preventDefault()
+      @options.selection?.remove(m) for m in @options.collection.models
+      @optionsView.render()
 
 
   class SelectionStatsView extends Marionette.ItemView
@@ -26,18 +42,34 @@
 
   class OptionView extends Marionette.ItemView
     template: 'advanced_filters/show/_selector_view_option'
-    tagName: 'option'
+    tagName: 'div'
+
+    events:
+      'click': (e) ->
+        e.preventDefault()
+
+        if @$el.hasClass('selected')
+          @$el.removeClass('selected')
+          @options.selection?.remove(@model)
+        else
+          @$el.addClass('selected')
+          @options.selection?.add(@model)
+
 
     onShow: ->
-      @$el.attr value: @model.get('id')
+      id = @model.get('id')
+      @$el.addClass('selected') if @options.selection?.get(@model.get('id'))?
 
   class OptionsView extends Marionette.CollectionView
     itemView: OptionView
-    tagName: 'select'
+    tagName: 'div'
+    className: 'selection'
 
-    initialize: (options) -> @options = options
+    initialize: (options) ->
+      @options = options
+
+    itemViewOptions: -> @options
 
     onShow: ->
-      @$el.attr
-        multiple: 'yes'
-        size: @options.rows
+      @$el.css
+        height: (@options.rows or 5) * 24
