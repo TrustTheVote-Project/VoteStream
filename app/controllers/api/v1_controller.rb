@@ -5,7 +5,7 @@ class Api::V1Controller < Api::BaseController
   end
 
   def election_districts
-    raise Api::NotSupported
+    @districts = locality.districts
   end
 
   def election_localities
@@ -17,11 +17,18 @@ class Api::V1Controller < Api::BaseController
   end
 
   def election_contests
-    raise Api::NotSupported
+    @contests = locality.contests.includes(candidates: [ :party ])
   end
 
   def election_referenda
-    raise Api::NotSupported
+    @referendums = locality.referendums.includes(:ballot_responses)
   end
-  
+
+  private
+
+  def locality
+    election = Election.find_by(uid: params[:electionUID])
+    election.state.localities.first
+  end
+
 end
