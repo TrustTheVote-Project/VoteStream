@@ -1,6 +1,6 @@
 @import 'public/_mixins';
 
-.selection {
+.options-view {
   @include force-scrollbar();
   background: #fff;
   overflow-y: scroll;
@@ -10,7 +10,7 @@
 
   > div {
     padding: 2px;
-    padding-left: 22px;
+    padding-left: 24px;
     line-height: 20px;
 
     background: image-url('checkbox-unchecked.png') 0 0 no-repeat;
@@ -19,6 +19,10 @@
     -moz-user-select: none;
     -webkit-user-select: none;
     -ms-user-select: none;
+
+    &:hover {
+      background-color: #eee;
+    }
 
     &.selected {
       background-image: image-url('checkbox-checked.png');
