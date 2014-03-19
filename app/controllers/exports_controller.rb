@@ -2,11 +2,12 @@ class ExportsController < ApplicationController
 
   def index
     locality     = Locality.find(params[:lid])
+    election     = locality.state.elections.first
     contest_ids  = params[:cid].to_s.split('-')
     district_ids = params[:did].to_s.split('-')
     precinct_ids = params[:pid].to_s.split('-')
 
-    @filename = "test.#{params[:format]}"
+    @filename = "#{locality.name.titleize.gsub(/[^a-z]/i, '')}#{election.held_on.strftime('%Y%m%d')}.#{params[:format]}"
 
     respond_to do |format|
       format.csv
