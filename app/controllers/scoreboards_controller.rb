@@ -13,6 +13,7 @@ class ScoreboardsController < ApplicationController
     gon.locality_name = locality.name.titleize
     gon.locality_info = "#{locality.name.titleize}, #{state.name}"
     gon.election_info = "#{election.held_on.strftime('%Y')} General Election"
+    gon.data_filename = "#{locality.name.titleize.gsub(/[^a-z]/i, '')}#{election.held_on.strftime('%Y%m%d')}"
 
     gon.mapCenterLat  = -93.147
     gon.mapCenterLon  = 45.005988
@@ -51,6 +52,7 @@ class ScoreboardsController < ApplicationController
 
     gon.percentReporting = DataProcessor.percent_reporting(locality)
     gon.reportingIds     = DataProcessor.reporting_precinct_ids(locality)
+    gon.exports_url      = exports_url
   end
 
 end

@@ -1,6 +1,16 @@
 @App.module "Entities", (Entities, App, Backbone, Marionette, $, _) ->
 
   class Entities.AdvancedFilter extends Backbone.Model
+    requestData: ->
+      sc = @get 'selectedContests'
+      sd = @get 'selectedDistricts'
+      sp = @get 'selectedPrecincts'
+
+      return {
+        cid: sc.pluck('id').join('-')
+        did: sd.pluck('id').join('-')
+        pid: sp.pluck('id').join('-')
+      }
 
   API =
     getAdvancedFilter: ->

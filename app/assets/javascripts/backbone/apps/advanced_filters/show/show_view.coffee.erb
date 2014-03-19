@@ -9,7 +9,24 @@
       contestsRegion:  '#contests-region'
       locationsRegion: '#locations-region'
 
+    events:
+      'click #js-save-as-csv': (e) -> @saveAs(e, 'csv')
+      'click #js-save-as-pdf': (e) -> @saveAs(e, 'pdf')
+      'click #js-save-as-xml': (e) -> @saveAs(e, 'xml')
+
+    serializeData: ->
+      data = {}
+      data.filename = gon.data_filename
+      data
+
     onShow: ->
       @filterBarRegion.show new Show.FilterBarView()
       @contestsRegion.show new Show.ContestsSelectorView()
       @locationsRegion.show new Show.LocationsSelectorView()
+
+    saveAs: (e, format) ->
+      e.preventDefault()
+      af = App.request 'entities:advancedFilter'
+      data = af.requestData()
+      data.lid = gon.locality_id
+      window.open "#{gon.exports_url}.#{format}?#{$.param(data)}"

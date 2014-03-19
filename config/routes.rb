@@ -27,6 +27,8 @@ Enrs::Application.routes.draw do
   get '/data/region_refcons' => 'data#region_refcons'
   get '/data/precinct_results' => 'data#precinct_results'
 
+  get '/exports' => 'exports#index', as: 'exports'
+  
   # API
   namespace :resources, module: 'api' do
     namespace :v1, module: nil, format: 'json' do

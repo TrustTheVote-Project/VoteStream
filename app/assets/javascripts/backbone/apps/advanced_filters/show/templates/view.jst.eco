@@ -8,9 +8,9 @@
   <div class="row-fluid save-as">
     <div class="span12">
       <label>Save as</label>
-      <a href="" id="js-save-as-csv" class="btn btn-primary">CSV</a>
-      <a href="" id="js-save-as-pdf" class="btn btn-primary">PDF</a>
-      <a href="" id="js-save-as-xml" class="btn btn-primary">VIP-XML</a>
+      <a href="" id="js-save-as-csv" class="btn btn-primary" download="<%= @filename %>.csv">CSV</a>
+      <a href="" id="js-save-as-pdf" class="btn btn-primary" download="<%= @filename %>.pdf">PDF</a>
+      <a href="" id="js-save-as-xml" class="btn btn-primary" download="<%= @filename %>.xml">VIP-XML</a>
     </div>
   </div>
 </div>

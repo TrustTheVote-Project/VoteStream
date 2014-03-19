@@ -12,7 +12,7 @@
 
     onShow: ->
       af = App.request 'entities:advancedFilter'
-      sd = af.get 'selectedContests'
+      sd = af.get 'selectedDistricts'
       sp = af.get 'selectedPrecincts'
 
       @federalDistrictsRegion.show new Show.SelectorView title: 'Federal', collection: App.request('entities:districts:federal'), selection: sd
