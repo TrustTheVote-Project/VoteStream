@@ -20,28 +20,7 @@ class RefConResults
   end
 
   def region_refcons(params)
-    district_ids = districts_for_region(params)
-
-    filt = {}
-    filt[:district_id] = district_ids unless district_ids.blank?
-
-    cat = params[:category]
-    if cat.blank?
-      if contest_id = params[:contest_id]
-        contests = Contest.where(filt).where(id: contest_id)
-      elsif referendum_id = params[:referendum_id]
-        referendums = Referendum.where(filt).where(id: referendum_id)
-      else
-        contests = Contest.where(filt)
-      end
-    elsif cat == 'referenda'
-      referendums = Referendum.where(filt)
-    else
-      contests = Contest.where(filt).where(district_type: cat)
-      referendums = Referendum.where(filt).where(district_type: cat)
-    end
-
-    list_to_refcons([ contests, referendums ].compact.flatten, params)
+    list_to_refcons(refcons_in_region(params), params)
   end
 
   def contest_data(contest, params)
@@ -103,6 +82,51 @@ class RefConResults
       return referendum_precinct_results(Referendum.find(rid), params)
     else
       return {}
+    end
+  end
+
+  # returns the results of polls for a given precinct (for API)
+  def all_precinct_results(precinct, params)
+    filt = { district_id: precinct.district_ids }
+    contests = Contest.where(filt)
+    referendums = Referendum.where(filt)
+    refcons = [ contests, referendums ].flatten.compact
+
+    refcons.inject([]) do |memo, refcon|
+      if refcon.kind_of?(Contest)
+        c = refcon
+        cids = c.candidate_ids
+
+        candidate_query = Candidate.select("id, uid").where(id: cids)
+        candidate_uids = candidate_query.inject({}) do |m, r|
+          m[r.id] = r.uid
+          m
+        end
+
+        results = CandidateResult.where(candidate_id: cids, precinct_id: precinct.id)
+        results = results.group('candidate_id').select("sum(votes) v, candidate_id").map do |cv|
+          { candidate_id: candidate_uids[cv.candidate_id], votes: cv.v }
+        end
+
+        memo << { contest_id: c.uid, results: results }
+      else
+        r = refcon
+        brids = r.ballot_response_ids
+
+        ballot_response_uids = BallotResponse.select("id, uid").where(id: brids).inject({}) do |m, r|
+          m[r.id] = r.uid
+          m
+        end
+
+        results = BallotResponseResult.where(ballot_response_id: brids, precinct_id: precinct.id)
+        results = results.group('ballot_response_id').select("sum(votes) v, ballot_response_id").map do |bv|
+          { ballot_response_id: ballot_response_uids[bv.ballot_response_id], votes: bv.v }
+        end
+
+        memo << { referendum_id: r.uid, results: results }
+      end
+
+      memo
     end
   end
 
@@ -265,4 +289,30 @@ class RefConResults
       nil
     end
   end
+
+  def refcons_in_region(params)
+    district_ids = districts_for_region(params)
+
+    filt = {}
+    filt[:district_id] = district_ids unless district_ids.blank?
+
+    cat = params[:category]
+    if cat.blank?
+      if contest_id = params[:contest_id]
+        contests = Contest.where(filt).where(id: contest_id)
+      elsif referendum_id = params[:referendum_id]
+        referendums = Referendum.where(filt).where(id: referendum_id)
+      else
+        contests = Contest.where(filt)
+      end
+    elsif cat == 'referenda'
+      referendums = Referendum.where(filt)
+    else
+      contests = Contest.where(filt).where(district_type: cat)
+      referendums = Referendum.where(filt).where(district_type: cat)
+    end
+
+    [ contests, referendums ].compact.flatten
+  end
+
 end

@@ -28,7 +28,7 @@ Enrs::Application.routes.draw do
   get '/data/precinct_results' => 'data#precinct_results'
 
   get '/exports' => 'exports#index', as: 'exports'
-  
+
   # API
   namespace :resources, module: 'api' do
     namespace :v1, module: nil, format: 'json' do
@@ -38,6 +38,7 @@ Enrs::Application.routes.draw do
       get '/election_ballot_style' => 'v1#election_ballot_style'
       get '/election_contests'     => 'v1#election_contests'
       get '/election_referenda'    => 'v1#election_referenda'
+      get '/election_results_precinct' => 'v1#election_results_precinct'
     end
   end
 

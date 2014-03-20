@@ -24,11 +24,21 @@ class Api::V1Controller < Api::BaseController
     @referendums = locality.referendums.includes(:ballot_responses)
   end
 
+  # --- Election results ---
+
+  def election_results_precinct
+    precinct = election.state.precincts.find_by!(uid: params[:precinct_uid])
+    @results = RefConResults.new.all_precinct_results(precinct, { candidate_id: params[:candidate_id] })
+  end
+
   private
 
   def locality
-    election = Election.find_by(uid: params[:electionUID])
-    election.state.localities.first
+    @locality ||= election.state.localities.first
+  end
+
+  def election
+    @election ||= Election.find_by(uid: params[:electionUID])
   end
 
 end
