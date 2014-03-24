@@ -27,8 +27,8 @@ class Api::V1Controller < Api::BaseController
   # --- Election results ---
 
   def election_results_precinct
-    precinct = election.state.precincts.find_by!(uid: params[:precinct_uid])
-    @results = RefConResults.new.all_precinct_results(precinct, { candidate_id: params[:candidate_id] })
+    @precinct = election.state.precincts.find_by!(uid: params[:precinct_uid])
+    @results = RefConResults.new.all_precinct_results(@precinct, { candidate_id: params[:candidate_id] })
   end
 
   private

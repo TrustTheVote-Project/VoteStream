@@ -11,16 +11,20 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140307094204) do
+ActiveRecord::Schema.define(version: 20140324092900) do
 
   create_table "ballot_response_results", force: true do |t|
     t.integer "ballot_response_id"
     t.integer "precinct_id"
     t.integer "votes"
+    t.string  "uid"
+    t.integer "contest_result_id",  null: false
   end
 
   add_index "ballot_response_results", ["ballot_response_id"], name: "index_ballot_response_results_on_ballot_response_id", using: :btree
+  add_index "ballot_response_results", ["contest_result_id"], name: "index_ballot_response_results_on_contest_result_id", using: :btree
   add_index "ballot_response_results", ["precinct_id"], name: "index_ballot_response_results_on_precinct_id", using: :btree
+  add_index "ballot_response_results", ["uid"], name: "index_ballot_response_results_on_uid", using: :btree
 
   create_table "ballot_responses", force: true do |t|
     t.integer "referendum_id"
@@ -36,10 +40,14 @@ ActiveRecord::Schema.define(version: 20140307094204) do
     t.integer "candidate_id"
     t.integer "precinct_id"
     t.integer "votes"
+    t.string  "uid"
+    t.integer "contest_result_id", null: false
   end
 
   add_index "candidate_results", ["candidate_id"], name: "index_candidate_results_on_candidate_id", using: :btree
+  add_index "candidate_results", ["contest_result_id"], name: "index_candidate_results_on_contest_result_id", using: :btree
   add_index "candidate_results", ["precinct_id"], name: "index_candidate_results_on_precinct_id", using: :btree
+  add_index "candidate_results", ["uid"], name: "index_candidate_results_on_uid", using: :btree
 
   create_table "candidates", force: true do |t|
     t.string  "uid",        null: false
@@ -51,6 +59,22 @@ ActiveRecord::Schema.define(version: 20140307094204) do
 
   add_index "candidates", ["contest_id"], name: "index_candidates_on_contest_id", using: :btree
   add_index "candidates", ["uid"], name: "index_candidates_on_uid", unique: true, using: :btree
+
+  create_table "contest_results", force: true do |t|
+    t.string   "uid",               null: false
+    t.string   "certification",     null: false
+    t.integer  "precinct_id",       null: false
+    t.integer  "contest_id"
+    t.integer  "referendum_id"
+    t.integer  "total_votes"
+    t.integer  "total_valid_votes"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "contest_results", ["contest_id"], name: "index_contest_results_on_contest_id", using: :btree
+  add_index "contest_results", ["precinct_id"], name: "index_contest_results_on_precinct_id", using: :btree
+  add_index "contest_results", ["referendum_id"], name: "index_contest_results_on_referendum_id", using: :btree
 
   create_table "contests", force: true do |t|
     t.string  "uid",           null: false

@@ -7,6 +7,7 @@ class Precinct < ActiveRecord::Base
   has_many   :ballot_response_results, dependent: :destroy
   has_many   :contests,    -> { uniq }, through: :districts
   has_many   :referendums, -> { uniq }, through: :districts
+  has_many   :contest_results, dependent: :destroy
 
   validates :uid, presence: true
   validates :name, presence: true

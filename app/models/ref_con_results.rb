@@ -87,47 +87,97 @@ class RefConResults
 
   # returns the results of polls for a given precinct (for API)
   def all_precinct_results(precinct, params)
-    filt = { district_id: precinct.district_ids }
-    contests = Contest.where(filt)
-    referendums = Referendum.where(filt)
-    refcons = [ contests, referendums ].flatten.compact
+    crs = precinct.contest_results.includes(:contest, :referendum)
+    crs.map do |cr|
+      if cr.contest_related?
+        c = cr.contest
 
-    refcons.inject([]) do |memo, refcon|
-      if refcon.kind_of?(Contest)
-        c = refcon
-        cids = c.candidate_ids
-
-        candidate_query = Candidate.select("id, uid").where(id: cids)
-        candidate_uids = candidate_query.inject({}) do |m, r|
-          m[r.id] = r.uid
-          m
+        results = cr.candidate_results.includes(:candidate).map do |res|
+          { id:             res.uid,
+            candidate_id:   res.candidate.uid,
+            candidate_name: res.candidate.name,
+            votes:          res.votes
+          }
         end
 
-        results = CandidateResult.where(candidate_id: cids, precinct_id: precinct.id)
-        results = results.group('candidate_id').select("sum(votes) v, candidate_id").map do |cv|
-          { candidate_id: candidate_uids[cv.candidate_id], votes: cv.v }
+        { id:                  cr.uid,
+          certification:       cr.certification,
+          contest_id:          c.uid,
+          contest_name:        c.office,
+          total_votes:         cr.total_votes,
+          total_valid_votes:   cr.total_valid_votes,
+          overvotes:           0,
+          blank_votes:         0,
+          ballot_line_results: results
+        }
+      elsif cr.referendum_related?
+        r = cr.referendum
+
+        results = cr.ballot_response_results.includes(:ballot_response).map do |res|
+          { id:             res.uid,
+            response_id:    res.ballot_response.uid,
+            response_name:  res.ballot_response.name,
+            votes:          res.votes
+          }
         end
 
-        memo << { contest_id: c.uid, results: results }
+        { id:                  cr.uid,
+          certification:       cr.certification,
+          contest_id:          r.uid,
+          contest_name:        r.title,
+          total_votes:         cr.total_votes,
+          total_valid_votes:   cr.total_valid_votes,
+          overvotes:           0,
+          blank_votes:         0,
+          ballot_line_results: results
+        }
       else
-        r = refcon
-        brids = r.ballot_response_ids
-
-        ballot_response_uids = BallotResponse.select("id, uid").where(id: brids).inject({}) do |m, r|
-          m[r.id] = r.uid
-          m
-        end
-
-        results = BallotResponseResult.where(ballot_response_id: brids, precinct_id: precinct.id)
-        results = results.group('ballot_response_id').select("sum(votes) v, ballot_response_id").map do |bv|
-          { ballot_response_id: ballot_response_uids[bv.ballot_response_id], votes: bv.v }
-        end
-
-        memo << { referendum_id: r.uid, results: results }
+        nil
       end
+    end.compact
 
-      memo
-    end
+    # filt = { district_id: precinct.district_ids }
+    # contests = Contest.where(filt)
+    # referendums = Referendum.where(filt)
+    # refcons = [ contests, referendums ].flatten.compact
+    #
+    # refcons.inject([]) do |memo, refcon|
+    #   if refcon.kind_of?(Contest)
+    #     c = refcon
+    #     cids = c.candidate_ids
+    #
+    #     candidate_query = Candidate.select("id, name, uid").where(id: cids)
+    #     candidate_data = candidate_query.inject({}) do |m, r|
+    #       m[r.id] = { uid: r.uid, name: r.name }
+    #       m
+    #     end
+    #
+    #     results = CandidateResult.where(candidate_id: cids, precinct_id: precinct.id)
+    #     results = results.group('candidate_id').select("sum(votes) v, candidate_id").map do |cv|
+    #       cdata = candidate_data[cv.candidate_id]
+    #       { candidate_id: cdata[:uid], candidate_name: cdata[:name], votes: cv.v }
+    #     end
+    #
+    #     memo << { contest_id: c.uid, results: results }
+    #   else
+    #     r = refcon
+    #     brids = r.ballot_response_ids
+    #
+    #     ballot_response_uids = BallotResponse.select("id, uid").where(id: brids).inject({}) do |m, r|
+    #       m[r.id] = r.uid
+    #       m
+    #     end
+    #
+    #     results = BallotResponseResult.where(ballot_response_id: brids, precinct_id: precinct.id)
+    #     results = results.group('ballot_response_id').select("sum(votes) v, ballot_response_id").map do |bv|
+    #       { ballot_response_id: ballot_response_uids[bv.ballot_response_id], votes: bv.v }
+    #     end
+    #
+    #     memo << { referendum_id: r.uid, results: results }
+    #   end
+    #
+    #   memo
+    # end
   end
 
   private
