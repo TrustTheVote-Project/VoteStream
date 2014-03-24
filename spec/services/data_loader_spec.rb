@@ -89,4 +89,14 @@ describe DataLoader do
     expect(candidate.sort_order).to eq 1
   end
 
+  it 'should mark contests as write-in and partisan' do
+    c = Contest.find_by!(uid: "2012-11-06-27-123-contest-29")
+    expect(c).to be_write_in
+    expect(c).to be_partisan
+  end
+
+  it 'should not mark contests as partisan' do
+    c = Contest.find_by!(uid: "2012-11-06-27-123-contest-30")
+    expect(c).not_to be_partisan
+  end
 end

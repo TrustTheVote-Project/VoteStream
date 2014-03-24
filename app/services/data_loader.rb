@@ -5,6 +5,8 @@ class DataLoader < BaseLoader
     @doc = Nokogiri::XML(xml_source)
     @doc.remove_namespaces!
     @districts = {}
+    @nonpartisan_party_uid = nil
+    @write_in_party_uid = nil
   end
 
   def load
@@ -136,6 +138,12 @@ class DataLoader < BaseLoader
       abbr = dequote(party_el.css('abbreviation').first.content)
       sort_order = dequote(party_el.css('sort_order').first.content).to_i
 
+      if name =~ /nonpartisan/i
+        @nonpartisan_party_uid = uid
+      elsif name =~ /write.*in/i
+        @write_in_party_uid = uid
+      end
+
       Party.create_with(name: name, abbr: abbr, sort_order: sort_order).find_or_create_by(uid: uid)
     end
   end
@@ -165,7 +173,10 @@ class DataLoader < BaseLoader
       district    = District.find_by_uid(district_id)
       if district
         locality_id = district.precincts.first.locality_id
-        contest   = Contest.create_with(office: office, sort_order: sort_order, district: district, locality_id: locality_id).find_or_create_by(uid: uid)
+        parties   = contest_el.css("party_id").map(&:content)
+        write_in  = parties.include?(@write_in_party_uid)
+        partisan  = !parties.include?(@nonpartisan_party_uid)
+        contest   = Contest.create_with(office: office, sort_order: sort_order, district: district, locality_id: locality_id, write_in: write_in, partisan: partisan).find_or_create_by(uid: uid)
         block.call(contest_el, contest)
       else
         raise_strict InvalidFormat.new("District with ID '#{district_id}' was not found")

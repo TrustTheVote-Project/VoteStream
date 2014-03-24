@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140324092900) do
+ActiveRecord::Schema.define(version: 20140324142355) do
 
   create_table "ballot_response_results", force: true do |t|
     t.integer "ballot_response_id"
@@ -83,6 +83,8 @@ ActiveRecord::Schema.define(version: 20140324092900) do
     t.string  "sort_order"
     t.string  "district_type"
     t.integer "locality_id"
+    t.boolean "partisan"
+    t.boolean "write_in"
   end
 
   add_index "contests", ["district_id"], name: "index_contests_on_district_id", using: :btree
