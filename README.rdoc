@@ -6,3 +6,5 @@ Details on server setup can be found here.
 
 * PostgreSQL 9.1 (installation instructions -- https://help.ubuntu.com/community/PostgreSQL)
 * PostGIS 2.0 (installation instructions -- http://trac.osgeo.org/postgis/wiki/UsersWikiPostGIS20Ubuntu1304)
+
+GRANT SELECT ON public.geometry_columns TO enrs;
