@@ -1,15 +1,17 @@
 development:
-  adapter:  mysql2
+  adapter:  postgresql
   host:     localhost
+  encoding: unicode
   database: enrs_d
-  pool: 25
-  username: root
-  password: password
+  pool: 5
+  username: enrs
+  password: enrs
 
 test:
-  adapter:  mysql2
+  adapter:  postgresql
   host:     localhost
+  encoding: unicode
   database: enrs_t
-  pool: 25
-  username: root
-  password: password
+  pool: 5
+  username: enrs
+  password: enrs
