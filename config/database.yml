@@ -1,5 +1,5 @@
 development:
-  adapter:  postgresql
+  adapter:  postgis
   host:     localhost
   encoding: unicode
   database: enrs_d
@@ -8,7 +8,7 @@ development:
   password: enrs
 
 test:
-  adapter:  postgresql
+  adapter:  postgis
   host:     localhost
   encoding: unicode
   database: enrs_t

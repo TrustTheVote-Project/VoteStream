@@ -11,10 +11,12 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140324142355) do
+ActiveRecord::Schema.define(version: 20140325120721) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
+  enable_extension "postgis"
+  enable_extension "postgis_topology"
 
   create_table "ballot_response_results", force: true do |t|
     t.integer "ballot_response_id"
@@ -24,10 +26,10 @@ ActiveRecord::Schema.define(version: 20140324142355) do
     t.integer "contest_result_id",  null: false
   end
 
-  add_index "ballot_response_results", ["ballot_response_id"], name: "index_ballot_response_results_on_ballot_response_id", using: :btree
-  add_index "ballot_response_results", ["contest_result_id"], name: "index_ballot_response_results_on_contest_result_id", using: :btree
-  add_index "ballot_response_results", ["precinct_id"], name: "index_ballot_response_results_on_precinct_id", using: :btree
-  add_index "ballot_response_results", ["uid"], name: "index_ballot_response_results_on_uid", using: :btree
+  add_index "ballot_response_results", ["ballot_response_id"], :name => "index_ballot_response_results_on_ballot_response_id"
+  add_index "ballot_response_results", ["contest_result_id"], :name => "index_ballot_response_results_on_contest_result_id"
+  add_index "ballot_response_results", ["precinct_id"], :name => "index_ballot_response_results_on_precinct_id"
+  add_index "ballot_response_results", ["uid"], :name => "index_ballot_response_results_on_uid"
 
   create_table "ballot_responses", force: true do |t|
     t.integer "referendum_id"
@@ -36,8 +38,8 @@ ActiveRecord::Schema.define(version: 20140324142355) do
     t.integer "sort_order"
   end
 
-  add_index "ballot_responses", ["referendum_id"], name: "index_ballot_responses_on_referendum_id", using: :btree
-  add_index "ballot_responses", ["uid"], name: "index_ballot_responses_on_uid", unique: true, using: :btree
+  add_index "ballot_responses", ["referendum_id"], :name => "index_ballot_responses_on_referendum_id"
+  add_index "ballot_responses", ["uid"], :name => "index_ballot_responses_on_uid", :unique => true
 
   create_table "candidate_results", force: true do |t|
     t.integer "candidate_id"
@@ -47,10 +49,10 @@ ActiveRecord::Schema.define(version: 20140324142355) do
     t.integer "contest_result_id", null: false
   end
 
-  add_index "candidate_results", ["candidate_id"], name: "index_candidate_results_on_candidate_id", using: :btree
-  add_index "candidate_results", ["contest_result_id"], name: "index_candidate_results_on_contest_result_id", using: :btree
-  add_index "candidate_results", ["precinct_id"], name: "index_candidate_results_on_precinct_id", using: :btree
-  add_index "candidate_results", ["uid"], name: "index_candidate_results_on_uid", using: :btree
+  add_index "candidate_results", ["candidate_id"], :name => "index_candidate_results_on_candidate_id"
+  add_index "candidate_results", ["contest_result_id"], :name => "index_candidate_results_on_contest_result_id"
+  add_index "candidate_results", ["precinct_id"], :name => "index_candidate_results_on_precinct_id"
+  add_index "candidate_results", ["uid"], :name => "index_candidate_results_on_uid"
 
   create_table "candidates", force: true do |t|
     t.string  "uid",        null: false
@@ -60,8 +62,8 @@ ActiveRecord::Schema.define(version: 20140324142355) do
     t.integer "party_id",   null: false
   end
 
-  add_index "candidates", ["contest_id"], name: "index_candidates_on_contest_id", using: :btree
-  add_index "candidates", ["uid"], name: "index_candidates_on_uid", unique: true, using: :btree
+  add_index "candidates", ["contest_id"], :name => "index_candidates_on_contest_id"
+  add_index "candidates", ["uid"], :name => "index_candidates_on_uid", :unique => true
 
   create_table "contest_results", force: true do |t|
     t.string   "uid",               null: false
@@ -75,9 +77,9 @@ ActiveRecord::Schema.define(version: 20140324142355) do
     t.datetime "updated_at"
   end
 
-  add_index "contest_results", ["contest_id"], name: "index_contest_results_on_contest_id", using: :btree
-  add_index "contest_results", ["precinct_id"], name: "index_contest_results_on_precinct_id", using: :btree
-  add_index "contest_results", ["referendum_id"], name: "index_contest_results_on_referendum_id", using: :btree
+  add_index "contest_results", ["contest_id"], :name => "index_contest_results_on_contest_id"
+  add_index "contest_results", ["precinct_id"], :name => "index_contest_results_on_precinct_id"
+  add_index "contest_results", ["referendum_id"], :name => "index_contest_results_on_referendum_id"
 
   create_table "contests", force: true do |t|
     t.string  "uid",           null: false
@@ -90,10 +92,10 @@ ActiveRecord::Schema.define(version: 20140324142355) do
     t.boolean "write_in"
   end
 
-  add_index "contests", ["district_id"], name: "index_contests_on_district_id", using: :btree
-  add_index "contests", ["district_type"], name: "index_contests_on_district_type", using: :btree
-  add_index "contests", ["locality_id"], name: "index_contests_on_locality_id", using: :btree
-  add_index "contests", ["uid"], name: "index_contests_on_uid", unique: true, using: :btree
+  add_index "contests", ["district_id"], :name => "index_contests_on_district_id"
+  add_index "contests", ["district_type"], :name => "index_contests_on_district_type"
+  add_index "contests", ["locality_id"], :name => "index_contests_on_locality_id"
+  add_index "contests", ["uid"], :name => "index_contests_on_uid", :unique => true
 
   create_table "districts", force: true do |t|
     t.string "uid",           null: false
@@ -101,15 +103,15 @@ ActiveRecord::Schema.define(version: 20140324142355) do
     t.string "district_type"
   end
 
-  add_index "districts", ["uid"], name: "index_districts_on_uid", unique: true, using: :btree
+  add_index "districts", ["uid"], :name => "index_districts_on_uid", :unique => true
 
   create_table "districts_precincts", id: false, force: true do |t|
     t.integer "district_id", null: false
     t.integer "precinct_id", null: false
   end
 
-  add_index "districts_precincts", ["district_id"], name: "index_districts_precincts_on_district_id", using: :btree
-  add_index "districts_precincts", ["precinct_id"], name: "index_districts_precincts_on_precinct_id", using: :btree
+  add_index "districts_precincts", ["district_id"], :name => "index_districts_precincts_on_district_id"
+  add_index "districts_precincts", ["precinct_id"], :name => "index_districts_precincts_on_precinct_id"
 
   create_table "elections", force: true do |t|
     t.integer "state_id",      null: false
@@ -119,8 +121,8 @@ ActiveRecord::Schema.define(version: 20140324142355) do
     t.boolean "statewide"
   end
 
-  add_index "elections", ["state_id"], name: "index_elections_on_state_id", using: :btree
-  add_index "elections", ["uid"], name: "index_elections_on_uid", unique: true, using: :btree
+  add_index "elections", ["state_id"], :name => "index_elections_on_state_id"
+  add_index "elections", ["uid"], :name => "index_elections_on_uid", :unique => true
 
   create_table "localities", force: true do |t|
     t.integer "state_id",      null: false
@@ -129,8 +131,8 @@ ActiveRecord::Schema.define(version: 20140324142355) do
     t.string  "uid",           null: false
   end
 
-  add_index "localities", ["state_id"], name: "index_localities_on_state_id", using: :btree
-  add_index "localities", ["uid"], name: "index_localities_on_uid", unique: true, using: :btree
+  add_index "localities", ["state_id"], :name => "index_localities_on_state_id"
+  add_index "localities", ["uid"], :name => "index_localities_on_uid", :unique => true
 
   create_table "parties", force: true do |t|
     t.string  "uid",        null: false
@@ -139,7 +141,7 @@ ActiveRecord::Schema.define(version: 20140324142355) do
     t.string  "abbr",       null: false
   end
 
-  add_index "parties", ["uid"], name: "index_parties_on_uid", unique: true, using: :btree
+  add_index "parties", ["uid"], :name => "index_parties_on_uid", :unique => true
 
   create_table "polling_locations", force: true do |t|
     t.integer "precinct_id"
@@ -152,19 +154,20 @@ ActiveRecord::Schema.define(version: 20140324142355) do
     t.string  "zip"
   end
 
-  add_index "polling_locations", ["address_id"], name: "index_polling_locations_on_address_id", using: :btree
-  add_index "polling_locations", ["precinct_id"], name: "index_polling_locations_on_precinct_id", using: :btree
+  add_index "polling_locations", ["address_id"], :name => "index_polling_locations_on_address_id"
+  add_index "polling_locations", ["precinct_id"], :name => "index_polling_locations_on_precinct_id"
 
   create_table "precincts", force: true do |t|
     t.integer "locality_id"
-    t.string  "uid",         null: false
-    t.string  "name",        null: false
+    t.string  "uid",                                                       null: false
+    t.string  "name",                                                      null: false
     t.text    "kml"
     t.integer "total_cast"
+    t.spatial "geo",         limit: {:srid=>4326, :type=>"multi_polygon"}
   end
 
-  add_index "precincts", ["locality_id"], name: "index_precincts_on_locality_id", using: :btree
-  add_index "precincts", ["uid"], name: "index_precincts_on_uid", unique: true, using: :btree
+  add_index "precincts", ["locality_id"], :name => "index_precincts_on_locality_id"
+  add_index "precincts", ["uid"], :name => "index_precincts_on_uid", :unique => true
 
   create_table "referendums", force: true do |t|
     t.integer "district_id"
@@ -177,9 +180,9 @@ ActiveRecord::Schema.define(version: 20140324142355) do
     t.string  "district_type"
   end
 
-  add_index "referendums", ["district_id"], name: "index_referendums_on_district_id", using: :btree
-  add_index "referendums", ["locality_id"], name: "index_referendums_on_locality_id", using: :btree
-  add_index "referendums", ["uid"], name: "index_referendums_on_uid", unique: true, using: :btree
+  add_index "referendums", ["district_id"], :name => "index_referendums_on_district_id"
+  add_index "referendums", ["locality_id"], :name => "index_referendums_on_locality_id"
+  add_index "referendums", ["uid"], :name => "index_referendums_on_uid", :unique => true
 
   create_table "states", force: true do |t|
     t.string "uid",  null: false
@@ -187,7 +190,7 @@ ActiveRecord::Schema.define(version: 20140324142355) do
     t.string "name"
   end
 
-  add_index "states", ["code"], name: "index_states_on_code", unique: true, using: :btree
-  add_index "states", ["uid"], name: "index_states_on_uid", unique: true, using: :btree
+  add_index "states", ["code"], :name => "index_states_on_code", :unique => true
+  add_index "states", ["uid"], :name => "index_states_on_uid", :unique => true
 
 end
