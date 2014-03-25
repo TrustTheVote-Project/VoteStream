@@ -159,11 +159,11 @@ ActiveRecord::Schema.define(version: 20140325120721) do
 
   create_table "precincts", force: true do |t|
     t.integer "locality_id"
-    t.string  "uid",                                                       null: false
-    t.string  "name",                                                      null: false
+    t.string  "uid",                                                  null: false
+    t.string  "name",                                                 null: false
     t.text    "kml"
     t.integer "total_cast"
-    t.spatial "geo",         limit: {:srid=>4326, :type=>"multi_polygon"}
+    t.spatial "geo",         limit: {:srid=>4326, :type=>"geometry"}
   end
 
   add_index "precincts", ["locality_id"], :name => "index_precincts_on_locality_id"

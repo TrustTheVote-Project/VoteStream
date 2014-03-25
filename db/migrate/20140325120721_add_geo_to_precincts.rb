@@ -3,6 +3,6 @@ class AddGeoToPrecincts < ActiveRecord::Migration
     # execute "create extension postgis;"
     # execute "create extension postgis_topology;"
     #
-    add_column :precincts, :geo, 'GEOMETRY(MultiPolygon, 4326)'
+    add_column :precincts, :geo, 'GEOMETRY(Geometry, 4326)'
   end
 end

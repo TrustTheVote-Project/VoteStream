@@ -91,13 +91,10 @@ class DataLoader < BaseLoader
       locality_el.css('precinct').each do |precinct_el|
         uid      = precinct_el['id']
         name     = dequote(precinct_el.css('> name').first.content)
-        kml      = (precinct_el.css('Polygon coordinates') || []).map { |c| c.content }
+        kml      = "<MultiGeometry>#{precinct_el.css('Polygon').map { |p| p.to_xml }.join}</MultiGeometry>"
 
-        if kml.blank?
-          raise_strict InvalidFormat.new("Precinct #{uid} has no geometry KML")
-        end
-
-        precinct = locality.precincts.create_with(name: name, kml: kml).find_or_create_by(uid: uid)
+        precinct = locality.precincts.create_with(name: name).find_or_create_by(uid: uid)
+        Precinct.where(id: precinct.id).update_all([ "geo = ST_GeomFromKML(?)", kml ])
 
         precinct_el.css('electoral_district_id').map { |el| el.content }.uniq.each do |uid|
           precinct.districts << @districts[uid]

@@ -12,6 +12,6 @@ class Precinct < ActiveRecord::Base
   validates :uid, presence: true
   validates :name, presence: true
 
-  serialize :kml
+  #serialize :kml
 
 end
