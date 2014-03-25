@@ -44,10 +44,10 @@ class ScoreboardsController < ApplicationController
 
     gon.categories = {
       'referenda' => I18n.t('scoreboard.header.left_menu.categories.referenda'),
-      'federal'   => I18n.t('scoreboard.header.left_menu.categories.federal'),
-      'state'     => I18n.t('scoreboard.header.left_menu.categories.state'),
-      'mcd'       => I18n.t('scoreboard.header.left_menu.categories.local'),
-      'other'     => I18n.t('scoreboard.header.left_menu.categories.other')
+      'Federal'   => I18n.t('scoreboard.header.left_menu.categories.federal'),
+      'State'     => I18n.t('scoreboard.header.left_menu.categories.state'),
+      'MCD'       => I18n.t('scoreboard.header.left_menu.categories.local'),
+      'Other'     => I18n.t('scoreboard.header.left_menu.categories.other')
     }
 
     gon.percentReporting = DataProcessor.percent_reporting(locality)

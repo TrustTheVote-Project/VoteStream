@@ -42,12 +42,12 @@
   App.reqres.setHandler 'entities:refcons:other', -> API.getRefcons().get('other')
 
   App.reqres.setHandler 'entities:refcon:all-federal', ->
-    new Refcon({ name: 'All Federal Contests', type: 'all', id: 'federal' })
+    new Refcon({ name: 'All Federal Contests', type: 'all', id: 'Federal' })
   App.reqres.setHandler 'entities:refcon:all-state', ->
-    new Refcon({ name: 'All State Contests', type: 'all', id: 'state' })
+    new Refcon({ name: 'All State Contests', type: 'all', id: 'State' })
   App.reqres.setHandler 'entities:refcon:all-local', ->
-    new Refcon({ name: 'All Local Contests', type: 'all', id: 'mcd' })
+    new Refcon({ name: 'All Local Contests', type: 'all', id: 'MCD' })
   App.reqres.setHandler 'entities:refcon:all-other', ->
-    new Refcon({ name: 'All Other Contests', type: 'all', id: 'other' })
+    new Refcon({ name: 'All Other Contests', type: 'all', id: 'Other' })
   App.reqres.setHandler 'entities:refcon:all-referenda', ->
     new Refcon({ name: 'All Referenda', type: 'all', id: 'referenda' })

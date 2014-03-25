@@ -7,10 +7,10 @@ class RefConResults
   end
 
   def all_refcons(params)
-    { federal: refcons_of_type('federal', params),
-      state:   refcons_of_type('state', params),
-      mcd:     refcons_of_type('mcd', params),
-      other:   refcons_of_type('other', params) }
+    { federal: refcons_of_type('Federal', params),
+      state:   refcons_of_type('State', params),
+      mcd:     refcons_of_type('MCD', params),
+      other:   refcons_of_type('Other', params) }
   end
 
   def refcons_of_type(district_type, params)
