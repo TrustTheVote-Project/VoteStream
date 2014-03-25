@@ -65,5 +65,3 @@ end
 require 'open-uri'
 Locality.destroy_all
 District.destroy_all
-DataLoader.new(open("#{Rails.root}/spec/fixtures/Ramsey-County-MN-Jurisdiction-Definition-VIP.xml")).load
-DataLoader.new(open("#{Rails.root}/spec/fixtures/Ramsey-County-MN-Election-Definition-Nov-2012-VIP-Draft.xml")).load
