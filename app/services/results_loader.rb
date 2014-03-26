@@ -1,5 +1,9 @@
 class ResultsLoader < BaseLoader
 
+  CANDIDATE_RESULTS_COLUMNS       = [ :contest_result_id, :uid, :precinct_id, :candidate_id, :votes ]
+  BALLOT_RESPONSE_RESULTS_COLUMNS = [ :contest_result_id, :uid, :precinct_id, :ballot_response_id, :votes ]
+  CONTEST_RESULTS_COLUMNS = [ :uid, :certification, :precinct_id, :contest_id, :referendum_id, :total_votes, :total_valid_votes ]
+
   def initialize(xml_source)
     @xml_source = xml_source
     @doc = Nokogiri::XML(xml_source)
@@ -32,6 +36,8 @@ class ResultsLoader < BaseLoader
     referendum_uids = @doc.css('contest_result > referendum_id').map { |el| dequote(el.content) }
     referendum_ids  = Referendum.where(uid: referendum_uids).select('uid, id').inject({}) { |m, r| m[r.uid] = r.id; m }
 
+    results = []
+
     @doc.css('contest_result').each do |cr_el|
       precinct_uid = dequote(cr_el.css('> jurisdiction_id').first.content)
       precinct_id = @precinct_ids[precinct_uid]
@@ -50,42 +56,56 @@ class ResultsLoader < BaseLoader
         referendum_id = referendum_ids[referendum_uid] or raise "Referendum with UID #{referendum_uid} wasn't found"
       end
 
-      cr = ContestResult.create!({
-        uid:               cr_el['id'],
-        certification:     cr_el['certification'],
-        precinct_id:       precinct_id,
-        contest_id:        contest_id,
-        referendum_id:     referendum_id,
-        total_votes:       total_votes,
-        total_valid_votes: cr_el.css('> total_valid_votes').first.content
-      })
-
-      if contest_id
-        load_contest_results(cr_el, cr)
-      elsif referendum_id
-        load_referendum_results(cr_el, cr)
-      else
-        raise InvalidFormat.new("Neither contest_id, nor referendum_id elements found")
-      end
+      results << [
+        cr_el['id'],
+        cr_el['certification'],
+        precinct_id,
+        contest_id,
+        referendum_id,
+        total_votes,
+        cr_el.css('> total_valid_votes').first.content
+      ]
     end
+    ContestResult.import CONTEST_RESULTS_COLUMNS, results
+
+    @contest_result_ids = ContestResult.select('id, uid').inject({}) { |m, r| m[r.uid] = r.id; m }
+    load_contest_and_referendum_results
   end
 
-  def load_contest_results(cr_el, cr)
-    results = []
+  def load_contest_and_referendum_results
+    candidate_results = []
+    ballot_response_results = []
 
-    cr_el.css('ballot_line_result').each do |blr_el|
-      candidate_uid = dequote(blr_el.css('> candidate_id').first.content)
-      candidate_id = @candidate_ids[candidate_uid] || (@candidate_ids[candidate_uid] = Candidate.find_by!(uid: candidate_uid).id)
+    uids = @doc.css('contest_result candidate_id').map { |el| dequote(el.content) }
+    @candidate_ids = Candidate.select('id, uid').where(uid: uids).inject({}) { |m, r| m[r.uid] = r.id; m }
+    uids = @doc.css('contest_result ballot_response_id').map { |el| dequote(el.content) }
+    @ballot_response_ids = BallotResponse.select('id, uid').where(uid: uids).inject({}) { |m, r| m[r.uid] = r.id; m }
 
-      results << {
-        uid:         blr_el['id'],
-        precinct_id: cr.precinct_id,
-        candidate_id: candidate_id,
-        votes:       blr_el.css('votes').first.content
-      }
+    @doc.css('contest_result').each do |cr_el|
+      cr_id = @contest_result_ids[cr_el['id']]
+
+      cr_el.css('ballot_line_result').each do |blr_el|
+        uid = blr_el['id']
+        votes = blr_el.css('votes').first.content
+        precinct_uid = dequote(blr_el.css('> jurisdiction_id').first.content)
+        precinct_id = @precinct_ids[precinct_uid]
+
+        if el = blr_el.css('> candidate_id').first
+          candidate_uid = dequote(el.content)
+          candidate_id = @candidate_ids[candidate_uid]
+
+          candidate_results << [ cr_id, uid, precinct_id, candidate_id, votes ]
+        elsif el = blr_el.css('> ballot_response_id').first
+          ballot_response_uid = dequote(el.content)
+          ballot_response_id = @ballot_response_ids[ballot_response_uid]
+
+          ballot_response_results << [ cr_id, uid, precinct_id, ballot_response_id, votes ]
+        end
+      end
     end
 
-    cr.candidate_results.create(results) unless results.blank?
+    CandidateResult.import(CANDIDATE_RESULTS_COLUMNS, candidate_results) unless candidate_results.blank?
+    BallotResponseResult.import(BALLOT_RESPONSE_RESULTS_COLUMNS, ballot_response_results) unless ballot_response_results.blank?
   end
 
   def load_referendum_results(cr_el, cr)
@@ -95,15 +115,15 @@ class ResultsLoader < BaseLoader
       ballot_response_uid = dequote(blr_el.css('> ballot_response_id').first.content)
       ballot_response_id = @ballot_response_ids[ballot_response_uid] || (@ballot_response_ids[ballot_response_uid] = BallotResponse.find_by!(uid: ballot_response_uid).id)
 
-      results << {
-        uid:         blr_el['id'],
-        precinct_id: cr.precinct_id,
-        ballot_response_id: ballot_response_id,
-        votes:       blr_el.css('votes').first.content
-      }
+      results << [
+        blr_el['id'],
+        cr.precinct_id,
+        ballot_response_id,
+        blr_el.css('votes').first.content
+      ]
     end
 
-    cr.ballot_response_results.create(results) unless results.blank?
+    cr.ballot_response_results.import(BALLOT_RESPONSE_RESULTS_COLUMNS, results) unless results.blank?
   end
 
   def temp
