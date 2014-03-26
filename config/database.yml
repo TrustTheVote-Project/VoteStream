@@ -5,6 +5,7 @@ development:
   pool: 25
   username: root
   password: password
+  strict: false
 
 test:
   adapter:  mysql2
@@ -13,3 +14,4 @@ test:
   pool: 25
   username: root
   password: password
+  strict: false

@@ -114,6 +114,7 @@ ActiveRecord::Schema.define(version: 20140307094204) do
 
   create_table "polling_locations", force: true do |t|
     t.integer "precinct_id"
+    t.integer "address_id"
     t.string  "name",        null: false
     t.string  "line1"
     t.string  "line2"
@@ -122,6 +123,7 @@ ActiveRecord::Schema.define(version: 20140307094204) do
     t.string  "zip"
   end
 
+  add_index "polling_locations", ["address_id"], name: "index_polling_locations_on_address_id", using: :btree
   add_index "polling_locations", ["precinct_id"], name: "index_polling_locations_on_precinct_id", using: :btree
 
   create_table "precincts", force: true do |t|

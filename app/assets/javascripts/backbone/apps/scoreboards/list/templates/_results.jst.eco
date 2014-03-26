@@ -1,0 +1,11 @@
+<div class="row-fluid percent-reporting">
+	<div class="span3"><%= @percentReporting %></div>
+	<div class="span6 text-right">
+		<span>Save as</span>
+		<a href="" id="js-save-as-csv" download="<%= @filename %>.csv">CSV</a> | 
+		<a href="" id="js-save-as-pdf" download="<%= @filename %>.pdf">PDF</a> | 
+		<a href="" id="js-save-as-xml" download="<%= @filename %>.xml">VIP-XML</a>
+	</div>
+</div>
+<div class="header bar span9"><%= @refcon.attributes.name %></div>
+<div id="results"></div>

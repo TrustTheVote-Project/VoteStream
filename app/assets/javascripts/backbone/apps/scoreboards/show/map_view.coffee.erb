@@ -120,10 +120,6 @@ InfoBubble.prototype.panToView = ->
       @map.mapTypes.set 'map-style', styledMapType
       @map.setMapTypeId 'map-style'
 
-      if @options.infoWindow
-        google.maps.event.addListener @map, 'click', () =>
-          @closeInfoWindow()
-
     pointFromPair: (pair) ->
       coords = pair.split(',')
       new google.maps.LatLng parseFloat(coords[1]), parseFloat(coords[0])
@@ -191,15 +187,65 @@ InfoBubble.prototype.panToView = ->
         zIndex:           zIndex
       }
 
-    onPolygonMouseOver: ->
-      @setOptions
-        fillColor:   @.data.colors.hoverFillColor
-        fillOpacity: @.data.colors.hoverFillOpacity
+    onPolygonMouseOver: (e) ->
+      if @.data.mapView.options.infoWindow isnt 'simple'
+        @setOptions
+          fillColor:   @.data.colors.hoverFillColor
+          fillOpacity: @.data.colors.hoverFillOpacity
+
+        mapView = @.data.mapView
+        if @.data.precinctResult?
+          pid = @.data.precinctId
+          precincts = App.request 'entities:precincts'
+          precinct = precincts.get pid
+          mapView.focusedPrecinct = precinct
+
+          if mapView.options.infoWindow == 'simple'
+            html = mapView.simpleInfoWindowHtml @, precinct
+          else
+            html = mapView.fullInfoWindowHtml @, precinct
+        else
+          html = "<%= I18n.t 'scoreboard.not_voting' %>"
+
+        # close previous bubble
+        mapView.closeInfoWindow()
+
+        create_bubble = ->
+          window.infoBubble = ib = new InfoBubble
+            content: html
+            position: precinct.bounds.getCenter()
+            map: mapView.map
+            padding: 0
+            borderRadius: 0
+            hideCloseButton: true
+            shadowStyle: 0
+            disableAnimation: true
+          $(ib.arrowInner_).css
+            borderColor: '#f3f3f3 transparent transparent'
+
+          self = mapView
+          $(ib.bubble_).on 'click', (e) ->
+            return unless e.target.tagName == 'A'
+
+            precinct = self.focusedPrecinct
+            self.focusedPrecinct = null
+
+            App.vent.trigger 'region:selected', precinct
+
+            if self.options.infoWindow != 'simple'
+              App.navigate 'list', trigger: true
+
+          ib.open()
+
+        @timeout = setTimeout create_bubble, 250
 
     onPolygonMouseOut: ->
       @setOptions
         fillColor:   @.data.colors.fillColor
         fillOpacity: @.data.colors.fillOpacity
+
+      @.data.mapView.closeInfoWindow()
+      clearTimeout @timeout
 
     fullInfoWindowHtml: (poly, precinct) ->
       si = App.request 'entities:scoreboardInfo'
@@ -222,74 +268,42 @@ InfoBubble.prototype.panToView = ->
         p = Math.floor((v * 1000) / (votes || 1)) / 10.0
         color = i.get('c')
         name = i.get('name')
-        rowsHtml += "<tr style='color: #{color};'><td class='iw-n'>#{name}</td><td class='iw-v'>#{v}</td><td class='iw-p'>#{p}%</td></tr>"
+        rowsHtml += "<tr style='color: #{color};'><td class='iw-n'>#{name.toLowerCase().replace('and','&')}</td><td class='iw-v'>#{v}</td><td class='iw-p'>#{p}%</td></tr>"
 
       if votes > totalDisplayed
         v = votes - totalDisplayed
         p = Math.floor((v * 1000) / (votes || 1)) / 10.0
         rowsHtml += "<tr class='other'><td class='iw-n'>Others</td><td class='iw-v'>#{v}</td><td class='iw-p'>#{p}%</td></tr>"
 
-      "<div class='precinct-bubble'><div class='iw-c'><h5>#{precinct.get('name')}</h5><table class='iw-rows'>#{rowsHtml}</table></div><div class='iw-all'><a>View all contests for this precinct</a></div></div>"
+      "<div class='precinct-bubble'><div class='iw-c'><h5>#{precinct.get('name')}</h5><table class='iw-rows'>#{rowsHtml}</table></div></div>"
 
     simpleInfoWindowHtml: (poly, precinct) ->
       "<div class='precinct-bubble'><div class='iw-c'><h5>#{precinct.get('name')}</h5></div><div class='iw-all'><a href='#'>Set as Region</a></div></div>"
 
-    onPolygonClick: (e) ->
-      @setOptions
-        fillColor:   @.data.colors.hoverFillColor
-        fillOpacity: @.data.colors.hoverFillOpacity
+    onPolygonClick: ->
+      if @.data.precinctResult? and @.data.mapView.options.infoWindow isnt 'simple'
+        @setOptions
+          fillColor:   @.data.colors.hoverFillColor
+          fillOpacity: @.data.colors.hoverFillOpacity
 
-      mapView = @.data.mapView
-      if @.data.precinctResult?
         pid = @.data.precinctId
         precincts = App.request 'entities:precincts'
         precinct = precincts.get pid
-        mapView.focusedPrecinct = precinct
-
-        if mapView.options.infoWindow == 'simple'
-          html = mapView.simpleInfoWindowHtml @, precinct
-        else
-          html = mapView.fullInfoWindowHtml @, precinct
-      else
-        html = "<%= I18n.t 'scoreboard.not_voting' %>"
-
-      # close previous bubble
-      mapView.closeInfoWindow()
-
-      window.infoBubble = ib = new InfoBubble
-        content: html
-        position: e.latLng
-        map: mapView.map
-        padding: 0
-        borderRadius: 0
-        hideCloseButton: true
-        shadowStyle: 0
-      $(ib.arrowInner_).css
-        borderColor: '#f3f3f3 transparent transparent'
-
-      self = mapView
-      $(ib.bubble_).on 'click', (e) ->
-        return unless e.target.tagName == 'A'
-
-        precinct = self.focusedPrecinct
-        self.focusedPrecinct = null
-
+        
         App.vent.trigger 'region:selected', precinct
-
-        if self.options.infoWindow != 'simple'
-          App.navigate 'list', trigger: true
-
-      ib.open()
-
+        App.navigate 'list', trigger: true
+      
     renderPrecincts: ->
       App.execute 'when:fetched', @precincts, =>
         @removePreviousPolygons()
+
 
         bounds  = new google.maps.LatLngBounds()
         results = @precinctResults.get 'precincts'
         items   = @precinctResults.get 'items'
 
         for precinct in @precincts.models
+          this_bounds = new google.maps.LatLngBounds()
           precinctId = precinct.get 'id'
           res = results.get precinctId
           kml = precinct.get 'kml'
@@ -298,7 +312,11 @@ InfoBubble.prototype.panToView = ->
           lines = @pointsFromKml(kml)
 
           for points in lines
-            bounds.extend(point) for point in points
+            for point in points
+              this_bounds.extend(point)
+              bounds.extend(point)
+
+          precinct.bounds = this_bounds
 
           poly = new google.maps.Polygon
             paths:          lines,
@@ -323,3 +341,7 @@ InfoBubble.prototype.panToView = ->
           poly.setMap @map
 
         @map.fitBounds bounds
+
+        @.$el.on 'map:show', (e) =>
+          @map.setCenter(bounds.getCenter())
+          google.maps.event.trigger(@map, "resize");

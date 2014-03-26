@@ -42,6 +42,7 @@ class RefConResults
     return {
       summary: {
         title:  contest.office,
+        contest_type: contest.district_type,
         votes:  results.sum(:votes),
         rows:   ordered
       }
