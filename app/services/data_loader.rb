@@ -1,5 +1,7 @@
 class DataLoader < BaseLoader
 
+  DISTRICTS_PRECINCT_COLUMNS = [ :district_id, :precinct_id ]
+
   def initialize(xml_source)
     @xml_source = xml_source
     @doc = Nokogiri::XML(xml_source)
@@ -91,14 +93,18 @@ class DataLoader < BaseLoader
       locality_el.css('precinct').each do |precinct_el|
         uid      = precinct_el['id']
         name     = dequote(precinct_el.css('> name').first.content)
-        kml      = "<MultiGeometry>#{precinct_el.css('Polygon').map { |p| p.to_xml }.join}</MultiGeometry>"
+        kml      = "<MultiGeometry>#{precinct_el.css('Polygon').map { |p| p.to_xml.gsub(/(-?\d+\.\d+,-?\d+\.\d+),-?\d+\.\d+/, '\1') }.join}</MultiGeometry>"
 
         precinct = locality.precincts.create_with(name: name).find_or_create_by(uid: uid)
         Precinct.where(id: precinct.id).update_all([ "geo = ST_GeomFromKML(?)", kml ])
 
+        district_precincts = []
+
         precinct_el.css('electoral_district_id').map { |el| el.content }.uniq.each do |uid|
-          precinct.districts << @districts[uid]
+          district_precincts << [ @districts[uid], precinct.id ]
         end
+
+        DistrictsPrecinct.import DISTRICTS_PRECINCT_COLUMNS, district_precincts
 
         create_polling_location(precinct_el, precinct)
       end
@@ -155,7 +161,7 @@ class DataLoader < BaseLoader
         party_uid  = dequote(candidate_el.css('> party_id').first.try(:content))
         sort_order = dequote(candidate_el.css('> sort_order').first.content)
 
-        party      = Party.find_by(uid: party_uid)
+        party      = Party.create_with(name: "Undefined", sort_order: 9999, abbr: 'UNDEF').find_or_create_by(uid: party_uid)
         contest.candidates.create_with(name: name, party: party, sort_order: sort_order).find_or_create_by(uid: uid)
       end
     end
