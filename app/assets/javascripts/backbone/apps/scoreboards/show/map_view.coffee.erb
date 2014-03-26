@@ -126,16 +126,14 @@ InfoBubble.prototype.panToView = ->
 
     pointFromPair: (pair) ->
       coords = pair
-      new google.maps.LatLng parseFloat(coords[1]), parseFloat(coords[0])
+      new google.maps.LatLng parseFloat(pair[1]), parseFloat(pair[0])
 
     pointsFromKml: (geo) ->
-      if geo.type == 'Polygon'
-        polygons = geo.coordinates
-      else if geo.type = 'MultiPolygon'
-        polygons = geo.coordinates[0]
+      polygons = geo.coordinates
+      polygons = [ polygons ] if geo.type == 'Polygon'
 
       for polygon in polygons
-        @pointFromPair(pair) for pair in polygon
+        @pointFromPair(pair) for pair in polygon[0]
 
     removePreviousPolygons: ->
       poly.setMap(null) for poly in @polygons
