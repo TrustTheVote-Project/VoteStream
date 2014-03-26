@@ -27,24 +27,27 @@ class ResultsLoader < BaseLoader
   end
 
   def load_new_results
-    Rails.logger.info "--0"
-    @doc.css('contest_result').each do |cr_el|
-      Rails.logger.info "--a"
+    contest_uids    = @doc.css('contest_result > contest_id').map { |el| dequote(el.content) }
+    contest_ids     = Contest.where(uid: contest_uids).select('uid, id').inject({}) { |m, r| m[r.uid] = r.id; m }
+    referendum_uids = @doc.css('contest_result > referendum_id').map { |el| dequote(el.content) }
+    referendum_ids  = Referendum.where(uid: referendum_uids).select('uid, id').inject({}) { |m, r| m[r.uid] = r.id; m }
 
+    @doc.css('contest_result').each do |cr_el|
       precinct_uid = dequote(cr_el.css('> jurisdiction_id').first.content)
       precinct_id = @precinct_ids[precinct_uid]
+      total_votes = cr_el.css('> total_votes').first.content
 
       unless precinct_id
         precinct = Precinct.find_by!(uid: precinct_uid)
         precinct_id = @precinct_ids[precinct_uid] = precinct.id
-        precinct.total_cast = cr_el.css('> total_votes').first.content
+        precinct.total_cast = total_votes
         precinct.save
       end
 
       if contest_uid = dequote(cr_el.css('> contest_id').first.try(:content))
-        contest_id = Contest.find_by!(uid: contest_uid).id
+        contest_id = contest_ids[contest_uid] or raise "Contest with UID #{contest_uid} wasn't found"
       elsif referendum_uid = dequote(cr_el.css('> referendum_id').first.try(:content))
-        referendum_id = Referendum.find_by!(uid: referendum_uid).id
+        referendum_id = referendum_ids[referendum_uid] or raise "Referendum with UID #{referendum_uid} wasn't found"
       end
 
       cr = ContestResult.create!({
@@ -53,7 +56,7 @@ class ResultsLoader < BaseLoader
         precinct_id:       precinct_id,
         contest_id:        contest_id,
         referendum_id:     referendum_id,
-        total_votes:       cr_el.css('> total_votes').first.content,
+        total_votes:       total_votes,
         total_valid_votes: cr_el.css('> total_valid_votes').first.content
       })
 
@@ -68,31 +71,39 @@ class ResultsLoader < BaseLoader
   end
 
   def load_contest_results(cr_el, cr)
+    results = []
+
     cr_el.css('ballot_line_result').each do |blr_el|
       candidate_uid = dequote(blr_el.css('> candidate_id').first.content)
       candidate_id = @candidate_ids[candidate_uid] || (@candidate_ids[candidate_uid] = Candidate.find_by!(uid: candidate_uid).id)
 
-      cr.candidate_results.create({
+      results << {
         uid:         blr_el['id'],
         precinct_id: cr.precinct_id,
         candidate_id: candidate_id,
         votes:       blr_el.css('votes').first.content
-      })
+      }
     end
+
+    cr.candidate_results.create(results) unless results.blank?
   end
 
   def load_referendum_results(cr_el, cr)
+    results = []
+
     cr_el.css('ballot_line_result').each do |blr_el|
       ballot_response_uid = dequote(blr_el.css('> ballot_response_id').first.content)
       ballot_response_id = @ballot_response_ids[ballot_response_uid] || (@ballot_response_ids[ballot_response_uid] = BallotResponse.find_by!(uid: ballot_response_uid).id)
 
-      cr.ballot_response_results.create({
+      results << {
         uid:         blr_el['id'],
         precinct_id: cr.precinct_id,
         ballot_response_id: ballot_response_id,
         votes:       blr_el.css('votes').first.content
-      })
+      }
     end
+
+    cr.ballot_response_results.create(results) unless results.blank?
   end
 
   def temp
