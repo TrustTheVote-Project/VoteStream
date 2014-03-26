@@ -22,6 +22,18 @@
   .election-locality {
     font-size: 27px;
     font-weight: 800;
+
+    .live {
+      background: #3fa9f5;
+      color: white;
+      padding: 4px 10px;
+      font-size: 14px;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      display: inline-block;
+      vertical-align: top;
+      margin-top: -3px;
+    }
   }
 
   .header-share {
@@ -32,6 +44,10 @@
     display: inline-block;
     width: 30px;
     height: 30px;
+
+    &:hover {
+      text-decoration: none;
+    }
   }
   #js-tweet {
     background: image-url('twitter_icon_normal.png') transparent 0 0 no-repeat;

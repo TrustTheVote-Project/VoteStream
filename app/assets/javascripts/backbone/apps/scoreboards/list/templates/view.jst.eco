@@ -1,10 +1,7 @@
 <div id='filter-bar-region'></div>
 <div id='content'>
   <div class="row-fluid">
-    <div class="span9" id='results-region'></div>
-    <div class="span3" id='sidebar'>
-      <div id='summary-region'></div>
-      <div id='map-region'></div>
-    </div>
+    <div class="row-fluid" id='results-region'></div>
+    <div id='map-region' class="span3 panel"></div>
   </div>
 </div>

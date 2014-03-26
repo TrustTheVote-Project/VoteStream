@@ -7,6 +7,8 @@ en:
     footer: TrustTheVote Project, powered by Open Source Election Technology Foundation
 
   scoreboard:
+    title: VoteStream
+    live: Live
     tweet: 'Latest election results at:'
 
     header:
@@ -18,7 +20,7 @@ en:
         other: Other Contests
 
       left_menu:
-        label: Select contest or category
+        label: Filter by contest(s)
         none: No category
         categories:
           referenda: All Referenda
@@ -28,7 +30,7 @@ en:
           other: Other Contests
 
       right_menu:
-        label: Select region
+        label: Filter by Location(s)
         tabs:
           all: All Precincts
           districts: Districts

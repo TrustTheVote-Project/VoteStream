@@ -1,5 +1,0 @@
-<div class='header'><h5><%= @summary.get('title') %></h5></div>
-
-<table class='candidates'>
-</table>
-

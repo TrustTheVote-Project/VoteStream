@@ -7,8 +7,11 @@
     regions:
       filterBarRegion: '#filter-bar-region'
       resultsRegion: '#results-region'
-      summaryRegion: '#summary-region'
       mapRegion: '#map-region'
+
+    templateHelpers:
+      percent: -> Math.floor(@votes * 100 / (@totalVotes || 1))
+      percentFormatted: -> "#{Math.floor(@votes * 1000 / (@totalVotes || 1)) / 10.0}%"
 
     initialize: ->
       @si = App.request 'entities:scoreboardInfo'
@@ -17,6 +20,8 @@
     onShow: ->
       view = new List.ResultsView
         collection: @results
+
+      @resultsRegion.show view
 
       mapView = new App.ScoreboardsApp.Show.MapView
         hideControls:     true
@@ -27,28 +32,4 @@
 
       @filterBarRegion.show new App.ScoreboardsApp.FilterBar.View
         model: App.request('entities:scoreboardInfo')
-      @resultsRegion.show view
       @mapRegion.show mapView
-      @showSummary()
-
-      @si.on 'change:result', @showSummary
-
-    onClose: ->
-      @si.off 'change:result', @showSummary
-
-    showSummary: =>
-      result = @si.get('result')
-      if result?
-        rows = result.get('summary').get('rows')
-        if result.get('type') == 'c'
-          view = new App.ScoreboardsApp.Show.ContestSummaryView
-            model:      result
-            collection: rows
-            simpleVersion: true
-        else
-          view = new App.ScoreboardsApp.Show.ReferendumSummaryView
-            model:      result
-            collection: rows
-            simpleVersion: true
-
-        @summaryRegion.show view

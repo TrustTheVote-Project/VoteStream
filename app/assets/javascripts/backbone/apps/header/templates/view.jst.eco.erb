@@ -1,7 +1,10 @@
 <div class="row-fluid" id="header-bar">
   <div class="span9">
     <div class="election-meta"><span class="election-info"><%%= @electionInfo %></span> <%%= @localityInfo %></div>
-    <div class="election-locality"><%= I18n.t "front.title" %> <%= image_tag "live.png" %></div>
+    <div class="election-locality">
+      <%= I18n.t "scoreboard.title" %>
+      <span class="live"><%= I18n.t "scoreboard.live" %></span>
+    </div>
   </div>
   <div class="span3 header-share">
     <a href='#' id='js-facebook-share'>&nbsp;</a>

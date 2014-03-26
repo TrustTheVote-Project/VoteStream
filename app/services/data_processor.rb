@@ -11,7 +11,13 @@ class DataProcessor
   def self.percent_reporting(locality)
     stats = precinct_stats(locality)
     v = (stats[:reporting_precinct_ids].count * 100.0) / [ stats[:precinct_count], 1 ].max
-    "%3.1f" % v
+    if v >= 100
+      "Final Results"
+    elsif v > 0
+      "%3.1f" % v + " % Reporting"
+    else
+      "No Results"
+    end
   end
 
   def self.reporting_precinct_ids(locality)

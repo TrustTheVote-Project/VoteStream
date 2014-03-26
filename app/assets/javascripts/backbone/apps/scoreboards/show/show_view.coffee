@@ -17,7 +17,7 @@
       @resultsSummaryRegion.show @layout
       @mapRegion.show new Show.MapView
         infoWindow: true
-
+        noPanning: true
 
   class ResultsRotator
     constructor: ->
@@ -40,9 +40,13 @@
       App.vent.trigger 'result:selected', @results.at(@idx)
 
     prev: ->
-      @idx--
-      @idx = @results.length - 1 if @idx < 0
-      @idx = 0 if @idx < 0
+      if @idx > 0
+        @idx--
+      else if @idx is 0
+        @idx = (@results.length - 1)
+      else
+        @idx = 0
+
       App.vent.trigger 'result:selected', @results.at(@idx)
 
     hasPrev: -> @idx > 0
@@ -71,18 +75,18 @@
     events:
       'click #js-prev-refcon a': (e) ->
         e.preventDefault()
-        return if $(e.target).attr('disabled')
+        #return if $(e.target).attr('disabled')
         @rotator.prev()
 
       'click #js-next-refcon a': (e) ->
         e.preventDefault()
-        return if $(e.target).attr('disabled')
+        #return if $(e.target).attr('disabled')
         @rotator.next()
 
     updateView: ->
       @render()
-      if @rotator.hasPrev() then @ui.prevRefCon.removeAttr('disabled') else @ui.prevRefCon.attr('disabled', true)
-      if @rotator.hasNext() then @ui.nextRefCon.removeAttr('disabled') else @ui.nextRefCon.attr('disabled', true)
+      #if @rotator.hasPrev() then @ui.prevRefCon.removeAttr('disabled') else @ui.prevRefCon.attr('disabled', true)
+      #if @rotator.hasNext() then @ui.nextRefCon.removeAttr('disabled') else @ui.nextRefCon.attr('disabled', true)
 
     onShow: -> @updateView()
     onClose: ->
@@ -134,7 +138,10 @@
     template: 'scoreboards/show/_contest_summary_row'
     tagName:  'li'
     className: ->
-      if @.options.hidden then 'hide' else ''
+      classes = []
+      classes.push('hide') if @.options.hidden
+      classes.push('winner') if @.options.winner
+      return classes.join(' ')
     serializeData: ->
       data = Backbone.Marionette.ItemView.prototype.serializeData.apply @, arguments
       data.totalVotes = @options.totalVotes
@@ -151,6 +158,11 @@
   class ReferendumSummaryRowView extends Marionette.ItemView
     template: 'scoreboards/show/_referendum_summary_row'
     tagName:  'li'
+    className: ->
+      classes = []
+      classes.push('hide') if @.options.hidden
+      classes.push('winner') if @.options.winner
+      return classes.join(' ')
     serializeData: ->
       data = Backbone.Marionette.ItemView.prototype.serializeData.apply @, arguments
       data.totalVotes = @options.totalVotes
@@ -172,6 +184,7 @@
     itemViewContainer: 'ul'
     itemViewOptions: (m, i) ->
       return {
+        winner:     i is 0 and gon.percentReporting is 'Final Results',
         totalVotes: @model.get('summary').get('votes')
       }
 
@@ -190,6 +203,7 @@
     itemViewOptions: (m, i) ->
       return {
         hidden:     i > 1,
+        winner:     i is 0 and gon.percentReporting is 'Final Results',
         totalVotes: @model.get('summary').get('votes')
       }
 
