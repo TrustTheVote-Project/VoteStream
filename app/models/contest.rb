@@ -2,6 +2,10 @@ class Contest < ActiveRecord::Base
 
   DISTRICT_TYPES = %w( federal state mcd )
 
+  # a hack to isolate locality contests from other localities
+  # as we don't have standardized contest UIDs they duplicate on federal and state levels
+  belongs_to :locality
+
   belongs_to :district
   has_many   :precincts, through: :district
   has_many   :candidates, dependent: :destroy

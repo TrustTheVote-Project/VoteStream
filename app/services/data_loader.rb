@@ -13,7 +13,8 @@ class DataLoader < BaseLoader
 
   def load
     Election.transaction do
-      load_locality
+      @locality = load_locality
+      
       load_election
       load_districts
       load_precincts
@@ -36,7 +37,10 @@ class DataLoader < BaseLoader
       name = locality_el.css("> name").first.content
       type = locality_el.css("> type").first.content
       uid  = locality_el['id']
-      Locality.create_with(name: name, locality_type: type, state: state).find_or_create_by(uid: uid)
+
+      Locality.where(uid: uid).destroy_all
+
+      return Locality.create_with(name: name, locality_type: type, state: state).find_or_create_by(uid: uid)
     else
       raise InvalidFormat.new("State with ID '#{state_el['id']}' was not found")
     end
@@ -77,7 +81,8 @@ class DataLoader < BaseLoader
         uid      = locality_el['id']
         name     = dequote(locality_el.css('> name').first.content).titleize
         type     = dequote(locality_el.css('> type').first.content)
-        locality = state.localities.create_with(name: name, locality_type: type).find_or_create_by(uid: uid)
+
+        locality = state.localities.find_by(uid: uid)
 
         yield locality_el, locality
       end
@@ -88,8 +93,6 @@ class DataLoader < BaseLoader
     return if @doc.css('vip_object > state > locality > precinct').size == 0
 
     for_each_locality do |locality_el, locality|
-      # continue loading precincts
-      locality.precincts.destroy_all
       locality_el.css('precinct').each do |precinct_el|
         uid      = precinct_el['id']
         name     = dequote(precinct_el.css('> name').first.content)
@@ -147,7 +150,7 @@ class DataLoader < BaseLoader
         @write_in_party_uid = uid
       end
 
-      Party.create_with(name: name, abbr: abbr, sort_order: sort_order).find_or_create_by(uid: uid)
+      @locality.parties.create(name: name, abbr: abbr, sort_order: sort_order, uid: uid)
     end
   end
 
@@ -160,9 +163,8 @@ class DataLoader < BaseLoader
         name       = dequote(candidate_el.css('name, text').first.content)
         party_uid  = dequote(candidate_el.css('> party_id').first.try(:content))
         sort_order = dequote(candidate_el.css('> sort_order').first.content)
-
-        party      = Party.create_with(name: "Undefined", sort_order: 9999, abbr: 'UNDEF').find_or_create_by(uid: party_uid)
-        contest.candidates.create_with(name: name, party: party, sort_order: sort_order).find_or_create_by(uid: uid)
+        party      = Party.create_with(name: "Undefined", sort_order: 9999, abbr: 'UNDEF').find_or_create_by(uid: party_uid, locality_id: @locality.id)
+        contest.candidates.create(name: name, party: party, sort_order: sort_order, uid: uid)
       end
     end
   end
@@ -173,13 +175,12 @@ class DataLoader < BaseLoader
       office      = dequote(contest_el.css("office, title").first.content)
       sort_order  = dequote(contest_el.css("> ballot_placement").first.content)
       district_id = dequote(contest_el.css("> electoral_district_id").first.content)
-      district    = District.find_by_uid(district_id)
+      district    = @locality.districts.find_by(uid: district_id)
       if district
-        locality_id = district.precincts.first.locality_id
         parties   = contest_el.css("party_id").map(&:content)
         write_in  = parties.include?(@write_in_party_uid)
         partisan  = !parties.include?(@nonpartisan_party_uid)
-        contest   = Contest.create_with(office: office, sort_order: sort_order, district: district, locality_id: locality_id, write_in: write_in, partisan: partisan).find_or_create_by(uid: uid)
+        contest   = @locality.contests.create(office: office, sort_order: sort_order, district: district, write_in: write_in, partisan: partisan, uid: uid)
         block.call(contest_el, contest)
       else
         raise_strict InvalidFormat.new("District with ID '#{district_id}' was not found")
@@ -209,10 +210,9 @@ class DataLoader < BaseLoader
       question    = dequote(referendum_el.css("text").first.content)
       sort_order  = dequote(referendum_el.css("> ballot_placement").first.content)
       district_id = dequote(referendum_el.css("> electoral_district_id").first.content)
-      district    = District.find_by_uid(district_id)
+      district    = @locality.districts.find_by(uid: district_id)
       if district
-        locality_id = district.precincts.first.locality_id
-        referendum = Referendum.create_with(title: title, subtitle: subtitle, question: question, sort_order: sort_order, district: district, district_type: district.district_type, locality_id: locality_id).find_or_create_by(uid: uid)
+        referendum = @locality.referendums.create(title: title, subtitle: subtitle, question: question, sort_order: sort_order, district: district, district_type: district.district_type, uid: uid)
         block.call(referendum_el, referendum)
       else
         raise_strict InvalidFormat.new("District with ID '#{district_id}' was not found")
@@ -223,7 +223,7 @@ class DataLoader < BaseLoader
   def find_or_create_district(district_el)
     name = dequote(district_el.css("> name").first.content)
     type = dequote(district_el.css("> type").first.content)
-    District.create_with(name: name, district_type: type).find_or_create_by(uid: district_el['id'])
+    @locality.districts.create(name: name, district_type: type, uid: district_el['id'])
   end
 
 end

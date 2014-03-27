@@ -1,17 +1,23 @@
 class Precinct < ActiveRecord::Base
 
   belongs_to :locality
+
   has_and_belongs_to_many :districts
-  has_one    :polling_location, dependent: :destroy
-  has_many   :candidate_results, dependent: :destroy
-  has_many   :ballot_response_results, dependent: :destroy
-  has_many   :contests,    -> { uniq }, through: :districts
-  has_many   :referendums, -> { uniq }, through: :districts
-  has_many   :contest_results, dependent: :destroy
+  
+  has_one    :polling_location,        dependent: :delete
+  has_many   :candidate_results,       dependent: :delete_all
+  has_many   :ballot_response_results, dependent: :delete_all
+  has_many   :contest_results,         dependent: :delete_all
 
   validates :uid, presence: true
   validates :name, presence: true
 
-  #serialize :kml
+  def contests
+    self.locality.contests.where(district_id: self.district_ids)
+  end
+
+  def referendums
+    self.locality.referendums.where(district_id: self.district_ids)
+  end
 
 end

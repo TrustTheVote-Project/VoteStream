@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140325120721) do
+ActiveRecord::Schema.define(version: 20140327102215) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -98,12 +98,14 @@ ActiveRecord::Schema.define(version: 20140325120721) do
   add_index "contests", ["uid"], :name => "index_contests_on_uid", :unique => true
 
   create_table "districts", force: true do |t|
-    t.string "uid",           null: false
-    t.string "name"
-    t.string "district_type"
+    t.string  "uid",           null: false
+    t.string  "name"
+    t.string  "district_type"
+    t.integer "locality_id"
   end
 
-  add_index "districts", ["uid"], :name => "index_districts_on_uid", :unique => true
+  add_index "districts", ["locality_id"], :name => "index_districts_on_locality_id"
+  add_index "districts", ["uid", "locality_id"], :name => "index_districts_on_uid_and_locality_id", :unique => true
 
   create_table "districts_precincts", id: false, force: true do |t|
     t.integer "district_id", null: false
@@ -135,13 +137,15 @@ ActiveRecord::Schema.define(version: 20140325120721) do
   add_index "localities", ["uid"], :name => "index_localities_on_uid", :unique => true
 
   create_table "parties", force: true do |t|
-    t.string  "uid",        null: false
+    t.string  "uid",         null: false
     t.integer "sort_order"
-    t.string  "name",       null: false
-    t.string  "abbr",       null: false
+    t.string  "name",        null: false
+    t.string  "abbr",        null: false
+    t.integer "locality_id"
   end
 
-  add_index "parties", ["uid"], :name => "index_parties_on_uid", :unique => true
+  add_index "parties", ["locality_id"], :name => "index_parties_on_locality_id"
+  add_index "parties", ["uid", "locality_id"], :name => "index_parties_on_uid_and_locality_id", :unique => true
 
   create_table "polling_locations", force: true do |t|
     t.integer "precinct_id"

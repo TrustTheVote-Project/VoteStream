@@ -7,15 +7,17 @@ class RefConResults
   end
 
   def all_refcons(params)
-    { federal: refcons_of_type('Federal', params),
-      state:   refcons_of_type('State', params),
-      mcd:     refcons_of_type('MCD', params),
-      other:   refcons_of_type('Other', params) }
+    locality = Locality.find(params[:locality_id])
+    { federal: refcons_of_type(locality, 'Federal', params),
+      state:   refcons_of_type(locality, 'State', params),
+      mcd:     refcons_of_type(locality, 'MCD', params),
+      other:   refcons_of_type(locality, 'Other', params) }
   end
 
-  def refcons_of_type(district_type, params)
-    contests = Contest.where(district_type: district_type, locality_id: params[:locality_id]).select("id, office as name, sort_order")
-    refs     = Referendum.where(district_type: district_type, locality_id: params[:locality_id]).select("id, title as name, sort_order")
+  def refcons_of_type(locality, district_type, params)
+    contests     = locality.contests.where(district_type: district_type).select("id, office as name, sort_order")
+    refs         = locality.referendums.where(district_type: district_type).select("id, title as name, sort_order")
+
     [ contests, refs ].flatten.sort_by(&:sort_order).map { |i| { id: i.id, name: i.name, type: i.kind_of?(Contest) ? 'c' : 'r' } }
   end
 
@@ -345,7 +347,12 @@ class RefConResults
     district_ids = districts_for_region(params)
 
     filt = {}
-    filt[:district_id] = district_ids unless district_ids.blank?
+    if district_ids.blank?
+      locality_id = params[:locality_id]
+      filt[:locality_id] = locality_id unless locality_id.blank?
+    else
+      filt[:district_id] = district_ids
+    end
 
     cat = params[:category]
     if cat.blank?

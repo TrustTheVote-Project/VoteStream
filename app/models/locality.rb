@@ -3,10 +3,11 @@ class Locality < ActiveRecord::Base
   COUNTY = "COUNTY"
 
   belongs_to :state
-  has_many   :precincts, dependent: :destroy
-  has_many   :districts,   -> { uniq }, through: :precincts
-  has_many   :contests,    -> { uniq }, through: :districts
-  has_many   :referendums, -> { uniq }, through: :districts
+  has_many   :precincts,   dependent: :destroy
+  has_many   :districts,   dependent: :delete_all
+  has_many   :contests,    dependent: :destroy
+  has_many   :referendums, dependent: :destroy
+  has_many   :parties,     dependent: :delete_all
 
   validates :uid, presence: true
   validates :name, presence: true
