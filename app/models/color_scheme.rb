@@ -8,7 +8,7 @@ class ColorScheme
 
       if party == 'republican'
         c = 'republican'
-      elsif party == 'democratic-farmer-labor'
+      elsif party == 'democratic-farmer-labor' or party == 'democratic'
         c = 'democrat'
       elsif party == 'nonpartisan'
         c = index == 0 ? 'nonpartisan1' : 'nonpartisan2'
