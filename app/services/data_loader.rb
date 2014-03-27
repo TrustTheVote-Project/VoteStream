@@ -104,7 +104,7 @@ class DataLoader < BaseLoader
         kml      = "<MultiGeometry>#{precinct_el.css('Polygon').map { |p| p.to_xml.gsub(/(-?\d+\.\d+,-?\d+\.\d+),-?\d+\.\d+/, '\1') }.join}</MultiGeometry>"
 
         precinct = locality.precincts.create_with(name: name).find_or_create_by(uid: uid)
-        Precinct.where(id: precinct.id).update_all([ "geo = ST_GeomFromKML(?)", kml ])
+        Precinct.where(id: precinct.id).update_all([ "geo = ST_SimplifyPreserveTopology(ST_GeomFromKML(?), 0.0001)", kml ])
 
         district_precincts = []
 

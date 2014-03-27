@@ -18,8 +18,7 @@ class DataController < ApplicationController
 
   def precincts
     locality  = Locality.find(params[:locality_id])
-    tolerance = 0.0001
-    precincts = locality.precincts.select("id, name, ST_AsGeoJSON(ST_SimplifyPreserveTopology(geo, #{tolerance})) json")
+    precincts = locality.precincts.select("id, name, ST_AsGeoJSON(geo) json")
     render json: precincts.map { |p| { id: p.id, name: p.name, kml: JSON.parse(p.json) } }
   end
 
