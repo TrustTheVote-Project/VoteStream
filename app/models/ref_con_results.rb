@@ -186,8 +186,9 @@ class RefConResults
   private
 
   def contest_precinct_results(contest, params)
-    precincts  = contest.precincts
-    candidates = contest.candidates
+    region_pids = precinct_ids_for_region(params) || [ -1 ]
+    precincts  = contest.precincts.select("precincts.id, precincts.id in (#{region_pids.join(',')}) as inregion")
+    candidates = contest.candidates.includes(:party)
     results    = CandidateResult.where(candidate_id: contest.candidate_ids)
 
     precinct_candidate_results = results.group_by(&:precinct_id).inject({}) do |memo, (pid, results)|
@@ -197,7 +198,6 @@ class RefConResults
 
     rating = CandidateResult.where(candidate_id: contest.candidate_ids).select("candidate_id, sum(votes) v").group('candidate_id').order("v desc").map(&:candidate_id)
 
-    region_pids = precinct_ids_for_region(params)
     pmap = precincts.map do |p|
       pcr = precinct_candidate_results[p.id] || []
       candidate_votes = pcr.inject({}) do |memo, r|
@@ -214,8 +214,8 @@ class RefConResults
       idx = rating.index(candidate.try(:id))
 
       { id:       p.id,
-        inRegion: (region_pids && region_pids.include?(p.id)) || false,
-        c:        ColorScheme.candidate_color(candidate, idx),
+        inRegion: p.inregion,
+        c:        candidate ? candidate.color || ColorScheme.candidate_color(candidate, idx) : nil,
         adv:      li[:advantage],
         votes:    li[:total_votes],
         rows:     ordered[0, 2] }

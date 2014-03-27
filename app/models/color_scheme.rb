@@ -1,17 +1,31 @@
 class ColorScheme
 
+  def self.candidate_pre_color(party)
+    if party == 'republican'
+      c = 'republican'
+    elsif party == 'democratic-farmer-labor' or party == 'democratic'
+      c = 'democrat'
+    elsif party == 'nonpartisan'
+      c = nil # we'll have it idx-based
+    else
+      c = 'other'
+    end
+
+    c ? colors[c] : nil
+  end
+
   def self.candidate_color(candidate, index)
     c = 'not_reporting'
 
     if candidate
       party = candidate.party.name.downcase.strip
 
-      if party == 'republican'
+      if party == 'nonpartisan'
+        c = index == 0 ? 'nonpartisan1' : 'nonpartisan2'
+      elsif party == 'republican'
         c = 'republican'
       elsif party == 'democratic-farmer-labor' or party == 'democratic'
         c = 'democrat'
-      elsif party == 'nonpartisan'
-        c = index == 0 ? 'nonpartisan1' : 'nonpartisan2'
       else
         c = 'other'
       end

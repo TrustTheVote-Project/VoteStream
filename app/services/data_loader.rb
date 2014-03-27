@@ -4,7 +4,7 @@ class DataLoader < BaseLoader
   DISTRICTS_PRECINCT_COLUMNS = [ :district_id, :precinct_id ]
   BALLOT_RESPONSES_COLUMNS   = [ :referendum_id, :name, :sort_order, :uid ]
   DISTRICT_COLUMNS           = [ :name, :district_type, :uid ]
-  CANDIDATE_COLUMNS          = [ :name, :party_id, :sort_order, :uid ]
+  CANDIDATE_COLUMNS          = [ :name, :party_id, :sort_order, :uid, :color ]
 
   def initialize(xml_source)
     @xml_source = xml_source
@@ -165,13 +165,21 @@ class DataLoader < BaseLoader
       @locality.parties.create(name: name, abbr: abbr, sort_order: sort_order, uid: uid)
     end
 
-    @parties = @locality.parties.select('id, uid').all.inject({}) { |m, p| m[p.uid] = p.id; m }
+    @parties = {}
+    @party_names = {}
+
+    @locality.parties.select('id, uid, name').each do |p|
+      @parties[p.uid] = p.id
+      @party_names[p.uid] = p.name.downcase
+    end
 
     # Create missing parties
     all_uids = @doc.css('party_id').map { |r| dequote(r.content) }.uniq
     missing_uids = all_uids - @parties.keys
     missing_uids.each do |uid|
-      @parties[uid] = @locality.parties.create(name: "Undefined #{uid}", sort_order: 9999, abbr: 'UNDEF', uid: uid)
+      party = @locality.parties.create(name: "Undefined-#{uid}", sort_order: 9999, abbr: 'UNDEF', uid: uid)
+      @parties[uid] = party.id
+      @party_names[uid] = party.name.downcase
     end
   end
 
@@ -186,7 +194,8 @@ class DataLoader < BaseLoader
         name       = dequote(candidate_el.css('name, text').first.content)
         party_uid  = dequote(candidate_el.css('> party_id').first.try(:content))
         sort_order = dequote(candidate_el.css('> sort_order').first.content)
-        candidates << [ name, @parties[party_uid], sort_order, uid ]
+        color      = ColorScheme.candidate_pre_color(@party_names[party_uid])
+        candidates << [ name, @parties[party_uid], sort_order, uid, color ]
       end
 
       contest.candidates.import CANDIDATE_COLUMNS, candidates
