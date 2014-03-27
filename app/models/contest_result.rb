@@ -4,7 +4,7 @@ class ContestResult < ActiveRecord::Base
   belongs_to :contest
   belongs_to :referendum
 
-  has_many   :candidate_results, dependent: :delete_all
+  has_many   :candidate_results,       dependent: :delete_all
   has_many   :ballot_response_results, dependent: :delete_all
 
   def contest_related?
@@ -14,5 +14,5 @@ class ContestResult < ActiveRecord::Base
   def referendum_related?
     self.referendum_id.present?
   end
-  
+
 end

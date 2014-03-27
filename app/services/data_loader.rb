@@ -1,12 +1,17 @@
 class DataLoader < BaseLoader
 
+  UNSET                      = "<unset>"
   DISTRICTS_PRECINCT_COLUMNS = [ :district_id, :precinct_id ]
+  BALLOT_RESPONSES_COLUMNS   = [ :referendum_id, :name, :sort_order, :uid ]
+  DISTRICT_COLUMNS           = [ :name, :district_type, :uid ]
+  CANDIDATE_COLUMNS          = [ :name, :party_id, :sort_order, :uid ]
 
   def initialize(xml_source)
     @xml_source = xml_source
     @doc = Nokogiri::XML(xml_source)
     @doc.remove_namespaces!
     @districts = {}
+    @parties = {}
     @nonpartisan_party_uid = nil
     @write_in_party_uid = nil
   end
@@ -14,7 +19,7 @@ class DataLoader < BaseLoader
   def load
     Election.transaction do
       @locality = load_locality
-      
+
       load_election
       load_districts
       load_precincts
@@ -115,10 +120,17 @@ class DataLoader < BaseLoader
   end
 
   def load_districts
+    districts = []
+
     @doc.css('vip_object > electoral_district').each do |district_el|
-      district = find_or_create_district(district_el)
-      @districts[district.uid] = district
+      name = dequote(district_el.css("> name").first.content)
+      type = dequote(district_el.css("> type").first.content)
+      districts << [ name, type, district_el['id'] ]
     end
+
+    @locality.districts.import DISTRICT_COLUMNS, districts
+
+    @districts = @locality.districts.all.inject({}) { |m, d| m[d.uid] = d; m }
   end
 
   def create_polling_location(precinct_el, precinct)
@@ -152,20 +164,32 @@ class DataLoader < BaseLoader
 
       @locality.parties.create(name: name, abbr: abbr, sort_order: sort_order, uid: uid)
     end
+
+    @parties = @locality.parties.select('id, uid').all.inject({}) { |m, p| m[p.uid] = p.id; m }
+
+    # Create missing parties
+    all_uids = @doc.css('party_id').map { |r| dequote(r.content) }.uniq
+    missing_uids = all_uids - @parties.keys
+    missing_uids.each do |uid|
+      @parties[uid] = @locality.parties.create(name: "Undefined #{uid}", sort_order: 9999, abbr: 'UNDEF', uid: uid)
+    end
   end
 
   def load_contests
     return if @doc.css('vip_object > contest').size == 0
 
     for_each_contest do |contest_el, contest|
+      candidates = []
+
       contest_el.css("candidate").each do |candidate_el|
         uid        = candidate_el['id']
         name       = dequote(candidate_el.css('name, text').first.content)
         party_uid  = dequote(candidate_el.css('> party_id').first.try(:content))
         sort_order = dequote(candidate_el.css('> sort_order').first.content)
-        party      = Party.create_with(name: "Undefined", sort_order: 9999, abbr: 'UNDEF').find_or_create_by(uid: party_uid, locality_id: @locality.id)
-        contest.candidates.create(name: name, party: party, sort_order: sort_order, uid: uid)
+        candidates << [ name, @parties[party_uid], sort_order, uid ]
       end
+
+      contest.candidates.import CANDIDATE_COLUMNS, candidates
     end
   end
 
@@ -191,15 +215,19 @@ class DataLoader < BaseLoader
   def load_referendums
     return if @doc.css('vip_object > referendum').size == 0
 
+    ballot_responses = []
+
     for_each_referendum do |referendum_el, referendum|
       referendum_el.css("ballot_response").each do |ballot_response_el|
         uid        = ballot_response_el['id']
         name       = dequote(ballot_response_el.css('> text').first.content)
         sort_order = dequote(ballot_response_el.css('> sort_order').first.content)
 
-        referendum.ballot_responses.create_with(name: name, sort_order: sort_order).find_or_create_by(uid: uid)
+        ballot_responses << [ referendum.id, name, sort_order, uid ]
       end
     end
+
+    BallotResponse.import BALLOT_RESPONSES_COLUMNS, ballot_responses
   end
 
   def for_each_referendum(&block)
@@ -207,7 +235,9 @@ class DataLoader < BaseLoader
       uid         = referendum_el['id']
       title       = dequote(referendum_el.css("title").first.content)
       subtitle    = dequote(referendum_el.css("subtitle").first.content)
+      subtitle    = UNSET if subtitle.blank?
       question    = dequote(referendum_el.css("text").first.content)
+      question    = UNSET if question.blank?
       sort_order  = dequote(referendum_el.css("> ballot_placement").first.content)
       district_id = dequote(referendum_el.css("> electoral_district_id").first.content)
       district    = @locality.districts.find_by(uid: district_id)
@@ -218,12 +248,6 @@ class DataLoader < BaseLoader
         raise_strict InvalidFormat.new("District with ID '#{district_id}' was not found")
       end
     end
-  end
-
-  def find_or_create_district(district_el)
-    name = dequote(district_el.css("> name").first.content)
-    type = dequote(district_el.css("> type").first.content)
-    @locality.districts.create(name: name, district_type: type, uid: district_el['id'])
   end
 
 end

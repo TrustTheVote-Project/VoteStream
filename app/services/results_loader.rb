@@ -16,6 +16,8 @@ class ResultsLoader < BaseLoader
     @candidate_ids = {}
     @ballot_response_ids = {}
 
+    @locality = find_locality(@doc)
+
     Precinct.transaction do
       remove_old_results
       load_new_results
@@ -26,8 +28,19 @@ class ResultsLoader < BaseLoader
 
   private
 
+  def find_locality(doc)
+    locality_uid = doc.css('state > locality').first.try(:[], 'id')
+    if locality_uid.blank?
+      contest_uid = dequote(doc.css('contest_result > contest_id').first.content)
+      return Contest.find_by!(uid: contest_uid).locality
+    else
+      return Locality.find_by!(uid: locality_uid)
+    end
+  end
+
   def remove_old_results
-    ContestResult.destroy_all
+    contest_ids = @locality.contest_ids
+    ContestResult.where(contest_id: contest_ids).destroy_all
   end
 
   def load_new_results
