@@ -3,11 +3,12 @@ class Precinct < ActiveRecord::Base
   belongs_to :locality
 
   has_and_belongs_to_many :districts
-  
+
   has_one    :polling_location,        dependent: :delete
   has_many   :candidate_results,       dependent: :delete_all
   has_many   :ballot_response_results, dependent: :delete_all
   has_many   :contest_results,         dependent: :delete_all
+  has_many   :districts_precincts
 
   validates :uid, presence: true
   validates :name, presence: true

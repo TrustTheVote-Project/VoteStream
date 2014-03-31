@@ -1,256 +1,282 @@
 class DataLoader < BaseLoader
 
   DISTRICTS_PRECINCT_COLUMNS = [ :district_id, :precinct_id ]
+  DISTRICTS_PRECINCTS_COLUMNS = [ :district_id ]
   BALLOT_RESPONSES_COLUMNS   = [ :referendum_id, :name, :sort_order, :uid ]
+  BALLOT_RESPONSE_COLUMNS    = [ :name, :sort_order, :uid ]
   DISTRICT_COLUMNS           = [ :name, :district_type, :uid ]
   CANDIDATE_COLUMNS          = [ :name, :party_id, :sort_order, :uid, :color ]
 
+  attr_reader   :districts, :district_ids
+  attr_reader   :parties, :party_ids, :party_names
+  attr_accessor :state
+  attr_accessor :locality, :locality_uid, :locality_name, :locality_type
+
   def initialize(xml_source)
     @xml_source = xml_source
-    @doc = Nokogiri::XML(xml_source)
-    @doc.remove_namespaces!
-    @districts = {}
-    @parties = {}
-    @nonpartisan_party_uid = nil
-    @write_in_party_uid = nil
   end
 
-  def load
-    Election.transaction do
-      @locality = load_locality
+  def parse_state(reader)
+    loader = self
+    reader.for_element 'state' do
+      puts "State - #{attribute('id')}"
+      loader.state = State.find_by(uid: attribute('id'))
 
-      load_election
-      load_districts
-      load_precincts
-      load_parties
-      load_contests
-      load_referendums
-
-      DataProcessor.on_definitions_upload
-    end
-  end
-
-  private
-
-  def load_locality
-    state_el = @doc.css("vip_object > state").first
-    state = State.find_by(uid: state_el['id'])
-
-    if state
-      locality_el = state_el.css("> locality").first
-      name = locality_el.css("> name").first.content
-      type = locality_el.css("> type").first.content
-      uid  = locality_el['id']
-
-      Locality.where(uid: uid).destroy_all
-
-      return Locality.create_with(name: name, locality_type: type, state: state).find_or_create_by(uid: uid)
-    else
-      raise InvalidFormat.new("State with ID '#{state_el['id']}' was not found")
-    end
-  end
-
-  def load_election
-    election_el = @doc.css("vip_object > election").first
-
-    uid       = election_el['id']
-    state_uid = dequote(election_el.css("> state_id").first.content)
-    date      = dequote(election_el.css("> date").first.content)
-    type      = dequote(election_el.css("> election_type").first.content)
-    statewide = dequote(election_el.css("> statewide").first.content).upcase == "YES"
-
-    state = State.find_by_uid(state_uid)
-    if state
-      state.elections.create_with({
-        held_on:        date,
-        election_type:  type,
-        statewide:      statewide
-      }).find_or_create_by(uid: uid)
-    else
-      raise InvalidFormat.new("State with ID '#{state_uid}' was not found")
-    end
-  end
-
-  def for_each_state
-    @doc.css("vip_object > state").each do |state_el|
-      uid = state_el['id']
-      state = State.find_by_uid!(uid)
-      yield state_el, state
-    end
-  end
-
-  def for_each_locality
-    for_each_state do |state_el, state|
-      state_el.css("locality").each do |locality_el|
-        uid      = locality_el['id']
-        name     = dequote(locality_el.css('> name').first.content).titleize
-        type     = dequote(locality_el.css('> type').first.content)
-
-        locality = state.localities.find_by(uid: uid)
-
-        yield locality_el, locality
+      inside_element do
+        loader.parse_locality(self)
       end
     end
   end
 
-  def load_precincts
-    puts "-------- #{@doc.css('vip_object > precinct').size}"
-    return if @doc.css('vip_object > precinct').size == 0
+  def parse_locality(reader)
+    loader = self
+    reader.for_element 'locality' do
+      loader.locality_uid  = attribute('id')
+      loader.locality_name = loader.locality_type = nil
 
-    @doc.css('vip_object > precinct').each do |precinct_el|
-      uid      = precinct_el['id']
-      name     = dequote(precinct_el.css('> name').first.content)
-      kml      = "<MultiGeometry>#{precinct_el.css('Polygon').map { |p| p.to_xml.gsub(/(-?\d+\.\d+,-?\d+\.\d+),-?\d+\.\d+/, '\1') }.join}</MultiGeometry>"
+      inside_element do
+        for_element('name') { loader.locality_name = inner_xml }
+        for_element('type') { loader.locality_type = inner_xml }
 
-      precinct = @locality.precincts.create_with(name: name).find_or_create_by(uid: uid)
-      Precinct.where(id: precinct.id).update_all([ "geo = ST_SimplifyPreserveTopology(ST_GeomFromKML(?), 0.0001)", kml ])
+        loader.parse_precincts(self)
+      end
+    end
+  end
 
-      district_precincts = []
+  def purge_locality(id)
+    locality = Locality.find_by(uid: @locality_uid)
+    if locality
 
-      precinct_el.css('electoral_district_id').map { |el| el.content }.uniq.each do |uid|
-        district_precincts << [ @districts[uid], precinct.id ]
+      precinct_ids = locality.precinct_ids
+
+      Precinct.where(locality_id: locality.id).delete_all
+      Party.where(locality_id: locality.id).delete_all
+      District.where(locality_id: locality.id).delete_all
+
+      PollingLocation.where(precinct_id: precinct_ids).delete_all
+      DistrictsPrecinct.where(precinct_id: precinct_ids).delete_all
+
+      contest_result_ids = ContestResult.where(contest_id: locality.contest_ids).pluck(:id)
+      CandidateResult.where(contest_result_id: contest_result_ids).delete_all
+      BallotResponseResult.where(contest_result_id: contest_result_ids).delete_all
+      ContestResult.where(contest_id: locality.contest_ids).delete_all
+
+      Candidate.where(contest_id: locality.contest_ids).delete_all
+      Contest.where(locality_id: locality.id).delete_all
+
+      BallotResponse.where(referendum_id: locality.referendum_ids).delete_all
+      Referendum.where(locality_id: locality.id).delete_all
+
+      locality.delete
+    end
+  end
+
+  def create_locality
+    puts "Locality: #{@locality_uid} #{@locality_name} #{@locality_type}"
+
+    purge_locality(@locality_uid)
+
+    @locality = Locality.create(name: @locality_name, locality_type: @locality_type, state: @state, uid: @locality_uid)
+  end
+
+  def save_districts
+    @locality.districts.import DISTRICT_COLUMNS, @districts
+    @district_ids = @locality.districts.select('id, uid').inject({}) { |m, d| m[d.uid] = d.id; m }
+  end
+
+  def parse_precincts(reader)
+    loader = self
+    reader.for_element 'precinct' do
+      loader.create_locality unless loader.locality
+      loader.save_districts if loader.district_ids.blank?
+
+      uid              = attribute('id')
+      name             = nil
+      district_uids    = []
+      polling_location = {}
+      polygons         = []
+
+      inside_element do
+        for_element_text('name') { name = value }
+
+        inside_element 'precinct_split' do
+          for_element('electoral_district_id') { district_uids << inner_xml }
+        end
+
+        inside_element 'polling_location' do
+          for_element_text('location_name') { polling_location[:name] = value }
+          for_element_text('line1')         { polling_location[:line1] = value }
+          for_element_text('line2')         { polling_location[:line2] = value }
+          for_element_text('city')          { polling_location[:city] = value }
+          for_element_text('state')         { polling_location[:state] = value }
+          for_element_text('zip')           { polling_location[:zip] = value }
+        end
+
+        for_element 'Polygon' do
+          polygons << outer_xml.gsub(/(-?\d+\.\d+,-?\d+\.\d+),-?\d+\.\d+/, '\1')
+        end
       end
 
-      DistrictsPrecinct.import DISTRICTS_PRECINCT_COLUMNS, district_precincts
+      district_uids.uniq!
+      district_ids = district_uids.map { |duid| [ loader.district_ids[duid] ] }
 
-      create_polling_location(precinct_el, precinct)
+      p = loader.locality.precincts.create(name: name, uid: uid)
+      Precinct.where(id: p.id).update_all([ "geo = ST_SimplifyPreserveTopology(ST_GeomFromKML(?), 0.0001)", "<MultiGeometry>#{polygons.join}</MultiGeometry>" ])
+      p.districts_precincts.import DISTRICTS_PRECINCTS_COLUMNS, district_ids
     end
   end
 
-  def load_districts
-    districts = []
+  def parse_districts(reader)
+    loader = self
 
-    @doc.css('vip_object > electoral_district').each do |district_el|
-      name = dequote(district_el.css("> name").first.content)
-      type = dequote(district_el.css("> type").first.content)
-      districts << [ name, type, district_el['id'] ]
-    end
+    reader.for_element 'electoral_district' do
+      district = [ nil, nil, attribute('id') ]
 
-    @locality.districts.import DISTRICT_COLUMNS, districts
-
-    @districts = @locality.districts.all.inject({}) { |m, d| m[d.uid] = d; m }
-  end
-
-  def create_polling_location(precinct_el, precinct)
-    polling_location_el = precinct_el.css('> polling_location').first
-    address_el = polling_location_el.css('> address').first
-
-    precinct.create_polling_location({
-      name:  dequote(address_el.css('> location_name').first.content),
-      line1: dequote(address_el.css('> line1').first.content),
-      line2: dequote(address_el.css('> line2').first.try(:content)),
-      city:  dequote(address_el.css('> city').first.content),
-      state: dequote(address_el.css('> state').first.content),
-      zip:   dequote(address_el.css('> zip').first.content)
-    })
-  end
-
-  def load_parties
-    return if @doc.css('vip_object > party').size == 0
-
-    @doc.css('vip_object > party').each do |party_el|
-      uid = party_el['id']
-      name = dequote(party_el.css('name').first.content)
-      abbr = dequote(party_el.css('abbreviation').first.content)
-      sort_order = dequote(party_el.css('sort_order').first.content).to_i
-
-      if name =~ /nonpartisan/i
-        @nonpartisan_party_uid = uid
-      elsif name =~ /write.*in/i
-        @write_in_party_uid = uid
+      inside_element do
+        for_element_text('name') { district[0] = value }
+        for_element('type')      { district[1] = inner_xml }
       end
 
-      @locality.parties.create(name: name, abbr: abbr, sort_order: sort_order, uid: uid)
-    end
-
-    @parties = {}
-    @party_names = {}
-
-    @locality.parties.select('id, uid, name').each do |p|
-      @parties[p.uid] = p.id
-      @party_names[p.uid] = p.name.downcase
-    end
-
-    # Create missing parties
-    all_uids = @doc.css('party_id').map { |r| dequote(r.content) }.uniq
-    missing_uids = all_uids - @parties.keys
-    missing_uids.each do |uid|
-      party = @locality.parties.create(name: "Undefined-#{uid}", sort_order: 9999, abbr: 'UNDEF', uid: uid)
-      @parties[uid] = party.id
-      @party_names[uid] = party.name.downcase
+      loader.districts << district
     end
   end
 
-  def load_contests
-    return if @doc.css('vip_object > contest').size == 0
+  def parse_parties(reader)
+    loader = self
+    reader.for_element 'party' do
+      raise "No Locality defined yet" unless loader.locality
 
-    for_each_contest do |contest_el, contest|
-      candidates = []
+      uid        = attribute('id')
+      name       = nil
+      sort_order = nil
+      abbr       = nil
 
-      contest_el.css("candidate").each do |candidate_el|
-        uid        = candidate_el['id']
-        name       = dequote(candidate_el.css('name, text').first.content)
-        party_uid  = dequote(candidate_el.css('> party_id').first.try(:content))
-        sort_order = dequote(candidate_el.css('> sort_order').first.content)
-        color      = ColorScheme.candidate_pre_color(@party_names[party_uid])
-        candidates << [ name, @parties[party_uid], sort_order, uid, color ]
+      inside_element do
+        for_element_text('name')    { name = value }
+        for_element('sort_order')   { sort_order = inner_xml }
+        for_element('abbreviation') { abbr = inner_xml }
       end
 
+      party = loader.locality.parties.create(uid: uid, name: name, sort_order: sort_order, abbr: abbr)
+      loader.party_ids[uid] = party.id
+    end
+  end
+
+  def parse_referendums(reader)
+    loader = self
+    reader.for_element 'referendum' do
+      uid              = attribute('id')
+      title            = nil
+      subtitle         = UNSET
+      question         = UNSET
+      sort_order       = nil
+      district_uid     = nil
+      ballot_responses = []
+
+      inside_element do
+        for_element_text('title')       { title = loader.dequote(value) }
+        for_element_text('subtitle')    { subtitle = loader.dequote(value) }
+        for_element('ballot_placement') { sort_order = inner_xml }
+        for_element_text('electoral_district_id') { district_uid = loader.dequote(value) }
+
+        for_element 'ballot_response' do
+          buid = attribute('id')
+          text = nil
+          sort_order = nil
+
+          inside_element do
+            for_element('text') { text = inner_xml }
+            for_element('sort_order') { sort_order = inner_xml}
+
+          end
+
+          ballot_responses << [ text, sort_order, buid ]
+        end
+      end
+
+      # create referendum
+      district_id = loader.district_ids[district_uid]
+      referendum = loader.locality.referendums.create({
+        title: title,
+        subtitle: subtitle,
+        question: question,
+        sort_order: sort_order,
+        district_id: district_id,
+        uid: uid
+      })
+
+      # save ballots
+      referendum.ballot_responses.import BALLOT_RESPONSE_COLUMNS, ballot_responses
+    end
+  end
+
+  def parse_contests(reader)
+    loader = self
+    reader.for_element 'contest' do
+      uid          = attribute('id')
+      office       = nil
+      district_uid = nil
+      sort_order   = nil
+      candidates   = []
+
+      inside_element do
+        for_element_text('office') { office = loader.dequote(value) }
+        for_element_text('electoral_district_id') { district_uid = loader.dequote(value) }
+        for_element('sort_order') { sort_order = inner_xml }
+
+        for_element 'candidate' do
+          cuid       = attribute('id')
+          name       = nil
+          party_id   = nil
+          sort_order = nil
+
+          inside_element do
+            for_element_text('name') { name = value }
+            for_element_text('party_id') do
+              party_id = loader.party_ids[value]
+              unless party_id
+                party = Party.create_undefined(loader.locality, value)
+                loader.party_ids[value] = party.id
+                loader.party_names[value] = party.name
+                party_id = party.id
+              end
+            end
+            for_element('sort_order') { sort_order = inner_xml }
+          end
+
+          color = ColorScheme.candidate_pre_color(loader.party_names[uid])
+          candidates << [ name, party_id, sort_order, cuid, color ]
+        end
+      end
+
+      # create contest
+      district_id = loader.district_ids[district_uid]
+      write_in = false # TODO fix
+      partisan = false # TODO fix
+      contest = loader.locality.contests.create(office: office, sort_order: sort_order, district_id: district_id, write_in: write_in, partisan: partisan, uid: uid)
+
+      # save candidates
       contest.candidates.import CANDIDATE_COLUMNS, candidates
     end
   end
 
-  def for_each_contest(&block)
-    @doc.css("vip_object > contest").each do |contest_el|
-      uid         = contest_el['id']
-      office      = dequote(contest_el.css("office, title").first.content)
-      sort_order  = dequote(contest_el.css("> ballot_placement").first.content)
-      district_id = dequote(contest_el.css("> electoral_district_id").first.content)
-      district    = @locality.districts.find_by(uid: district_id)
-      if district
-        parties   = contest_el.css("party_id").map(&:content)
-        write_in  = parties.include?(@write_in_party_uid)
-        partisan  = !parties.include?(@nonpartisan_party_uid)
-        contest   = @locality.contests.create(office: office, sort_order: sort_order, district: district, write_in: write_in, partisan: partisan, uid: uid)
-        block.call(contest_el, contest)
-      else
-        raise_strict InvalidFormat.new("District with ID '#{district_id}' was not found")
-      end
-    end
-  end
 
-  def load_referendums
-    return if @doc.css('vip_object > referendum').size == 0
 
-    ballot_responses = []
+  def load
+    @districts = []
+    @parties = []
+    @party_ids = {}
+    @party_names = {}
 
-    for_each_referendum do |referendum_el, referendum|
-      referendum_el.css("ballot_response").each do |ballot_response_el|
-        uid        = ballot_response_el['id']
-        name       = dequote(ballot_response_el.css('> text').first.content)
-        sort_order = dequote(ballot_response_el.css('> sort_order').first.content)
+    loader = self
 
-        ballot_responses << [ referendum.id, name, sort_order, uid ]
-      end
-    end
-
-    BallotResponse.import BALLOT_RESPONSES_COLUMNS, ballot_responses
-  end
-
-  def for_each_referendum(&block)
-    @doc.css("vip_object > referendum").each do |referendum_el|
-      uid         = referendum_el['id']
-      title       = dequote(referendum_el.css("title").first.content)
-      subtitle    = dequote(referendum_el.css("subtitle").first.content)
-      question    = dequote(referendum_el.css("text").first.content)
-      sort_order  = dequote(referendum_el.css("> ballot_placement").first.content)
-      district_id = dequote(referendum_el.css("> electoral_district_id").first.content)
-      district    = @locality.districts.find_by(uid: district_id)
-      if district
-        referendum = @locality.referendums.create(title: title, subtitle: subtitle, question: question, sort_order: sort_order, district: district, district_type: district.district_type, uid: uid)
-        block.call(referendum_el, referendum)
-      else
-        raise_strict InvalidFormat.new("District with ID '#{district_id}' was not found")
+    Election.transaction do
+      Xml::Parser.new(Nokogiri::XML::Reader(@xml_source)) do
+        loader.parse_districts(self)
+        loader.parse_state(self)
+        loader.parse_parties(self)
+        loader.parse_contests(self)
+        loader.parse_referendums(self)
       end
     end
   end

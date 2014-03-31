@@ -2,8 +2,6 @@ class BaseLoader
 
   class InvalidFormat < StandardError; end
 
-  protected
-
   def dequote(v)
     v.blank? ? v : v.gsub(/(^["']|["']$)/, '')
   end
