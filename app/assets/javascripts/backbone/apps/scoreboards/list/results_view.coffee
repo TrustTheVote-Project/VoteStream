@@ -57,21 +57,15 @@
         @$el.addClass 'selected'
         App.vent.trigger 'result:selected', @model
 
-      'mouseover': -> do @showMap
-      'mouseout': -> do @hideMap
+      'mouseover': -> @showMap()
 
     onShow: ->
       if @collection.length > 2 and !@options.simpleVersion
         @ui.showMoreBtn.show()
 
     showMap: ->
-      #offset = @.$el.offset().top - $('#content').offset().top
-      #$('#sidebar').css('margin-top', offset).addClass('active')
       $('#map-region').appendTo(@.$el)
       $('#map-view').trigger('map:show')
-
-    hideMap: ->
-      #$('#sidebar').removeClass('active')
 
   class ResponseRow extends Marionette.ItemView
     template: 'scoreboards/list/_response_row'
@@ -105,6 +99,12 @@
         $(".result").removeClass 'selected'
         @$el.addClass 'selected'
         App.vent.trigger 'result:selected', @model
+
+      'mouseover': -> @showMap()
+
+    showMap: ->
+      $('#map-region').appendTo(@.$el)
+      $('#map-view').trigger('map:show')
 
   class List.ResultsView extends Marionette.CompositeView
     template: 'scoreboards/list/_results'

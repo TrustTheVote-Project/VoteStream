@@ -1,6 +1,6 @@
-<div class='header'><h5><%= @summary.get('title') %></h5></div>
-<h6><%= @summary.get('subtitle') %></h6>
-<p class="muted"><%= @summary.get('text') %></div>
-
-<table class='responses'>
-</table>
+<div class='panel span9 summary'>
+  <div class='header'><h5><%= @summary.get('title') %></h5></div>
+  <h6><%= @summary.get('subtitle') %></h6>
+  <p class="muted"><%= @summary.get('text') %></p>
+  <div class="content responses"></div>
+</div>
