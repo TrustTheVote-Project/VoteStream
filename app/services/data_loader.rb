@@ -1,6 +1,5 @@
 class DataLoader < BaseLoader
 
-  UNSET                      = "<unset>"
   DISTRICTS_PRECINCT_COLUMNS = [ :district_id, :precinct_id ]
   BALLOT_RESPONSES_COLUMNS   = [ :referendum_id, :name, :sort_order, :uid ]
   DISTRICT_COLUMNS           = [ :name, :district_type, :uid ]
@@ -243,9 +242,7 @@ class DataLoader < BaseLoader
       uid         = referendum_el['id']
       title       = dequote(referendum_el.css("title").first.content)
       subtitle    = dequote(referendum_el.css("subtitle").first.content)
-      subtitle    = UNSET if subtitle.blank?
       question    = dequote(referendum_el.css("text").first.content)
-      question    = UNSET if question.blank?
       sort_order  = dequote(referendum_el.css("> ballot_placement").first.content)
       district_id = dequote(referendum_el.css("> electoral_district_id").first.content)
       district    = @locality.districts.find_by(uid: district_id)

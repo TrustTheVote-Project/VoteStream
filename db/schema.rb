@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140327173617) do
+ActiveRecord::Schema.define(version: 20140331182245) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -177,9 +177,9 @@ ActiveRecord::Schema.define(version: 20140327173617) do
   create_table "referendums", force: true do |t|
     t.integer "district_id"
     t.string  "uid",           null: false
-    t.string  "title",         null: false
-    t.text    "subtitle",      null: false
-    t.text    "question",      null: false
+    t.string  "title"
+    t.text    "subtitle"
+    t.text    "question"
     t.string  "sort_order"
     t.integer "locality_id"
     t.string  "district_type"
