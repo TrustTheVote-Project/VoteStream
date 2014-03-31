@@ -296,7 +296,7 @@ class RefConResults
   def ordered_records(items, items_votes, &block)
     unordered = items.map do |i|
       votes = items_votes[i.id].to_i
-      { order: @order_by_votes ? -votes : i.sort_order, item: i }
+      { order: (@order_by_votes ? -votes * 10000 : 0) + i.sort_order.to_i, item: i }
     end
 
     ordered = unordered.sort_by { |cv| cv[:order] }.map { |cv| cv[:item] }
