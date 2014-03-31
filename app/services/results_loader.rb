@@ -4,7 +4,8 @@ class ResultsLoader < BaseLoader
   BALLOT_RESPONSE_RESULTS_COLUMNS = [ :contest_result_id, :uid, :precinct_id, :ballot_response_id, :votes ]
   CONTEST_RESULTS_COLUMNS         = [ :uid, :certification, :precinct_id, :contest_id, :referendum_id, :total_votes, :total_valid_votes ]
 
-  def initialize(xml_source)
+  def initialize(xml_source, options = {})
+    @options = {}
     @xml_source = xml_source
     @doc = Nokogiri::XML(xml_source)
     @doc.remove_namespaces!
@@ -19,7 +20,7 @@ class ResultsLoader < BaseLoader
     @locality = find_locality(@doc)
 
     Precinct.transaction do
-      remove_old_results
+      remove_old_results unless options[:keep_old_results]
       load_new_results
 
       DataProcessor.on_results_upload
