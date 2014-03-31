@@ -17,9 +17,8 @@ class DataController < ApplicationController
   end
 
   def precincts
-    locality  = Locality.find(params[:locality_id])
-    precincts = locality.precincts.select("id, name, ST_AsGeoJSON(geo) json")
-    render json: precincts.map { |p| { id: p.id, name: p.name, kml: JSON.parse(p.json) } }
+    locality = Locality.find(params[:locality_id])
+    render text: DataProcessor.precincts_json(locality)
   end
 
   def precincts_geometries

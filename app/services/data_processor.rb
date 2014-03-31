@@ -46,6 +46,14 @@ class DataProcessor
     end
   end
 
+  def self.precincts_json(locality)
+    Rails.cache.fetch("locality:#{locality.id}:precincts") do
+      precincts = locality.precincts.select("id, name, ST_AsGeoJSON(geo) json")
+      data = precincts.map { |p| { id: p.id, name: p.name, kml: JSON.parse(p.json) } }
+      data.to_json
+    end
+  end
+
   def self.on_definitions_upload
     on_results_upload
   end

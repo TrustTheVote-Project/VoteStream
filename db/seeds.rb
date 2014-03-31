@@ -24,7 +24,7 @@ states = [
   ["MD", "Maryland"],
   ["ME", "Maine"],
   ["MI", "Michigan"],
-  ["MN", "Minnesota", "120000000027"],
+  ["MN", "Minnesota", "27"],
   ["MO", "Missouri"],
   ["MS", "Mississippi"],
   ["MT", "Montana"],
@@ -57,7 +57,7 @@ states = [
 
 states.each_with_index do |data, index|
   code, name, uid = *data
-  uid ||= index
+  uid ||= code
   State.create_with(name: name, uid: uid).find_or_create_by(code: code)
 end
 
