@@ -2,28 +2,12 @@ class DataController < ApplicationController
 
   def districts
     locality  = Locality.find(params[:locality_id])
-    districts = locality.focused_districts.includes(:precincts)
-
-    if params[:grouped]
-      grouped = districts.group_by(&:district_type)
-      @json   = Hash[grouped.map { |t, ds| [ (t || 'other').downcase, ds.map { |d| { id: d.id, name: d.name.titleize } } ] }]
-    else
-      order   = %w{ Federal State MCD }
-      ordered = districts.sort_by { |d| "#{order.index(d.district_type) || 5}#{d.name.downcase}" }
-      @json   = ordered.map { |d| { id: d.id, name: d.name.titleize, pids: d.precinct_ids } }
-    end
-
-    render json: @json
+    render text: DataProcessor.districts_json(locality, params[:grouped])
   end
 
   def precincts
     locality = Locality.find(params[:locality_id])
     render text: DataProcessor.precincts_json(locality)
-  end
-
-  def precincts_geometries
-    locality = Locality.find(params[:locality_id])
-    render json: locality.precincts.map { |p| { id: p.id, kml: p.kml } }
   end
 
   # the list of all refcons grouped
@@ -38,12 +22,8 @@ class DataController < ApplicationController
 
   # election results for the given precinct
   def precinct_results
-    render json: RefConResults.new.precinct_results(params)
+    render text: DataProcessor.precinct_results_json(params)
   end
-
-  # def results
-  #   render json: RefConResults.new.data(params)
-  # end
 
   def voting_results
     locality = Locality.find(params[:locality_id])

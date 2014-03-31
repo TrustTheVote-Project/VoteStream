@@ -21,7 +21,6 @@ Enrs::Application.routes.draw do
 
   get '/data/districts' => 'data#districts'
   get '/data/precincts' => 'data#precincts'
-  get '/data/precincts_geometries' => 'data#precincts_geometries'
   get '/data/voting_results' => 'data#voting_results'
   get '/data/all_refcons' => 'data#all_refcons'
   get '/data/region_refcons' => 'data#region_refcons'

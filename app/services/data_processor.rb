@@ -54,6 +54,35 @@ class DataProcessor
     end
   end
 
+  def self.precinct_results_json(params)
+    if params[:contest_id]
+      locality_id = Contest.find(params[:contest_id]).locality_id
+    else
+      locality_id = Referendum.find(params[:referendum_id]).locality_id
+    end
+
+    Rails.cache.fetch("locality:#{locality_id}:precinct_results") do
+      RefConResults.new.precinct_results(params).to_json
+    end
+  end
+
+  def self.districts_json(locality, grouped)
+    Rails.cache.fetch("locality:#{locality_id}:#{grouped ? 'grouped:' : ''}districts") do
+      districts = locality.focused_districts.includes(:precincts)
+
+      if params[:grouped]
+        grouped = districts.group_by(&:district_type)
+        data    = Hash[grouped.map { |t, ds| [ (t || 'other').downcase, ds.map { |d| { id: d.id, name: d.name.titleize } } ] }]
+      else
+        order   = %w{ Federal State MCD }
+        ordered = districts.sort_by { |d| "#{order.index(d.district_type) || 5}#{d.name.downcase}" }
+        data    = ordered.map { |d| { id: d.id, name: d.name.titleize, pids: d.precinct_ids } }
+      end
+
+      data
+    end
+  end
+
   def self.on_definitions_upload
     on_results_upload
   end
