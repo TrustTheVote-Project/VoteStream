@@ -95,27 +95,26 @@ class DataLoader < BaseLoader
   end
 
   def load_precincts
-    return if @doc.css('vip_object > state > locality > precinct').size == 0
+    puts "-------- #{@doc.css('vip_object > precinct').size}"
+    return if @doc.css('vip_object > precinct').size == 0
 
-    for_each_locality do |locality_el, locality|
-      locality_el.css('precinct').each do |precinct_el|
-        uid      = precinct_el['id']
-        name     = dequote(precinct_el.css('> name').first.content)
-        kml      = "<MultiGeometry>#{precinct_el.css('Polygon').map { |p| p.to_xml.gsub(/(-?\d+\.\d+,-?\d+\.\d+),-?\d+\.\d+/, '\1') }.join}</MultiGeometry>"
+    @doc.css('vip_object > precinct').each do |precinct_el|
+      uid      = precinct_el['id']
+      name     = dequote(precinct_el.css('> name').first.content)
+      kml      = "<MultiGeometry>#{precinct_el.css('Polygon').map { |p| p.to_xml.gsub(/(-?\d+\.\d+,-?\d+\.\d+),-?\d+\.\d+/, '\1') }.join}</MultiGeometry>"
 
-        precinct = locality.precincts.create_with(name: name).find_or_create_by(uid: uid)
-        Precinct.where(id: precinct.id).update_all([ "geo = ST_SimplifyPreserveTopology(ST_GeomFromKML(?), 0.0001)", kml ])
+      precinct = @locality.precincts.create_with(name: name).find_or_create_by(uid: uid)
+      Precinct.where(id: precinct.id).update_all([ "geo = ST_SimplifyPreserveTopology(ST_GeomFromKML(?), 0.0001)", kml ])
 
-        district_precincts = []
+      district_precincts = []
 
-        precinct_el.css('electoral_district_id').map { |el| el.content }.uniq.each do |uid|
-          district_precincts << [ @districts[uid], precinct.id ]
-        end
-
-        DistrictsPrecinct.import DISTRICTS_PRECINCT_COLUMNS, district_precincts
-
-        create_polling_location(precinct_el, precinct)
+      precinct_el.css('electoral_district_id').map { |el| el.content }.uniq.each do |uid|
+        district_precincts << [ @districts[uid], precinct.id ]
       end
+
+      DistrictsPrecinct.import DISTRICTS_PRECINCT_COLUMNS, district_precincts
+
+      create_polling_location(precinct_el, precinct)
     end
   end
 
