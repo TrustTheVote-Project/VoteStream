@@ -20,7 +20,7 @@ class ResultsLoader < BaseLoader
     @locality = find_locality(@doc)
 
     Precinct.transaction do
-      remove_old_results unless options[:keep_old_results]
+      remove_old_results unless @options[:keep_old_results]
       load_new_results
 
       DataProcessor.on_results_upload
