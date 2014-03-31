@@ -67,7 +67,7 @@ class DataProcessor
   end
 
   def self.districts_json(locality, grouped)
-    Rails.cache.fetch("locality:#{locality_id}:#{grouped ? 'grouped:' : ''}districts") do
+    Rails.cache.fetch("locality:#{locality.id}:#{grouped ? 'grouped:' : ''}districts") do
       districts = locality.focused_districts.includes(:precincts)
 
       if params[:grouped]
