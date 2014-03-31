@@ -70,7 +70,7 @@ class DataProcessor
     Rails.cache.fetch("locality:#{locality.id}:#{grouped ? 'grouped:' : ''}districts") do
       districts = locality.focused_districts.includes(:precincts)
 
-      if params[:grouped]
+      if grouped
         grouped = districts.group_by(&:district_type)
         data    = Hash[grouped.map { |t, ds| [ (t || 'other').downcase, ds.map { |d| { id: d.id, name: d.name.titleize } } ] }]
       else
