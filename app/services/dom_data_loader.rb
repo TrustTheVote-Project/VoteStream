@@ -1,4 +1,4 @@
-class DataLoader < BaseLoader
+class DomDataLoader < BaseLoader
 
   DISTRICTS_PRECINCT_COLUMNS = [ :district_id, :precinct_id ]
   DISTRICTS_PRECINCTS_COLUMNS = [ :district_id ]

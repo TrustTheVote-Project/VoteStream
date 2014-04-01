@@ -1,4 +1,4 @@
-class ResultsLoader < BaseLoader
+class DomResultsLoader < BaseLoader
 
   CANDIDATE_RESULTS_COLUMNS       = [ :contest_result_id, :uid, :precinct_id, :candidate_id, :votes ]
   BALLOT_RESPONSE_RESULTS_COLUMNS = [ :contest_result_id, :uid, :precinct_id, :ballot_response_id, :votes ]
