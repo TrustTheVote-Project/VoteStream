@@ -89,12 +89,15 @@
   # Results for the given result (recon + region)
   class Entities.PrecinctResultData extends Backbone.Model
     initialize: ->
-      @set 'items', new PrecinctRowItems
-      @set 'precincts', new PrecinctResults
+      @set
+        items: new PrecinctRowItems
+        precincts: new PrecinctResults
 
     parse: (data) ->
-      @set 'items', new PrecinctRowItems data.items
-      @set 'precincts', new PrecinctResults data.precincts
+      @set
+        items: new PrecinctRowItems data.items
+        precincts: new PrecinctResults data.precincts
+      @._previousAttributes = null
 
     fetchForResult: (result, region) ->
       if !result?

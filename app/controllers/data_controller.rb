@@ -22,6 +22,7 @@ class DataController < ApplicationController
 
   # election results for the given precinct
   def precinct_results
+    DataProcessor.flush
     render text: DataProcessor.precinct_results_json(params)
   end
 

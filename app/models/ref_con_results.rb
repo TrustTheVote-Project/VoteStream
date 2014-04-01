@@ -214,7 +214,7 @@ class RefConResults
       idx = rating.index(candidate.try(:id))
 
       { id:       p.id,
-        inRegion: p.inregion,
+        i: p.inregion,
         c:        candidate ? candidate.color || ColorScheme.candidate_color(candidate, idx) : nil,
         adv:      li[:advantage],
         votes:    li[:total_votes],
@@ -257,7 +257,7 @@ class RefConResults
       idx = rating.index(ballot_response.try(:id))
 
       { id:       p.id,
-        inRegion: (region_pids && region_pids.include?(p.id)) || false,
+        i: (region_pids && region_pids.include?(p.id)) || false,
         c:        ColorScheme.ballot_response_color(ballot_response, idx),
         adv:      li[:advantage],
         votes:    li[:total_votes],

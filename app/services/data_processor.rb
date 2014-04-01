@@ -84,10 +84,14 @@ class DataProcessor
   end
 
   def self.on_definitions_upload
-    on_results_upload
+    flush
   end
 
   def self.on_results_upload
+    flush
+  end
+
+  def self.flush
     Rails.cache.delete_matched("locality:*")
   end
 

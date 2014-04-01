@@ -32,6 +32,8 @@ InfoBubble.prototype.panToView = ->
       @polygons = []
       @options = options
 
+      @initColors()
+
       si = App.request 'entities:scoreboardInfo'
       @precinctResults = si.get 'precinctResults'
       @precinctResults.on 'sync', @updateColors, @
@@ -45,15 +47,13 @@ InfoBubble.prototype.panToView = ->
 
       for p in @polygons
         res = precincts.get p.data.precinctId
-        p.data.colors = @precinctColors items, res
+        newColors = @precinctColors items, res
         p.data.precinctResult = res
+        if p.data.colors != newColors
+          p.data.colors = newColors
+          p.setOptions p.data.colors
 
-        p.setOptions
-          fillColor:   p.data.colors.fillColor
-          fillOpacity: p.data.colors.fillOpacity
-          strokeColor: p.data.colors.strokeColor
-          strokeWeight: p.data.colors.strokeWeight
-          zIndex:       p.data.colors.zIndex
+      undefined
 
     onShow: ->
       @initMap()
@@ -145,19 +145,30 @@ InfoBubble.prototype.panToView = ->
 
       gon.colorScheme.saturation[c]
 
-    precinctColors: (items, precinctResult) ->
-      # Default (not in range precinct) colors are all the same
-      fillColor     = gon.colorScheme.colors.notVoting
-      fillOpacity   = 1
-      hoverColor    = fillColor
-      hoverOpacity  = 0.9
-      strokeColor   = '#ffffff'
-      strokeWeight  = 0.7
-      zIndex        = 1
+    initColors: ->
+      @colors =
+        noResults:
+          fillColor:     gon.colorScheme.colors.notVoting
+          fillOpacity:   1
+          hoverColor:    gon.colorScheme.colors.notVoting
+          hoverOpacity:  0.9
+          strokeColor:   if @options.whiteBackground then '#bbbbbb' else '#ffffff'
+          strokeWeight:  0.7
+          zIndex:         1
 
+    precinctColors: (items, precinctResult) ->
       if precinctResult?
+        # Default (not in range precinct) colors are all the same
+        fillColor     = gon.colorScheme.colors.notVoting
+        fillOpacity   = 1
+        hoverColor    = fillColor
+        hoverOpacity  = 0.9
+        strokeColor   = '#ffffff'
+        strokeWeight  = 0.7
+        zIndex        = 1
+
         # Highlight with opacity if precinct is in range
-        inRegion = precinctResult.get('inRegion')
+        inRegion = precinctResult.get('i')
         if inRegion
           strokeColor  = '#000000'
           strokeWeight = .5
@@ -172,23 +183,24 @@ InfoBubble.prototype.panToView = ->
           unless inRegion
             strokeColor = gon.colorScheme.colors.notVoting
         else
-          rows = precinctResult.get('rows')
           fillColor = precinctResult.get 'c'
           leaderAdvantage = precinctResult.get 'adv'
           fillOpacity = @colorShade leaderAdvantage
           hoverColor = fillColor
-      else
-        strokeColor = '#bbbbbb' if @options.whiteBackground
 
-      return {
-        fillColor:        fillColor
-        fillOpacity:      fillOpacity
-        hoverFillColor:   hoverColor
-        hoverFillOpacity: hoverOpacity
-        strokeColor:      strokeColor
-        strokeWeight:     strokeWeight
-        zIndex:           zIndex
-      }
+        colors = {
+          fillColor:        fillColor
+          fillOpacity:      fillOpacity
+          hoverFillColor:   hoverColor
+          hoverFillOpacity: hoverOpacity
+          strokeColor:      strokeColor
+          strokeWeight:     strokeWeight
+          zIndex:           zIndex
+        }
+      else
+        colors = @colors.noResults
+
+      return colors
 
     onPolygonMouseOver: (e) ->
       if @.data.mapView.options.infoWindow isnt 'simple'
@@ -292,10 +304,10 @@ InfoBubble.prototype.panToView = ->
         pid = @.data.precinctId
         precincts = App.request 'entities:precincts'
         precinct = precincts.get pid
-        
+
         App.vent.trigger 'region:selected', precinct
         App.navigate 'list', trigger: true
-      
+
     renderPrecincts: ->
       App.execute 'when:fetched', @precincts, =>
         @removePreviousPolygons()
