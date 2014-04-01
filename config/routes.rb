@@ -25,6 +25,7 @@ Enrs::Application.routes.draw do
   get '/data/all_refcons' => 'data#all_refcons'
   get '/data/region_refcons' => 'data#region_refcons'
   get '/data/precinct_results' => 'data#precinct_results'
+  get '/data/precinct_colors' => 'data#precinct_colors'
 
   get '/exports' => 'exports#index', as: 'exports'
 

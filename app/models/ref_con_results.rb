@@ -88,6 +88,42 @@ class RefConResults
     end
   end
 
+  def precinct_colors(params)
+    region_pids = precinct_ids_for_region(params) || [ -1 ]
+    cid = params[:contest_id]
+    rid = params[:referendum_id]
+    results = ContestResult.where(contest_id: cid, referendum_id: rid).select("*, id in (#{region_pids.join(',')}) as inregion")
+
+    # colors for precincts with results
+    reported_precinct_ids = []
+    colors = results.map do |r|
+      reported_precinct_ids << r.precinct_id
+
+      region = r.inregion ? 'i' : 'o'
+      base   = 'r' # (n)ot reporting, (r)epublican, (d)emocrat, (o)ther, (1) non-partisan, (2) non-partisan
+      shade  = 0   # 0, 1, 2
+      color  = "#{region}#{base}#{shade}"
+
+      { id: r.precinct_id, c: color }
+    end
+
+    # colors for precincts in range
+    if cid
+      pids = Contest.find(cid).precinct_ids
+    elsif rid
+      pids = Referendum.find(rid).precinct_ids
+    else
+      []
+    end
+    in_pids = pids & region_pids
+    out_pids = pids - in_pids
+
+    colors = colors + in_pids.map  { |pid| { id: pid, c: "in0" } }
+    colors = colors + out_pids.map { |pid| { id: pid, c: "on0" } }
+
+    colors
+  end
+
   # returns the results of polls for a given precinct (for API)
   def all_precinct_results(precinct, params)
     crs = precinct.contest_results.includes(:contest, :referendum)

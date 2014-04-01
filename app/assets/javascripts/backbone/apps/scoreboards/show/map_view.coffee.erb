@@ -42,12 +42,11 @@ InfoBubble.prototype.panToView = ->
     updateColors: ->
       @closeInfoWindow()
 
-      items     = @precinctResults.get 'items'
       precincts = @precinctResults.get 'precincts'
 
       for p in @polygons
         res = precincts.get p.data.precinctId
-        newColors = @precinctColors items, res
+        newColors = @precinctColors res
         p.data.precinctResult = res
         if p.data.colors != newColors
           p.data.colors = newColors
@@ -156,7 +155,7 @@ InfoBubble.prototype.panToView = ->
           strokeWeight:  0.7
           zIndex:         1
 
-    precinctColors: (items, precinctResult) ->
+    precinctColors: (precinctResult) ->
       if precinctResult?
         # Default (not in range precinct) colors are all the same
         fillColor     = gon.colorScheme.colors.notVoting
@@ -315,14 +314,13 @@ InfoBubble.prototype.panToView = ->
 
         bounds  = new google.maps.LatLngBounds()
         results = @precinctResults.get 'precincts'
-        items   = @precinctResults.get 'items'
 
         for precinct in @precincts.models
           this_bounds = new google.maps.LatLngBounds()
           precinctId = precinct.get 'id'
           res = results.get precinctId
           kml = precinct.get 'kml'
-          colors = @precinctColors items, res
+          colors = @precinctColors res
 
           lines = @pointsFromKml(kml)
 

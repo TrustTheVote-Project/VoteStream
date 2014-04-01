@@ -27,6 +27,11 @@ class DataController < ApplicationController
     render text: DataProcessor.precinct_results_json(params)
   end
 
+  # quick summary of colors for all precincts
+  def precinct_colors
+    render text: DataProcessor.precinct_colors_json(params)
+  end
+
   def voting_results
     locality = Locality.find(params[:locality_id])
     precincts = locality.precincts
