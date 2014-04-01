@@ -1,5 +1,7 @@
 class DataController < ApplicationController
 
+  before_filter :conditional_flush
+
   def districts
     locality  = Locality.find(params[:locality_id])
     render text: DataProcessor.districts_json(locality, params[:grouped])
@@ -29,6 +31,12 @@ class DataController < ApplicationController
     locality = Locality.find(params[:locality_id])
     precincts = locality.precincts
     render json: precincts.map { |p| { id: p.id, name: p.name } }
+  end
+
+  private
+
+  def conditional_flush
+    DataProcessor.flush if params[:flush_cache]
   end
 
 end
