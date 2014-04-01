@@ -76,7 +76,7 @@ class DataProcessor
       else
         order   = %w{ Federal State MCD }
         ordered = districts.sort_by { |d| "#{order.index(d.district_type) || 5}#{d.name.downcase}" }
-        data    = ordered.map { |d| { id: d.id, name: d.name.titleize, pids: d.precinct_ids } }
+        data    = ordered.map { |d| { id: d.id, name: d.name.titleize } }
       end
 
       data.to_json
