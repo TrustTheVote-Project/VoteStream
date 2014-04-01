@@ -26,6 +26,7 @@ class DataLoader < BaseLoader
 
     Election.transaction do
       Xml::Parser.new(Nokogiri::XML::Reader(@xml_source)) do
+        loader.parse_election(self)
         loader.parse_districts(self)
         loader.parse_state(self)
         loader.parse_precincts(self)
@@ -33,6 +34,23 @@ class DataLoader < BaseLoader
         loader.parse_contests(self)
         loader.parse_referendums(self)
       end
+    end
+  end
+
+  def parse_election(reader)
+    loader = self
+    reader.for_element 'election' do
+      election = Election.new(uid: attribute('id'))
+
+      inside_element do
+        for_element('date') { election.held_on = inner_xml }
+        for_element('election_type') { election.election_type = inner_xml }
+        for_element('state_id') { election.state = State.find_by(uid: inner_xml) }
+        for_element('statewide') { election.statewide = inner_xml == 'YES' }
+      end
+
+      Election.where(uid: election.uid).delete_all
+      election.save!
     end
   end
 
