@@ -213,6 +213,10 @@ InfoBubble.prototype.panToView = ->
         mapView = @.data.mapView
         mapView.closeInfoWindow()
 
+        pid = @.data.precinctId
+        result = mapView.precinctResults.get('precincts').get(pid)
+        return unless result?
+
         do (self = @, e) ->
           createBubble = ->
             mapView = self.data.mapView
@@ -226,7 +230,6 @@ InfoBubble.prototype.panToView = ->
               html = mapView.fullInfoWindowHtml self, precinct
             else
               html = "<%= I18n.t 'scoreboard.not_voting' %>"
-
 
             window.infoBubble = ib = new InfoBubble
               content: html
@@ -299,7 +302,7 @@ InfoBubble.prototype.panToView = ->
 
     onPolygonClick: ->
       pid = @.data.precinctId
-      result = @precinctResults.get('precincts').get(pid)
+      result = @.data.mapView.precinctResults.get('precincts').get(pid)
 
       if result? and @.data.mapView.options.infoWindow isnt 'simple'
         @setOptions
