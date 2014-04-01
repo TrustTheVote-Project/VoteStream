@@ -167,22 +167,32 @@ InfoBubble.prototype.panToView = ->
                     [ 'o', '<%= AppConfig['map_color']['colors']['other'] %>' ],
                     [ 'n', '<%= AppConfig['map_color']['colors']['not_reporting'] %>' ],
                     [ '1', '<%= AppConfig['map_color']['colors']['nonpartisan1'] %>' ],
-                    [ '2', '<%= AppConfig['map_color']['colors']['nonpartisan2'] %>' ] ]
+                    [ '2', '<%= AppConfig['map_color']['colors']['nonpartisan2'] %>' ],
+                    [ 'Y', '<%= AppConfig['map_color']['colors']['referenda_yes'] %>' ],
+                    [ 'N', '<%= AppConfig['map_color']['colors']['referenda_no'] %>' ] ]
           clc = cl[0]
           color = cl[1]
           for shade in [ 0, 1, 2 ]
             key = "#{region}#{clc}#{shade}"
 
+            if region == 'i'
+              strokeColor = '#000000'
+            else if clc == 'n'
+              strokeColor = '<%= AppConfig['map_color']['colors']['not_voting'] %>'
+            else
+              strokeColor = '#ffffff'
+
             @colors[key] = {
               fillColor:    color
-              fillOpacity:  gon.colorScheme.saturation[shade]
+              fillOpacity:  if clc == 'n' then 1 else gon.colorScheme.saturation[shade]
               hoverColor:   color
               hoverOpacity: 0.9
-              strokeColor:  if region == 'i' then '#000000' else '#ffffff'
+              strokeColor:  strokeColor
               strokeWeight: if region == 'i' then 0.5 else 0.7
               zIndex:       if region == 'i' then 2 else 1
             }
 
+      console.log @colors
       undefined
 
     findPrecinctColors: (precinctColor) ->
@@ -313,6 +323,7 @@ InfoBubble.prototype.panToView = ->
         for precinct in @precincts.models
           this_bounds = new google.maps.LatLngBounds()
           precinctId = precinct.get 'id'
+
           res = precincts.get precinctId
           color = @precinctColors.get precinctId
           kml = precinct.get 'kml'

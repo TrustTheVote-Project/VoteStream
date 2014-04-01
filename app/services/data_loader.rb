@@ -16,6 +16,26 @@ class DataLoader < BaseLoader
     @xml_source = xml_source
   end
 
+  def load
+    @districts   = []
+    @parties     = []
+    @party_ids   = {}
+    @party_names = {}
+
+    loader = self
+
+    Election.transaction do
+      Xml::Parser.new(Nokogiri::XML::Reader(@xml_source)) do
+        loader.parse_districts(self)
+        loader.parse_state(self)
+        loader.parse_precincts(self)
+        loader.parse_parties(self)
+        loader.parse_contests(self)
+        loader.parse_referendums(self)
+      end
+    end
+  end
+
   def parse_state(reader)
     loader = self
     reader.for_element 'state' do
@@ -37,9 +57,9 @@ class DataLoader < BaseLoader
       inside_element do
         for_element('name') { loader.locality_name = inner_xml }
         for_element('type') { loader.locality_type = inner_xml }
-
-        loader.parse_precincts(self)
       end
+
+      loader.create_locality
     end
   end
 
@@ -56,10 +76,7 @@ class DataLoader < BaseLoader
       PollingLocation.where(precinct_id: precinct_ids).delete_all
       DistrictsPrecinct.where(precinct_id: precinct_ids).delete_all
 
-      contest_result_ids = ContestResult.where(contest_id: locality.contest_ids).pluck(:id)
-      CandidateResult.where(contest_result_id: contest_result_ids).delete_all
-      BallotResponseResult.where(contest_result_id: contest_result_ids).delete_all
-      ContestResult.where(contest_id: locality.contest_ids).delete_all
+      purge_locality_results(locality)
 
       Candidate.where(contest_id: locality.contest_ids).delete_all
       Contest.where(locality_id: locality.id).delete_all
@@ -87,7 +104,6 @@ class DataLoader < BaseLoader
   def parse_precincts(reader)
     loader = self
     reader.for_element 'precinct' do
-      loader.create_locality unless loader.locality
       loader.save_districts if loader.district_ids.blank?
 
       uid              = attribute('id')
@@ -167,8 +183,8 @@ class DataLoader < BaseLoader
     reader.for_element 'referendum' do
       uid              = attribute('id')
       title            = nil
-      subtitle         = UNSET
-      question         = UNSET
+      subtitle         = nil
+      question         = nil
       sort_order       = nil
       district_uid     = nil
       ballot_responses = []
@@ -187,7 +203,6 @@ class DataLoader < BaseLoader
           inside_element do
             for_element('text') { text = inner_xml }
             for_element('sort_order') { sort_order = inner_xml}
-
           end
 
           ballot_responses << [ text, sort_order, buid ]
@@ -213,6 +228,8 @@ class DataLoader < BaseLoader
   def parse_contests(reader)
     loader = self
     reader.for_element 'contest' do
+      loader.save_districts if loader.district_ids.blank?
+
       uid          = attribute('id')
       office       = nil
       district_uid = nil
@@ -257,27 +274,6 @@ class DataLoader < BaseLoader
 
       # save candidates
       contest.candidates.import CANDIDATE_COLUMNS, candidates
-    end
-  end
-
-
-
-  def load
-    @districts = []
-    @parties = []
-    @party_ids = {}
-    @party_names = {}
-
-    loader = self
-
-    Election.transaction do
-      Xml::Parser.new(Nokogiri::XML::Reader(@xml_source)) do
-        loader.parse_districts(self)
-        loader.parse_state(self)
-        loader.parse_parties(self)
-        loader.parse_contests(self)
-        loader.parse_referendums(self)
-      end
     end
   end
 

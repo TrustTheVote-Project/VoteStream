@@ -15,4 +15,11 @@ class BaseLoader
     end
   end
 
+  def purge_locality_results(locality)
+    contest_result_ids = ContestResult.where(contest_id: locality.contest_ids).pluck(:id)
+    CandidateResult.where(contest_result_id: contest_result_ids).delete_all
+    BallotResponseResult.where(contest_result_id: contest_result_ids).delete_all
+    ContestResult.where(contest_id: locality.contest_ids).delete_all
+  end
+  
 end
