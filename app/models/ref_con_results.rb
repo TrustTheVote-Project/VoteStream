@@ -100,9 +100,8 @@ class RefConResults
       reported_precinct_ids << r.precinct_id
 
       region = r.inregion ? 'i' : 'o'
-      base   = 'r' # (n)ot reporting, (r)epublican, (d)emocrat, (o)ther, (1) non-partisan, (2) non-partisan
-      shade  = 0   # 0, 1, 2
-      color  = "#{region}#{base}#{shade}"
+      code   = r.color_code || 'n0'
+      color  = "#{region}#{code}"
 
       { id: r.precinct_id, c: color }
     end

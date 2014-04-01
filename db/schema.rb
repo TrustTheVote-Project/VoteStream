@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140331182245) do
+ActiveRecord::Schema.define(version: 20140401123339) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -76,6 +76,7 @@ ActiveRecord::Schema.define(version: 20140331182245) do
     t.integer  "total_valid_votes"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.string   "color_code"
   end
 
   add_index "contest_results", ["contest_id"], :name => "index_contest_results_on_contest_id"

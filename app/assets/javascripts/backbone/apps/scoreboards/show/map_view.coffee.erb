@@ -36,18 +36,20 @@ InfoBubble.prototype.panToView = ->
 
       si = App.request 'entities:scoreboardInfo'
       @precinctResults = si.get 'precinctResults'
-      @precinctResults.on 'sync', @updateColors, @
+
+      @precinctColors = si.get 'precinctColors'
+      @precinctColors.on 'sync', @updateColors, @
       @precincts = App.request 'entities:precincts'
 
     updateColors: ->
       @closeInfoWindow()
 
-      precincts = @precinctResults.get 'precincts'
+      precincts = @precinctResults.get('precincts')
 
       for p in @polygons
+        color = @precinctColors.get p.data.precinctId
         res = precincts.get p.data.precinctId
-        newColors = @precinctColors res
-        p.data.precinctResult = res
+        newColors = @findPrecinctColors color
         if p.data.colors != newColors
           p.data.colors = newColors
           p.setOptions p.data.colors
@@ -61,9 +63,10 @@ InfoBubble.prototype.panToView = ->
     onClose: ->
       @closeInfoWindow()
       @removePreviousPolygons()
-      @precinctResults.off 'sync', @updateColors, @
+      @precinctColors.off 'sync', @updateColors, @
       delete @map
       delete @polygons
+      delete @precinctColors
       delete @precinctResults
       delete @precincts
 
@@ -145,6 +148,9 @@ InfoBubble.prototype.panToView = ->
       gon.colorScheme.saturation[c]
 
     initColors: ->
+      # region: i / o
+      #  class: r / c / o / n / 1 / 2
+      #  shade: 0 - 2
       @colors =
         noResults:
           fillColor:     gon.colorScheme.colors.notVoting
@@ -155,47 +161,33 @@ InfoBubble.prototype.panToView = ->
           strokeWeight:  0.7
           zIndex:         1
 
-    precinctColors: (precinctResult) ->
-      if precinctResult?
-        # Default (not in range precinct) colors are all the same
-        fillColor     = gon.colorScheme.colors.notVoting
-        fillOpacity   = 1
-        hoverColor    = fillColor
-        hoverOpacity  = 0.9
-        strokeColor   = '#ffffff'
-        strokeWeight  = 0.7
-        zIndex        = 1
+      for region in [ 'i', 'o' ]
+        for cl in [ [ 'r', '<%= AppConfig['map_color']['colors']['republican'] %>' ],
+                    [ 'd', '<%= AppConfig['map_color']['colors']['democrat'] %>' ],
+                    [ 'o', '<%= AppConfig['map_color']['colors']['other'] %>' ],
+                    [ 'n', '<%= AppConfig['map_color']['colors']['not_reporting'] %>' ],
+                    [ '1', '<%= AppConfig['map_color']['colors']['nonpartisan1'] %>' ],
+                    [ '2', '<%= AppConfig['map_color']['colors']['nonpartisan2'] %>' ] ]
+          clc = cl[0]
+          color = cl[1]
+          for shade in [ 0, 1, 2 ]
+            key = "#{region}#{clc}#{shade}"
 
-        # Highlight with opacity if precinct is in range
-        inRegion = precinctResult.get('i')
-        if inRegion
-          strokeColor  = '#000000'
-          strokeWeight = .5
-          zIndex       = 2
+            @colors[key] = {
+              fillColor:    color
+              fillOpacity:  gon.colorScheme.saturation[shade]
+              hoverColor:   color
+              hoverOpacity: 0.9
+              strokeColor:  if region == 'i' then '#000000' else '#ffffff'
+              strokeWeight: if region == 'i' then 0.5 else 0.7
+              zIndex:       if region == 'i' then 2 else 1
+            }
 
-        precinctVotes = precinctResult.get('votes')
-        if precinctVotes == 0
-          # Precinct is not reporting
-          fillColor = gon.colorScheme.colors.notReporting
+      undefined
 
-          # NOTE: Just to keep contrast right with something configurable
-          unless inRegion
-            strokeColor = gon.colorScheme.colors.notVoting
-        else
-          fillColor = precinctResult.get 'c'
-          leaderAdvantage = precinctResult.get 'adv'
-          fillOpacity = @colorShade leaderAdvantage
-          hoverColor = fillColor
-
-        colors = {
-          fillColor:        fillColor
-          fillOpacity:      fillOpacity
-          hoverFillColor:   hoverColor
-          hoverFillOpacity: hoverOpacity
-          strokeColor:      strokeColor
-          strokeWeight:     strokeWeight
-          zIndex:           zIndex
-        }
+    findPrecinctColors: (precinctColor) ->
+      if precinctColor?
+        colors = @colors[precinctColor.get('c')]
       else
         colors = @colors.noResults
 
@@ -207,51 +199,52 @@ InfoBubble.prototype.panToView = ->
           fillColor:   @.data.colors.hoverFillColor
           fillOpacity: @.data.colors.hoverFillOpacity
 
-        mapView = @.data.mapView
-        if @.data.precinctResult?
-          pid = @.data.precinctId
-          precincts = App.request 'entities:precincts'
-          precinct = precincts.get pid
-          mapView.focusedPrecinct = precinct
-
-          if mapView.options.infoWindow == 'simple'
-            html = mapView.simpleInfoWindowHtml @, precinct
-          else
-            html = mapView.fullInfoWindowHtml @, precinct
-        else
-          html = "<%= I18n.t 'scoreboard.not_voting' %>"
-
         # close previous bubble
+        mapView = @.data.mapView
         mapView.closeInfoWindow()
 
-        create_bubble = ->
-          window.infoBubble = ib = new InfoBubble
-            content: html
-            position: precinct.bounds.getCenter()
-            map: mapView.map
-            padding: 0
-            borderRadius: 0
-            hideCloseButton: true
-            shadowStyle: 0
-            disableAnimation: true
-          $(ib.arrowInner_).css
-            borderColor: '#f3f3f3 transparent transparent'
+        do (self = @, e) ->
+          createBubble = ->
+            mapView = self.data.mapView
+            pid = self.data.precinctId
+            result = mapView.precinctResults.get('precincts').get(pid)
+            if result
+              precincts = App.request 'entities:precincts'
+              precinct  = precincts.get pid
+              mapView.focusedPrecinct = precinct
 
-          self = mapView
-          $(ib.bubble_).on 'click', (e) ->
-            return unless e.target.tagName == 'A'
+              html = mapView.fullInfoWindowHtml self, precinct
+            else
+              html = "<%= I18n.t 'scoreboard.not_voting' %>"
 
-            precinct = self.focusedPrecinct
-            self.focusedPrecinct = null
 
-            App.vent.trigger 'region:selected', precinct
+            window.infoBubble = ib = new InfoBubble
+              content: html
+              position: e.latLng
+              map: mapView.map
+              padding: 0
+              borderRadius: 0
+              hideCloseButton: true
+              shadowStyle: 0
+              disableAnimation: true
+            $(ib.arrowInner_).css
+              borderColor: '#f3f3f3 transparent transparent'
 
-            if self.options.infoWindow != 'simple'
-              App.navigate 'list', trigger: true
+            self = mapView
+            $(ib.bubble_).on 'click', (e) ->
+              return unless e.target.tagName == 'A'
 
-          ib.open()
+              precinct = self.focusedPrecinct
+              self.focusedPrecinct = null
 
-        @timeout = setTimeout create_bubble, 250
+              App.vent.trigger 'region:selected', precinct
+
+              if self.options.infoWindow != 'simple'
+                App.navigate 'list', trigger: true
+
+            ib.open()
+
+          self.timeout = setTimeout createBubble, 250
 
     onPolygonMouseOut: ->
       @setOptions
@@ -267,7 +260,7 @@ InfoBubble.prototype.panToView = ->
       result = si.get 'result'
       title = result.get('summary').get('title')
 
-      precinctResult = poly.data.precinctResult
+      precinctResult = poly.data.mapView.precinctResults.get('precincts').get(poly.data.precinctId)
       rows  = precinctResult.get('rows')
       votes = precinctResult.get('votes')
 
@@ -295,14 +288,17 @@ InfoBubble.prototype.panToView = ->
       "<div class='precinct-bubble'><div class='iw-c'><h5>#{precinct.get('name')}</h5></div><div class='iw-all'><a href='#'>Set as Region</a></div></div>"
 
     onPolygonClick: ->
-      if @.data.precinctResult? and @.data.mapView.options.infoWindow isnt 'simple'
+      pid = @.data.precinctId
+      result = @precinctResults.get('precincts').get(pid)
+
+      if result? and @.data.mapView.options.infoWindow isnt 'simple'
         @setOptions
           fillColor:   @.data.colors.hoverFillColor
           fillOpacity: @.data.colors.hoverFillOpacity
 
         pid = @.data.precinctId
         precincts = App.request 'entities:precincts'
-        precinct = precincts.get pid
+        precinct  = precincts.get pid
 
         App.vent.trigger 'region:selected', precinct
         App.navigate 'list', trigger: true
@@ -311,16 +307,16 @@ InfoBubble.prototype.panToView = ->
       App.execute 'when:fetched', @precincts, =>
         @removePreviousPolygons()
 
-
+        precincts = @precinctResults.get 'precincts'
         bounds  = new google.maps.LatLngBounds()
-        results = @precinctResults.get 'precincts'
 
         for precinct in @precincts.models
           this_bounds = new google.maps.LatLngBounds()
           precinctId = precinct.get 'id'
-          res = results.get precinctId
+          res = precincts.get precinctId
+          color = @precinctColors.get precinctId
           kml = precinct.get 'kml'
-          colors = @precinctColors res
+          colors = @findPrecinctColors color
 
           lines = @pointsFromKml(kml)
 
@@ -342,7 +338,6 @@ InfoBubble.prototype.panToView = ->
             data:
               precinctId:       precinctId
               colors:           colors
-              precinctResult:   res
               mapView:          @
 
           if @options.infoWindow

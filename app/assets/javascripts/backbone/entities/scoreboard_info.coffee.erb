@@ -28,6 +28,7 @@
 
           results:          new Entities.ResultsCollection
           result:           null
+          precinctColors:   new Entities.PrecinctColors
           precinctResults:  new Entities.PrecinctResultData
 
           refcon:           App.request('entities:refcon:all-Federal')
@@ -77,6 +78,10 @@
         sb.on 'change:result', ->
           result  = sb.get 'result'
           region  = sb.get 'region'
+
+          colors  = sb.get 'precinctColors'
+          colors.fetchForResult result, region
+
           results = sb.get 'precinctResults'
           results.fetchForResult result, region
 

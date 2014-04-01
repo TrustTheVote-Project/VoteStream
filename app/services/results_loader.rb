@@ -2,7 +2,7 @@ class ResultsLoader < BaseLoader
 
   CANDIDATE_RESULTS_COLUMNS       = [ :contest_result_id, :uid, :precinct_id, :candidate_id, :votes ]
   BALLOT_RESPONSE_RESULTS_COLUMNS = [ :contest_result_id, :uid, :precinct_id, :ballot_response_id, :votes ]
-  CONTEST_RESULTS_COLUMNS         = [ :uid, :certification, :precinct_id, :contest_id, :referendum_id, :total_votes, :total_valid_votes ]
+  CONTEST_RESULTS_COLUMNS         = [ :uid, :certification, :precinct_id, :contest_id, :referendum_id, :total_votes, :total_valid_votes, :color_code ]
 
   def initialize(xml_source, options = {})
     @options = {}
