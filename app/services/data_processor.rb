@@ -79,7 +79,7 @@ class DataProcessor
         data    = ordered.map { |d| { id: d.id, name: d.name.titleize, pids: d.precinct_ids } }
       end
 
-      data
+      data.to_json
     end
   end
 
