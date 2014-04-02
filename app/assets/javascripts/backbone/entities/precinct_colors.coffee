@@ -7,11 +7,10 @@
     model: PrecinctColor
 
     fetchForResult: (result, region) ->
-      if !result?
-        @parse {}
-        @trigger 'reset'
-        @trigger 'sync'
-        return
+      @reset []
+      @trigger 'sync'
+
+      return if !result?
 
       filter = {}
 

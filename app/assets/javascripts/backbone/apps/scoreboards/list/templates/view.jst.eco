@@ -2,6 +2,6 @@
 <div id='content'>
   <div class="row-fluid">
     <div class="row-fluid" id='results-region'></div>
-    <div id='map-region' class="span3 panel"></div>
+    <div id='map-region' class="panel span3"></div>
   </div>
 </div>

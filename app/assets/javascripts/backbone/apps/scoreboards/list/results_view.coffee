@@ -52,20 +52,24 @@
         @ui.showLessBtn.hide()
         @ui.showMoreBtn.show()
 
-      'click': ->
-        $(".result").removeClass 'selected'
-        @$el.addClass 'selected'
-        App.vent.trigger 'result:selected', @model
-
-      'mouseover': -> @showMap()
+      'click': (e) -> @select()
 
     onShow: ->
       if @collection.length > 2 and !@options.simpleVersion
         @ui.showMoreBtn.show()
 
-    showMap: ->
-      $('#map-region').appendTo(@.$el)
-      $('#map-view').trigger('map:show')
+      si = App.request 'entities:scoreboardInfo'
+      @markSelected() if si.get('result') == @model
+
+    markSelected: ->
+      $(".result").removeClass 'selected'
+      @$el.addClass 'selected'
+
+    select: ->
+      @markSelected()
+      App.vent.trigger 'result:selected', @model
+
+
 
   class ResponseRow extends Marionette.ItemView
     template: 'scoreboards/list/_response_row'
@@ -95,16 +99,20 @@
       }
 
     events:
-      'click': (e) ->
-        $(".result").removeClass 'selected'
-        @$el.addClass 'selected'
-        App.vent.trigger 'result:selected', @model
+      'click': (e) -> @select()
 
-      'mouseover': -> @showMap()
+    onShow: ->
+      si = App.request 'entities:scoreboardInfo'
+      @markSelected() if si.get('result') == @model
 
-    showMap: ->
-      $('#map-region').appendTo(@.$el)
-      $('#map-view').trigger('map:show')
+    markSelected: ->
+      $(".result").removeClass 'selected'
+      @$el.addClass 'selected'
+
+    select: ->
+      @markSelected()
+      App.vent.trigger 'result:selected', @model
+
 
   class List.ResultsView extends Marionette.CompositeView
     template: 'scoreboards/list/_results'
@@ -116,6 +124,7 @@
 
     initialize: (opts) ->
       @model = App.request 'entities:scoreboardInfo'
+      @.listenTo @model, 'change:result', => @updateMapPosition()
 
     onBeforeRender: ->
       si = App.request 'entities:scoreboardInfo'
@@ -132,3 +141,14 @@
         ContestResultView
       else
         ReferendumResultView
+
+    onCompositeCollectionRendered: ->
+      @updateMapPosition()
+
+    updateMapPosition: ->
+      selected = $('.result.selected')
+      if selected.length > 0
+        top = selected.position().top
+        $("#map-region").css(top: top, opacity: 1)
+      else
+        $("#map-region").css(opacity: 0)

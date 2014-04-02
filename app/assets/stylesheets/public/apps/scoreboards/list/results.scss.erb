@@ -7,8 +7,37 @@ $selected-header-bg: #fff;
 $selected-header-fg: #133a54;
 $party-color: #808080;
 
+@mixin panel() {
+  box-shadow: 2px 6px 30px rgba(black, 0.3);
+  transition: all 0ms;
+  padding: 0 20px;
+  cursor: pointer;
+  position: relative;
+
+  .header {
+    background: $unselected-header-bg;
+    color: $unselected-header-fg;
+    //margin-bottom: 10px;
+    padding: 10px 0;
+    position: relative;
+
+    h5 {
+      font-size: 18px;
+      margin: 0;
+      line-height: $header-height * 2;
+    }
+  }
+}
+
 #list {
+  #content > div {
+    position: relative;
+  }
+
   #map-region {
+    @include panel();
+    padding: 0;
+
     display: block;
     height: 340px;
     opacity: 0;
@@ -102,7 +131,7 @@ $party-color: #808080;
       clear: both;
     }
 
-    &:hover {
+    &.selected {
       .panel {
         box-shadow: 2px 6px 30px rgba(black, 0.5);
 
@@ -124,27 +153,7 @@ $party-color: #808080;
     }
 
     .panel {
-      box-shadow: 2px 6px 30px rgba(black, 0.3);
-      transition: all 0ms;
-      padding: 0 20px;
-      cursor: pointer;
-      position: relative;
-
-      .header {
-        background: $unselected-header-bg;
-        color: $unselected-header-fg;
-        //margin-bottom: 10px;
-        padding: 10px 0;
-        position: relative;
-
-        h5 {
-          font-size: 18px;
-          margin: 0;
-          line-height: $header-height * 2;
-        }
-      }
-
-      
+      @include panel();
     }
 
     &.selected {

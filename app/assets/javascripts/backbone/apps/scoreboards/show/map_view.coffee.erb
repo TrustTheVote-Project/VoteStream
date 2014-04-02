@@ -50,9 +50,8 @@ InfoBubble.prototype.panToView = ->
         color = @precinctColors.get p.data.precinctId
         res = precincts.get p.data.precinctId
         newColors = @findPrecinctColors color
-        if p.data.colors != newColors
-          p.data.colors = newColors
-          p.setOptions p.data.colors
+        p.data.colors = newColors
+        p.setOptions p.data.colors
 
       undefined
 
@@ -362,7 +361,3 @@ InfoBubble.prototype.panToView = ->
           poly.setMap @map
 
         @map.fitBounds bounds
-
-        @.$el.on 'map:show', (e) =>
-          @map.setCenter(bounds.getCenter())
-          google.maps.event.trigger(@map, "resize");

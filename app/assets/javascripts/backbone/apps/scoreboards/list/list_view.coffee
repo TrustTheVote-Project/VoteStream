@@ -29,7 +29,7 @@
         noZoom:           true
         noPanning:        true
         infoWindow:       'simple'
+      @mapRegion.show mapView
 
       @filterBarRegion.show new App.ScoreboardsApp.FilterBar.View
         model: App.request('entities:scoreboardInfo')
-      @mapRegion.show mapView
