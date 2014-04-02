@@ -41,7 +41,7 @@ class DataController < ApplicationController
   private
 
   def conditional_flush
-    DataProcessor.flush if params[:flush_cache]
+    DataProcessor.flush if params[:flush]
   end
 
 end

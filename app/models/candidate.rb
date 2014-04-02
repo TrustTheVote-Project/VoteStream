@@ -7,4 +7,8 @@ class Candidate < ActiveRecord::Base
   validates :uid, presence: true
   validates :name, presence: true
 
+  def party_name
+    name =~ /write-?in/i ? "" : party.name
+  end
+
 end

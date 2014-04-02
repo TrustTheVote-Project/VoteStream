@@ -38,7 +38,7 @@ class RefConResults
     end
 
     ordered = ordered_records(candidates, candidate_votes) do |c, votes, idx|
-      { name: c.name, party: { name: c.party.name, abbr: c.party.abbr }, votes: votes, c: ColorScheme.candidate_color(c, idx) }
+      { name: c.name, party: { name: c.party_name, abbr: c.party.abbr }, votes: votes, c: ColorScheme.candidate_color(c, idx) }
     end
 
     return {
@@ -173,49 +173,6 @@ class RefConResults
         nil
       end
     end.compact
-
-    # filt = { district_id: precinct.district_ids }
-    # contests = Contest.where(filt)
-    # referendums = Referendum.where(filt)
-    # refcons = [ contests, referendums ].flatten.compact
-    #
-    # refcons.inject([]) do |memo, refcon|
-    #   if refcon.kind_of?(Contest)
-    #     c = refcon
-    #     cids = c.candidate_ids
-    #
-    #     candidate_query = Candidate.select("id, name, uid").where(id: cids)
-    #     candidate_data = candidate_query.inject({}) do |m, r|
-    #       m[r.id] = { uid: r.uid, name: r.name }
-    #       m
-    #     end
-    #
-    #     results = CandidateResult.where(candidate_id: cids, precinct_id: precinct.id)
-    #     results = results.group('candidate_id').select("sum(votes) v, candidate_id").map do |cv|
-    #       cdata = candidate_data[cv.candidate_id]
-    #       { candidate_id: cdata[:uid], candidate_name: cdata[:name], votes: cv.v }
-    #     end
-    #
-    #     memo << { contest_id: c.uid, results: results }
-    #   else
-    #     r = refcon
-    #     brids = r.ballot_response_ids
-    #
-    #     ballot_response_uids = BallotResponse.select("id, uid").where(id: brids).inject({}) do |m, r|
-    #       m[r.id] = r.uid
-    #       m
-    #     end
-    #
-    #     results = BallotResponseResult.where(ballot_response_id: brids, precinct_id: precinct.id)
-    #     results = results.group('ballot_response_id').select("sum(votes) v, ballot_response_id").map do |bv|
-    #       { ballot_response_id: ballot_response_uids[bv.ballot_response_id], votes: bv.v }
-    #     end
-    #
-    #     memo << { referendum_id: r.uid, results: results }
-    #   end
-    #
-    #   memo
-    # end
   end
 
   private
@@ -257,7 +214,7 @@ class RefConResults
     end
 
     return {
-      items: candidates.map { |c| { id: c.id, name: c.name, party: { name: c.party.name, abbr: c.party.abbr }, c: ColorScheme.candidate_color(c, candidates.index(c)) } },
+      items: candidates.map { |c| { id: c.id, name: c.name, party: { name: c.party_name, abbr: c.party.abbr }, c: ColorScheme.candidate_color(c, candidates.index(c)) } },
       precincts: pmap
     }
   end
