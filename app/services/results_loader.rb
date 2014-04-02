@@ -1,12 +1,33 @@
 class ResultsLoader < BaseLoader
 
-  CANDIDATE_RESULTS_COLUMNS       = [ :uid, :precinct_id, :candidate_id, :votes ]
-  BALLOT_RESPONSE_RESULTS_COLUMNS = [ :uid, :precinct_id, :ballot_response_id, :votes ]
+  CANDIDATE_RESULTS_COLUMNS       = [ :contest_result_id, :uid, :precinct_id, :candidate_id, :votes ]
+  BALLOT_RESPONSE_RESULTS_COLUMNS = [ :contest_result_id, :uid, :precinct_id, :ballot_response_id, :votes ]
   CONTEST_RESULTS_COLUMNS         = [ :uid, :certification, :precinct_id, :contest_id, :referendum_id, :total_votes, :total_valid_votes, :color_code ]
+
+  STATE = 'state'
+  CONTEST_RESULT = 'contest_result'
+  JURISDICTION_ID = 'jurisdiction_id'
+  CONTEST_ID = 'contest_id'
+  REFERENDUM_ID = 'referendum_id'
+  TOTAL_VOTES = 'total_votes'
+  TOTAL_VALID_VOTES = 'total_valid_votes'
+  BALLOT_LINE_RESULT = 'ballot_line_result'
+  CANDIDATE_ID = 'candidate_id'
+  BALLOT_RESPONSE_ID = 'ballot_response_id'
+  VOTES = 'votes'
+
+  NO_VOTES_COLOR = 'n0'
+
+  NONPARTISAN = 'nonpartisan'
+  REPUBLICAN = 'republican'
+  DEMOCRATIC_1 = 'democratic-farmer-labor'
+  DEMOCRATIC_2 = 'democratic'
+  YES = 'yes'
+  NO = 'no'
 
   attr_accessor :purge_results
   attr_accessor :state, :locality
-  attr_accessor :contest_results, :candidate_results, :ballot_response_results
+  attr_accessor :contest_results, :candidate_results, :ballot_response_results, :contest_counter
   attr_accessor :contest_ids, :candidate_ids, :candidate_parties
   attr_accessor :referendum_ids, :ballot_response_ids, :ballot_response_names
   attr_accessor :precinct_ids, :precinct_total
@@ -23,6 +44,7 @@ class ResultsLoader < BaseLoader
     @purge_results = !@options[:keep_results]
 
     @contest_results = []
+    @contest_counter = 0
     @candidate_results = []
     @ballot_response_results = []
 
@@ -31,6 +53,8 @@ class ResultsLoader < BaseLoader
         loader.parse_state(self)
         loader.parse_contest_result(self)
       end
+
+      flush_results
 
       # Save precinct_total
       self.precinct_total.each do |precinct_id, total_cast|
@@ -43,7 +67,7 @@ class ResultsLoader < BaseLoader
 
   def parse_state(reader)
     loader = self
-    reader.for_element 'state' do
+    reader.for_element STATE do
       loader.state = State.find_by!(uid: attribute('id'))
 
       inside_element do
@@ -57,7 +81,7 @@ class ResultsLoader < BaseLoader
 
   def parse_contest_result(reader)
     loader = self
-    reader.for_element 'contest_result' do
+    reader.for_element CONTEST_RESULT do
       # purge results if necessary
       if loader.purge_results
         loader.purge_results = false
@@ -84,74 +108,93 @@ class ResultsLoader < BaseLoader
 
       items = []
       inside_element do
-        for_element('jurisdiction_id')   { contest_result.precinct_id = loader.precinct_ids[loader.dequote(inner_xml)] }
-        for_element('contest_id')        { contest_result.contest_id = loader.contest_ids[loader.dequote(inner_xml)] }
-        for_element('referendum_id')     { contest_result.referendum_id = loader.referendum_ids[loader.dequote(inner_xml)] }
-        for_element('total_votes')       { contest_result.total_votes = inner_xml }
-        for_element('total_valid_votes') { contest_result.total_valid_votes = inner_xml }
+        for_element(JURISDICTION_ID)   { contest_result.precinct_id = loader.precinct_ids[loader.dequote(inner_xml)] }
+        for_element(CONTEST_ID)        { contest_result.contest_id = loader.contest_ids[loader.dequote(inner_xml)] }
+        for_element(REFERENDUM_ID)     { contest_result.referendum_id = loader.referendum_ids[loader.dequote(inner_xml)] }
+        for_element(TOTAL_VOTES)       { contest_result.total_votes = inner_xml }
+        for_element(TOTAL_VALID_VOTES) { contest_result.total_valid_votes = inner_xml }
 
-        for_element 'ballot_line_result' do
+        for_element BALLOT_LINE_RESULT do
           blr_uid = attribute('id')
           item_id = nil
           votes   = 0
 
           inside_element do
-            for_element('candidate_id') { item_id = loader.candidate_ids[loader.dequote(inner_xml)] }
-            for_element('ballot_response_id') { item_id = loader.ballot_response_ids[loader.dequote(inner_xml)] }
-            for_element('votes') { votes = inner_xml }
+            for_element(CANDIDATE_ID)  { item_id = loader.candidate_ids[loader.dequote(inner_xml)] }
+            for_element(BALLOT_RESPONSE_ID) { item_id = loader.ballot_response_ids[loader.dequote(inner_xml)] }
+            for_element(VOTES)         { votes = inner_xml }
           end
 
-          items << [ blr_uid, contest_result.precinct_id, item_id, votes.to_i ]
+          items << [ contest_result.uid, blr_uid, contest_result.precinct_id, item_id, votes.to_i ]
         end
       end
 
-      items.sort_by! { |i| -i[3] }
+      items.sort_by! { |i| -i[4] }
       total_votes = contest_result.total_votes
-      diff = (items[0][3] - (items[1].try(:[], 3) || 0)) * 100 / (total_votes == 0 ? 1 : total_votes)
-      leader_id = items[0][2]
+      diff = (items[0][4] - (items[1].try(:[], 4) || 0)) * 100 / (total_votes == 0 ? 1 : total_votes)
+      leader_id = items[0][3]
 
       if contest_result.contest_related?
         contest_result.color_code = loader.candidate_color_code(leader_id, diff, total_votes)
-        contest_result.save!
-        contest_result.candidate_results.import CANDIDATE_RESULTS_COLUMNS, items
+        loader.candidate_results.push(*items)
       else
         contest_result.color_code = loader.ballot_response_color_code(leader_id, diff, total_votes)
-        contest_result.save!
-        contest_result.ballot_response_results.import BALLOT_RESPONSE_RESULTS_COLUMNS, items
+        loader.ballot_response_results.push(*items)
       end
+
+      loader.contest_results << contest_result
+
+      # if we have enough data, flush it and start counting
+      loader.contest_counter += 1
+      loader.flush_results if loader.contest_counter % 1000 == 0
 
       loader.precinct_total[contest_result.precinct_id] = contest_result.total_votes
     end
   end
 
+  def flush_results
+    ContestResult.import @contest_results
+    contest_result_ids = ContestResult.select('id, uid').where(uid: @contest_results.map(&:uid)).inject({}) { |m, r| m[r.uid] = r.id; m }
+    @contest_results.clear
+
+    @candidate_results.each { |r| r[0] = contest_result_ids[r[0]] }
+    CandidateResult.import CANDIDATE_RESULTS_COLUMNS, @candidate_results
+    @candidate_results.clear
+
+    @ballot_response_results.each { |r| r[0] = contest_result_ids[r[0]] }
+    BallotResponseResult.import BALLOT_RESPONSE_RESULTS_COLUMNS, @ballot_response_results
+    @ballot_response_results.clear
+
+    puts "#{@contest_counter}: #{ObjectSpace.count_objects.inspect}"
+  end
 
   def candidate_color_code(candidate_id, diff, total_votes)
     if total_votes == 0
-      return 'n0'
+      return NO_VOTES_COLOR
     else
       party, sort_order = @candidate_parties[candidate_id]
-      if party == 'nonpartisan'
+      if party == NONPARTISAN
         c = sort_order == 1 ? '1' : '2'
-      elsif party == 'republican'
+      elsif party == REPUBLICAN
         c = 'r'
-      elsif party == 'democratic-farmer-labor' or party == 'democratic'
+      elsif party == DEMOCRATIC_1 or party == DEMOCRATIC_2
         c = 'd'
       else
         c = 'o'
       end
-      
+
       return "#{c}#{shade(diff)}"
     end
   end
 
   def ballot_response_color_code(ballot_response_id, diff, total_votes)
     if total_votes == 0
-      return 'n0'
+      return NO_VOTES_COLOR
     else
       name, sort_order = @ballot_response_names[ballot_response_id]
-      if name == 'yes'
+      if name == YES
         c = 'Y'
-      elsif name == 'no'
+      elsif name == NO
         c = 'N'
       else
         c = sort_order == 1 ? 'Y' : 'N'

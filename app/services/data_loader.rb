@@ -7,6 +7,42 @@ class DataLoader < BaseLoader
   DISTRICT_COLUMNS           = [ :name, :district_type, :uid ]
   CANDIDATE_COLUMNS          = [ :name, :party_id, :sort_order, :uid, :color ]
 
+  ELECTION = 'election'
+  DATE = 'date'
+  ELECTION_TYPE = 'election_type'
+  STATE_ID = 'state_id'
+  STATEWIDE = 'statewide'
+  STATE = 'state'
+  LOCALITY = 'locality'
+  NAME = 'name'
+  TYPE = 'type'
+  PRECINCT = 'precinct'
+  PRECINCT_SPLIT = 'precinct_split'
+  ELECTORAL_DISTRICT_ID = 'electoral_district_id'
+  POLLING_LOCATION = 'polling_location'
+  LOCATION_NAME = 'location_name'
+  LINE1 = 'line1'
+  LINE2 = 'line2'
+  CITY = 'city'
+  ZIP = 'zip'
+  POLYGON = 'Polygon'
+  GEO_QUERY = "geo = ST_SimplifyPreserveTopology(ST_GeomFromKML(?), 0.0001)"
+  MULTI = "<MultiGeometry>%s</MultiGeometry>"
+  ELECTORAL_DISTRICT = 'electoral_district'
+  PARTY = 'party'
+  SORT_ORDER = 'sort_order'
+  ABBREVIATION = 'abbreviation'
+  REFERENDUM = 'referendum'
+  TITLE = 'title'
+  SUBTITLE = 'subtitle'
+  BALLOT_PLACEMENT = 'ballot_placement'
+  BALLOT_RESPONSE = 'ballot_response'
+  TEXT = 'text'
+  CONTEST = 'contest'
+  OFFICE = 'office'
+  CANDIDATE = 'candidate'
+  PARTY_ID = 'party_id'
+
   attr_reader   :districts, :district_ids
   attr_reader   :parties, :party_ids, :party_names
   attr_accessor :state
@@ -39,14 +75,14 @@ class DataLoader < BaseLoader
 
   def parse_election(reader)
     loader = self
-    reader.for_element 'election' do
+    reader.for_element ELECTION do
       election = Election.new(uid: attribute('id'))
 
       inside_element do
-        for_element('date') { election.held_on = inner_xml }
-        for_element('election_type') { election.election_type = inner_xml }
-        for_element('state_id') { election.state = State.find_by(uid: inner_xml) }
-        for_element('statewide') { election.statewide = inner_xml == 'YES' }
+        for_element(DATE) { election.held_on = inner_xml }
+        for_element(ELECTION_TYPE) { election.election_type = inner_xml }
+        for_element(STATE_ID) { election.state = State.find_by(uid: inner_xml) }
+        for_element(STATEWIDE) { election.statewide = inner_xml == 'YES' }
       end
 
       Election.where(uid: election.uid).delete_all
@@ -56,7 +92,7 @@ class DataLoader < BaseLoader
 
   def parse_state(reader)
     loader = self
-    reader.for_element 'state' do
+    reader.for_element STATE do
       puts "State - #{attribute('id')}"
       loader.state = State.find_by(uid: attribute('id'))
 
@@ -68,13 +104,13 @@ class DataLoader < BaseLoader
 
   def parse_locality(reader)
     loader = self
-    reader.for_element 'locality' do
+    reader.for_element LOCALITY do
       loader.locality_uid  = attribute('id')
       loader.locality_name = loader.locality_type = nil
 
       inside_element do
-        for_element('name') { loader.locality_name = inner_xml }
-        for_element('type') { loader.locality_type = inner_xml }
+        for_element(NAME) { loader.locality_name = inner_xml }
+        for_element(TYPE) { loader.locality_type = inner_xml }
       end
 
       loader.create_locality
@@ -122,7 +158,7 @@ class DataLoader < BaseLoader
 
   def parse_precincts(reader)
     loader = self
-    reader.for_element 'precinct' do
+    reader.for_element PRECINCT do
       loader.save_districts if loader.district_ids.blank?
 
       uid              = attribute('id')
@@ -132,22 +168,22 @@ class DataLoader < BaseLoader
       polygons         = []
 
       inside_element do
-        for_element_text('name') { name = value }
+        for_element_text(NAME) { name = value }
 
-        inside_element 'precinct_split' do
-          for_element('electoral_district_id') { district_uids << inner_xml }
+        inside_element PRECINCT_SPLIT do
+          for_element(ELECTORAL_DISTRICT_ID) { district_uids << inner_xml }
         end
 
-        inside_element 'polling_location' do
-          for_element_text('location_name') { polling_location[:name] = value }
-          for_element_text('line1')         { polling_location[:line1] = value }
-          for_element_text('line2')         { polling_location[:line2] = value }
-          for_element_text('city')          { polling_location[:city] = value }
-          for_element_text('state')         { polling_location[:state] = value }
-          for_element_text('zip')           { polling_location[:zip] = value }
+        inside_element POLLING_LOCATION do
+          for_element_text(LOCATION_NAME) { polling_location[:name] = value }
+          for_element_text(LINE1)         { polling_location[:line1] = value }
+          for_element_text(LINE2)         { polling_location[:line2] = value }
+          for_element_text(CITY)          { polling_location[:city] = value }
+          for_element_text(STATE)         { polling_location[:state] = value }
+          for_element_text(ZIP)           { polling_location[:zip] = value }
         end
 
-        for_element 'Polygon' do
+        for_element POLYGON do
           polygons << outer_xml.gsub(/(-?\d+\.\d+,-?\d+\.\d+),-?\d+\.\d+/, '\1')
         end
       end
@@ -156,7 +192,7 @@ class DataLoader < BaseLoader
       district_ids = district_uids.map { |duid| [ loader.district_ids[duid] ] }
 
       p = loader.locality.precincts.create(name: name, uid: uid)
-      Precinct.where(id: p.id).update_all([ "geo = ST_SimplifyPreserveTopology(ST_GeomFromKML(?), 0.0001)", "<MultiGeometry>#{polygons.join}</MultiGeometry>" ])
+      Precinct.where(id: p.id).update_all([ GEO_QUERY, MULTI % polygons.join ])
       p.districts_precincts.import DISTRICTS_PRECINCTS_COLUMNS, district_ids
     end
   end
@@ -164,12 +200,12 @@ class DataLoader < BaseLoader
   def parse_districts(reader)
     loader = self
 
-    reader.for_element 'electoral_district' do
+    reader.for_element ELECTORAL_DISTRICT do
       district = [ nil, nil, attribute('id') ]
 
       inside_element do
-        for_element_text('name') { district[0] = value }
-        for_element('type')      { district[1] = inner_xml }
+        for_element_text(NAME) { district[0] = value }
+        for_element(TYPE)      { district[1] = inner_xml }
       end
 
       loader.districts << district
@@ -178,7 +214,7 @@ class DataLoader < BaseLoader
 
   def parse_parties(reader)
     loader = self
-    reader.for_element 'party' do
+    reader.for_element PARTY do
       raise "No Locality defined yet" unless loader.locality
 
       uid        = attribute('id')
@@ -187,9 +223,9 @@ class DataLoader < BaseLoader
       abbr       = nil
 
       inside_element do
-        for_element_text('name')    { name = value }
-        for_element('sort_order')   { sort_order = inner_xml }
-        for_element('abbreviation') { abbr = inner_xml }
+        for_element_text(NAME)    { name = value }
+        for_element(SORT_ORDER)   { sort_order = inner_xml }
+        for_element(ABBREVIATION) { abbr = inner_xml }
       end
 
       party = loader.locality.parties.create(uid: uid, name: name, sort_order: sort_order, abbr: abbr)
@@ -199,7 +235,7 @@ class DataLoader < BaseLoader
 
   def parse_referendums(reader)
     loader = self
-    reader.for_element 'referendum' do
+    reader.for_element REFERENDUM do
       uid              = attribute('id')
       title            = nil
       subtitle         = nil
@@ -209,19 +245,19 @@ class DataLoader < BaseLoader
       ballot_responses = []
 
       inside_element do
-        for_element_text('title')       { title = loader.dequote(value) }
-        for_element_text('subtitle')    { subtitle = loader.dequote(value) }
-        for_element('ballot_placement') { sort_order = inner_xml }
-        for_element_text('electoral_district_id') { district_uid = loader.dequote(value) }
+        for_element_text(TITLE)       { title = loader.dequote(value) }
+        for_element_text(SUBTITLE)    { subtitle = loader.dequote(value) }
+        for_element(BALLOT_PLACEMENT) { sort_order = inner_xml }
+        for_element_text(ELECTORAL_DISTRICT_ID) { district_uid = loader.dequote(value) }
 
-        for_element 'ballot_response' do
+        for_element BALLOT_RESPONSE do
           buid = attribute('id')
           text = nil
           sort_order = nil
 
           inside_element do
-            for_element('text') { text = inner_xml }
-            for_element('sort_order') { sort_order = inner_xml}
+            for_element(TEXT) { text = inner_xml }
+            for_element(SORT_ORDER) { sort_order = inner_xml}
           end
 
           ballot_responses << [ text, sort_order, buid ]
@@ -246,7 +282,7 @@ class DataLoader < BaseLoader
 
   def parse_contests(reader)
     loader = self
-    reader.for_element 'contest' do
+    reader.for_element CONTEST do
       loader.save_districts if loader.district_ids.blank?
 
       uid          = attribute('id')
@@ -256,19 +292,19 @@ class DataLoader < BaseLoader
       candidates   = []
 
       inside_element do
-        for_element_text('office') { office = loader.dequote(value) }
-        for_element_text('electoral_district_id') { district_uid = loader.dequote(value) }
-        for_element('sort_order') { sort_order = inner_xml }
+        for_element_text(OFFICE) { office = loader.dequote(value) }
+        for_element_text(ELECTORAL_DISTRICT_ID) { district_uid = loader.dequote(value) }
+        for_element(SORT_ORDER) { sort_order = inner_xml }
 
-        for_element 'candidate' do
+        for_element CANDIDATE do
           cuid       = attribute('id')
           name       = nil
           party_id   = nil
           sort_order = nil
 
           inside_element do
-            for_element_text('name') { name = value }
-            for_element_text('party_id') do
+            for_element_text(NAME) { name = value }
+            for_element_text(PARTY_ID) do
               party_id = loader.party_ids[value]
               unless party_id
                 party = Party.create_undefined(loader.locality, value)
@@ -277,7 +313,7 @@ class DataLoader < BaseLoader
                 party_id = party.id
               end
             end
-            for_element('sort_order') { sort_order = inner_xml }
+            for_element(SORT_ORDER) { sort_order = inner_xml }
           end
 
           color = ColorScheme.candidate_pre_color(loader.party_names[uid])

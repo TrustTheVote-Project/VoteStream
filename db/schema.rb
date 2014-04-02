@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140401123339) do
+ActiveRecord::Schema.define(version: 20140402102246) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -82,6 +82,7 @@ ActiveRecord::Schema.define(version: 20140401123339) do
   add_index "contest_results", ["contest_id"], :name => "index_contest_results_on_contest_id"
   add_index "contest_results", ["precinct_id"], :name => "index_contest_results_on_precinct_id"
   add_index "contest_results", ["referendum_id"], :name => "index_contest_results_on_referendum_id"
+  add_index "contest_results", ["uid"], :name => "index_contest_results_on_uid"
 
   create_table "contests", force: true do |t|
     t.string  "uid",           null: false
