@@ -1,47 +1,47 @@
 class DataLoader < BaseLoader
 
-  DISTRICTS_PRECINCT_COLUMNS = [ :district_id, :precinct_id ]
+  DISTRICTS_PRECINCT_COLUMNS  = [ :district_id, :precinct_id ]
   DISTRICTS_PRECINCTS_COLUMNS = [ :district_id ]
-  BALLOT_RESPONSES_COLUMNS   = [ :referendum_id, :name, :sort_order, :uid ]
-  BALLOT_RESPONSE_COLUMNS    = [ :name, :sort_order, :uid ]
-  DISTRICT_COLUMNS           = [ :name, :district_type, :uid ]
-  CANDIDATE_COLUMNS          = [ :name, :party_id, :sort_order, :uid, :color ]
+  BALLOT_RESPONSES_COLUMNS    = [ :referendum_id, :name, :sort_order, :uid ]
+  BALLOT_RESPONSE_COLUMNS     = [ :name, :sort_order, :uid ]
+  DISTRICT_COLUMNS            = [ :name, :district_type, :uid ]
+  CANDIDATE_COLUMNS           = [ :name, :party_id, :sort_order, :uid, :color ]
 
-  ELECTION = 'election'
-  DATE = 'date'
-  ELECTION_TYPE = 'election_type'
-  STATE_ID = 'state_id'
-  STATEWIDE = 'statewide'
-  STATE = 'state'
-  LOCALITY = 'locality'
-  NAME = 'name'
-  TYPE = 'type'
-  PRECINCT = 'precinct'
-  PRECINCT_SPLIT = 'precinct_split'
-  ELECTORAL_DISTRICT_ID = 'electoral_district_id'
-  POLLING_LOCATION = 'polling_location'
-  LOCATION_NAME = 'location_name'
-  LINE1 = 'line1'
-  LINE2 = 'line2'
-  CITY = 'city'
-  ZIP = 'zip'
-  POLYGON = 'Polygon'
-  GEO_QUERY = "geo = ST_SimplifyPreserveTopology(ST_GeomFromKML(?), 0.0001)"
-  MULTI = "<MultiGeometry>%s</MultiGeometry>"
-  ELECTORAL_DISTRICT = 'electoral_district'
-  PARTY = 'party'
-  SORT_ORDER = 'sort_order'
-  ABBREVIATION = 'abbreviation'
-  REFERENDUM = 'referendum'
-  TITLE = 'title'
-  SUBTITLE = 'subtitle'
-  BALLOT_PLACEMENT = 'ballot_placement'
-  BALLOT_RESPONSE = 'ballot_response'
-  TEXT = 'text'
-  CONTEST = 'contest'
-  OFFICE = 'office'
-  CANDIDATE = 'candidate'
-  PARTY_ID = 'party_id'
+  ELECTION                    = 'election'
+  DATE                        = 'date'
+  ELECTION_TYPE               = 'election_type'
+  STATE_ID                    = 'state_id'
+  STATEWIDE                   = 'statewide'
+  STATE                       = 'state'
+  LOCALITY                    = 'locality'
+  NAME                        = 'name'
+  TYPE                        = 'type'
+  PRECINCT                    = 'precinct'
+  PRECINCT_SPLIT              = 'precinct_split'
+  ELECTORAL_DISTRICT_ID       = 'electoral_district_id'
+  POLLING_LOCATION            = 'polling_location'
+  LOCATION_NAME               = 'location_name'
+  LINE1                       = 'line1'
+  LINE2                       = 'line2'
+  CITY                        = 'city'
+  ZIP                         = 'zip'
+  POLYGON                     = 'Polygon'
+  GEO_QUERY                   = 'geo = ST_SimplifyPreserveTopology(ST_GeomFromKML(?), 0.0001)'
+  MULTI                       = '<MultiGeometry>%s</MultiGeometry>'
+  ELECTORAL_DISTRICT          = 'electoral_district'
+  PARTY                       = 'party'
+  SORT_ORDER                  = 'sort_order'
+  ABBREVIATION                = 'abbreviation'
+  REFERENDUM                  = 'referendum'
+  TITLE                       = 'title'
+  SUBTITLE                    = 'subtitle'
+  BALLOT_PLACEMENT            = 'ballot_placement'
+  BALLOT_RESPONSE             = 'ballot_response'
+  TEXT                        = 'text'
+  CONTEST                     = 'contest'
+  OFFICE                      = 'office'
+  CANDIDATE                   = 'candidate'
+  PARTY_ID                    = 'party_id'
 
   attr_reader   :districts, :district_ids
   attr_reader   :parties, :party_ids, :party_names

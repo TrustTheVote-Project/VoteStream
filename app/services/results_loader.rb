@@ -4,26 +4,26 @@ class ResultsLoader < BaseLoader
   BALLOT_RESPONSE_RESULTS_COLUMNS = [ :contest_result_id, :uid, :precinct_id, :ballot_response_id, :votes ]
   CONTEST_RESULTS_COLUMNS         = [ :uid, :certification, :precinct_id, :contest_id, :referendum_id, :total_votes, :total_valid_votes, :color_code ]
 
-  STATE = 'state'
-  CONTEST_RESULT = 'contest_result'
-  JURISDICTION_ID = 'jurisdiction_id'
-  CONTEST_ID = 'contest_id'
-  REFERENDUM_ID = 'referendum_id'
-  TOTAL_VOTES = 'total_votes'
-  TOTAL_VALID_VOTES = 'total_valid_votes'
-  BALLOT_LINE_RESULT = 'ballot_line_result'
-  CANDIDATE_ID = 'candidate_id'
-  BALLOT_RESPONSE_ID = 'ballot_response_id'
-  VOTES = 'votes'
+  STATE                           = 'state'
+  CONTEST_RESULT                  = 'contest_result'
+  JURISDICTION_ID                 = 'jurisdiction_id'
+  CONTEST_ID                      = 'contest_id'
+  REFERENDUM_ID                   = 'referendum_id'
+  TOTAL_VOTES                     = 'total_votes'
+  TOTAL_VALID_VOTES               = 'total_valid_votes'
+  BALLOT_LINE_RESULT              = 'ballot_line_result'
+  CANDIDATE_ID                    = 'candidate_id'
+  BALLOT_RESPONSE_ID              = 'ballot_response_id'
+  VOTES                           = 'votes'
 
-  NO_VOTES_COLOR = 'n0'
+  NO_VOTES_COLOR                  = 'n0'
 
-  NONPARTISAN = 'nonpartisan'
-  REPUBLICAN = 'republican'
-  DEMOCRATIC_1 = 'democratic-farmer-labor'
-  DEMOCRATIC_2 = 'democratic'
-  YES = 'yes'
-  NO = 'no'
+  NONPARTISAN                     = 'nonpartisan'
+  REPUBLICAN                      = 'republican'
+  DEMOCRATIC_1                    = 'democratic-farmer-labor'
+  DEMOCRATIC_2                    = 'democratic'
+  YES                             = 'yes'
+  NO                              = 'no'
 
   attr_accessor :purge_results
   attr_accessor :state, :locality
