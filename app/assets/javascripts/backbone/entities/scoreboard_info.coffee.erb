@@ -79,11 +79,12 @@
           result  = sb.get 'result'
           region  = sb.get 'region'
 
-          colors  = sb.get 'precinctColors'
-          colors.fetchForResult result, region
+          App.execute 'when:fetched', App.request('entities:precincts'), =>
+            colors  = sb.get 'precinctColors'
+            colors.fetchForResult result, region
 
-          results = sb.get 'precinctResults'
-          results.fetchForResult result, region
+            results = sb.get 'precinctResults'
+            results.fetchForResult result, region
 
       Entities.scoreboardInfo
 

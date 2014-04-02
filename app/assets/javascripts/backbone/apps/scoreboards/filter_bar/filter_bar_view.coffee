@@ -78,22 +78,27 @@
         model: scoreboardInfo
         collection: App.request 'entities:refcons:other'
 
-      @.districtDropdownRegion.show new SelectorView
-        name: 'Districts'
-        itemView: DistrictSelectorRow
-        model: scoreboardInfo
-        prependedCollection: new Backbone.Collection([
-          { id: null, name: gon.locality_name }
-        ])
-        collection: App.request 'entities:districts'
-      @.precinctDropdownRegion.show new SelectorView
-        name: 'Precincts'
-        itemView: PrecinctSelectorRow
-        model: scoreboardInfo
-        prependedCollection: new Backbone.Collection([
-          { id: null, name: 'All Precincts' }
-        ])
-        collection: App.request 'entities:precincts'
+      App.execute 'when:fetched', App.request('entities:precincts'), =>
+        # We give time for the map to load
+        setTimeout (=>
+          @.districtDropdownRegion.show new SelectorView
+            name: 'Districts'
+            itemView: DistrictSelectorRow
+            model: scoreboardInfo
+            prependedCollection: new Backbone.Collection([
+              { id: null, name: gon.locality_name }
+            ])
+
+          collection: App.request 'entities:districts'
+          @.precinctDropdownRegion.show new SelectorView
+            name: 'Precincts'
+            itemView: PrecinctSelectorRow
+            model: scoreboardInfo
+            prependedCollection: new Backbone.Collection([
+              { id: null, name: 'All Precincts' }
+            ])
+            collection: App.request 'entities:precincts'
+          ), 2000
 
       @.breadcrumbsRegion.show new BreadcrumbsView
         model: scoreboardInfo

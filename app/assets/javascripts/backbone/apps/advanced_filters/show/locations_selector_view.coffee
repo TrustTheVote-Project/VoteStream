@@ -19,4 +19,9 @@
       @stateDistrictsRegion.show new Show.SelectorView title: 'State', collection: App.request('entities:districts:state'), selection: sd
       @cityDistrictsRegion.show new Show.SelectorView title: 'City/Town', collection: App.request('entities:districts:local'), selection: sd
       @otherDistrictsRegion.show new Show.SelectorView title: 'Other', collection: App.request('entities:districts:other'), selection: sd
-      @precinctsRegion.show new Show.SelectorView title: 'Precincts', rows: 20, collection: App.request('entities:precincts'), selection: sp
+
+      App.execute 'when:fetched', App.request('entities:scoreboardInfo').get('precinctColors'), =>
+        # We give time for the map to load
+        setTimeout (=>
+          @precinctsRegion.show new Show.SelectorView title: 'Precincts', rows: 20, collection: App.request('entities:precincts'), selection: sp
+        ), 2000
