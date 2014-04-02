@@ -1,5 +1,5 @@
-<a class="btn dropdown-toggle" href="#">
+<a class="btn dropdown-toggle" data-toggle="dropdown" href="#">
   <%= @name %>
   <span class="caret"></span>
 </a>
-<ul class="dropdown-menu"></ul>
+<ul class="dropdown-menu" role="menu"></ul>

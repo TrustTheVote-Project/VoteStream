@@ -24,23 +24,3 @@
 .dropdown-menu > li > a:hover {
   background: #DDDCDC;
 }
-
-[id*="dropdown-region"]:hover {
-  .dropdown-toggle {
-    background: #999;
-    color: white;
-    text-shadow: none;
-
-    .caret {border-top-color: white;}
-  }
-
-  .dropdown-menu {
-    display: block;
-    margin-top: 0;
-
-    > li > a:hover,
-    > li > a:focus {
-      color: #333;
-    }
-  }
-}
