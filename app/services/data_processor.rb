@@ -48,7 +48,7 @@ class DataProcessor
 
   def self.precincts_json(locality)
     Rails.cache.fetch("locality:#{locality.id}:precincts") do
-      precincts = locality.precincts.select("id, name, ST_AsGeoJSON(geo) json")
+      precincts = locality.precincts.select("id, name, ST_AsGeoJSON(geo) json").order("name")
       data = precincts.map { |p| { id: p.id, name: p.name, kml: JSON.parse(p.json) } }
       data.to_json
     end
@@ -75,7 +75,7 @@ class DataProcessor
 
   def self.districts_json(locality, grouped)
     Rails.cache.fetch("locality:#{locality.id}:#{grouped ? 'grouped:' : ''}districts") do
-      districts = locality.focused_districts.includes(:precincts)
+      districts = locality.focused_districts.includes(:precincts).order('name')
 
       if grouped
         grouped = districts.group_by(&:district_type)

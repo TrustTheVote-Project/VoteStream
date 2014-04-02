@@ -88,8 +88,7 @@
             prependedCollection: new Backbone.Collection([
               { id: null, name: gon.locality_name }
             ])
-
-          collection: App.request 'entities:districts'
+            collection: App.request 'entities:districts'
           @.precinctDropdownRegion.show new SelectorView
             name: 'Precincts'
             itemView: PrecinctSelectorRow

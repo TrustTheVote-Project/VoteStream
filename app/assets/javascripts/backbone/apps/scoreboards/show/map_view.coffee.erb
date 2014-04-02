@@ -245,6 +245,7 @@ InfoBubble.prototype.panToView = ->
             $(ib.bubble_).on 'click', (e) ->
               return unless e.target.tagName == 'A'
 
+              e.preventDefault()
               precinct = self.focusedPrecinct
               self.focusedPrecinct = null
 
@@ -293,7 +294,7 @@ InfoBubble.prototype.panToView = ->
         p = Math.floor((v * 1000) / (votes || 1)) / 10.0
         rowsHtml += "<tr class='other'><td class='iw-n'>Others</td><td class='iw-v'>#{v}</td><td class='iw-p'>#{p}%</td></tr>"
 
-      "<div class='precinct-bubble'><div class='iw-c'><h5>#{precinct.get('name')}</h5><table class='iw-rows'>#{rowsHtml}</table></div></div>"
+      "<div class='precinct-bubble'><div class='iw-c'><h5>#{precinct.get('name')}</h5><table class='iw-rows'>#{rowsHtml}</table></div><div class='iw-all'><a href='#'>View All Results</a></div></div>"
 
     simpleInfoWindowHtml: (poly, precinct) ->
       "<div class='precinct-bubble'><div class='iw-c'><h5>#{precinct.get('name')}</h5></div><div class='iw-all'><a href='#'>Set as Region</a></div></div>"
