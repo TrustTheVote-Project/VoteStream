@@ -100,6 +100,7 @@ class DataLoader < BaseLoader
       Contest.where(locality_id: locality.id).delete_all
 
       BallotResponse.where(referendum_id: locality.referendum_ids).delete_all
+      BallotResponse.where(referendum_id: nil).delete_all
       Referendum.where(locality_id: locality.id).delete_all
 
       locality.delete
@@ -229,7 +230,7 @@ class DataLoader < BaseLoader
 
       # create referendum
       district_id = loader.district_ids[district_uid]
-      referendum = loader.locality.referendums.create({
+      referendum = loader.locality.referendums.create!({
         title: title,
         subtitle: subtitle,
         question: question,
