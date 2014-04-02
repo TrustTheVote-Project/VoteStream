@@ -81,7 +81,7 @@
       App.execute 'when:fetched', App.request('entities:precincts'), =>
         # We give time for the map to load
         setTimeout (=>
-          @.districtDropdownRegion.show new SelectorView
+          @.districtDropdownRegion?.show new SelectorView
             name: 'Districts'
             itemView: DistrictSelectorRow
             model: scoreboardInfo
@@ -89,7 +89,7 @@
               { id: null, name: gon.locality_name }
             ])
             collection: App.request 'entities:districts'
-          @.precinctDropdownRegion.show new SelectorView
+          @.precinctDropdownRegion?.show new SelectorView
             name: 'Precincts'
             itemView: PrecinctSelectorRow
             model: scoreboardInfo
