@@ -31,6 +31,8 @@ map_color:
 # Ordering of candidates in lists: 'vote_order', 'sort_order'
 candidate_ordering: vote_order
 
+ttv_logo_url: http://votestream.trustthevote.org
+
 admin:
   user: enrsadmin
   pass: enrs23operations$2
