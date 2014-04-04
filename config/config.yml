@@ -18,7 +18,7 @@ map_color:
 
     not_voting:     '#cccccc'
     not_reporting:  '#ffffff'
-    tie:            '#483c32'
+    tie:            '#EFDFBB'
 
   threshold:
     lower:  10
