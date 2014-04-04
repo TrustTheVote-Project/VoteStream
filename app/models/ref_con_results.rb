@@ -92,7 +92,7 @@ class RefConResults
     region_pids = precinct_ids_for_region(params)
     cid = params[:contest_id]
     rid = params[:referendum_id]
-    results = ContestResult.where(contest_id: cid, referendum_id: rid).select("*, id in (#{(region_pids || [ -1 ]).join(',')}) as inregion")
+    results = ContestResult.where(contest_id: cid, referendum_id: rid).select("*, precinct_id in (#{(region_pids || [ -1 ]).join(',')}) as inregion")
 
     # colors for precincts with results
     reported_precinct_ids = []
