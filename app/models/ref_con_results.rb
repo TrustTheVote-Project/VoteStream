@@ -89,10 +89,10 @@ class RefConResults
   end
 
   def precinct_colors(params)
-    region_pids = precinct_ids_for_region(params) || [ -1 ]
+    region_pids = precinct_ids_for_region(params)
     cid = params[:contest_id]
     rid = params[:referendum_id]
-    results = ContestResult.where(contest_id: cid, referendum_id: rid).select("*, id in (#{region_pids.join(',')}) as inregion")
+    results = ContestResult.where(contest_id: cid, referendum_id: rid).select("*, id in (#{(region_pids || [ -1 ]).join(',')}) as inregion")
 
     # colors for precincts with results
     reported_precinct_ids = []
@@ -108,14 +108,17 @@ class RefConResults
 
     # colors for precincts in range
     if cid
-      pids = Contest.find(cid).precinct_ids
+      contest = Contest.find(cid)
+      pids = contest.precinct_ids
+      region_pids ||= Precinct.where(locality_id: contest.locality_id).pluck(:id)
     elsif rid
-      pids = Referendum.find(rid).precinct_ids
-    else
-      []
+      referendum = Referendum.find(rid)
+      pids = referendum.precinct_ids
+      region_pids ||= Precinct.where(locality_id: referendum.locality_id).pluck(:id)
     end
-    in_pids = pids & region_pids
-    out_pids = pids - in_pids
+
+    in_pids  = (pids & region_pids) - reported_precinct_ids
+    out_pids = region_pids - pids
 
     colors = colors + in_pids.map  { |pid| { id: pid, c: "in0" } }
     colors = colors + out_pids.map { |pid| { id: pid, c: "on0" } }
@@ -178,8 +181,7 @@ class RefConResults
   private
 
   def contest_precinct_results(contest, params)
-    region_pids = precinct_ids_for_region(params) || [ -1 ]
-    precincts  = contest.precincts.select("precincts.id, precincts.id in (#{region_pids.join(',')}) as inregion")
+    precincts  = contest.precincts.select("precincts.id")
     candidates = contest.candidates.includes(:party)
     results    = CandidateResult.where(candidate_id: contest.candidate_ids)
 
@@ -187,8 +189,6 @@ class RefConResults
       memo[pid] = results
       memo
     end
-
-    rating = CandidateResult.where(candidate_id: contest.candidate_ids).select("candidate_id, sum(votes) v").group('candidate_id').order("v desc").map(&:candidate_id)
 
     pmap = precincts.map do |p|
       pcr = precinct_candidate_results[p.id] || []
@@ -202,13 +202,8 @@ class RefConResults
       end
 
       li = leader_info(pcr)
-      candidate = li[:leader].try(:candidate)
-      idx = rating.index(candidate.try(:id))
 
       { id:       p.id,
-        i: p.inregion,
-        c:        candidate ? candidate.color || ColorScheme.candidate_color(candidate, idx) : nil,
-        adv:      li[:advantage],
         votes:    li[:total_votes],
         rows:     ordered[0, 2] }
     end
@@ -230,9 +225,6 @@ class RefConResults
       memo
     end
 
-    rating = ids
-
-    region_pids = precinct_ids_for_region(params)
     pmap = precincts.map do |p|
       pcr = precinct_referendum_results[p.id] || []
       response_votes = pcr.inject({}) do |memo, r|
@@ -245,13 +237,8 @@ class RefConResults
       end
 
       li = leader_info(pcr)
-      ballot_response = li[:leader].try(:ballot_response)
-      idx = rating.index(ballot_response.try(:id))
 
       { id:       p.id,
-        i: (region_pids && region_pids.include?(p.id)) || false,
-        c:        ColorScheme.ballot_response_color(ballot_response, idx),
-        adv:      li[:advantage],
         votes:    li[:total_votes],
         rows:     ordered[0, 2] }
     end
@@ -268,20 +255,13 @@ class RefConResults
     if total_votes > 0
       pcr_s        = pcr.sort_by(&:votes).reverse
       leader       = pcr_s[0]
-      leader_votes = leader.try(:votes).to_i
-      runner_votes = pcr_s[1].try(:votes).to_i
-      leader_perc  = leader_votes * 100 / total_votes
-      runner_perc  = runner_votes * 100 / total_votes
-      advantage    = leader_perc - runner_perc
     else
       leader       = nil
-      advantage    = 0
     end
 
     return {
       total_votes: total_votes,
-      leader: leader,
-      advantage: advantage
+      leader: leader
     }
   end
 

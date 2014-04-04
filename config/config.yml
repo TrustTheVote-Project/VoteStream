@@ -18,6 +18,7 @@ map_color:
 
     not_voting:     '#cccccc'
     not_reporting:  '#ffffff'
+    tie:            '#483c32'
 
   threshold:
     lower:  10

@@ -20,6 +20,7 @@ class BaseLoader
     CandidateResult.where(contest_result_id: contest_result_ids).delete_all
     BallotResponseResult.where(contest_result_id: contest_result_ids).delete_all
     ContestResult.where(contest_id: locality.contest_ids).delete_all
+    ContestResult.where(referendum_id: locality.referendum_ids).delete_all
   end
-  
+
 end

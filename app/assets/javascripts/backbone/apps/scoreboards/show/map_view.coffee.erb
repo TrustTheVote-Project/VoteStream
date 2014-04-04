@@ -48,8 +48,7 @@ InfoBubble.prototype.panToView = ->
 
       for p in @polygons
         color = @precinctColors.get p.data.precinctId
-        res = precincts.get p.data.precinctId
-        newColors = @findPrecinctColors color
+        newColors = @findPrecinctColors(color)
         p.data.colors = newColors
         p.setOptions p.data.colors
 
@@ -150,7 +149,7 @@ InfoBubble.prototype.panToView = ->
       # region: i / o
       #  class: r / c / o / n / 1 / 2
       #  shade: 0 - 2
-      @colors =
+      @colors = window.mapcolors =
         noResults:
           fillColor:     gon.colorScheme.colors.notVoting
           fillOpacity:   1
@@ -168,7 +167,8 @@ InfoBubble.prototype.panToView = ->
                     [ '1', '<%= AppConfig['map_color']['colors']['nonpartisan1'] %>' ],
                     [ '2', '<%= AppConfig['map_color']['colors']['nonpartisan2'] %>' ],
                     [ 'Y', '<%= AppConfig['map_color']['colors']['referenda_yes'] %>' ],
-                    [ 'N', '<%= AppConfig['map_color']['colors']['referenda_no'] %>' ] ]
+                    [ 'N', '<%= AppConfig['map_color']['colors']['referenda_no'] %>' ],
+                    [ 't', '<%= AppConfig['map_color']['colors']['tie'] %>' ]]
           clc = cl[0]
           color = cl[1]
           for shade in [ 0, 1, 2 ]

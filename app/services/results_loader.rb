@@ -16,7 +16,7 @@ class ResultsLoader < BaseLoader
   BALLOT_RESPONSE_ID              = 'ballot_response_id'
   VOTES                           = 'votes'
 
-  NO_VOTES_COLOR                  = 'n0'
+  TIE_COLOR                       = 't0'
 
   NONPARTISAN                     = 'nonpartisan'
   REPUBLICAN                      = 'republican'
@@ -169,8 +169,8 @@ class ResultsLoader < BaseLoader
   end
 
   def candidate_color_code(candidate_id, diff, total_votes)
-    if total_votes == 0
-      return NO_VOTES_COLOR
+    if diff == 0
+      return TIE_COLOR
     else
       party, sort_order = @candidate_parties[candidate_id]
       if party == NONPARTISAN
@@ -188,8 +188,8 @@ class ResultsLoader < BaseLoader
   end
 
   def ballot_response_color_code(ballot_response_id, diff, total_votes)
-    if total_votes == 0
-      return NO_VOTES_COLOR
+    if diff == 0
+      return TIE_COLOR
     else
       name, sort_order = @ballot_response_names[ballot_response_id]
       if name == YES
