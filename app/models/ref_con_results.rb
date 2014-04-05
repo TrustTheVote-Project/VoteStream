@@ -28,7 +28,7 @@ class RefConResults
   def contest_data(contest, params)
     pids       = precinct_ids_for_region(params)
     cids       = contest.candidate_ids
-    candidates = contest.candidates
+    candidates = contest.candidates.includes(:party)
     results    = CandidateResult.where(candidate_id: cids)
     results = results.where(precinct_id: pids) unless pids.blank?
 
