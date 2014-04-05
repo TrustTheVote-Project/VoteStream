@@ -15,8 +15,8 @@ class RefConResults
   end
 
   def refcons_of_type(locality, district_type, params)
-    contests     = locality.contests.where(district_type: district_type).select("id, office as name, sort_order")
-    refs         = locality.referendums.where(district_type: district_type).select("id, title as name, sort_order")
+    contests     = locality.contests.where(district_type: district_type).select("id, office as name, lpad(sort_order, 5, '0') || lower(office) as sort_order")
+    refs         = locality.referendums.where(district_type: district_type).select("id, title as name, lpad(sort_order, 5, '0') || lower(title) as sort_order")
 
     [ contests, refs ].flatten.sort_by(&:sort_order).map { |i| { id: i.id, name: i.name, type: i.kind_of?(Contest) ? 'c' : 'r' } }
   end
