@@ -69,8 +69,16 @@ InfoBubble.prototype.panToView = ->
       delete @precincts
 
     closeInfoWindow: ->
+      if @timeout
+        clearTimeout @timeout
+        @timeout = null
+
       if window.infoBubble?
-        window.infoBubble.close()
+        do (bubble = window.infoBubble) ->
+          setTimeout (->
+            bubble.close()
+            $(bubble.bubble_).remove()
+          ), 0
         window.infoBubble = null
 
     initMap: ->
@@ -256,7 +264,7 @@ InfoBubble.prototype.panToView = ->
 
             ib.open()
 
-          self.timeout = setTimeout createBubble, 250
+          mapView.timeout = setTimeout createBubble, 250
 
     onPolygonMouseOut: ->
       @setOptions
@@ -264,7 +272,6 @@ InfoBubble.prototype.panToView = ->
         fillOpacity: @.data.colors.fillOpacity
 
       @.data.mapView.closeInfoWindow()
-      clearTimeout @timeout
 
     fullInfoWindowHtml: (poly, precinct) ->
       si = App.request 'entities:scoreboardInfo'

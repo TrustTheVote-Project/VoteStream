@@ -1028,7 +1028,7 @@ InfoBubble.prototype.open_ = function(opt_map, opt_anchor) {
     window.setTimeout(function() {
       // Pan into view, done in a time out to make it feel nicer :)
       that.panToView();
-    }, 200);
+    }, 100);
   }
 };
 InfoBubble.prototype['open'] = InfoBubble.prototype.open;
