@@ -342,7 +342,10 @@ class RefConResults
       referendums = Referendum.where(filt).where(district_type: cat)
     end
 
-    [ contests, referendums ].compact.flatten
+    contests = contests.select("*, lpad(sort_order, 5, '0') || lower(office) as sort_order") if contests
+    referendums = referendums.select("*, lpad(sort_order, 5, '0') || lower(title) as sort_order") if referendums
+
+    [ contests, referendums ].compact.flatten.sort_by(&:sort_order)
   end
 
 end

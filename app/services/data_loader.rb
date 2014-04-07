@@ -252,15 +252,15 @@ class DataLoader < BaseLoader
 
         for_element BALLOT_RESPONSE do
           buid = attribute('id')
-          text = nil
-          sort_order = nil
+          btext = nil
+          bsort_order = nil
 
           inside_element do
-            for_element(TEXT) { text = inner_xml }
-            for_element(SORT_ORDER) { sort_order = inner_xml}
+            for_element(TEXT) { btext = inner_xml }
+            for_element(SORT_ORDER) { bsort_order = inner_xml}
           end
 
-          ballot_responses << [ text, sort_order, buid ]
+          ballot_responses << [ btext, bsort_order, buid ]
         end
       end
 
@@ -294,30 +294,30 @@ class DataLoader < BaseLoader
       inside_element do
         for_element_text(OFFICE) { office = loader.dequote(value) }
         for_element_text(ELECTORAL_DISTRICT_ID) { district_uid = loader.dequote(value) }
-        for_element(SORT_ORDER) { sort_order = inner_xml }
+        for_element(BALLOT_PLACEMENT) { sort_order = inner_xml }
 
         for_element CANDIDATE do
-          cuid       = attribute('id')
-          name       = nil
-          party_id   = nil
-          sort_order = nil
+          cuid        = attribute('id')
+          cname       = nil
+          cparty_id   = nil
+          csort_order = nil
 
           inside_element do
-            for_element_text(NAME) { name = value }
+            for_element_text(NAME) { cname = value }
             for_element_text(PARTY_ID) do
-              party_id = loader.party_ids[value]
-              unless party_id
+              cparty_id = loader.party_ids[value]
+              unless cparty_id
                 party = Party.create_undefined(loader.locality, value)
-                loader.party_ids[value] = party.id
+                loader.party_ids[value]   = party.id
                 loader.party_names[value] = party.name
-                party_id = party.id
+                cparty_id = party.id
               end
             end
-            for_element(SORT_ORDER) { sort_order = inner_xml }
+            for_element(SORT_ORDER) { csort_order = inner_xml }
           end
 
           color = ColorScheme.candidate_pre_color(loader.party_names[uid])
-          candidates << [ name, party_id, sort_order, cuid, color ]
+          candidates << [ cname, cparty_id, csort_order, cuid, color ]
         end
       end
 
