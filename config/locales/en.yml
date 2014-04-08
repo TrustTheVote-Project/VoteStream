@@ -1,10 +1,10 @@
 en:
   front:
-    title: Election Night Reporting System
-    summary: A work-in-progress development instance of ENRS availble for demonstration use. Developed an operated by the TrustTheVote Project, with thanks to Ramsey County Elections, Minnesota Secretrary of State, and Minnesota Legislative GIS services, for source data, advice, and assistance.
-    details: Supported by OSET Foundation under a grant from Knight Foundation
+    title: 'VoteStream: Election Results Reporting, Visualization, and Data Service'
+    summary: 'A demonstration instance of VoteStream, availble for public use. Developed and operated by the TrustTheVote Project, supported by the OSET Foundation under a grant from Knight Foundation.'
+    details: 'With thanks for assistance from: California Office of the Secretary of State; Inyo County (CA) Elections; Los Angeles County (CA) Office of Registrar, Recorder, and County Clerk (RR-CC); Los Angeles County (CA) RR-CC Information Technology; Los Angeles County (CA) RR-CC Office of Election Information and Preparation; Los Angeles County (CA) GIS Office; Minnesota Office of the Secretary of State; Minnesota Legislative GIS Office; Ramsey County (MN) Elections; San Mateo County (CA) Elections; Travis County (TX) Elections; Travis County (TX) Tax Office; United States National Institute of Standards and Technology (NIST); Virginia State Board of Elections; Voting Information Project'
     button_label: Enter
-    footer: TrustTheVote Project, powered by Open Source Election Technology Foundation
+    footer: 'TrustTheVote Project, powered by Open Source Election Technology Foundation'
 
   scoreboard:
     title: VoteStream
