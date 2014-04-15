@@ -20,6 +20,7 @@ class DataLoader < BaseLoader
   PRECINCT_SPLIT              = 'precinct_split'
   ELECTORAL_DISTRICT_ID       = 'electoral_district_id'
   POLLING_LOCATION            = 'polling_location'
+  ADDRESS                     = 'address'
   LOCATION_NAME               = 'location_name'
   LINE1                       = 'line1'
   LINE2                       = 'line2'
@@ -175,12 +176,14 @@ class DataLoader < BaseLoader
         end
 
         inside_element POLLING_LOCATION do
-          for_element_text(LOCATION_NAME) { polling_location[:name] = value }
-          for_element_text(LINE1)         { polling_location[:line1] = value }
-          for_element_text(LINE2)         { polling_location[:line2] = value }
-          for_element_text(CITY)          { polling_location[:city] = value }
-          for_element_text(STATE)         { polling_location[:state] = value }
-          for_element_text(ZIP)           { polling_location[:zip] = value }
+          inside_element ADDRESS do
+            for_element_text(LOCATION_NAME) { polling_location[:name] = value }
+            for_element_text(LINE1)         { polling_location[:line1] = value }
+            for_element_text(LINE2)         { polling_location[:line2] = value }
+            for_element_text(CITY)          { polling_location[:city] = value }
+            for_element_text(STATE)         { polling_location[:state] = value }
+            for_element_text(ZIP)           { polling_location[:zip] = value }
+          end
         end
 
         for_element POLYGON do
@@ -194,6 +197,7 @@ class DataLoader < BaseLoader
       p = loader.locality.precincts.create(name: name, uid: uid)
       Precinct.where(id: p.id).update_all([ GEO_QUERY, MULTI % polygons.join ])
       p.districts_precincts.import DISTRICTS_PRECINCTS_COLUMNS, district_ids
+      p.create_polling_location(polling_location)
     end
   end
 
@@ -247,6 +251,7 @@ class DataLoader < BaseLoader
       inside_element do
         for_element_text(TITLE)       { title = loader.dequote(value) }
         for_element_text(SUBTITLE)    { subtitle = loader.dequote(value) }
+        for_element_text(TEXT)        { question = loader.dequote(value) }
         for_element(BALLOT_PLACEMENT) { sort_order = inner_xml }
         for_element_text(ELECTORAL_DISTRICT_ID) { district_uid = loader.dequote(value) }
 
