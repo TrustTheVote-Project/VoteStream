@@ -3,13 +3,29 @@ class Api::V1Controller < Api::BaseController
   INVALID_UID = "Invalid UID"
 
   rescue_from ActiveRecord::RecordNotFound do
-    render json: { errors: [ INVALID_UID ] }
+    respond_to do |format|
+      format.json do
+        render json: { errors: [ INVALID_UID ] }
+      end
+
+      format.xml do
+        render text: [ INVALID_UID ].to_xml(root: "errors", skip_types: true)
+      end
+    end
   end
 
   rescue_from ApiError do |e|
-    render json: { errors: [ e.message ] }
+    respond_to do |format|
+      format.json do
+        render json: { errors: [ e.message ] }
+      end
+
+      format.xml do
+        render text: [ e.message ].to_xml(root: "errors", skip_types: true)
+      end
+    end
   end
-  
+
   def elections
     @elections = Election.all
   end
@@ -44,6 +60,21 @@ class Api::V1Controller < Api::BaseController
   def election_results_locality
     @locality = election.state.localities.find_by!(uid: params[:locality_uid])
     @results  = RefConResults.new.election_results_locality(locality, params)
+  end
+
+  # --- Election feed ---
+
+  def election_feed
+    @election = Election.find_by!(uid: params[:electionUID])
+    render text: ElectionFeed.new(@election).render_xml
+  end
+
+  def election_feed_status
+    raise ApiError.new "Unimplemented"
+  end
+
+  def election_feed_seq
+    raise ApiError.new "Unimplemented"
   end
 
   private

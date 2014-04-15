@@ -29,14 +29,22 @@ Enrs::Application.routes.draw do
   # API
   namespace :resources, module: 'api' do
     namespace :v1, module: nil, format: 'json' do
-      get '/elections'             => 'v1#elections'
-      get '/election_districts'    => 'v1#election_districts'
-      get '/election_localities'   => 'v1#election_localities'
-      get '/election_ballot_style' => 'v1#election_ballot_style'
-      get '/election_contests'     => 'v1#election_contests'
-      get '/election_referenda'    => 'v1#election_referenda'
+      get '/elections'                 => 'v1#elections'
+      get '/election_districts'        => 'v1#election_districts'
+      get '/election_localities'       => 'v1#election_localities'
+      get '/election_ballot_style'     => 'v1#election_ballot_style'
+      get '/election_contests'         => 'v1#election_contests'
+      get '/election_referenda'        => 'v1#election_referenda'
       get '/election_results_precinct' => 'v1#election_results_precinct'
       get '/election_results_locality' => 'v1#election_results_locality'
+    end
+
+    namespace :v1, module: nil, format: 'xml' do
+      get '/election_feed'             => 'v1#election_feed'
+
+      # unimplemented
+      get '/election_feed_status'      => 'v1#election_feed_status'
+      get '/election_feed_seq'         => 'v1#election_feed_seq'
     end
   end
 end
