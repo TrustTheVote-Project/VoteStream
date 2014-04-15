@@ -1,24 +1,31 @@
-json.precincts [ @precinct ] do
-  json.id   @precinct.uid
-  json.name @precinct.name
+json.precincts @results do |json, pr|
+  json.id   pr[:puid]
+  json.name pr[:pname]
 
-  json.contest_results @results do |json, r|
-    json.id                r[:id]
-    json.certification     r[:certification]
-    json.contest_id        r[:contest_id]
-    json.contest_name      r[:contest_name]
-    json.total_votes       r[:total_votes]
-    json.total_valid_votes r[:total_valid_votes]
-    json.overvotes         r[:overvotes]
-    json.blank_votes       r[:blank_votes]
+  json.contest_results pr[:r] do |json, cr|
+    json.id                cr[:couid]
+    json.certification     cr[:cert]
 
-    json.ballot_line_results r[:ballot_line_results] do |json, cv|
-      json.id             cv[:id]
-      json.candidate_id   cv[:candidate_id] if cv[:candidate_id]
-      json.candidate_name cv[:candidate_name] if cv[:candidate_name]
-      json.response_id    cv[:response_id] if cv[:response_id]
-      json.response_name  cv[:response_name] if cv[:response_name]
-      json.votes          cv[:votes]
+    if cuid = cr[:cuid]
+      json.contest_id      cuid
+      json.contest_name    cr[:cname]
+    else
+      json.referendum_id   cr[:ruid]
+      json.referendum_name cr[:rname]
+    end
+
+    json.total_votes       cr[:tv]
+    json.total_valid_votes cr[:tvv]
+    json.overvotes         0
+    json.blank_votes       0
+
+    json.ballot_line_results cr[:r] do |json, cv|
+      json.id              cv[:id]
+      json.candidate_id    cv[:cauid] if cv[:cauid]
+      json.candidate_name  cv[:caname] if cv[:caname]
+      json.response_id     cv[:bruid] if cv[:bruid]
+      json.response_name   cv[:brname] if cv[:brname]
+      json.votes           cv[:v]
     end
   end
 end

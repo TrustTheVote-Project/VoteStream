@@ -126,59 +126,78 @@ class RefConResults
     colors
   end
 
-  # returns the results of polls for a given precinct (for API)
-  def all_precinct_results(precinct, params)
-    crs = precinct.contest_results.includes(:contest, :referendum)
-    crs.map do |cr|
-      if cr.contest_related?
-        c = cr.contest
+  # results for the locality
+  def election_results_locality(locality, params)
+    precincts = locality.precincts.select("id, uid, name")
+    cid, rid, caid = election_results_params(params)
 
-        results = cr.candidate_results.includes(:candidate).map do |res|
-          { id:             res.uid,
-            candidate_id:   res.candidate.uid,
-            candidate_name: res.candidate.name,
-            votes:          res.votes
-          }
-        end
+    return precincts.map do |precinct|
+      election_results_precinct_actual(precinct, cid, rid, caid)
+    end
+  end
 
-        { id:                  cr.uid,
-          certification:       cr.certification,
-          contest_id:          c.uid,
-          contest_name:        c.office,
-          total_votes:         cr.total_votes,
-          total_valid_votes:   cr.total_valid_votes,
-          overvotes:           0,
-          blank_votes:         0,
-          ballot_line_results: results
-        }
-      elsif cr.referendum_related?
-        r = cr.referendum
+  # results for the single precinct
+  def election_results_precinct(precinct, params)
+    cid, rid, caid = election_results_params(params)
 
-        results = cr.ballot_response_results.includes(:ballot_response).map do |res|
-          { id:             res.uid,
-            response_id:    res.ballot_response.uid,
-            response_name:  res.ballot_response.name,
-            votes:          res.votes
-          }
-        end
-
-        { id:                  cr.uid,
-          certification:       cr.certification,
-          contest_id:          r.uid,
-          contest_name:        r.title,
-          total_votes:         cr.total_votes,
-          total_valid_votes:   cr.total_valid_votes,
-          overvotes:           0,
-          blank_votes:         0,
-          ballot_line_results: results
-        }
-      else
-        nil
-      end
-    end.compact
+    [ election_results_precinct_actual(precinct, cid, rid, caid) ]
   end
 
   private
+
+  def election_results_precinct_actual(precinct, cid, rid, caid)
+    results = []
+
+    if !rid || cid || caid
+      contest_query = ContestResult.where(precinct_id: precinct.id).joins(:contest, candidate_results: [ :candidate ]).select("certification, total_votes, total_valid_votes, contest_results.uid couid, contests.uid cuid, contests.office cname, candidate_results.uid cruid, votes, candidates.uid cauid, candidates.name caname")
+      if caid
+        contest_query = contest_query.where(candidate_results: { candidate_id: caid })
+      elsif cid
+        contest_query = contest_query.where(contest_id: cid)
+      end
+
+      contest_query.to_a.group_by(&:couid).each do |contest_result_uid, records|
+        res = records.map do |cr|
+          { id: cr.cruid, v: cr.votes, cauid: cr.cauid, caname: cr.caname }
+        end
+
+        r = records.first
+        results << {
+          couid: contest_result_uid,
+          cert:  r.certification,
+          cuid:  r.cuid,
+          cname: r.cname,
+          tv:    r.total_votes,
+          tvv:   r.total_valid_votes,
+          r:     res }
+      end
+    end
+
+    if (!cid && !caid) || rid
+      ref_query = ContestResult.where(precinct_id: precinct.id).joins(:referendum, ballot_response_results: [ :ballot_response ]).select("certification, total_votes, total_valid_votes, contest_results.uid couid, referendums.uid ruid, referendums.title rname, ballot_response_results.uid brruid, votes, ballot_responses.uid bruid, ballot_responses.name brname")
+      if rid
+        ref_query = ref_query.where(referendum_id: rid)
+      end
+
+      ref_query.to_a.group_by(&:couid).each do |contest_result_uid, records|
+        res = records.map do |rr|
+          { id: rr.brruid, v: rr.votes, bruid: rr.bruid, brname: rr.brname }
+        end
+
+        r = records.first
+        results << {
+          couid: contest_result_uid,
+          cert:  r.certification,
+          ruid:  r.ruid,
+          rname: r.rname,
+          tv:    r.total_votes,
+          tvv:   r.total_valid_votes,
+          r:     res }
+      end
+    end
+
+    { puid: precinct.uid, pname: precinct.name, r: results }
+  end
 
   def contest_precinct_results(contest, params)
     precincts  = contest.precincts.select("precincts.id")
@@ -346,6 +365,24 @@ class RefConResults
     referendums = referendums.select("*, lpad(sort_order, 5, '0') || lower(title) as sort_order") if referendums
 
     [ contests, referendums ].compact.flatten.sort_by(&:sort_order)
+  end
+
+
+  def election_results_params(params)
+    cuid = params[:contest_id]
+    cid  = cuid.blank? ? nil : Contest.find_by!(uid: cuid).id
+
+    ruid = params[:referendum_id]
+    rid  = ruid.blank? ? nil : Referendum.find_by!(uid: ruid).id
+
+    cauid = params[:candidate_id]
+    caid = cauid.blank? ? nil : Candidate.find_by!(uid: cauid).id
+
+    options = [ cid, rid, caid ]
+
+    raise ApiError.new("Not supported") if options.compact.size > 1
+
+    return options
   end
 
 end
