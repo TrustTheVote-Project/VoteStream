@@ -36,6 +36,7 @@ Enrs::Application.routes.draw do
       get '/election_contests'     => 'v1#election_contests'
       get '/election_referenda'    => 'v1#election_referenda'
       get '/election_results_precinct' => 'v1#election_results_precinct'
+      get '/election_results_locality' => 'v1#election_results_locality'
     end
   end
 end

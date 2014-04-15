@@ -1,5 +1,5 @@
 json.precincts [ @precinct ] do
-  json.id @precinct.uid
+  json.id   @precinct.uid
   json.name @precinct.name
 
   json.contest_results @results do |json, r|
