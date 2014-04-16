@@ -4,12 +4,18 @@ class ElectionFeed
 
   def initialize(election)
     @e = election
+    @l = election.state.localities.first
     @xml = Builder::XmlMarkup.new
   end
 
   def render_xml
     @xml.instruct!
     @xml.vip_object do
+      electoral_districts @l
+      party_uids = parties @l
+      contests    @l, party_uids
+      referendums @l
+
       state
     end
   end
@@ -23,7 +29,7 @@ class ElectionFeed
       @xml.name state.name
       @xml.abbreviation state.code
 
-      state.localities.each { |l| locality(l, state.uid) }
+      locality @l, state.uid
     end
   end
 
@@ -33,12 +39,7 @@ class ElectionFeed
       @xml.state_id state_uid
       @xml.type     l.locality_type
 
-      electoral_districts(l)
-      party_uids = parties(l)
-      contests(l, party_uids)
-      referendums(l)
-
-      precincts(l)
+      precincts l
     end
   end
 
