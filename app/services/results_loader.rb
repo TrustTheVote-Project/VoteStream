@@ -61,8 +61,23 @@ class ResultsLoader < BaseLoader
         Precinct.where(id: precinct_id).update_all(total_cast: total_cast)
       end
 
+      update_election locality.state.elections.first
+
       DataProcessor.on_results_upload
     end
+  end
+
+  def update_election(election)
+    # Calculate reporting percent
+    all       = @locality.precinct_ids
+    reporting = BallotResponseResult.where(precinct_id: all).select("DISTINCT precinct_id").map(&:precinct_id)
+    reporting << CandidateResult.where(precinct_id: all).select("DISTINCT precinct_id").map(&:precinct_id)
+    reporting = reporting.flatten.uniq.count
+
+    Rails.logger.info "----#{reporting} / #{all.count}"
+    election.reporting = reporting * 100.0 / [ all.count, 1 ].max
+    election.seq      += 1
+    election.save!
   end
 
   def parse_state(reader)

@@ -41,8 +41,9 @@ Enrs::Application.routes.draw do
 
     namespace :v1, module: nil, format: 'xml' do
       get '/election_feed'             => 'v1#election_feed'
+    end
 
-      # unimplemented
+    namespace :v1, module: nil do
       get '/election_feed_status'      => 'v1#election_feed_status'
       get '/election_feed_seq'         => 'v1#election_feed_seq'
     end

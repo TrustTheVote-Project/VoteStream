@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140409183226) do
+ActiveRecord::Schema.define(version: 20140416044538) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -119,11 +119,13 @@ ActiveRecord::Schema.define(version: 20140409183226) do
   add_index "districts_precincts", ["precinct_id"], :name => "index_districts_precincts_on_precinct_id"
 
   create_table "elections", force: true do |t|
-    t.integer "state_id",      null: false
-    t.string  "uid",           null: false
+    t.integer "state_id",                                            null: false
+    t.string  "uid",                                                 null: false
     t.date    "held_on"
-    t.string  "election_type", null: false
+    t.string  "election_type",                                       null: false
     t.boolean "statewide"
+    t.decimal "reporting",     precision: 5, scale: 2, default: 0.0, null: false
+    t.integer "seq",                                   default: 0,   null: false
   end
 
   add_index "elections", ["state_id"], :name => "index_elections_on_state_id"

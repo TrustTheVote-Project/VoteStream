@@ -65,16 +65,27 @@ class Api::V1Controller < Api::BaseController
   # --- Election feed ---
 
   def election_feed
-    @election = Election.find_by!(uid: params[:electionUID])
-    render text: ElectionFeed.new(@election).render_xml
+    render text: ElectionFeed.new(election).render_xml
   end
 
   def election_feed_status
-    raise ApiError.new "Unimplemented"
+    if election.reporting == 100
+      fullness = "all"
+    elsif election.reporting > 0
+      fullness = "partial"
+    else
+      fullness = "none"
+    end
+
+    respond_to do |format|
+      format.html { render text: "#{fullness}_unofficial" }
+    end
   end
 
   def election_feed_seq
-    raise ApiError.new "Unimplemented"
+    respond_to do |format|
+      format.html { render text: election.seq }
+    end
   end
 
   private
