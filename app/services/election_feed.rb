@@ -162,10 +162,14 @@ class ElectionFeed
         @xml.name p.name
         @xml.locality_id luid
 
-        p.districts.each do |d|
-          @xml.electoral_district_id d.uid
+        # precinct split
+        @xml.precinct_split do
+          p.districts.each do |d|
+            @xml.electoral_district_id d.uid
+          end
         end
 
+        # polling location
         pl = p.polling_location
         if pl
           @xml.polling_location do
