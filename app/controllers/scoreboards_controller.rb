@@ -9,6 +9,7 @@ class ScoreboardsController < ApplicationController
     state             = locality.state
     election          = state.elections.first
 
+    gon.election_uid  = election.uid
     gon.locality_id   = locality.id
     gon.locality_name = locality.name.titleize
     gon.locality_info = "#{locality.name.titleize}, #{state.name}"
