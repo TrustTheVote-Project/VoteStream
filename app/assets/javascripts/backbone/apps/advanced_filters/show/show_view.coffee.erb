@@ -29,4 +29,4 @@
       af = App.request 'entities:advancedFilter'
       data = af.requestData()
       data.lid = gon.locality_id
-      window.open "#{gon.exports_url}.#{format}?#{$.param(data)}"
+      window.open "#{gon.feed_url}.#{format}?#{$.param(data)}"

@@ -7,6 +7,7 @@
       sp = @get 'selectedPrecincts'
 
       return {
+        electionUID: gon.election_uid
         cid: sc.pluck('id').join('-')
         did: sd.pluck('id').join('-')
         pid: sp.pluck('id').join('-')

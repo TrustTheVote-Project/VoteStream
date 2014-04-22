@@ -53,7 +53,7 @@ class ScoreboardsController < ApplicationController
 
     gon.percentReporting = DataProcessor.percent_reporting(locality)
     gon.reportingIds     = DataProcessor.reporting_precinct_ids(locality)
-    gon.exports_url      = exports_url
+    gon.feed_url         = feed_url
   end
 
 end

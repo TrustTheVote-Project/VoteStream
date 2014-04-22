@@ -2,9 +2,16 @@ require 'builder'
 
 class ElectionFeed
 
-  def initialize(election)
+  def initialize(election, filter = {})
+    @cids = filter[:cid].blank? ? [] : filter[:cid].split('-').map(&:to_i)
+    @pids = filter[:pid].blank? ? [] : filter[:pid].split('-').map(&:to_i)
+    @dids = filter[:did].blank? ? [] : filter[:did].split('-').map(&:to_i)
+    @dids.map { |did| @pids += District.find(did).precinct_ids }
+    @pids.uniq!
+
     @e = election
-    @l = election.state.localities.first
+    localities = election.state.localities
+    @l = filter[:lid].present? ? localities.find(filter[:lid]) : localities.first
     @xml = Builder::XmlMarkup.new
   end
 
@@ -70,8 +77,11 @@ class ElectionFeed
   def contests(l, party_uids)
     euid = @e.uid
 
-    l.contests.joins(:district).select("contests.id, contests.uid, office, sort_order, districts.uid duid").each do |c|
-      @xml.contest(id: c.uid) do
+    query = l.contests.joins(:district).select("contests.id, contests.uid, office, sort_order, districts.uid duid")
+    query = query.where(contests: { id: @cids }) unless @cids.blank?
+
+    query.each do |c|
+      @xml.contest(id: c.uid, iid: c.id) do
         @xml.election_id euid
         @xml.office c.office
         @xml.ballot_placement c.sort_order
@@ -94,13 +104,18 @@ class ElectionFeed
   end
 
   def summary_contest_result(c)
-    cr = ContestResult.where(contest_id: c.id).select("sum(total_votes) tv, sum(total_valid_votes) tvv").to_a.first
-    ca = CandidateResult.joins(:candidate, :contest_result).where(contest_results: { contest_id: c.id }).select("sum(votes) votes, candidates.uid cauid").group("candidates.uid")
+    cr = ContestResult.where(contest_id: c.id)
+    cr = cr.where(precinct_id: @pids) unless @pids.blank?
+    cr = cr.select("sum(total_votes) tv, sum(total_valid_votes) tvv").to_a.first
 
     @xml.contest_result do
       @xml.contest_id c.uid
       @xml.total_votes cr.tv
       @xml.total_valid_votes cr.tvv
+
+      ca = CandidateResult.joins(:candidate, :contest_result).where(contest_results: { contest_id: c.id })
+      ca = ca.where(contest_results: { precinct_id: @pids }) unless @pids.blank?
+      ca = ca.select("sum(votes) votes, candidates.uid cauid").group("candidates.uid")
 
       ca.each do |i|
         @xml.ballot_line_result do
@@ -112,7 +127,10 @@ class ElectionFeed
   end
 
   def referendums(l)
-    l.referendums.joins(:district).select("referendums.id, referendums.uid, title, subtitle, question, sort_order, districts.uid duid").each do |r|
+    return unless @cids.blank?
+
+    query = l.referendums.joins(:district).select("referendums.id, referendums.uid, title, subtitle, question, sort_order, districts.uid duid")
+    query.each do |r|
       @xml.referendum(id: r.uid) do
         @xml.title r.title
         @xml.subtitle r.subtitle
@@ -136,13 +154,18 @@ class ElectionFeed
   end
 
   def summary_referendum_result(r)
-    cr  = ContestResult.where(referendum_id: r.id).select("sum(total_votes) tv, sum(total_valid_votes) tvv").to_a.first
-    brs = BallotResponseResult.joins(:ballot_response, :contest_result).where(contest_results: { referendum_id: r.id }).select("sum(votes) votes, ballot_responses.uid bruid").group("ballot_responses.uid")
+    cr = ContestResult.where(referendum_id: r.id)
+    cr = cr.where(precinct_id: @pids) unless @pids.blank?
+    cr = cr.select("sum(total_votes) tv, sum(total_valid_votes) tvv").to_a.first
 
     @xml.contest_result do
       @xml.referendum_id     r.uid
       @xml.total_votes       cr.tv
       @xml.total_valid_votes cr.tvv
+
+      brs = BallotResponseResult.joins(:ballot_response, :contest_result).where(contest_results: { referendum_id: r.id })
+      brs = brs.where(contest_results: { precinct_id: @pids }) unless @pids.blank?
+      brs = brs.select("sum(votes) votes, ballot_responses.uid bruid").group("ballot_responses.uid")
 
       brs.each do |br|
         @xml.ballot_line_result do
@@ -156,7 +179,9 @@ class ElectionFeed
   def precincts(l)
     luid = l.uid
 
-    l.precincts.includes(:districts, :polling_location).each do |p|
+    query = l.precincts.includes(:districts, :polling_location)
+    query = query.where(precincts: { id: @pids }) unless @pids.blank?
+    query.each do |p|
       puid = p.uid
 
       @xml.precinct(id: puid) do
@@ -184,7 +209,13 @@ class ElectionFeed
         end
 
         # contests
-        crs = p.contest_results.includes(:contest, candidate_results: [ :candidate ]).where("contest_id IS NOT NULL")
+        crs = p.contest_results.includes(:contest, candidate_results: [ :candidate ])
+        if @cids.blank?
+          crs = crs.where("contest_id IS NOT NULL")
+        else
+          crs = crs.where(contest_id: @cids)
+        end
+
         crs.each do |cr|
           @xml.contest_result(id: cr.uid, certification: cr.certification) do
             @xml.contest_id        cr.contest.uid
@@ -202,22 +233,25 @@ class ElectionFeed
         end
 
         # referendums
-        crs = p.contest_results.includes(:referendum, ballot_response_results: [ :ballot_response ]).where("referendum_id IS NOT NULL")
-        crs.each do |cr|
-          @xml.contest_result(id: cr.uid, certification: cr.certification) do
-            @xml.referendum_id     cr.referendum.uid
-            @xml.total_votes       cr.total_votes
-            @xml.total_valid_votes cr.total_valid_votes
+        if @cids.blank?
+          crs = p.contest_results.includes(:referendum, ballot_response_results: [ :ballot_response ]).where("referendum_id IS NOT NULL")
+          crs.each do |cr|
+            @xml.contest_result(id: cr.uid, certification: cr.certification) do
+              @xml.referendum_id     cr.referendum.uid
+              @xml.total_votes       cr.total_votes
+              @xml.total_valid_votes cr.total_valid_votes
 
-            cr.ballot_response_results.each do |r|
-              @xml.ballot_line_result(id: r.uid, certification: cr.certification) do
-                @xml.jurisdiction_id puid
-                @xml.ballot_response_id r.ballot_response.uid
-                @xml.votes           r.votes
+              cr.ballot_response_results.each do |r|
+                @xml.ballot_line_result(id: r.uid, certification: cr.certification) do
+                  @xml.jurisdiction_id puid
+                  @xml.ballot_response_id r.ballot_response.uid
+                  @xml.votes           r.votes
+                end
               end
             end
           end
         end
+
       end
     end
   end

@@ -68,6 +68,14 @@ class Api::V1Controller < Api::BaseController
     render text: ElectionFeed.new(election).render_xml
   end
 
+  def filtered_election_feed
+    respond_to do |format|
+      format.xml do
+        render text: ElectionFeed.new(election, params).render_xml
+      end
+    end
+  end
+
   def election_feed_status
     if election.reporting == 100
       fullness = "all"

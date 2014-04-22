@@ -24,7 +24,7 @@ Enrs::Application.routes.draw do
   get '/data/precinct_results' => 'data#precinct_results'
   get '/data/precinct_colors'  => 'data#precinct_colors'
 
-  get '/exports' => 'exports#index', as: 'exports'
+  get '/feed(.:format)'        => 'api/v1#filtered_election_feed', as: 'feed'
 
   # API
   namespace :resources, module: 'api' do
