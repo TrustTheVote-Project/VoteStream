@@ -35,9 +35,12 @@ en:
           all: All Precincts
           districts: Districts
           precincts: Precincts
-      
+
       view_selector:
         map: Map view
         list: List view
 
     not_voting: Not voting
+
+    advanced_filters:
+      view_feed: View Complete Data Feed &raquo;
