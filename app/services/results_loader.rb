@@ -129,41 +129,47 @@ class ResultsLoader < BaseLoader
         for_element(TOTAL_VOTES)       { contest_result.total_votes = inner_xml }
         for_element(TOTAL_VALID_VOTES) { contest_result.total_valid_votes = inner_xml }
 
-        for_element BALLOT_LINE_RESULT do
-          blr_uid = attribute('id')
-          item_id = nil
-          votes   = 0
+        # parse results only if precinct exists
+        unless contest_result.precinct_id.blank?
+          for_element BALLOT_LINE_RESULT do
+            blr_uid = attribute('id')
+            item_id = nil
+            votes   = 0
 
-          inside_element do
-            for_element(CANDIDATE_ID)  { item_id = loader.candidate_ids[loader.dequote(inner_xml)] }
-            for_element(BALLOT_RESPONSE_ID) { item_id = loader.ballot_response_ids[loader.dequote(inner_xml)] }
-            for_element(VOTES)         { votes = inner_xml }
+            inside_element do
+              for_element(CANDIDATE_ID)  { item_id = loader.candidate_ids[loader.dequote(inner_xml)] }
+              for_element(BALLOT_RESPONSE_ID) { item_id = loader.ballot_response_ids[loader.dequote(inner_xml)] }
+              for_element(VOTES)         { votes = inner_xml }
+            end
+
+            items << [ contest_result.uid, blr_uid, contest_result.precinct_id, item_id, votes.to_i ]
           end
-
-          items << [ contest_result.uid, blr_uid, contest_result.precinct_id, item_id, votes.to_i ]
         end
       end
 
-      items.sort_by! { |i| -i[4] }
-      total_votes = contest_result.total_votes
-      diff = (items[0][4] - (items[1].try(:[], 4) || 0)) * 100 / (total_votes == 0 ? 1 : total_votes)
-      leader_id = items[0][3]
+      # save result only if precinct exists
+      if !contest_result.precinct_id.blank? && items.size > 0
+        items.sort_by! { |i| -i[4] }
+        total_votes = contest_result.total_votes
+        diff = (items[0][4] - (items[1].try(:[], 4) || 0)) * 100 / (total_votes == 0 ? 1 : total_votes)
+        leader_id = items[0][3]
 
-      if contest_result.contest_related?
-        contest_result.color_code = loader.candidate_color_code(leader_id, diff, total_votes)
-        loader.candidate_results.push(*items)
-      else
-        contest_result.color_code = loader.ballot_response_color_code(leader_id, diff, total_votes)
-        loader.ballot_response_results.push(*items)
+        if contest_result.contest_related?
+          contest_result.color_code = loader.candidate_color_code(leader_id, diff, total_votes)
+          loader.candidate_results.push(*items)
+        else
+          contest_result.color_code = loader.ballot_response_color_code(leader_id, diff, total_votes)
+          loader.ballot_response_results.push(*items)
+        end
+
+        loader.contest_results << contest_result
+
+        # if we have enough data, flush it and start counting
+        loader.contest_counter += 1
+        loader.flush_results if loader.contest_counter % 1000 == 0
+
+        loader.precinct_total[contest_result.precinct_id] = contest_result.total_votes
       end
-
-      loader.contest_results << contest_result
-
-      # if we have enough data, flush it and start counting
-      loader.contest_counter += 1
-      loader.flush_results if loader.contest_counter % 1000 == 0
-
-      loader.precinct_total[contest_result.precinct_id] = contest_result.total_votes
     end
   end
 
