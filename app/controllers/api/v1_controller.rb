@@ -65,13 +65,17 @@ class Api::V1Controller < Api::BaseController
   # --- Election feed ---
 
   def election_feed
-    render text: ElectionFeed.new(election).render_xml
+    render text: ElectionXmlFeed.new(election).render
   end
 
   def filtered_election_feed
     respond_to do |format|
       format.xml do
-        render text: ElectionFeed.new(election, params).render_xml
+        render text: ElectionXmlFeed.new(election, params).render
+      end
+
+      format.csv do
+        @feed = ElectionCsvFeed.new(election, params)
       end
     end
   end
