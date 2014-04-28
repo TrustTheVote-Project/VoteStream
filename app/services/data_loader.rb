@@ -304,21 +304,23 @@ class DataLoader < BaseLoader
         for_element CANDIDATE do
           cuid        = attribute('id')
           cname       = nil
+          cparty_uid  = 'undefined'
           cparty_id   = nil
           csort_order = nil
 
           inside_element do
-            for_element_text(NAME) { cname = value }
-            for_element_text(PARTY_ID) do
-              cparty_id = loader.party_ids[value]
-              unless cparty_id
-                party = Party.create_undefined(loader.locality, value)
-                loader.party_ids[value]   = party.id
-                loader.party_names[value] = party.name
-                cparty_id = party.id
-              end
-            end
-            for_element(SORT_ORDER) { csort_order = inner_xml }
+            for_element_text(NAME)     { cname = value }
+            for_element_text(PARTY_ID) { cparty_uid = value }
+            for_element(SORT_ORDER)    { csort_order = inner_xml }
+          end
+
+          # convert party UID into party ID or create new one
+          cparty_id = loader.party_ids[cparty_uid]
+          unless cparty_id
+            party = Party.create_undefined(loader.locality, cparty_uid)
+            loader.party_ids[cparty_uid]   = party.id
+            loader.party_names[cparty_uid] = party.name
+            cparty_id = party.id
           end
 
           color = ColorScheme.candidate_pre_color(loader.party_names[uid])
