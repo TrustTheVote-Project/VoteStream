@@ -1,15 +1,7 @@
 election_name_col = [ @feed.locality_name, @feed.state_name, @feed.election_name, @feed.held_on].reject(&:blank?).join(' ')
 
+csv << [ "Election", "Precinct", "Contest / Referendum", "Candidate / Response", "Party", "Votes" ]
 @feed.precincts_results(@feed.precincts) do |precinct, contest, candidate, party, votes|
+  party = nil if party =~ /(nonpartisan|write-?in)/i
   csv << [ election_name_col, precinct, contest, candidate, party, votes ]
 end
-
-#@feed.precincts.each do |precinct|
-#  @feed.contest_results(precinct) do |contest_name, candidate_name, candidate_party, votes|
-#    csv << [ election_name_col, precinct.name, contest_name, candidate_name, candidate_party, votes ]
-#  end
-
-  #@feed.referendum_results(precinct) do |referendum_name, ballot_response_name, votes|
-  # csv << [ election_name_col, precinct.name, referendum_name, ballot_response_name, '', votes ]
-  #end
-#end

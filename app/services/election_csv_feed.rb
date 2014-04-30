@@ -29,50 +29,11 @@ class ElectionCsvFeed < ElectionFeed
       SELECT precinct_id, contest, candidate, party, votes
       FROM results_feed_view
       WHERE precinct_id IN (#{pids.join(',')}) #{contest_cond}
-      ORDER BY precinct_id, contest_id, referendum_id
+      ORDER BY precinct_id, contest_id, referendum_id, sort_order
     END
 
     res.each do |r|
       block.call precinct_names[r['precinct_id'].to_i], r['contest'], r['candidate'], r['party'], r['votes']
-    end
-  end
-
-  # iterator over all related contests in the given precinct
-  def contest_results(precinct, &block)
-    # query = precinct.contest_results.where('contest_id IS NOT NULL').includes(:contest)
-    # query = query.where(contest_id: @cids) unless @cids.blank?
-    #
-    # query.find_each do |cres|
-    #   office = cres.contest.office
-    #
-    #   cres.candidate_results.includes(candidate: [ :party ]).each do |res|
-    #     block.call office, res.candidate.name, res.candidate.party.name, res.votes
-    #   end
-    #
-    #   block.call office, 'OVERVOTES', '', 0
-    #   block.call office, 'UNDERVOTES', '', 0
-    # end
-
-    res = ActiveRecord::Base.connection.exec_query("SELECT * FROM csv1 WHERE precinct_id=#{precinct.id}")
-    res.each do |r|
-     block.call r['contest'], r['candidate'], r['party'], r['votes']
-    end
-  end
-
-  # iterator over all related referendums
-  def referendum_results(precinct, &block)
-    return unless @cids.blank?
-
-    query = precinct.contest_results.where('referendum_id IS NOT NULL').includes(:referendum)
-    query.find_each do |cres|
-      name = cres.referendum.title
-
-      cres.ballot_response_results.includes(:ballot_response).each do |res|
-        block.call name, res.ballot_response.name, res.votes
-      end
-
-      block.call name, 'OVERVOTES', 0
-      block.call name, 'UNDERVOTES', 0
     end
   end
 
