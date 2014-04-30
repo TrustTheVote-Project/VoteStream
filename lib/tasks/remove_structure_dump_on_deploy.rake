@@ -1,4 +1,4 @@
-env = ENV['RACK_ENV']
+env = ENV['RACK_ENV'] || ENV['RAILS_ENV']
 if env == 'production' || env == 'staging'
   Rake::TaskManager.class_eval do
     def remove_task(task_name)
