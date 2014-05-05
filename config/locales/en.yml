@@ -44,3 +44,6 @@ en:
 
     advanced_filters:
       view_feed: View Complete Data Feed &raquo;
+
+  pdf:
+    election_results: Election Results

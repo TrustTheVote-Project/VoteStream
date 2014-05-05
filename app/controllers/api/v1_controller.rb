@@ -77,6 +77,13 @@ class Api::V1Controller < Api::BaseController
       format.csv do
         @feed = ElectionCsvFeed.new(election, params)
       end
+
+      format.pdf do
+        @feed = ElectionCsvFeed.new(election, params)
+        render pdf: 'feed.pdf',
+          layout: 'pdf.html',
+          show_as_html: params[:debug].present?
+      end
     end
   end
 

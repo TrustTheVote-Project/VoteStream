@@ -1,0 +1,32 @@
+.page-break { display:block; clear:both; page-break-after:always; }
+
+.results {
+  border-collapse: collapse;
+  border-spacing: 0;
+  border: 1px solid #ddd;
+
+  font-size: 12px;
+
+  box-sizing: border-box;
+  width: 100%;
+
+  tr:nth-child(odd) {
+    background-color: #f9f9f9;
+  }
+  
+  th {
+    border-top: 0;
+    border-bottom-width: 2px;
+    border: 1px solid #ddd;
+    vertical-align: bottom;
+    padding: 8px;
+    line-height: 1.42857143;
+  }
+
+  td {
+    border: 1px solid #ddd;
+    vertical-align: top;
+    padding: 8px;
+    line-height: 1.42857143;
+  }
+}

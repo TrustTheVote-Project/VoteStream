@@ -1,0 +1,26 @@
+%h1 #{@feed.locality_name}
+%h2 #{@feed.state_name}
+%h3 Election held on #{@feed.held_on}
+%h4= t 'pdf.election_results'
+
+- @feed.precincts.each do |precinct|
+  .page-break
+  %h4= precinct.name
+  %table.results
+    %thead
+      %tr
+        %th Precinct
+        %th Contest / Referendum
+        %th Candidate / Response
+        %th Party
+        %th Votes
+
+    %tbody
+      - @feed.precincts_results([ precinct ]) do |precinct, contest, candidate, party, votes|
+        - party = nil if party =~ /(nonpartisan|write-?in)/i
+        %tr
+          %td= precinct
+          %td= contest
+          %td= candidate
+          %td= party
+          %td= votes
