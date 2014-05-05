@@ -26,7 +26,7 @@ module Enrs
     # config.i18n.default_locale = :de
 
     config.assets.enabled = true
-    config.assets.precompile += %w{ demo_federal.js demo_state.js admin.js admin.css scoreboards.js }
+    config.assets.precompile += %w{ demo_federal.js demo_state.js admin.js admin.css scoreboards.js pdf.css }
 
     # create a db specific dump in structure.sql file rather than schema.rb. IIRC when :sql is set rails test code loads that instead of the schema.rb
     config.active_record.schema_format = :sql
