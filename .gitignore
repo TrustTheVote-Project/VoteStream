@@ -18,3 +18,5 @@
 # Ignore deployment config
 /config/deploy/staging.rb
 /config/deploy/production.rb
+
+.ruby-gemset
