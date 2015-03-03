@@ -24,6 +24,11 @@ class Admin::DataController < Admin::BaseController
     DataLoader.new(params[:file]).load
     redirect_to :admin_data, notice: "Definitioins have been uploaded"
   end
+  
+  def load_vssc
+    VSSCLoader.new(params[:file]).load
+    redirect_to :admin_data, notice: "Definitioins have been uploaded"    
+  end
 
   def load_results
     ResultsLoader.new(params[:file]).load
