@@ -2,6 +2,16 @@ class Contest < ActiveRecord::Base
 
   DISTRICT_TYPES = %w( federal state mcd )
 
+  # VSSC District Types:
+  # "congressional",
+  # "local",
+  # "locality",
+  # "other",
+  # "state-house",
+  # "state-senate",
+  # "statewide"
+
+
   # a hack to isolate locality contests from other localities
   # as we don't have standardized contest UIDs they duplicate on federal and state levels
   belongs_to :locality

@@ -410,7 +410,8 @@ CREATE TABLE precincts (
     name character varying(255) NOT NULL,
     kml text,
     total_cast integer,
-    geo geometry(Geometry,4326)
+    geo geometry(Geometry,4326),
+    precinct_id integer
 );
 
 
@@ -1020,6 +1021,13 @@ CREATE INDEX index_precincts_on_locality_id ON precincts USING btree (locality_i
 
 
 --
+-- Name: index_precincts_on_precinct_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE INDEX index_precincts_on_precinct_id ON precincts USING btree (precinct_id);
+
+
+--
 -- Name: index_precincts_on_uid; Type: INDEX; Schema: public; Owner: -; Tablespace: 
 --
 
@@ -1157,3 +1165,5 @@ INSERT INTO schema_migrations (version) VALUES ('20140416044538');
 INSERT INTO schema_migrations (version) VALUES ('20140428181530');
 
 INSERT INTO schema_migrations (version) VALUES ('20140430071457');
+
+INSERT INTO schema_migrations (version) VALUES ('20150304142413');
