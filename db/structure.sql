@@ -198,7 +198,8 @@ CREATE TABLE contests (
     district_type character varying(255),
     locality_id integer,
     partisan boolean,
-    write_in boolean
+    write_in boolean,
+    election_id integer
 );
 
 
@@ -916,6 +917,13 @@ CREATE INDEX index_contests_on_district_type ON contests USING btree (district_t
 
 
 --
+-- Name: index_contests_on_election_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE INDEX index_contests_on_election_id ON contests USING btree (election_id);
+
+
+--
 -- Name: index_contests_on_locality_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
 --
 
@@ -1167,3 +1175,5 @@ INSERT INTO schema_migrations (version) VALUES ('20140428181530');
 INSERT INTO schema_migrations (version) VALUES ('20140430071457');
 
 INSERT INTO schema_migrations (version) VALUES ('20150304142413');
+
+INSERT INTO schema_migrations (version) VALUES ('20150324134710');

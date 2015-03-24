@@ -5,7 +5,7 @@ class VSSCLoader < BaseLoader
     @xml_source = xml_source
   end
   
-  def load
+  def load(locality)
     er = ::VSSC::Parser.parse(@xml_source)
     Election.transaction do
       election = Election.new(uid: er.object_id + '-vssc')
@@ -18,12 +18,12 @@ class VSSCLoader < BaseLoader
       election.election_type = "general"
       
       
-      locality = Locality.new(name: "Travis County - VSSC", 
-                      locality_type: "County", 
-                      state: election.state, 
-                      uid: "tvcounty-vssc-test")
-      
-      Locality.where(uid: locality.uid).destroy_all
+      # locality = Locality.new(name: "Travis County - VSSC",
+      #                 locality_type: "County",
+      #                 state: election.state,
+      #                 uid: "tvcounty-vssc-test")
+      #
+      # Locality.where(uid: locality.uid).destroy_all
       
       # first load up all the districts
       #districts = []
@@ -97,7 +97,7 @@ class VSSCLoader < BaseLoader
         #   election.election_type = e.type
         e.contest_collection.contest.each do |c|
           if c.is_a?(VSSC::CandidateChoice)
-            contest = Contest.new(uid: c.object_id,
+            contest = Contest.new(uid: c.object_id, election: election,
               office: offices[c.office] ? offices[c.office].name : c.name,
               sort_order: c.sequence_order)              
             contest.district = District.where(locality_id: locality.id, uid: c.contest_gp_scope).first
