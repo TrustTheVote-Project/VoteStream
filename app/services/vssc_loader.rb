@@ -31,11 +31,21 @@ class VSSCLoader < BaseLoader
       precinct_splits = {}                                
       er.gp_unit_collection.gp_unit.each do |gp_unit|
         if gp_unit.is_a?(VSSC::District)
-          type = gp_unit.district_type
-          type = "Other" if type.blank?
+          type = case gp_unit.district_type
+          when VSSC::DistrictType.congressional, VSSC::DistrictType.statewide
+            "Federal"
+          when VSSC::DistrictType.state_house, VSSC::DistrictType.state_senate
+            "State"
+          when VSSC::DistrictType.locality
+            "MCD"
+          else
+            "Other"
+          end
           d = District.new(name: gp_unit.name, district_type: type, uid: gp_unit.object_id)
           d.save!
           locality.districts << d
+          precinct_splits[d.uid] ||= {:districts=>[], :precincts=>[]}
+          precinct_splits[d.uid][:districts] << d
           gp_unit.gp_sub_unit_ref.each do |sub_gp_id|
             precinct_splits[sub_gp_id] ||= {:districts=>[], :precincts=>[]}
             precinct_splits[sub_gp_id][:districts] << d
@@ -43,6 +53,8 @@ class VSSCLoader < BaseLoader
         else
           p = Precinct.new(uid: gp_unit.object_id, name: gp_unit.object_id)
           locality.precincts << p
+          precinct_splits[p.uid] ||= {:districts=>[], :precincts=>[]}
+          precinct_splits[p.uid][:precincts] << p
           gp_unit.gp_sub_unit_ref.each do |sub_gp_id|
             precinct_splits[sub_gp_id] ||= {:districts=>[], :precincts=>[]}
             precinct_splits[sub_gp_id][:precincts] << p
@@ -66,10 +78,11 @@ class VSSCLoader < BaseLoader
       end
 
       offices = {}
-      er.office_collection.office.each do |o|
-        offices[o.object_id] = o
+      if er.office_collection
+        er.office_collection.office.each do |o|
+          offices[o.object_id] = o
+        end
       end
-      
       
       locality.save!
       
@@ -85,9 +98,12 @@ class VSSCLoader < BaseLoader
         e.contest_collection.contest.each do |c|
           if c.is_a?(VSSC::CandidateChoice)
             contest = Contest.new(uid: c.object_id,
-              office: offices[c.office].name,
+              office: offices[c.office] ? offices[c.office].name : c.name,
               sort_order: c.sequence_order)              
             contest.district = District.where(locality_id: locality.id, uid: c.contest_gp_scope).first
+            
+            precinct_results = {}
+            
             c.ballot_selection.each_with_index do |candidate_sel, i|
               sel = candidates[candidate_sel.candidate.first] #TODO: can be multiple candidates in VSSC
               party = Party.where(uid: sel.party, locality_id: locality.id).first
@@ -100,9 +116,19 @@ class VSSCLoader < BaseLoader
                 color: color)
 
               contest.candidates << candidate
+              
+              candidate_sel.vote_counts.each do |vc|
+                raise precinct_splits[vc.gp_unit][:precincts].inspect.to_s if precinct_splits[vc.gp_unit][:precincts].count > 1
+                precinct = precinct_splits[vc.gp_unit][:precincts].first || Precinct.find_by_uid("#{vc.gp_unit}")
+                precinct_results[precinct.id] ||= ContestResult.new(:uid=>"result-#{contest.uid}-#{precinct.uid}",
+                  :certification=>"unofficial_partial", precinct_id: precinct.id)
+                cr = precinct_results[precinct.id] 
+                cr.candidate_results << CandidateResult.new(candidate: candidate, precinct_id: precinct.id,
+                  votes: vc.count, uid: "#{contest.uid}-#{precinct.uid}-#{candidate.uid}")
+              end
+              
             end
-            contest.send(:set_district_type)
-            raise contest.inspect.to_s + ' ' +  contest.district.inspect.to_s if contest.district_type != 'Other'
+            contest.contest_results = precinct_results.values
             
             locality.contests << contest
           elsif c.is_a?(VSSC::BallotMeasure)
@@ -130,6 +156,8 @@ class VSSCLoader < BaseLoader
       end
       
       locality.save!
+      
+      
       
       Election.where(uid: election.uid).delete_all
       election.save!

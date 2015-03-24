@@ -19,6 +19,7 @@ class Contest < ActiveRecord::Base
   belongs_to :district
   has_many   :precincts, through: :district
   has_many   :candidates, dependent: :destroy
+  has_many   :contest_results, dependent: :destroy
 
   validates :uid, presence: true
   before_save :set_district_type
