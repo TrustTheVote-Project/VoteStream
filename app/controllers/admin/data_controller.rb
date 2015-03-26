@@ -26,7 +26,10 @@ class Admin::DataController < Admin::BaseController
   end
   
   def load_vssc
-    VSSCLoader.new(params[:file]).load
+    mismatches = VSSCLoader.new(params[:file]).load(params[:locality_id])
+    if !mismatches.empty?
+      raise mismatches.to_s
+    end
     redirect_to :admin_data, notice: "Definitioins have been uploaded"    
   end
 

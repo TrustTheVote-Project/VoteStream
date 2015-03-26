@@ -1,7 +1,8 @@
 .page-header
   %h1= @locality.name
 
-.row
+
+.row-fluid
   .span12
     %table.properties
       %tr
@@ -10,6 +11,24 @@
       %tr
         %th.l Type:
         %td= @locality.locality_type
+        
+        
+        
+.row
+  .span12
+    %h3 Upload VSSC Election
+    = form_tag admin_load_vssc_path, multipart: true do
+      .row-fluid
+        .span6
+          .file-wrap
+            %span.file-btn.btn Choose XML file
+            = file_field_tag :file
+            = hidden_field_tag :locality_id, @locality.id
+        .span6
+          = submit_tag "Upload VSSC", class: 'btn'
+
+
+
 
 .row
   .span12
@@ -20,15 +39,17 @@
       %table.table.contests
         %thead
           %tr
+            %th.election Election
             %th.uid  UID
             %th.office Office
             %th.district District
         %tbody
-          - @locality.contests.includes(:district).order('sort_order').each do |c|
+          - @locality.contests.includes(:district, :election).order('election_id, sort_order').each do |c|
             %tr
+              %td.election= c.election.uid
               %td.uid= c.uid
               %td.office= c.office
-              %td.district= c.district.name
+              %td.district= c.district ? c.district.name : 'MISSING'
 
 .row
   .span12
@@ -46,3 +67,21 @@
             %tr
               %td.uid= p.uid
               %td.name= p.name
+
+
+.row
+  .span12
+    %h3 Districts
+    - if @locality.districts.blank?
+      %p.none No districts uploaded
+    - else
+      %table.table.districts
+        %thead
+          %tr
+            %th.uid UID
+            %th.name Name
+        %tbody
+          - @locality.districts.order('name').each do |d|
+            %tr
+              %td.uid= d.uid
+              %td.name= d.name

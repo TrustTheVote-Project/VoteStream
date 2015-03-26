@@ -360,7 +360,7 @@ class RefConResults
       contests = Contest.where(filt).where(district_type: cat)
       referendums = Referendum.where(filt).where(district_type: cat)
     end
-
+    
     contests = contests.select("*, lpad(sort_order, 5, '0') || lower(office) as sort_order") if contests
     referendums = referendums.select("*, lpad(sort_order, 5, '0') || lower(title) as sort_order") if referendums
 

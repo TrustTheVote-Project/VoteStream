@@ -155,7 +155,7 @@ CREATE TABLE contest_results (
     id integer NOT NULL,
     uid character varying(255) NOT NULL,
     certification character varying(255) NOT NULL,
-    precinct_id integer NOT NULL,
+    precinct_id integer,
     contest_id integer,
     referendum_id integer,
     total_votes integer,

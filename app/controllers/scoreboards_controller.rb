@@ -7,7 +7,7 @@ class ScoreboardsController < ApplicationController
   def show
     locality          = Locality.find(params[:locality])
     state             = locality.state
-    election          = state.elections.first
+    election          = state.elections.last
 
     gon.election_uid  = election.uid
     gon.locality_id   = locality.id

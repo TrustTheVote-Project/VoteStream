@@ -3,7 +3,7 @@ class CreateContestResults < ActiveRecord::Migration
     create_table :contest_results do |t|
       t.string     :uid, null: false
       t.string     :certification, null: false
-      t.references :precinct, index: true, null: false
+      t.references :precinct, index: true #, null: false
       t.references :contest, index: true
       t.references :referendum, index: true
       t.integer    :total_votes
