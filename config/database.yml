@@ -15,3 +15,12 @@ test:
   pool: 5
   username: enrs
   password: enrs
+
+production:
+  adapter:  postgis
+  host: votestream.co2uuw3cetr9.us-east-1.rds.amazonaws.com   
+  encoding: unicode
+  database: votestream
+  pool: 5
+  username: votestream
+  password: votestream
