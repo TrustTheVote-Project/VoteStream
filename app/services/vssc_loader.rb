@@ -224,7 +224,59 @@ class VSSCLoader < BaseLoader
             
               locality.contests << contest
             elsif c.is_a?(VSSC::BallotMeasure)
+              ref = Referendum.new(uid: c.object_id, 
+                sort_order: c.sequence_order,
+                title: c.name,
+                subtitle: c.summary_text,
+                question: c.full_text)
+              
+              ref.district = District.where(locality_id: locality.id, uid: c.contest_gp_scope).first
+              if ref.district.nil? 
+                raise c.contest_gp_scope.to_s
+                mismatches[:districts] ||= []
+                mismatches[:districts] << c.contest_gp_scope
+              end
             
+              precinct_results = {}
+            
+              c.ballot_selection.each_with_index do |sel, i|
+                
+                response = BallotResponse.new(uid: sel.object_id, 
+                  name: sel.selection)
+              
+                ref.ballot_responses << response
+                
+                
+                sel.vote_counts.each do |vc|
+                  d_uid = fix_district_uid(vc.gp_unit)
+                  raise precinct_splits[d_uid][:precincts].inspect.to_s if precinct_splits[d_uid][:precincts].count > 1
+                  precinct = precinct_splits[d_uid][:precincts].first || Precinct.find_by_uid("#{d_uid}")
+
+                  if precinct
+                    precinct_results[d_uid] ||= ContestResult.new(:uid=>"result-#{ref.uid}-#{precinct.uid}", :certification=>"unofficial_partial", precinct_id: precinct.id)
+                  else
+                    precinct_results[d_uid] ||= ContestResult.new(:uid=>"result-#{ref.uid}-#{d_uid}", :certification=>"unofficial_partial")
+                  end
+                
+                  cr = precinct_results[d_uid]
+                
+                  if precinct
+                    cr.ballot_response_results << BallotResponseResult.new(ballot_response: response, precinct_id: precinct.id,
+                      votes: vc.count, uid: "#{ref.uid}-#{precinct.uid}-#{response.uid}")
+                  else
+                    mismatches[:precincts] ||= []
+                    mismatches[:precincts] << d_uid
+                    cr.ballot_response_results << BallotResponseResult.new(ballot_response: candidate,
+                      votes: vc.count, uid: "#{ref.uid}-#{d_uid}-#{response.uid}")
+                  end
+                  precinct_results[d_uid] ||= cr
+                
+                end
+              
+              end
+              ref.contest_results = precinct_results.values
+            
+              locality.referendums << ref
             elsif c.is_a?(VSSC::StraightParty)
               # contest = Contest.new(uid: c.object_id,
               #   partisan: true,
