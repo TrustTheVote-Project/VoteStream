@@ -28,12 +28,12 @@ class Admin::DataController < Admin::BaseController
     else
       DataLoader.new(contents).load
     end
-      redirect_to :admin_data, notice: "Definitioins have been uploaded"
+      redirect_to :admin_data, notice: "Definitions have been uploaded"
   end
   
   def load_results
     ResultsLoader.new(params[:file]).load
-    redirect_to :admin_data, notice: "Results has been uploaded"
+    redirect_to :admin_data, notice: "Results have been uploaded"
   end
 
   def load_vssc

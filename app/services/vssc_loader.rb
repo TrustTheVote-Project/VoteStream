@@ -1,6 +1,10 @@
 require 'vssc'
 class VSSCLoader < BaseLoader
   
+  GEO_QUERY                   = 'geo = ST_SimplifyPreserveTopology(ST_GeomFromKML(?), 0.0001)'
+  MULTI                       = '<MultiGeometry>%s</MultiGeometry>'
+  
+  
   def initialize(xml_source)
     @xml_source = xml_source
   end
@@ -59,24 +63,19 @@ class VSSCLoader < BaseLoader
       precinct_splits = {}
       er.gp_unit_collection.gp_unit.each do |gp_unit|
         if gp_unit.is_a?(VSSC::District)
-          d_uid = fix_district_uid(gp_unit.object_id)
           # TODO: This is a temp "guesser" for the ID format to match existing ones
-          d = District.find_by_uid(d_uid)
-          if d.nil?
-            # type = case gp_unit.district_type
-            # when VSSC::DistrictType.congressional, VSSC::DistrictType.statewide
-            #   "Federal"
-            # when VSSC::DistrictType.state_house, VSSC::DistrictType.state_senate
-            #   "State"
-            # when VSSC::DistrictType.locality
-            #   "MCD"
-            # else
-            #   "Other"
-            # end
-            # d = District.new(name: gp_unit.name, district_type: type, uid: gp_unit.object_id)
-            # d.save!
-            # locality.districts << d
+          type = case gp_unit.district_type
+          when VSSC::DistrictType.congressional, VSSC::DistrictType.statewide
+            "Federal"
+          when VSSC::DistrictType.state_house, VSSC::DistrictType.state_senate
+            "State"
+          when VSSC::DistrictType.locality
+            "MCD"
+          else
+            "Other"
           end
+          d = District.new(name: gp_unit.name, district_type: type, uid: gp_unit.object_id)
+          locality.districts << d
           if d
             precinct_splits[d.uid] ||= {:districts=>[], :precincts=>[]}
             precinct_splits[d.uid][:districts] << d
@@ -86,13 +85,16 @@ class VSSCLoader < BaseLoader
               precinct_splits[sub_gp_id][:districts] << d
             end
           end
+          d.save!
         else
-          p_uid = fix_district_uid(gp_unit.object_id)
-          p = Precinct.find_by_uid(p_uid)
-          if p.nil?
-            # p = Precinct.new(uid: gp_unit.object_id, name: gp_unit.object_id)
-            # locality.precincts << p
-          end
+          p = Precinct.new({
+            uid: gp_unit.object_id, 
+            name: "Precinct-#{gp_unit.local_geo_code}"
+          })
+          
+          
+          
+          locality.precincts << p
           if p
             precinct_splits[p.uid] ||= {:districts=>[], :precincts=>[]}
             precinct_splits[p.uid][:precincts] << p
@@ -101,6 +103,19 @@ class VSSCLoader < BaseLoader
               precinct_splits[sub_gp_id] ||= {:districts=>[], :precincts=>[]}
               precinct_splits[sub_gp_id][:precincts] << p
             end
+          end
+          p.save!
+          
+          polygons = []
+          if gp_unit.spatial_dimension.any?
+            spatial_xml = gp_unit.spatial_dimension.first.spatial_extent.coordinates.to_s
+            doc = Nokogiri::XML(spatial_xml.gsub("<![CDATA[",'').gsub(']]>',''))
+            doc.css("Polygon").each do |p|
+              p2 = p.to_s.gsub(/(-?\d+\.\d+,-?\d+\.\d+),-?\d+\.\d+/, '\1')
+              polygons << p2
+            end
+          
+            Precinct.where(id: p.id).update_all([ DataLoader::GEO_QUERY, DataLoader::MULTI % polygons.join ])
           end
         end
       end
@@ -111,6 +126,7 @@ class VSSCLoader < BaseLoader
           matched_gpus[:precincts].each do |p|
             d.precincts << p
           end
+          d.save!
         end
       end
       
@@ -152,9 +168,10 @@ class VSSCLoader < BaseLoader
               contest = Contest.new(uid: c.object_id, election: election,
                 office: offices[c.office] ? offices[c.office].name : c.name,
                 sort_order: c.sequence_order)              
-              d_uid = fix_district_uid(c.contest_gp_scope)
-              contest.district = District.where(locality_id: locality.id, uid: d_uid).first
+              
+              contest.district = District.where(locality_id: locality.id, uid: c.contest_gp_scope).first
               if contest.district.nil? 
+                raise c.contest_gp_scope.to_s
                 mismatches[:districts] ||= []
                 mismatches[:districts] << c.contest_gp_scope
               end
