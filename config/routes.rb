@@ -13,6 +13,7 @@ Enrs::Application.routes.draw do
     get  '/data' => 'data#index', as: 'data'
     post '/load_definitions' => 'data#load_definitions', as: 'load_definitions'
     post '/load_vssc' => 'data#load_vssc', as: 'load_vssc'
+    post '/load_vssc_results' => 'data#load_vssc_results', as: 'load_vssc_results'
     post '/load_results' => 'data#load_results', as: 'load_results'
     get  '/full_reset' => 'data#full_reset', as: 'full_reset'
   end
