@@ -4,7 +4,15 @@ class VSSCLoader < BaseLoader
   GEO_QUERY                   = 'geo = ST_SimplifyPreserveTopology(ST_GeomFromKML(?), 0.0001)'
   MULTI                       = '<MultiGeometry>%s</MultiGeometry>'
   
-  
+  TIE_COLOR                       = 't0'  
+  NONPARTISAN                     = 'nonpartisan'
+  REPUBLICAN                      = 'republican'
+  DEMOCRATIC_1                    = 'democratic-farmer-labor'
+  DEMOCRATIC_2                    = 'democratic'
+  YES                             = 'yes'
+  NO                              = 'no'
+
+
   def initialize(xml_source)
     @xml_source = xml_source
   end
@@ -85,33 +93,61 @@ class VSSCLoader < BaseLoader
 
 
                 candidate_sel.vote_counts.each do |vc|
-                  d_uid = vc.gp_unit #fix_district_uid(vc.gp_unit)
-                  precinct = locality.precincts.find_by_uid("#{d_uid}")
+                  if vc.ballot_type == VSSC::BallotType.election_day
+                    d_uid = vc.gp_unit #fix_district_uid(vc.gp_unit)
+                    precinct = locality.precincts.find_by_uid("#{d_uid}")
                   
-                  if precinct
-                    precinct = precinct.precinct || precinct
-                    precinct_results[d_uid] ||= ContestResult.new(:uid=>"result-#{contest.uid}-#{precinct.uid}", :certification=>"unofficial_partial", precinct_id: precinct.id)
-                  else
-                    precinct_results[d_uid] ||= ContestResult.new(:uid=>"result-#{contest.uid}-#{d_uid}", :certification=>"unofficial_partial")
+                    if precinct
+                      precinct = precinct.precinct || precinct
+                      d_uid = precinct.uid
+                      precinct_results[d_uid] ||= ContestResult.new(:uid=>"result-#{contest.uid}-#{precinct.uid}", :certification=>"unofficial_partial", precinct_id: precinct.id)
+                    else
+                      precinct_results[d_uid] ||= ContestResult.new(:uid=>"result-#{contest.uid}-#{d_uid}", :certification=>"unofficial_partial")
+                    end
+                
+                    cr = precinct_results[d_uid]
+                    cr.total_votes ||= 0
+                    if precinct
+                      cr.total_votes += vc.count
+                      uid = "#{contest.uid}-#{precinct.uid}-#{candidate.uid}"
+                      can_res = cr.candidate_results.find_by_uid(uid)
+                      if can_res.nil?
+                        can_res = CandidateResult.new(candidate: candidate, precinct_id: precinct.id, uid: "#{contest.uid}-#{precinct.uid}-#{candidate.uid}", votes: vc.count)
+                        cr.candidate_results << can_res
+                      else
+                        can_res.votes = (can_res.votes || 0) + vc.count
+                        can_res.save!
+                      end
+                    else
+                      mismatches[:precincts] ||= []
+                      mismatches[:precincts] << d_uid
+                      cr.total_votes += vc.count
+                      cr.candidate_results << CandidateResult.new(candidate: candidate,
+                        votes: vc.count, uid: "#{contest.uid}-#{d_uid}-#{candidate.uid}")
+                    end
+                    cr.save!
+                    precinct_results[d_uid] = cr
                   end
-                
-                  cr = precinct_results[d_uid]
-                
-                  if precinct
-                    cr.candidate_results << CandidateResult.new(candidate: candidate, precinct_id: precinct.id,
-                      votes: vc.count, uid: "#{contest.uid}-#{precinct.uid}-#{candidate.uid}")
-                  else
-                    mismatches[:precincts] ||= []
-                    mismatches[:precincts] << d_uid
-                    cr.candidate_results << CandidateResult.new(candidate: candidate,
-                      votes: vc.count, uid: "#{contest.uid}-#{d_uid}-#{candidate.uid}")
-                  end
-                  precinct_results[d_uid] ||= cr
-                
+                  
                 end
-              
+                
               end
+              
+              precinct_results.values.each do |cr|
+                if !cr.precinct_id.blank? && cr.candidate_results.count > 0
+                  items = cr.candidate_results.order("votes DESC").all
+                  total_votes = cr.total_votes || 0
+                  diff = (items[0].votes - (items[1].try(:votes) || 0)) * 100 / (total_votes == 0 ? 1 : total_votes)
+                  leader = items[0].candidate
+
+                  cr.color_code = self.candidate_color_code(leader, diff, total_votes)
+                end
+              end
+              
               contest.contest_results = precinct_results.values
+              
+              
+              
             
             elsif c.is_a?(VSSC::BallotMeasure)
               ref = locality.referendums.find_by_uid(c.object_id)
@@ -184,6 +220,35 @@ class VSSCLoader < BaseLoader
       
       
       return mismatches
+    end
+  end
+    
+  def candidate_color_code(candidate, diff, total_votes)
+    if diff == 0
+      return TIE_COLOR
+    else
+      party = candidate.party.name.downcase
+      if party == NONPARTISAN
+        c=  '1'
+        #c = sort_order == 1 ? '1' : '2'
+      elsif party == REPUBLICAN
+        c = 'r'
+      elsif party == DEMOCRATIC_1 or party == DEMOCRATIC_2
+        c = 'd'
+      else
+        c = 'o'
+      end
+
+      return "#{c}#{shade(diff)}"
+    end
+  end
+  def shade(diff)
+    if diff < AppConfig['map_color']['threshold']['lower']
+      2
+    elsif diff < AppConfig['map_color']['threshold']['upper']
+      1
+    else
+      0
     end
   end
   
