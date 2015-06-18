@@ -10,7 +10,9 @@ class VSSCLoader < BaseLoader
   DEMOCRATIC_1                    = 'democratic-farmer-labor'
   DEMOCRATIC_2                    = 'democratic'
   YES                             = 'yes'
+  FOR                             = 'for'
   NO                              = 'no'
+  AGAINST                         = 'against'
 
 
   def initialize(xml_source)
@@ -273,8 +275,6 @@ class VSSCLoader < BaseLoader
                   leader = items[0].ballot_response
 
                   cr.color_code = self.ballot_response_color_code(leader, diff, total_votes)
-                else
-                  raise cr.inspect.to_s + cr.ballot_response_results.size.to_s
                 end
               end
               
@@ -351,9 +351,9 @@ class VSSCLoader < BaseLoader
       return TIE_COLOR
     else
       name, sort_order = ballot_response.name.downcase, ballot_response.sort_order
-      if name == YES
+      if name == YES || name == FOR
         c = 'Y'
-      elsif name == NO
+      elsif name == NO || name == AGAINST
         c = 'N'
       else
         c = sort_order == 1 ? 'Y' : 'N'
@@ -614,7 +614,7 @@ class VSSCLoader < BaseLoader
               c.ballot_selection.each_with_index do |sel, i|
                 
                 response = BallotResponse.new(uid: sel.object_id, 
-                  name: sel.selection)
+                  name: sel.selection, sort_order: i+1)
               
                 ref_responses[ref.uid] ||= []
                 ref_responses[ref.uid] << response
