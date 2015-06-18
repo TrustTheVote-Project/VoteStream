@@ -228,12 +228,12 @@ class VSSCLoader < BaseLoader
                   d_uid =  vc.gp_unit #fix_district_uid(vc.gp_unit)
                   
                   precinct = locality_precincts[d_uid]
-                
                   if precinct
                     precinct = precinct.precinct || precinct
-                  
+                    d_uid = precinct.uid
                     precinct_results[d_uid] ||= ContestResult.new(:uid=>"result-#{ref.uid}-#{precinct.uid}", :certification=>"unofficial_partial", precinct_id: precinct.id, referendum_id: ref.id, total_votes: 0)
                   else
+                    raise 'abc'
                     precinct_results[d_uid] ||= ContestResult.new(:uid=>"result-#{ref.uid}-#{d_uid}", :certification=>"unofficial_partial", referendum_id: ref.id, total_votes: 0)
                   end
                 
@@ -273,6 +273,8 @@ class VSSCLoader < BaseLoader
                   leader = items[0].ballot_response
 
                   cr.color_code = self.ballot_response_color_code(leader, diff, total_votes)
+                else
+                  raise cr.inspect.to_s + cr.ballot_response_results.size.to_s
                 end
               end
               
