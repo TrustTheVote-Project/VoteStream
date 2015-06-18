@@ -1,5 +1,7 @@
 class Party < ActiveRecord::Base
 
+  belongs_to :locality
+
   validates :name, presence: true
   validates :abbr, presence: true
   validates :uid, uniqueness: { scope: [ :locality_id ] }

@@ -155,7 +155,7 @@ CREATE TABLE contest_results (
     id integer NOT NULL,
     uid character varying(255) NOT NULL,
     certification character varying(255) NOT NULL,
-    precinct_id integer NOT NULL,
+    precinct_id integer,
     contest_id integer,
     referendum_id integer,
     total_votes integer,
@@ -198,7 +198,8 @@ CREATE TABLE contests (
     district_type character varying(255),
     locality_id integer,
     partisan boolean,
-    write_in boolean
+    write_in boolean,
+    election_id integer
 );
 
 
@@ -219,98 +220,6 @@ CREATE SEQUENCE contests_id_seq
 --
 
 ALTER SEQUENCE contests_id_seq OWNED BY contests.id;
-
-
---
--- Name: parties; Type: TABLE; Schema: public; Owner: -; Tablespace: 
---
-
-CREATE TABLE parties (
-    id integer NOT NULL,
-    uid character varying(255) NOT NULL,
-    sort_order integer,
-    name character varying(255) NOT NULL,
-    abbr character varying(255) NOT NULL,
-    locality_id integer
-);
-
-
---
--- Name: referendums; Type: TABLE; Schema: public; Owner: -; Tablespace: 
---
-
-CREATE TABLE referendums (
-    id integer NOT NULL,
-    district_id integer,
-    uid character varying(255) NOT NULL,
-    title character varying(255),
-    subtitle text,
-    question text,
-    sort_order character varying(255),
-    locality_id integer,
-    district_type character varying(255)
-);
-
-
---
--- Name: csv1; Type: VIEW; Schema: public; Owner: -
---
-
-CREATE VIEW csv1 AS
-        (        (         SELECT cr.precinct_id,
-                            cor.contest_id,
-                            NULL::numeric AS referendum_id,
-                            co.office AS contest,
-                            ca.name AS candidate,
-                            p.name AS party,
-                            cr.votes
-                           FROM candidate_results cr,
-                            contest_results cor,
-                            contests co,
-                            candidates ca,
-                            parties p
-                          WHERE ((((cor.id = cr.contest_result_id) AND (co.id = cor.contest_id)) AND (ca.id = cr.candidate_id)) AND (p.id = ca.party_id))
-                UNION ALL
-                         SELECT brr.precinct_id,
-                            NULL::integer AS contest_id,
-                            cor.referendum_id,
-                            re.title AS contest,
-                            br.name AS candidate,
-                            ''::character varying AS party,
-                            brr.votes
-                           FROM ballot_response_results brr,
-                            contest_results cor,
-                            referendums re,
-                            ballot_responses br
-                          WHERE (((cor.id = brr.contest_result_id) AND (br.id = brr.ballot_response_id)) AND (re.id = cor.referendum_id)))
-        UNION ALL
-                 SELECT cor.precinct_id,
-                    cor.contest_id,
-                    NULL::numeric AS referendum_id,
-                    co.office AS contest,
-                    v.candidate,
-                    ''::character varying AS party,
-                    0 AS votes
-                   FROM contest_results cor,
-                    contests co,
-                    (         SELECT 'OVERVOTES'::text AS candidate
-                        UNION ALL
-                                 SELECT 'UNDERVOTES'::text) v
-                  WHERE (co.id = cor.contest_id))
-UNION ALL
-         SELECT cor.precinct_id,
-            NULL::integer AS contest_id,
-            cor.referendum_id,
-            re.title AS contest,
-            v.candidate,
-            ''::character varying AS party,
-            0 AS votes
-           FROM contest_results cor,
-            referendums re,
-            (         SELECT 'OVERVOTES'::text AS candidate
-                UNION ALL
-                         SELECT 'UNDERVOTES'::text) v
-          WHERE (re.id = cor.referendum_id);
 
 
 --
@@ -366,7 +275,7 @@ CREATE TABLE elections (
     held_on date,
     election_type character varying(255) NOT NULL,
     statewide boolean,
-    reporting numeric(5,2) DEFAULT 0.0 NOT NULL,
+    reporting numeric(5,2) DEFAULT 0 NOT NULL,
     seq integer DEFAULT 0 NOT NULL
 );
 
@@ -420,6 +329,20 @@ CREATE SEQUENCE localities_id_seq
 --
 
 ALTER SEQUENCE localities_id_seq OWNED BY localities.id;
+
+
+--
+-- Name: parties; Type: TABLE; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE TABLE parties (
+    id integer NOT NULL,
+    uid character varying(255) NOT NULL,
+    sort_order integer,
+    name character varying(255) NOT NULL,
+    abbr character varying(255) NOT NULL,
+    locality_id integer
+);
 
 
 --
@@ -488,7 +411,8 @@ CREATE TABLE precincts (
     name character varying(255) NOT NULL,
     kml text,
     total_cast integer,
-    geo geometry(Geometry,4326)
+    geo geometry(Geometry,4326),
+    precinct_id integer
 );
 
 
@@ -509,6 +433,23 @@ CREATE SEQUENCE precincts_id_seq
 --
 
 ALTER SEQUENCE precincts_id_seq OWNED BY precincts.id;
+
+
+--
+-- Name: referendums; Type: TABLE; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE TABLE referendums (
+    id integer NOT NULL,
+    district_id integer,
+    uid character varying(255) NOT NULL,
+    title character varying(255),
+    subtitle text,
+    question text,
+    sort_order character varying(255),
+    locality_id integer,
+    district_type character varying(255)
+);
 
 
 --
@@ -535,68 +476,68 @@ ALTER SEQUENCE referendums_id_seq OWNED BY referendums.id;
 --
 
 CREATE VIEW results_feed_view AS
-        (        (         SELECT cr.precinct_id,
-                            cor.contest_id,
-                            NULL::numeric AS referendum_id,
-                            co.office AS contest,
-                            ca.name AS candidate,
-                            p.name AS party,
-                            cr.votes,
-                            ca.sort_order
-                           FROM candidate_results cr,
-                            contest_results cor,
-                            contests co,
-                            candidates ca,
-                            parties p
-                          WHERE ((((cor.id = cr.contest_result_id) AND (co.id = cor.contest_id)) AND (ca.id = cr.candidate_id)) AND (p.id = ca.party_id))
-                UNION ALL
-                         SELECT brr.precinct_id,
-                            NULL::integer AS contest_id,
-                            cor.referendum_id,
-                            re.title AS contest,
-                            br.name AS candidate,
-                            ''::character varying AS party,
-                            brr.votes,
-                            br.sort_order
-                           FROM ballot_response_results brr,
-                            contest_results cor,
-                            referendums re,
-                            ballot_responses br
-                          WHERE (((cor.id = brr.contest_result_id) AND (br.id = brr.ballot_response_id)) AND (re.id = cor.referendum_id)))
-        UNION ALL
-                 SELECT cor.precinct_id,
-                    cor.contest_id,
-                    NULL::numeric AS referendum_id,
-                    co.office AS contest,
-                    v.candidate,
-                    ''::character varying AS party,
-                    0 AS votes,
-                    v.sort_order
-                   FROM contest_results cor,
-                    contests co,
-                    (         SELECT 'OVERVOTES'::text AS candidate,
-                                    9999 AS sort_order
-                        UNION ALL
-                                 SELECT 'UNDERVOTES'::text,
-                                    9998) v
-                  WHERE (co.id = cor.contest_id))
+ SELECT cr.precinct_id,
+    cor.contest_id,
+    NULL::numeric AS referendum_id,
+    co.office AS contest,
+    ca.name AS candidate,
+    p.name AS party,
+    cr.votes,
+    ca.sort_order
+   FROM candidate_results cr,
+    contest_results cor,
+    contests co,
+    candidates ca,
+    parties p
+  WHERE ((((cor.id = cr.contest_result_id) AND (co.id = cor.contest_id)) AND (ca.id = cr.candidate_id)) AND (p.id = ca.party_id))
 UNION ALL
-         SELECT cor.precinct_id,
-            NULL::integer AS contest_id,
-            cor.referendum_id,
-            re.title AS contest,
-            v.candidate,
-            ''::character varying AS party,
-            0 AS votes,
-            v.sort_order
-           FROM contest_results cor,
-            referendums re,
-            (         SELECT 'OVERVOTES'::text AS candidate,
-                            9999 AS sort_order
-                UNION ALL
-                         SELECT 'UNDERVOTES'::text,
-                            9998) v
-          WHERE (re.id = cor.referendum_id);
+ SELECT brr.precinct_id,
+    NULL::integer AS contest_id,
+    cor.referendum_id,
+    re.title AS contest,
+    br.name AS candidate,
+    ''::character varying AS party,
+    brr.votes,
+    br.sort_order
+   FROM ballot_response_results brr,
+    contest_results cor,
+    referendums re,
+    ballot_responses br
+  WHERE (((cor.id = brr.contest_result_id) AND (br.id = brr.ballot_response_id)) AND (re.id = cor.referendum_id))
+UNION ALL
+ SELECT cor.precinct_id,
+    cor.contest_id,
+    NULL::numeric AS referendum_id,
+    co.office AS contest,
+    v.candidate,
+    ''::character varying AS party,
+    0 AS votes,
+    v.sort_order
+   FROM contest_results cor,
+    contests co,
+    ( SELECT 'OVERVOTES'::text AS candidate,
+            9999 AS sort_order
+        UNION ALL
+         SELECT 'UNDERVOTES'::text,
+            9998) v
+  WHERE (co.id = cor.contest_id)
+UNION ALL
+ SELECT cor.precinct_id,
+    NULL::integer AS contest_id,
+    cor.referendum_id,
+    re.title AS contest,
+    v.candidate,
+    ''::character varying AS party,
+    0 AS votes,
+    v.sort_order
+   FROM contest_results cor,
+    referendums re,
+    ( SELECT 'OVERVOTES'::text AS candidate,
+            9999 AS sort_order
+        UNION ALL
+         SELECT 'UNDERVOTES'::text,
+            9998) v
+  WHERE (re.id = cor.referendum_id);
 
 
 --
@@ -754,14 +695,6 @@ ALTER TABLE ONLY ballot_responses
 
 
 --
--- Name: candidate_results_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
---
-
-ALTER TABLE ONLY candidate_results
-    ADD CONSTRAINT candidate_results_pkey PRIMARY KEY (id);
-
-
---
 -- Name: candidates_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
 --
 
@@ -847,6 +780,14 @@ ALTER TABLE ONLY referendums
 
 ALTER TABLE ONLY states
     ADD CONSTRAINT states_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: voting_results_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
+--
+
+ALTER TABLE ONLY candidate_results
+    ADD CONSTRAINT voting_results_pkey PRIMARY KEY (id);
 
 
 --
@@ -976,6 +917,13 @@ CREATE INDEX index_contests_on_district_type ON contests USING btree (district_t
 
 
 --
+-- Name: index_contests_on_election_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE INDEX index_contests_on_election_id ON contests USING btree (election_id);
+
+
+--
 -- Name: index_contests_on_locality_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
 --
 
@@ -1081,6 +1029,13 @@ CREATE INDEX index_precincts_on_locality_id ON precincts USING btree (locality_i
 
 
 --
+-- Name: index_precincts_on_precinct_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE INDEX index_precincts_on_precinct_id ON precincts USING btree (precinct_id);
+
+
+--
 -- Name: index_precincts_on_uid; Type: INDEX; Schema: public; Owner: -; Tablespace: 
 --
 
@@ -1133,7 +1088,7 @@ CREATE UNIQUE INDEX unique_schema_migrations ON schema_migrations USING btree (v
 -- PostgreSQL database dump complete
 --
 
-SET search_path TO "$user", public, topology;
+SET search_path TO "$user",public;
 
 INSERT INTO schema_migrations (version) VALUES ('20131212110520');
 
@@ -1218,3 +1173,7 @@ INSERT INTO schema_migrations (version) VALUES ('20140416044538');
 INSERT INTO schema_migrations (version) VALUES ('20140428181530');
 
 INSERT INTO schema_migrations (version) VALUES ('20140430071457');
+
+INSERT INTO schema_migrations (version) VALUES ('20150304142413');
+
+INSERT INTO schema_migrations (version) VALUES ('20150324134710');

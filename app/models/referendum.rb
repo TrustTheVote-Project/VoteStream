@@ -7,5 +7,6 @@ class Referendum < ActiveRecord::Base
   belongs_to :district
   has_many   :precincts, through: :district
   has_many   :ballot_responses, dependent: :destroy
+  has_many   :contest_results, dependent: :destroy
 
 end

@@ -58,6 +58,7 @@ class DataLoader < BaseLoader
     @parties     = []
     @party_ids   = {}
     @party_names = {}
+    @election = nil
 
     loader = self
 
@@ -88,6 +89,7 @@ class DataLoader < BaseLoader
 
       Election.where(uid: election.uid).delete_all
       election.save!
+      @election = election
     end
   end
 
@@ -332,7 +334,7 @@ class DataLoader < BaseLoader
       district_id = loader.district_ids[district_uid]
       write_in = false # TODO fix
       partisan = false # TODO fix
-      contest = loader.locality.contests.create(office: office, sort_order: sort_order, district_id: district_id, write_in: write_in, partisan: partisan, uid: uid)
+      contest = loader.locality.contests.create(office: office, sort_order: sort_order, district_id: district_id, write_in: write_in, partisan: partisan, uid: uid, election: @election)
 
       # save candidates
       contest.candidates.import CANDIDATE_COLUMNS, candidates

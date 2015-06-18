@@ -2,7 +2,10 @@ class Precinct < ActiveRecord::Base
 
   belongs_to :locality
 
+  belongs_to :precinct #Linking between precinct for unifying/mapping
+  
   has_and_belongs_to_many :districts
+  
 
   has_one    :polling_location,        dependent: :delete
   has_many   :candidate_results,       dependent: :delete_all
@@ -19,6 +22,10 @@ class Precinct < ActiveRecord::Base
 
   def referendums
     self.locality.referendums.where(district_id: self.district_ids)
+  end
+  
+  def geo
+    self.read_attribute(:geo) || (self.precinct ? self.precinct.geo : nil)
   end
 
 end

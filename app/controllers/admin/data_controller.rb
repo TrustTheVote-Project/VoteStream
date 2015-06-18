@@ -21,14 +21,37 @@ class Admin::DataController < Admin::BaseController
   end
 
   def load_definitions
-    DataLoader.new(params[:file]).load
-    redirect_to :admin_data, notice: "Definitioins have been uploaded"
+    contents = params[:file].read
+    doc = Nokogiri::XML(contents) { |config| config.noblanks }
+    if doc.root.name == "ElectionReport"
+      VSSCLoader.new(contents).load
+    else
+      DataLoader.new(contents).load
+    end
+      redirect_to :admin_data, notice: "Definitions have been uploaded"
   end
-
+  
   def load_results
     ResultsLoader.new(params[:file]).load
-    redirect_to :admin_data, notice: "Results has been uploaded"
+    redirect_to :admin_data, notice: "Results have been uploaded"
   end
+
+  def load_vssc
+    mismatches = VSSCLoader.new(params[:file]).load(params[:locality_id])
+    if !mismatches.empty?
+      raise mismatches.to_s
+    end
+    redirect_to :admin_data, notice: "Definitioins have been uploaded"    
+  end
+  
+  def load_vssc_results
+    mismatches = VSSCLoader.new(params[:file]).load_results(params[:locality_id])    
+    if !mismatches.empty?
+      raise mismatches.to_s
+    end
+    redirect_to admin_locality_path(params[:locality_id]), notice: "Results have been uploaded"    
+  end
+
 
   private
 
