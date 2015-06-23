@@ -15,7 +15,7 @@
 
 <div class="row-fluid result <%= 'hide' if @participation != 'participation' %>" id="participation-info">
   <div class='panel span9 summary'>
-    <div class='header'><h5>Participation info</h5></div>
+    <div class='header'><h5>Participation Statistics</h5></div>
     <div class='info'>
       X ballots cast from Y registered voters in <%= @precinctsReportingCount() %> precincts, for aggregate turn-out of N%.
     </div>
