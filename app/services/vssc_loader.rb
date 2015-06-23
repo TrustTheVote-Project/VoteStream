@@ -80,6 +80,7 @@ class VSSCLoader < BaseLoader
           locality.parties.all.each do |p|
             locality_parties[p.uid] = p
           end
+          write_in_party = nil
           
           # where is this in hart??
           #   election.election_type = e.type
@@ -102,23 +103,24 @@ class VSSCLoader < BaseLoader
               
               c.ballot_selection.each_with_index do |candidate_sel, i|
                 
-                #TODO: skip write-ins
-                next if candidate_sel.is_write_in
-                
-                
                 candidate = contest_candidates[candidate_sel.candidate.first]  #it's just a UID
                 # If it's a write-in, create it
                 if candidate.nil? && candidate_sel.is_write_in
                   
                   sel = vssc_candidates[candidate_sel.candidate.first] #TODO: can be multiple candidates in VSSC
-                  party = locality_parties[sel.party]
+                  if sel.nil? 
+                    raise candidate_sel.candidate.first.to_s + ' ' + vssc_candidates.inspect.to_s
+                  end
+                  
+                  write_in_party ||= locality.parties.create(:name=>"write-in", abbr: "write-in", uid: "write-in", sort_order:  locality_parties.size + 1 )
+                  write_in_party 
                   # TODO: write-in candidates have a party?
-                  color = ColorScheme.candidate_pre_color(party.name)
+                  color = ColorScheme.candidate_pre_color(write_in_party.name)
                   
                   candidate = Candidate.new(uid: sel.object_id, 
                     name: sel.ballot_name, 
                     sort_order: sel.sequence_order, 
-                    party_id: party ? party.id : nil, 
+                    party_id: write_in_party ? write_in_party.id : nil, 
                     color: color)
               
                   contest.candidates << candidate
