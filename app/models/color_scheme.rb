@@ -52,6 +52,10 @@ class ColorScheme
     colors[c]
   end
 
+  def self.special_colors(t)
+    colors[t]
+  end
+
   def self.colors
     @colors ||= AppConfig['map_color']['colors']
   end

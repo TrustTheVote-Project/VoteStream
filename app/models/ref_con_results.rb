@@ -32,10 +32,17 @@ class RefConResults
     results    = CandidateResult.where(candidate_id: cids)
     results = results.where(precinct_id: pids) unless pids.blank?
 
+    # adding quasi-candidates here
+    special_party = Party.new(name: 'Special', abbr: 'special')
+    candidates << Candidate.new(party: special_party, name: 'Overvotes', id: -1)
+
     candidate_votes = results.group('candidate_id').select("sum(votes) v, candidate_id").inject({}) do |m, cr|
       m[cr.candidate_id] = cr.v
       m
     end
+
+    # DEBUG
+    candidate_votes[-1] = 500
 
     ordered = ordered_records(candidates, candidate_votes) do |c, votes, idx|
       { name: c.name, party: { name: c.party_name, abbr: c.party.abbr }, votes: votes, c: ColorScheme.candidate_color(c, idx) }
@@ -209,6 +216,10 @@ class RefConResults
       memo
     end
 
+    # adding quasi-candidates here
+    special_party = Party.new(name: 'Special', abbr: 'special')
+    candidates << Candidate.new(party: special_party, name: 'Overvotes', id: -1)
+
     pmap = precincts.map do |p|
       pcr = precinct_candidate_results[p.id] || []
       candidate_votes = pcr.inject({}) do |memo, r|
@@ -216,9 +227,13 @@ class RefConResults
         memo
       end
 
+      candidate_votes[-1] = 500
+
       ordered = ordered_records(candidates, candidate_votes) do |i, votes, idx|
         { id: i.id, votes: votes }
       end
+
+      ordered << { id: -1, votes: 500 }
 
       li = leader_info(pcr)
 
@@ -360,7 +375,7 @@ class RefConResults
       contests = Contest.where(filt).where(district_type: cat)
       referendums = Referendum.where(filt).where(district_type: cat)
     end
-    
+
     contests = contests.select("*, lpad(sort_order, 5, '0') || lower(office) as sort_order") if contests
     referendums = referendums.select("*, lpad(sort_order, 5, '0') || lower(title) as sort_order") if referendums
 

@@ -48,12 +48,12 @@ class DataProcessor
   def self.precincts_json(locality)
     Rails.cache.fetch("locality:#{locality.id}:precincts") do
       precincts = locality.precincts.where("geo IS NOT NULL").select("id, name, ST_AsGeoJSON(geo) json").order("name")
-      data = precincts.map do |p| 
-        { 
-          id: p.id, 
-          name: p.name, 
-          kml: JSON.parse(p.json) 
-        } 
+      data = precincts.map do |p|
+        {
+          id: p.id,
+          name: p.name,
+          kml: JSON.parse(p.json)
+        }
       end
       # precincts = locality.precincts.joins('LEFT OUTER JOIN precincts as p2 ON precincts.precinct_id = p2.id').select(
       #   "precincts.id, precincts.name, ST_AsGeoJSON(precincts.geo) json, ST_AsGeoJSON(p2.geo) json2"
