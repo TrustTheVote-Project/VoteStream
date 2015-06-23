@@ -122,13 +122,28 @@
     collectionEvents:
       sync: 'render'
 
+    modelEvents:
+      'change:participation': 'onParticipationChange'
+
+    onPU: ->
+      console.log 'pu'
+
+    onParticipationChange: ->
+      v = @model.get 'participation'
+      e = $("#participation-info")
+      if v == 'participation'
+        e.show()
+      else
+        e.hide()
+      @updateMapPosition()
+
     initialize: (opts) ->
       @model = App.request 'entities:scoreboardInfo'
+      @.listenTo @model.get('precinctResults'), 'sync', => @render()
       @.listenTo @model, 'change:result', => @updateMapPosition()
 
     onBeforeRender: ->
-      si = App.request 'entities:scoreboardInfo'
-      @selectedModel = si.get('result')
+      @selectedModel = @model.get('result')
 
     itemViewOptions: (model, i) ->
       return {
