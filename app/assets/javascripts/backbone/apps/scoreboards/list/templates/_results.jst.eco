@@ -17,7 +17,7 @@
   <div class='panel span9 summary'>
     <div class='header'><h5>Participation info</h5></div>
     <div class='info'>
-      X ballots cast from Y registered voters in <%= @precinctResults.get('precincts').length %> precincts, for aggregate turn-out of N%.
+      X ballots cast from Y registered voters in <%= @precinctsReportingCount() %> precincts, for aggregate turn-out of N%.
     </div>
   </div>
 </div>
