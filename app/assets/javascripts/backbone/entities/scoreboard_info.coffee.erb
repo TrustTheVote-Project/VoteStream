@@ -31,6 +31,9 @@
           precinctColors:   new Entities.PrecinctColors
           precinctResults:  new Entities.PrecinctResultData
 
+          precinctsReportingCount: ->
+            @precinctResults.get('precincts').length
+
           refcon:           App.request('entities:refcon:all-Federal')
           refconLabel:      ->
             type = @refcon.get('type')
