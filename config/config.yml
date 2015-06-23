@@ -20,6 +20,10 @@ map_color:
     not_reporting:  '#ffffff'
     tie:            '#EFDFBB'
 
+    overvotes:      '#FF0000'
+    undervotes:     '#00FF00'
+    writeins:       '#0000FF'
+
   threshold:
     lower:  10
     upper:  20
