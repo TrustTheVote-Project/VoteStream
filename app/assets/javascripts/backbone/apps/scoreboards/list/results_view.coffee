@@ -42,9 +42,7 @@
     events:
       'click #js-show-more': (e) ->
         e.preventDefault()
-        $('.candidate.hide', @ui.rowsList).show()
-        @ui.showMoreBtn.hide()
-        @ui.showLessBtn.show()
+        @expand()
 
       'click #js-show-less': (e) ->
         e.preventDefault()
@@ -53,6 +51,11 @@
         @ui.showMoreBtn.show()
 
       'click': (e) -> @select()
+
+    expand: ->
+        $('.candidate.hide', @ui.rowsList).show()
+        @ui.showMoreBtn.hide()
+        @ui.showLessBtn.show()
 
     onShow: ->
       if @collection.length > 2 and !@options.simpleVersion
@@ -124,9 +127,6 @@
 
     modelEvents:
       'change:participation': 'onParticipationChange'
-
-    onPU: ->
-      console.log 'pu'
 
     onParticipationChange: ->
       v = @model.get 'participation'
