@@ -20,3 +20,4 @@
 /config/deploy/production.rb
 
 .ruby-gemset
+dump.rdb
