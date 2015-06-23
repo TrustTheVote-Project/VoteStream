@@ -5,9 +5,10 @@
     id: 'list'
 
     regions:
-      filterBarRegion: '#filter-bar-region'
-      resultsRegion: '#results-region'
-      mapRegion: '#map-region'
+      filterBarRegion:              '#filter-bar-region'
+      resultsRegion:                '#results-region'
+      mapRegion:                    '#map-region'
+      participationSelectorRegion:  '#participation-selector-region'
 
     templateHelpers:
       percent: -> Math.floor(@votes * 100 / (@totalVotes || 1))
@@ -32,4 +33,24 @@
       @mapRegion.show mapView
 
       @filterBarRegion.show new App.ScoreboardsApp.FilterBar.View
-        model: App.request('entities:scoreboardInfo')
+        model: @si
+
+      @participationSelectorRegion.show new ParticipationSelectorView
+        model: @si
+
+  class ParticipationSelectorView extends Marionette.ItemView
+    template: 'scoreboards/list/_participation_view_selector'
+
+    modelEvents:
+      'change:participation': 'render'
+
+    className: 'btn-group'
+
+    events:
+      'click button': (e) ->
+        e.preventDefault()
+        link = $(e.target)
+        value = link.data('filter')
+        console.log(value)
+        @model.set 'participation', value
+        # App.navigate link.data('view'), trigger: true

@@ -40,6 +40,10 @@ en:
         map: Map view
         list: List view
 
+      filter_selector:
+        results: Results
+        participation: Results + Participation
+
     not_voting: Not voting
 
     advanced_filters:

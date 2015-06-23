@@ -30,11 +30,11 @@ class RefConResults
     cids       = contest.candidate_ids
     candidates = contest.candidates.includes(:party)
     results    = CandidateResult.where(candidate_id: cids)
-    results = results.where(precinct_id: pids) unless pids.blank?
+    results    = results.where(precinct_id: pids) unless pids.blank?
 
-    # adding quasi-candidates here
-    special_party = Party.new(name: 'Special', abbr: 'special')
-    candidates << Candidate.new(party: special_party, name: 'Overvotes', id: -1)
+    # # adding quasi-candidates here
+    # special_party = Party.new(name: 'Special', abbr: 'special')
+    # candidates << Candidate.new(party: special_party, name: 'Overvotes', id: -1)
 
     candidate_votes = results.group('candidate_id').select("sum(votes) v, candidate_id").inject({}) do |m, cr|
       m[cr.candidate_id] = cr.v
@@ -42,7 +42,7 @@ class RefConResults
     end
 
     # DEBUG
-    candidate_votes[-1] = 500
+    # candidate_votes[-1] = 500
 
     ordered = ordered_records(candidates, candidate_votes) do |c, votes, idx|
       { name: c.name, party: { name: c.party_name, abbr: c.party.abbr }, votes: votes, c: ColorScheme.candidate_color(c, idx) }
@@ -207,18 +207,22 @@ class RefConResults
   end
 
   def contest_precinct_results(contest, params)
+    pids       = precinct_ids_for_region(params)
     precincts  = contest.precincts.select("precincts.id")
+    precincts  = precincts.where(id: pids) unless pids.blank?
+
     candidates = contest.candidates.includes(:party)
     results    = CandidateResult.where(candidate_id: contest.candidate_ids)
+    results    = results.where(precinct_id: pids) unless pids.blank?
 
     precinct_candidate_results = results.group_by(&:precinct_id).inject({}) do |memo, (pid, results)|
       memo[pid] = results
       memo
     end
 
-    # adding quasi-candidates here
-    special_party = Party.new(name: 'Special', abbr: 'special')
-    candidates << Candidate.new(party: special_party, name: 'Overvotes', id: -1)
+    # # adding quasi-candidates here
+    # special_party = Party.new(name: 'Special', abbr: 'special')
+    # candidates << Candidate.new(party: special_party, name: 'Overvotes', id: -1)
 
     pmap = precincts.map do |p|
       pcr = precinct_candidate_results[p.id] || []
@@ -227,7 +231,7 @@ class RefConResults
         memo
       end
 
-      candidate_votes[-1] = 500
+      # candidate_votes[-1] = 500
 
       ordered = ordered_records(candidates, candidate_votes) do |i, votes, idx|
         { id: i.id, votes: votes }
@@ -249,10 +253,15 @@ class RefConResults
   end
 
   def referendum_precinct_results(referendum, params)
-    precincts  = referendum.precincts
-    responses  = referendum.ballot_responses
-    ids        = referendum.ballot_response_ids
-    results    = BallotResponseResult.where(ballot_response_id: ids)
+    responses = referendum.ballot_responses
+    ids       = referendum.ballot_response_ids
+
+    pids      = precinct_ids_for_region(params)
+    precincts = referendum.precincts.select("precincts.id")
+    precincts = precincts.where(id: pids) unless pids.blank?
+
+    results   = BallotResponseResult.where(ballot_response_id: ids)
+    results   = results.where(precinct_id: pids) unless pids.blank?
 
     precinct_referendum_results = results.group_by(&:precinct_id).inject({}) do |memo, (pid, results)|
       memo[pid] = results

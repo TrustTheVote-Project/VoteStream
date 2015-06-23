@@ -72,9 +72,10 @@ class DataProcessor
       locality_id = Referendum.find(params[:referendum_id]).locality_id
     end
 
-    Rails.cache.fetch("locality:#{locality_id}:#{params.hash}:precinct_results") do
+    # DEBUG remove this
+    # Rails.cache.fetch("locality:#{locality_id}:#{params.hash}:precinct_results") do
       RefConResults.new.precinct_results(params).to_json
-    end
+    # end
   end
 
   def self.precinct_colors_json(params)
