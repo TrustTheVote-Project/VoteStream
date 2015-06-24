@@ -39,28 +39,43 @@ class RefConResults
       m
     end
 
-    contest_results = contest.contest_results
-    contest_results = contest_results.where(precinct_id: pids) unless pids.blank?
-    overvotes = contest_results.sum(:overvotes)
-    undervotes = contest_results.sum(:undervotes)
+    overvotes, undervotes, registered = get_vote_stats(contest, pids)
 
     ordered = ordered_records(candidates, candidate_votes) do |c, votes, idx|
       { name: c.name, party: { name: c.party_name, abbr: c.party.abbr }, votes: votes, c: ColorScheme.candidate_color(c, idx) }
     end
 
+
+    total = results.sum(:votes)
+
     ordered << { name: 'Overvotes', party: { name: 'Stats', abbr: 'stats' }, votes: overvotes, c: ColorScheme.special_colors(:overvotes) }
     ordered << { name: 'Undervotes', party: { name: 'Stats', abbr: 'stats' }, votes: undervotes, c: ColorScheme.special_colors(:undervotes) }
+    ordered << { name: 'Non-Participating', party: { name: 'Stats', abbr: 'stats' }, votes: registered - total - overvotes - undervotes, c: ColorScheme.special_colors(:non_participating) }
 
     return {
       summary: {
         title:         contest.office,
         contest_type:  contest.district_type,
-        votes:         results.sum(:votes),
+        votes:         total,
         overvotes:     overvotes,
         undervotes:    undervotes,
+        ballots:       total + overvotes + undervotes,
         rows:          ordered
       }
     }
+  end
+
+  def get_vote_stats(refcon, pids)
+    contest_results = refcon.contest_results
+    contest_results = contest_results.where(precinct_id: pids) unless pids.blank?
+
+    overvotes  = contest_results.sum(:overvotes)
+    undervotes = contest_results.sum(:undervotes)
+
+    registered = Precinct
+    registered = registered.where(id: pids.blank? ? refcon.precinct_ids : pids.to_a)
+
+    return overvotes, undervotes, registered.sum(:registered_voters)
   end
 
   def referendum_data(referendum, params)
@@ -69,6 +84,8 @@ class RefConResults
     responses = referendum.ballot_responses
     results   = BallotResponseResult.where(ballot_response_id: brids)
     results   = results.where(precinct_id: pids) unless pids.blank?
+
+    overvotes, undervotes, registered = get_vote_stats(referendum, pids)
 
     response_votes = results.group('ballot_response_id').select("sum(votes) v, ballot_response_id").inject({}) do |m, br|
       m[br.ballot_response_id] = br.v
@@ -79,13 +96,22 @@ class RefConResults
       { name: b.name, votes: votes, c: ColorScheme.ballot_response_color(b, idx) }
     end
 
+    total = results.sum(:votes)
+
+    ordered << { name: 'Overvotes', party: { name: 'Stats', abbr: 'stats' }, votes: overvotes, c: ColorScheme.special_colors(:overvotes) }
+    ordered << { name: 'Undervotes', party: { name: 'Stats', abbr: 'stats' }, votes: undervotes, c: ColorScheme.special_colors(:undervotes) }
+    ordered << { name: 'Non-Participating', party: { name: 'Stats', abbr: 'stats' }, votes: registered - total - overvotes - undervotes, c: ColorScheme.special_colors(:non_participating) }
+
     return {
       summary: {
-        title:  referendum.title,
-        subtitle: referendum.subtitle,
-        text:   referendum.question,
-        votes:  results.sum(:votes),
-        rows:   ordered
+        title:       referendum.title,
+        subtitle:    referendum.subtitle,
+        text:        referendum.question,
+        votes:       total,
+        overvotes:   overvotes,
+        undervotes:  undervotes,
+        ballots:     total + overvotes + undervotes,
+        rows:        ordered
       }
     }
   end
@@ -255,7 +281,7 @@ class RefConResults
     ids       = referendum.ballot_response_ids
 
     pids      = precinct_ids_for_region(params)
-    precincts = referendum.precincts.select("precincts.id")
+    precincts = referendum.precincts.select("precincts.id, registered_voters")
     precincts = precincts.where(id: pids) unless pids.blank?
 
     results   = BallotResponseResult.where(ballot_response_id: ids)
@@ -281,6 +307,7 @@ class RefConResults
 
       { id:       p.id,
         votes:    li[:total_votes],
+        voters:   p.registered_voters,
         rows:     ordered[0, 2] }
     end
 
@@ -341,7 +368,7 @@ class RefConResults
 
   # picks districts that are related to the given precinct or the precincts related to the given district
   def districts_for_region(params)
-    if (pids = precinct_ids_for_region(params))
+    if !(pids = precinct_ids_for_region(params)).blank?
       DistrictsPrecinct.where(precinct_id: pids).uniq.pluck("district_id")
     else
       nil
@@ -350,7 +377,7 @@ class RefConResults
 
   def precinct_ids_for_region(params)
     if (pid = params[:precinct_id]) || (did = params[:district_id])
-      pid ? [ pid.to_i ] : DistrictsPrecinct.where(district_id: did).uniq.pluck("precinct_id")
+      pid ? [ pid.to_i ] : DistrictsPrecinct.where(district_id: did).uniq.pluck("precinct_id").to_a
     else
       nil
     end

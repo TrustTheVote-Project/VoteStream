@@ -18,6 +18,12 @@
       percentFormatted: -> "#{Math.floor(@votes * 1000 / (@totalVotes || 1)) / 10.0}%"
     onShow: ->
       c = @model.get('c')
+      if @model.get('party')['abbr'] == 'stats'
+        $(".bar", @$el).hide()
+        $(".party", @$el).text('')
+        $(".percent", @$el).text($(".votes", @$el).text())
+        $(".votes", @$el).hide()
+
       $("h5, .percent", @$el).css(color: c)
       $(".filler", @$el).css(background: c)
 
@@ -96,6 +102,10 @@
       c = @model.get('c')
       $("td", @$el).css(color: c)
 
+      if @model.get('party')?['abbr'] == 'stats'
+        $(".percent", @$el).text($(".votes", @$el).text())
+        $(".votes", @$el).hide()
+
   class ReferendumResultView extends Marionette.CompositeView
     template: 'scoreboards/list/_referendum_result'
     className: -> "referendum result #{ if @options.selected then 'selected' else '' }".trim()
@@ -134,6 +144,8 @@
 
     modelEvents:
       'change:participation': 'onParticipationChange'
+      'change:precinctsReportingCount': 'render'
+      'change:totalRegisteredVoters': 'render'
 
     onParticipationChange: ->
       @render()
@@ -176,3 +188,10 @@
         $("#map-region").css(top: top, opacity: 1)
       else
         $("#map-region").css(opacity: 0)
+
+    serializeData: ->
+      data = Backbone.Marionette.ItemView.prototype.serializeData.apply @, arguments
+      data.totalBallots = @model.get('totalBallotsCast')
+      data.totalRegisteredVoters = @model.get('totalRegisteredVoters')
+      data.turnOut = Math.round((data.totalBallots / (data.totalRegisteredVoters || 1)) * 100)
+      data

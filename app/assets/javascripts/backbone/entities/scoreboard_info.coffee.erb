@@ -31,8 +31,9 @@
           precinctColors:   new Entities.PrecinctColors
           precinctResults:  new Entities.PrecinctResultData
 
-          precinctsReportingCount: ->
-            @precinctResults.get('precincts').length
+          precinctsReportingCount: 0
+          totalBallotsCast: 0
+          totalRegisteredVoters: 0
 
           refcon:           App.request('entities:refcon:all-Federal')
           refconLabel:      ->
@@ -75,7 +76,17 @@
 
         sb.on 'change:region change:refcon', -> @reloadResults()
 
+        sb.get('precinctResults').on 'reset', ->
+          # compute stats
+          precincts = sb.get('precinctResults').get('precincts')
+          sb.set 'precinctsReportingCount', precincts.length
+          sb.set 'totalRegisteredVoters', _.inject(precincts.models, ((t, p) -> t + p.get('voters')), 0)
+
         sb.get('results').on 'reset', ->
+          # compute stats
+          console.log sb.get('results')
+          sb.set 'totalBallotsCast', _.inject(sb.get('results').models, ( (m, r) -> s = r.get('summary'); m + s.get('overvotes') + s.get('undervotes') + s.get('votes') ), 0)
+
           result = sb.pickResult()
           sb.set 'result', result
 

@@ -98,6 +98,7 @@
         items: new PrecinctRowItems data.items
         precincts: new PrecinctResults data.precincts
       @._previousAttributes = null
+      @trigger 'reset'
 
     fetchForResult: (result, region) ->
       if !result?

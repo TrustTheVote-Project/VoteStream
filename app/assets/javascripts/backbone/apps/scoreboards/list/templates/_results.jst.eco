@@ -17,7 +17,7 @@
   <div class='panel span9 summary'>
     <div class='header'><h5>Participation Statistics</h5></div>
     <div class='info'>
-      X ballots cast from Y registered voters in <%= @precinctsReportingCount() %> precincts, for aggregate turn-out of N%.
+      <%= @totalBallots %> ballots cast from <%= @totalRegisteredVoters %> registered voters in <%= @precinctsReportingCount %> precincts, for aggregate turn-out of <%= @turnOut %>%.
     </div>
   </div>
 </div>
