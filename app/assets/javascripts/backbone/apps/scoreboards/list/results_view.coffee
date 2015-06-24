@@ -5,8 +5,9 @@
     tagName: 'div'
     className: ->
       classes = ["row-fluid","candidate"]
-      classes.push('hide') if @.options.hidden
-      classes.push('winner') if @.options.winner
+      classes.push('extra') if @options.extra
+      classes.push('hide') if @options.hidden
+      classes.push('winner') if @options.winner
       return classes.join(' ')
     serializeData: ->
       data = Backbone.Marionette.ItemView.prototype.serializeData.apply @, arguments
@@ -29,37 +30,43 @@
     itemViewOptions: (model, i) ->
       return {
         model: model,
-        hidden: i > 1,
+        extra: i > 1,
+        hidden: !@withParticipationStats && i > 1,
         winner: i is 0 and gon.percentReporting is 'Final Results',
         totalVotes: @model.get('summary').get('votes')
       }
 
+    initialize: (opts) ->
+      @withParticipationStats = opts.withParticipationStats
+
     ui:
       rowsList: 'div.candidates'
+      partInfo: 'div.participaction-info'
       showMoreBtn: '#js-show-more'
       showLessBtn: '#js-show-less'
 
     events:
       'click #js-show-more': (e) ->
         e.preventDefault()
-        @expand()
+        $('.candidate.extra', @ui.rowsList).show()
+        @ui.showMoreBtn.hide()
+        @ui.showLessBtn.show()
 
       'click #js-show-less': (e) ->
         e.preventDefault()
-        $('.candidate.hide', @ui.rowsList).hide()
+        $('.candidate.extra', @ui.rowsList).hide()
         @ui.showLessBtn.hide()
         @ui.showMoreBtn.show()
 
       'click': (e) -> @select()
 
-    expand: ->
-        $('.candidate.hide', @ui.rowsList).show()
-        @ui.showMoreBtn.hide()
-        @ui.showLessBtn.show()
-
     onShow: ->
-      if @collection.length > 2 and !@options.simpleVersion
-        @ui.showMoreBtn.show()
+      if @options.withParticipationStats 
+        @ui.showLessBtn.show()
+        @ui.partInfo.show()
+      else
+        if @collection.length > 2 and !@options.simpleVersion
+          @ui.showMoreBtn.show()
 
       si = App.request 'entities:scoreboardInfo'
       @markSelected() if si.get('result') == @model
@@ -129,13 +136,14 @@
       'change:participation': 'onParticipationChange'
 
     onParticipationChange: ->
-      v = @model.get 'participation'
-      e = $("#participation-info")
-      if v == 'participation'
-        e.show()
-      else
-        e.hide()
-      @updateMapPosition()
+      @render()
+      # v = @model.get 'participation'
+      # e = $("#participation-info")
+      # if v == 'participation'
+      #   e.show()
+      # else
+      #   e.hide()
+      # @updateMapPosition()
 
     initialize: (opts) ->
       @model = App.request 'entities:scoreboardInfo'
@@ -146,10 +154,11 @@
       @selectedModel = @model.get('result')
 
     itemViewOptions: (model, i) ->
-      return
+      return {
         model: model
         selected: false
-        collection: model.get('summary').get('rows')
+        withParticipationStats : @model.get('participation') == 'participation'
+        collection: model.get('summary').get('rows') }
 
     getItemView: (model) ->
       if model.get('type') == 'c'
