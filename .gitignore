@@ -21,3 +21,5 @@
 
 .ruby-gemset
 dump.rdb
+
+.DS_Store
