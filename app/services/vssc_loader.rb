@@ -59,6 +59,37 @@ class VSSCLoader < BaseLoader
       election = Election.find_by_uid(er.object_id + '-vssc')
       mismatches = {}
 
+      # Pull in extra precinct data
+      
+      precinct_splits = {}
+      er.gp_unit_collection.gp_unit.each do |gp_unit|
+        if gp_unit.is_a?(VSSC::District)
+          # skip it
+        else
+          if gp_unit.local_geo_code
+            # It's a regular precinct
+          else
+            # Precinct split, add the reg-voters to i's parents
+            name = "Precinct-Split-#{gp_unit.object_id.split('-').last}"
+            precinct_splits[gp_unit.object_id] = gp_unit.registered_voters
+          end
+        end
+      end
+      precinct_children = Precinct.includes(:precinct).where(uid: precinct_splits.keys)
+      precinct_parents = precinct_children.inject({}) do |h, pc|
+        h[pc.uid] = pc.precinct
+        h
+      end
+      precinct_children.each do |p_child|
+        reg_voters = precinct_splits[p_child.uid].to_i
+        p_parent = precinct_parents[p_child.uid]
+        p_parent.registered_voters = (p_parent.registered_voters || 0) + reg_voters
+      end
+      precinct_parents.values.each do |p|
+        p.save
+      end
+
+
       if er.election && er.election.first
         er.election.first.tap do |e|
           #load candidates from the file
@@ -146,12 +177,15 @@ class VSSCLoader < BaseLoader
 
                     cr = precinct_results[d_uid]
                     cr.total_votes ||= 0
+                    cr.total_valid_votes ||= 0
+                    cr.undervotes ||= 0
+                    cr.overvotes ||= 0
                     if precinct
-                      cr.total_votes += vc.count
-                      can_result_uid = "#{contest.uid}-#{precinct.uid}-#{candidate.uid}"
+                      cr.total_valid_votes += vc.count
+                      can_result_uid = "#{contest.uid}-#{precinct.uid}-#{candidate.uid}-#{vc.ballot_type}"
                       can_res = can_results[can_result_uid]
                       if can_res.nil?
-                        can_res = CandidateResult.new(candidate: candidate, precinct_id: precinct.id, uid: can_result_uid, votes: vc.count)
+                        can_res = CandidateResult.new(candidate: candidate, precinct_id: precinct.id, uid: can_result_uid, votes: vc.count, ballot_type: vc.ballot_type)
                         can_results[can_result_uid] = can_res
                         contest_response_results[cr.uid] ||= []
                         contest_response_results[cr.uid] << can_res
@@ -162,11 +196,11 @@ class VSSCLoader < BaseLoader
                     else
                       mismatches[:precincts] ||= []
                       mismatches[:precincts] << d_uid
-                      cr.total_votes += vc.count
-                      can_result_uid = "#{contest.uid}-no-precinct-#{candidate.uid}"
+                      cr.total_valid_votes += vc.count
+                      can_result_uid = "#{contest.uid}-no-precinct-#{candidate.uid}-#{vc.ballot_type}"
                       can_res = can_results[can_result_uid]
                       if can_res.nil?
-                        can_res = CandidateResult.new(candidate: candidate, uid: can_result_uid, votes: vc.count)
+                        can_res = CandidateResult.new(candidate: candidate, uid: can_result_uid, votes: vc.count, ballot_type: vc.ballot_type)
                         can_results[can_result_uid] = can_res
                         cr.candidate_results << can_res
                       else
@@ -180,6 +214,28 @@ class VSSCLoader < BaseLoader
 
               end
 
+              
+              
+              # at this point all ContestResults should be built
+              c.contest_total_counts_by_gp_unit.each do |contest_total|
+                d_uid = contest_total.gp_unit #fix_district_uid(vc.gp_unit)
+                precinct = locality_precincts[d_uid]
+
+                if precinct
+                  precinct = precinct.precinct || precinct
+                  d_uid = precinct.uid
+                  cr = precinct_results[d_uid] 
+                  if cr.nil?
+                    raise "No contest result for contest total count #{contest_total}"                    
+                  end
+                  cr.total_votes += contest_total.ballots_cast
+                  cr.undervotes += contest_total.undervotes
+                  cr.overvotes += contest_total.overvotes
+                else
+                  raise "No pct for contest total count #{contest_total}"
+                end
+              end
+              
               precinct_results.values.each do |cr|
                 if !cr.precinct_id.blank? && cr.candidate_results.size > 0
                   items = cr.candidate_results.to_a.sort {|a,b| b.votes <=> a.votes}
@@ -242,13 +298,18 @@ class VSSCLoader < BaseLoader
 
                   cr = precinct_results[d_uid]
 
+                  cr.total_votes ||= 0
+                  cr.total_valid_votes ||= 0
+                  cr.undervotes ||= 0
+                  cr.overvotes ||= 0
+                  
                   if precinct
-                    cr.total_votes += vc.count
-                    ref_response_uid = "#{ref.uid}-#{precinct.uid}-#{response.uid}"
+                    cr.total_valid_votes += vc.count
+                    ref_response_uid = "#{ref.uid}-#{precinct.uid}-#{response.uid}-#{vc.ballot_type}"
                     ref_res = ref_results[ref_response_uid]
                     if ref_res.nil?
                       ref_res = BallotResponseResult.new(ballot_response: response, precinct_id: precinct.id,
-                      votes: vc.count, uid: ref_response_uid)
+                      votes: vc.count, uid: ref_response_uid, ballot_type: vc.ballot_type)
                       ref_results[ref_response_uid] = ref_res
                       contest_response_results[cr.uid] ||= []
                       contest_response_results[cr.uid] << ref_res
@@ -260,14 +321,33 @@ class VSSCLoader < BaseLoader
                     mismatches[:precincts] ||= []
                     mismatches[:precincts] << d_uid
                     cr.ballot_response_results << BallotResponseResult.new(ballot_response: response,
-                      votes: vc.count, uid: "#{ref.uid}-#{d_uid}-#{response.uid}")
+                      votes: vc.count, uid: "#{ref.uid}-no_precinct-#{response.uid}-#{vc.ballot_type}", ballot_type: vc.ballot_type)
                   end
                   precinct_results[d_uid] ||= cr
                 end
 
               end
 
+              # at this point all ContestResults should be built
+              c.contest_total_counts_by_gp_unit.each do |contest_total|
+                d_uid = contest_total.gp_unit #fix_district_uid(vc.gp_unit)
+                precinct = locality_precincts[d_uid]
 
+                if precinct
+                  precinct = precinct.precinct || precinct
+                  d_uid = precinct.uid
+                  cr = precinct_results[d_uid] 
+                  if cr.nil?
+                    raise "No contest result for contest total count #{contest_total}"                    
+                  end
+                  cr.total_votes += contest_total.ballots_cast
+                  cr.undervotes += contest_total.undervotes
+                  cr.overvotes += contest_total.overvotes
+                else
+                  raise "No pct for contest total count #{contest_total}"
+                end
+              end
+              
               precinct_results.values.each do |cr|
                 if !cr.precinct_id.blank? && cr.ballot_response_results.size > 0
                   items = cr.ballot_response_results.to_a.sort {|a,b| b.votes <=> a.votes}
