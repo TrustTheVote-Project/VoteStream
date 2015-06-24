@@ -53,7 +53,7 @@ class ColorScheme
   end
 
   def self.special_colors(t)
-    colors[t]
+    colors[t.to_s]
   end
 
   def self.colors

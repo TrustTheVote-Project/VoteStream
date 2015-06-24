@@ -20,9 +20,9 @@ map_color:
     not_reporting:  '#ffffff'
     tie:            '#EFDFBB'
 
-    overvotes:      '#FF0000'
-    undervotes:     '#00FF00'
-    writeins:       '#0000FF'
+    overvotes:      '#888888'
+    undervotes:     '#666666'
+    writeins:       '#444444'
 
   threshold:
     lower:  10

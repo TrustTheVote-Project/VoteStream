@@ -1,6 +1,8 @@
 class RefConResults
 
   CATEGORY_REFERENDUMS = 'Referendums'
+  OVERVOTES_ID = -1
+  UNDERVOTES_ID = -1
 
   def initialize(options = {})
     @order_by_votes = (options[:candidate_ordering] || AppConfig[:candidate_ordering]) != 'sort_order'
@@ -32,28 +34,31 @@ class RefConResults
     results    = CandidateResult.where(candidate_id: cids)
     results    = results.where(precinct_id: pids) unless pids.blank?
 
-    # # adding quasi-candidates here
-    # special_party = Party.new(name: 'Special', abbr: 'special')
-    # candidates << Candidate.new(party: special_party, name: 'Overvotes', id: -1)
-
     candidate_votes = results.group('candidate_id').select("sum(votes) v, candidate_id").inject({}) do |m, cr|
       m[cr.candidate_id] = cr.v
       m
     end
 
-    # DEBUG
-    # candidate_votes[-1] = 500
+    contest_results = contest.contest_results
+    contest_results = contest_results.where(precinct_id: pids) unless pids.blank?
+    overvotes = contest_results.sum(:overvotes)
+    undervotes = contest_results.sum(:undervotes)
 
     ordered = ordered_records(candidates, candidate_votes) do |c, votes, idx|
       { name: c.name, party: { name: c.party_name, abbr: c.party.abbr }, votes: votes, c: ColorScheme.candidate_color(c, idx) }
     end
 
+    ordered << { name: 'Overvotes', party: { name: 'Stats', abbr: 'stats' }, votes: overvotes, c: ColorScheme.special_colors(:overvotes) }
+    ordered << { name: 'Undervotes', party: { name: 'Stats', abbr: 'stats' }, votes: undervotes, c: ColorScheme.special_colors(:undervotes) }
+
     return {
       summary: {
-        title:  contest.office,
-        contest_type: contest.district_type,
-        votes:  results.sum(:votes),
-        rows:   ordered
+        title:         contest.office,
+        contest_type:  contest.district_type,
+        votes:         results.sum(:votes),
+        overvotes:     overvotes,
+        undervotes:    undervotes,
+        rows:          ordered
       }
     }
   end
@@ -208,7 +213,7 @@ class RefConResults
 
   def contest_precinct_results(contest, params)
     pids       = precinct_ids_for_region(params)
-    precincts  = contest.precincts.select("precincts.id")
+    precincts  = contest.precincts.select("precincts.id, registered_voters")
     precincts  = precincts.where(id: pids) unless pids.blank?
 
     candidates = contest.candidates.includes(:party)
@@ -220,10 +225,6 @@ class RefConResults
       memo
     end
 
-    # # adding quasi-candidates here
-    # special_party = Party.new(name: 'Special', abbr: 'special')
-    # candidates << Candidate.new(party: special_party, name: 'Overvotes', id: -1)
-
     pmap = precincts.map do |p|
       pcr = precinct_candidate_results[p.id] || []
       candidate_votes = pcr.inject({}) do |memo, r|
@@ -231,18 +232,15 @@ class RefConResults
         memo
       end
 
-      # candidate_votes[-1] = 500
-
       ordered = ordered_records(candidates, candidate_votes) do |i, votes, idx|
         { id: i.id, votes: votes }
       end
-
-      ordered << { id: -1, votes: 500 }
 
       li = leader_info(pcr)
 
       { id:       p.id,
         votes:    li[:total_votes],
+        voters:   p.registered_voters,
         rows:     ordered[0, 2] }
     end
 
