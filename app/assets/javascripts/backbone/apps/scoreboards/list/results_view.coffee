@@ -146,10 +146,10 @@
       @selectedModel = @model.get('result')
 
     itemViewOptions: (model, i) ->
-      return {
-        model: model,
-        selected: false #model == @selectedModel
-        collection: model.get('summary').get('rows') }
+      return
+        model: model
+        selected: false
+        collection: model.get('summary').get('rows')
 
     getItemView: (model) ->
       if model.get('type') == 'c'

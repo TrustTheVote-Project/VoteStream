@@ -51,6 +51,4 @@
         e.preventDefault()
         link = $(e.target)
         value = link.data('filter')
-        console.log(value)
         @model.set 'participation', value
-        # App.navigate link.data('view'), trigger: true
