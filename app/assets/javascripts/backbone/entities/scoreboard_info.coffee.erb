@@ -50,6 +50,7 @@
           percentReporting: gon.percentReporting
           view:             null
           participation:    'results'
+          percentageType:   'ballots'
 
         App.vent.on 'filters:set', (options = {}) ->
           su = App.request 'entities:scoreboardUrl'

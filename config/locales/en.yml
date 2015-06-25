@@ -44,6 +44,10 @@ en:
         results: Results
         participation: Results + Participation
 
+      percentage_type_selector:
+        ballots: Ballots Percentage
+        voters: Voters Percentage
+
     not_voting: Not voting
 
     advanced_filters:

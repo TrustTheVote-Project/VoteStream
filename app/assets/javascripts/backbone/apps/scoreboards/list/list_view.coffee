@@ -9,6 +9,7 @@
       resultsRegion:                '#results-region'
       mapRegion:                    '#map-region'
       participationSelectorRegion:  '#participation-selector-region'
+      percTypeSelectorRegion:       '#percentage-type-selector-region'
 
     templateHelpers:
       percent: -> Math.floor(@votes * 100 / (@totalVotes || 1))
@@ -38,6 +39,9 @@
       @participationSelectorRegion.show new ParticipationSelectorView
         model: @si
 
+      @percTypeSelectorRegion.show new PercentageTypeSelectorView
+        model: @si
+
   class ParticipationSelectorView extends Marionette.ItemView
     template: 'scoreboards/list/_participation_view_selector'
 
@@ -52,3 +56,18 @@
         link = $(e.target)
         value = link.data('filter')
         @model.set 'participation', value
+
+  class PercentageTypeSelectorView extends Marionette.ItemView
+    template: 'scoreboards/list/_percentage_type_view_selector'
+
+    modelEvents:
+      'change:percentageType': 'render'
+
+    className: 'btn-group'
+
+    events:
+      'click button': (e) ->
+        e.preventDefault()
+        link = $(e.target)
+        value = link.data('type')
+        @model.set 'percentageType', value
