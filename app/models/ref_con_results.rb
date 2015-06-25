@@ -242,12 +242,11 @@ class RefConResults
 
   def contest_precinct_results(contest, params)
     pids       = precinct_ids_for_region(params) || []
-    rc_pids    = contest.precinct_pids.uniq && pids
+    rc_pids    = contest.precinct_ids.uniq && pids
     precincts  = Precinct.select("precincts.id, registered_voters").where(id: rc_pids)
 
     candidates = contest.candidates.includes(:party)
-    results    = CandidateResult.where(candidate_id: contest.candidate_ids)
-    results    = results.where(precinct_id: pids) unless pids.blank?
+    results    = CandidateResult.where(candidate_id: contest.candidate_ids, precinct_id: rc_pids)
 
     precinct_candidate_results = results.group_by(&:precinct_id).inject({}) do |memo, (pid, results)|
       memo[pid] = results
@@ -277,8 +276,7 @@ class RefConResults
         rows:     ordered[0, 2] }
     end
 
-    cr = contest.contest_results
-    cr = cr.where(precinct_id: pids.to_a) unless pids.blank?
+    cr = contest.contest_results.where(precinct_id: rc_pids)
     ballots = cr.sum(:total_votes)
 
     return {
