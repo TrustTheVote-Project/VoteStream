@@ -298,6 +298,7 @@ class VSSCLoader < BaseLoader
                 d_uid = contest_total.gp_unit #fix_district_uid(vc.gp_unit)
                 precinct = locality_precincts[d_uid]
 
+                # TODO: Remove this once vspub handles it better
                 next if contest_total.ballots_cast.to_i == 0
                 
                 if precinct
