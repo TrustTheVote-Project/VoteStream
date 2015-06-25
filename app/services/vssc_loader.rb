@@ -131,53 +131,50 @@ class VSSCLoader < BaseLoader
 
 
                 candidate_sel.vote_counts.each do |vc|
-                  if vc.ballot_type == VSSC::BallotType.election_day
-                    d_uid = vc.gp_unit #fix_district_uid(vc.gp_unit)
-                    precinct = locality_precincts[d_uid]
+                  d_uid = vc.gp_unit #fix_district_uid(vc.gp_unit)
+                  precinct = locality_precincts[d_uid]
 
-                    if precinct
-                      precinct = precinct.precinct || precinct
-                      d_uid = precinct.uid
-                      precinct_results[d_uid] ||= ContestResult.new(:uid=>"result-#{contest.uid}-#{precinct.uid}", :certification=>"unofficial_partial", precinct_id: precinct.id, contest_id: contest.id)
-                    else
-                      precinct_results[d_uid] ||= ContestResult.new(:uid=>"result-#{contest.uid}-#{d_uid}", :certification=>"unofficial_partial", contest_id: contest.id)
-                    end
-
-                    cr = precinct_results[d_uid]
-                    cr.total_votes ||= 0
-                    cr.total_valid_votes ||= 0
-                    cr.undervotes ||= 0
-                    cr.overvotes ||= 0
-                    if precinct
-                      cr.total_valid_votes += vc.count
-                      can_result_uid = "#{contest.uid}-#{precinct.uid}-#{candidate.uid}-#{vc.ballot_type}"
-                      can_res = can_results[can_result_uid]
-                      if can_res.nil?
-                        can_res = CandidateResult.new(candidate: candidate, precinct_id: precinct.id, uid: can_result_uid, votes: vc.count, ballot_type: vc.ballot_type)
-                        can_results[can_result_uid] = can_res
-                        contest_response_results[cr.uid] ||= []
-                        contest_response_results[cr.uid] << can_res
-                        cr.candidate_results << can_res
-                      else
-                        can_res.votes = (can_res.votes || 0) + vc.count
-                      end
-                    else
-                      mismatches[:precincts] ||= []
-                      mismatches[:precincts] << d_uid
-                      cr.total_valid_votes += vc.count
-                      can_result_uid = "#{contest.uid}-no-precinct-#{candidate.uid}-#{vc.ballot_type}"
-                      can_res = can_results[can_result_uid]
-                      if can_res.nil?
-                        can_res = CandidateResult.new(candidate: candidate, uid: can_result_uid, votes: vc.count, ballot_type: vc.ballot_type)
-                        can_results[can_result_uid] = can_res
-                        cr.candidate_results << can_res
-                      else
-                        can_res.votes = (can_res.votes || 0) + vc.count
-                      end
-                    end
-                    precinct_results[d_uid] = cr
+                  if precinct
+                    precinct = precinct.precinct || precinct
+                    d_uid = precinct.uid
+                    precinct_results[d_uid] ||= ContestResult.new(:uid=>"result-#{contest.uid}-#{precinct.uid}", :certification=>"unofficial_partial", precinct_id: precinct.id, contest_id: contest.id)
+                  else
+                    precinct_results[d_uid] ||= ContestResult.new(:uid=>"result-#{contest.uid}-#{d_uid}", :certification=>"unofficial_partial", contest_id: contest.id)
                   end
 
+                  cr = precinct_results[d_uid]
+                  cr.total_votes ||= 0
+                  cr.total_valid_votes ||= 0
+                  cr.undervotes ||= 0
+                  cr.overvotes ||= 0
+                  if precinct
+                    cr.total_valid_votes += vc.count
+                    can_result_uid = "#{contest.uid}-#{precinct.uid}-#{candidate.uid}-#{vc.ballot_type.to_s}"
+                    can_res = can_results[can_result_uid]
+                    if can_res.nil?
+                      can_res = CandidateResult.new(candidate: candidate, precinct_id: precinct.id, uid: can_result_uid, votes: vc.count, ballot_type: vc.ballot_type.to_s)
+                      can_results[can_result_uid] = can_res
+                      contest_response_results[cr.uid] ||= []
+                      contest_response_results[cr.uid] << can_res
+                      cr.candidate_results << can_res
+                    else
+                      can_res.votes = (can_res.votes || 0) + vc.count
+                    end
+                  else
+                    mismatches[:precincts] ||= []
+                    mismatches[:precincts] << d_uid
+                    cr.total_valid_votes += vc.count
+                    can_result_uid = "#{contest.uid}-no-precinct-#{candidate.uid}-#{vc.ballot_type.to_s}"
+                    can_res = can_results[can_result_uid]
+                    if can_res.nil?
+                      can_res = CandidateResult.new(candidate: candidate, uid: can_result_uid, votes: vc.count, ballot_type: vc.ballot_type.to_s)
+                      can_results[can_result_uid] = can_res
+                      cr.candidate_results << can_res
+                    else
+                      can_res.votes = (can_res.votes || 0) + vc.count
+                    end
+                  end
+                  precinct_results[d_uid] = cr
                 end
 
               end
@@ -253,7 +250,7 @@ class VSSCLoader < BaseLoader
 
                 sel.vote_counts.each do |vc|
                   d_uid =  vc.gp_unit #fix_district_uid(vc.gp_unit)
-
+                  
                   precinct = locality_precincts[d_uid]
                   if precinct
                     precinct = precinct.precinct || precinct
@@ -273,11 +270,11 @@ class VSSCLoader < BaseLoader
 
                   if precinct
                     cr.total_valid_votes += vc.count
-                    ref_response_uid = "#{ref.uid}-#{precinct.uid}-#{response.uid}-#{vc.ballot_type}"
+                    ref_response_uid = "#{ref.uid}-#{precinct.uid}-#{response.uid}-#{vc.ballot_type.to_s}"
                     ref_res = ref_results[ref_response_uid]
                     if ref_res.nil?
                       ref_res = BallotResponseResult.new(ballot_response: response, precinct_id: precinct.id,
-                      votes: vc.count, uid: ref_response_uid, ballot_type: vc.ballot_type)
+                      votes: vc.count, uid: ref_response_uid, ballot_type: vc.ballot_type.to_s)
                       ref_results[ref_response_uid] = ref_res
                       contest_response_results[cr.uid] ||= []
                       contest_response_results[cr.uid] << ref_res
@@ -289,7 +286,7 @@ class VSSCLoader < BaseLoader
                     mismatches[:precincts] ||= []
                     mismatches[:precincts] << d_uid
                     cr.ballot_response_results << BallotResponseResult.new(ballot_response: response,
-                      votes: vc.count, uid: "#{ref.uid}-no_precinct-#{response.uid}-#{vc.ballot_type}", ballot_type: vc.ballot_type)
+                      votes: vc.count, uid: "#{ref.uid}-no_precinct-#{response.uid}-#{vc.ballot_type.to_s}", ballot_type: vc.ballot_type.to_s)
                   end
                   precinct_results[d_uid] ||= cr
                 end
@@ -301,6 +298,8 @@ class VSSCLoader < BaseLoader
                 d_uid = contest_total.gp_unit #fix_district_uid(vc.gp_unit)
                 precinct = locality_precincts[d_uid]
 
+                next if contest_total.ballots_cast.to_i == 0
+                
                 if precinct
                   precinct = precinct.precinct || precinct
                   d_uid = precinct.uid
