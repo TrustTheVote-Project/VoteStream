@@ -139,8 +139,9 @@
     tagName:  'li'
     className: ->
       classes = []
-      classes.push('hide') if @.options.hidden
-      classes.push('winner') if @.options.winner
+      classes.push('extra') if @options.extra
+      classes.push('hide') if @options.hidden
+      classes.push('winner') if @options.winner
       return classes.join(' ')
     serializeData: ->
       data = Backbone.Marionette.ItemView.prototype.serializeData.apply @, arguments
@@ -160,8 +161,9 @@
     tagName:  'li'
     className: ->
       classes = []
-      classes.push('hide') if @.options.hidden
-      classes.push('winner') if @.options.winner
+      classes.push('extra') if @options.extra
+      classes.push('hide') if @options.hidden
+      classes.push('winner') if @options.winner
       return classes.join(' ')
     serializeData: ->
       data = Backbone.Marionette.ItemView.prototype.serializeData.apply @, arguments
@@ -202,8 +204,9 @@
     itemViewContainer: 'ul'
     itemViewOptions: (m, i) ->
       return {
-        hidden:     i > 1,
-        winner:     i is 0 and gon.percentReporting is 'Final Results',
+        extra:      i > 1
+        hidden:     m.get('party')['abbr'] == 'stats'
+        winner:     i is 0 and gon.percentReporting is 'Final Results'
         totalVotes: @model.get('summary').get('votes')
       }
 
@@ -223,7 +226,7 @@
     events:
       'click #js-show-more': (e) ->
         e.preventDefault()
-        $('li.hide', @ui.rowsList).show()
+        $('li.extra', @ui.rowsList).show()
         @ui.showMoreBtn.hide()
         @ui.showLessBtn.show()
 
