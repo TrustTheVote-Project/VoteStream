@@ -241,8 +241,9 @@ class RefConResults
   end
 
   def contest_precinct_results(contest, params)
-    pids       = precinct_ids_for_region(params) || []
-    rc_pids    = contest.precinct_ids.uniq && pids
+    pids       = precinct_ids_for_region(params)
+    rc_pids    = contest.precinct_ids.uniq
+    rc_pids    = rc_pids & pids unless pids.nil?
     precincts  = Precinct.select("precincts.id, registered_voters").where(id: rc_pids)
 
     candidates = contest.candidates.includes(:party)
@@ -290,8 +291,9 @@ class RefConResults
   def referendum_precinct_results(referendum, params)
     responses = referendum.ballot_responses
     ids       = referendum.ballot_response_ids
-    pids      = precinct_ids_for_region(params) || []
-    rc_pids   = referendum.precinct_ids.uniq && pids
+    pids      = precinct_ids_for_region(params)
+    rc_pids   = referendum.precinct_ids.uniq
+    rc_pids    = rc_pids & pids unless pids.nil?
     precincts = Precinct.select("precincts.id, registered_voters").where(id: rc_pids)
 
     results   = BallotResponseResult.where(ballot_response_id: ids, precinct_id: rc_pids)
