@@ -1,0 +1,6 @@
+<div class='panel span9 summary'>
+  <div class='header'><h5>Participation Statistics</h5></div>
+  <div class='info'>
+    <%= @totalBallotsCast %> ballots cast from <%= @totalRegisteredVoters %> registered voters in <%= @precinctsReportingCount %> precincts, for aggregate turn-out of <%= @turnOut %>%.
+  </div>
+</div>

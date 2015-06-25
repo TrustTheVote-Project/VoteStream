@@ -142,11 +142,6 @@
     collectionEvents:
       sync: 'render'
 
-    modelEvents:
-      'change:showParticipation': 'render'
-      'change:precinctsReportingCount': 'render'
-      'change:totalRegisteredVoters': 'render'
-
     initialize: (opts) ->
       @model = App.request 'entities:scoreboardInfo'
       @.listenTo @model.get('precinctResults'), 'sync', => @render()
@@ -179,21 +174,39 @@
       else
         $("#map-region").css(opacity: 0)
 
+
+  # Participation stats panel
+  class ParticipationStatsView extends Marionette.ItemView
+    template: 'scoreboards/list/_participation_stats'
+    id: 'participation-info'
+    className: 'row-fluid result'
+    modelEvents:
+      'change:showParticipation': 'render'
+      'change:precinctsReportingCount': 'render'
+      'change:totalRegisteredVoters': 'render'
+      'change:totalBallotsCast': 'render'
+
     serializeData: ->
       data = Backbone.Marionette.ItemView.prototype.serializeData.apply @, arguments
-      data.totalBallots = @model.get('totalBallotsCast')
-      data.totalRegisteredVoters = @model.get('totalRegisteredVoters')
-      data.turnOut = Math.round((data.totalBallots / (data.totalRegisteredVoters || 1)) * 100)
+      totalBallots = @model.get('totalBallotsCast')
+      totalRegisteredVoters = @model.get('totalRegisteredVoters')
+      data.turnOut = Math.round((totalBallots / (totalRegisteredVoters || 1)) * 100)
       data
 
+    onRender: ->
+      if @model.get('showParticipation')
+        @$el.removeClass 'hide'
+      else
+        @$el.addClass 'hide'
 
 
-
+  # Results section layout
   class List.ResultsLayout extends Marionette.Layout
     template: 'scoreboards/list/_results_layout'
     id: 'results-layout'
 
     regions:
+      participationStatsRegion:     '#participation-stats-region'
       participationSelectorRegion:  '#participation-selector-region'
       percTypeSelectorRegion:       '#percentage-type-selector-region'
       resultsViewRegion:            '#results-view-region'
@@ -211,6 +224,9 @@
         model: @si
 
       @percTypeSelectorRegion.show new PercentageTypeSelectorView
+        model: @si
+
+      @participationStatsRegion.show new ParticipationStatsView
         model: @si
 
 

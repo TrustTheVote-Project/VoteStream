@@ -79,14 +79,13 @@
 
         sb.get('precinctResults').on 'reset', ->
           # compute stats
-          precincts = sb.get('precinctResults').get('precincts')
+          precinctResults = sb.get('precinctResults')
+          precincts = precinctResults.get('precincts')
           sb.set 'precinctsReportingCount', precincts.length
-          sb.set 'totalRegisteredVoters', _.inject(precincts.models, ((t, p) -> t + p.get('voters')), 0)
+          sb.set 'totalRegisteredVoters', precinctResults.get('voters')
+          sb.set 'totalBallotsCast', precinctResults.get('ballots')
 
         sb.get('results').on 'reset', ->
-          # compute stats
-          sb.set 'totalBallotsCast', _.inject(sb.get('results').models, ( (m, r) -> s = r.get('summary'); m + s.get('overvotes') + s.get('undervotes') + s.get('votes') ), 0)
-
           result = sb.pickResult()
           sb.set 'result', result
 

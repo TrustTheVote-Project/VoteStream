@@ -17,13 +17,5 @@
   <div class="header bar span9"><%= @refcon.attributes.name %></div>
 </div>
 
-<div class="row-fluid result <%= 'hide' if !@showParticipation %>" id="participation-info">
-  <div class='panel span9 summary'>
-    <div class='header'><h5>Participation Statistics</h5></div>
-    <div class='info'>
-      <%= @totalBallots %> ballots cast from <%= @totalRegisteredVoters %> registered voters in <%= @precinctsReportingCount %> precincts, for aggregate turn-out of <%= @turnOut %>%.
-    </div>
-  </div>
-</div>
-
+<div id="participation-stats-region"></div>
 <div id="results-view-region"></div>

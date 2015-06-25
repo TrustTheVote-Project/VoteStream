@@ -92,11 +92,15 @@
       @set
         items: new PrecinctRowItems
         precincts: new PrecinctResults
+        voters: 0
+        ballots: 0
 
     parse: (data) ->
       @set
         items: new PrecinctRowItems data.items
         precincts: new PrecinctResults data.precincts
+        voters: data.voters
+        ballots: data.ballots
       @._previousAttributes = null
       @trigger 'reset'
 
