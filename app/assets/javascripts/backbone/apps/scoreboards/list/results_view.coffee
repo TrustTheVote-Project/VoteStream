@@ -8,7 +8,6 @@
       classes.push('extra') if @options.extra
       classes.push('hide') if @options.hidden
       classes.push('winner') if @options.winner
-      console.log(classes)
       return classes.join(' ')
     serializeData: ->
       data = Backbone.Marionette.ItemView.prototype.serializeData.apply @, arguments
