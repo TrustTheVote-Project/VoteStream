@@ -294,7 +294,7 @@ InfoBubble.prototype.panToView = ->
         p = Math.floor((v * 1000) / (votes || 1)) / 10.0
         color = i.get('c')
         name = i.get('name')
-        rowsHtml += "<tr style='color: #{color};'><td class='iw-n'>#{name.toLowerCase().replace('and','&')}</td><td class='iw-v'>#{v}</td><td class='iw-p'>#{p}%</td></tr>"
+        rowsHtml += "<tr style='color: #{color};'><td class='iw-n'>#{name.toLowerCase().replace(' and ', ' & ')}</td><td class='iw-v'>#{v}</td><td class='iw-p'>#{p}%</td></tr>"
 
       if votes > totalDisplayed
         v = votes - totalDisplayed

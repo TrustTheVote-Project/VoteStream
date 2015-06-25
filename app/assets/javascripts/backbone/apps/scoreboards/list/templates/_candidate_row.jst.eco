@@ -1,6 +1,6 @@
 <div class='bar'><div class='filler' style='width:<%= @percent() %>%'></div></div>
 <div class="row-fluid percentage">
-  <div class="span9"><h5 class="<%= @party.name.toLowerCase() %>"><%= @name.toLowerCase().replace('and','&') %></h5></div>
+  <div class="span9"><h5 class="<%= @party.name.toLowerCase() %>"><%= @name.toLowerCase().replace(' and ', ' & ') %></h5></div>
   <div class="span3"><div class='percent'><%= @percentFormatted() %></div></div>
 </div>
 <div class="row-fluid total">

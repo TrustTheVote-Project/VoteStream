@@ -23,6 +23,9 @@
 
     = yield
 
+    - if Rails.env.development?
+      = console
+
   = render partial: 'layouts/admin/footer'
 
   = javascript_include_tag "https://www.google.com/jsapi"
