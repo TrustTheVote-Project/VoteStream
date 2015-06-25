@@ -70,10 +70,10 @@ class RefConResults
     contest_results = contest_results.where(precinct_id: pids.to_a) unless pids.blank?
 
     # order(nil) is important as AR adds default order which breaks the SQL query
-    r = contest_results.select('sum(overvotes) o, sum(undervotes) u, sum(total_votes) v').order(nil).first
+    r = contest_results.select('sum(overvotes) o, sum(undervotes) u, sum(total_valid_votes) v').order(nil).first
     overvotes  = r.o
     undervotes = r.u
-    ballots    = r.v
+    ballots    = r.v + r.o + r.u
 
     registered = Precinct
     registered = registered.where(id: pids.blank? ? refcon.precinct_ids : pids.to_a)
@@ -277,14 +277,13 @@ class RefConResults
         rows:     ordered[0, 2] }
     end
 
-    cr = contest.contest_results.where(precinct_id: rc_pids)
-    ballots = cr.sum(:total_votes)
+    ballots, overvotes, undervotes, registered = get_vote_stats(contest, rc_pids)
 
     return {
-      items: candidates.map { |c| { id: c.id, name: c.name, party: { name: c.party_name, abbr: c.party.abbr }, c: ColorScheme.candidate_color(c, candidates.index(c)) } },
-      ballots: ballots,
-      voters:  voters,
-      precincts: pmap
+      items:      candidates.map { |c| { id:  c.id, name:  c.name, party:  { name:  c.party_name, abbr:  c.party.abbr }, c:  ColorScheme.candidate_color(c, candidates.index(c)) } },
+      ballots:    ballots,
+      voters:     registered,
+      precincts:  pmap
     }
   end
 
@@ -325,14 +324,13 @@ class RefConResults
         rows:     ordered[0, 2] }
     end
 
-    cr = referendum.contest_results.where(precinct_id: rc_pids)
-    ballots = cr.sum(:total_votes)
+    ballots, overvotes, undervotes, registered = get_vote_stats(referendum, rc_pids)
 
     return {
-      items: responses.map { |r| { id: r.id, name: r.name, c: ColorScheme.ballot_response_color(r, responses.index(r)) } },
-      ballots: ballots,
-      voters:  voters,
-      precincts: pmap
+      items:      responses.map { |r| { id:  r.id, name:  r.name, c:  ColorScheme.ballot_response_color(r, responses.index(r)) } },
+      ballots:    ballots,
+      voters:     registered,
+      precincts:  pmap
     }
   end
 

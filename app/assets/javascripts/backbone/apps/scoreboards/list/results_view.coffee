@@ -161,13 +161,14 @@
       @selectedModel = @model.get('result')
 
     itemViewOptions: (model, i) ->
+      totalVotes = if @model.get('percentageType') == 'voters' then @model.get('totalRegisteredVoters') else @model.get('totalBallotsCast')
       return {
-        model: model
-        totalVotes: if @model.get('percentageType') == 'voters' then @model.get('totalRegisteredVoters') else @model.get('totalBallotsCast')
-        excludeNP: @model.get('percentageType') == 'ballots'
-        selected: false
-        showParticipation: @model.get('showParticipation')
-        collection: model.get('summary').get('rows') }
+        model:              model
+        totalVotes:         totalVotes
+        excludeNP:          @model.get('percentageType') == 'ballots'
+        selected:           false
+        showParticipation:  @model.get('showParticipation')
+        collection:         model.get('summary').get('rows') }
 
     getItemView: (model) ->
       if model.get('type') == 'c'
