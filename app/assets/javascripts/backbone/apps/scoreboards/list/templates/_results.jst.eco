@@ -13,7 +13,7 @@
   <div class="header bar span9"><%= @refcon.attributes.name %></div>
 </div>
 
-<div class="row-fluid result <%= 'hide' if @participation != 'participation' %>" id="participation-info">
+<div class="row-fluid result <%= 'hide' if !@showParticipation %>" id="participation-info">
   <div class='panel span9 summary'>
     <div class='header'><h5>Participation Statistics</h5></div>
     <div class='info'>

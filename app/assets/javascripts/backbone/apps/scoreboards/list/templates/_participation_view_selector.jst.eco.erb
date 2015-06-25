@@ -1,4 +1,4 @@
 <% results_label = I18n.t 'scoreboard.header.filter_selector.results' %>
 <% participation_label = I18n.t 'scoreboard.header.filter_selector.participation' %>
-<button class="btn btn-small<%%= ' active' if @participation == 'results' %>" data-filter="results" title="<%= results_label %>" id="results-filter-selector"><%= results_label %></button>
-<button class="btn btn-small<%%= ' active' if @participation == 'participation' %>" data-filter="participation" title="<%= participation_label %>" id="participation-filter-selector"><%= participation_label %></button>
+<button class="btn btn-small<%%= ' active' if !@showParticipation %>" data-filter="false" title="<%= results_label %>" id="results-filter-selector"><%= results_label %></button>
+<button class="btn btn-small<%%= ' active' if @showParticipation %>" data-filter="true" title="<%= participation_label %>" id="participation-filter-selector"><%= participation_label %></button>

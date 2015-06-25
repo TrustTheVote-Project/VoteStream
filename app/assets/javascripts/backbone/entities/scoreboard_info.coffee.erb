@@ -49,7 +49,7 @@
           regionLabel:      -> if !@region then "<%= I18n.t 'scoreboard.header.right_menu.tabs.all' %>" else @region.get('name')
           percentReporting: gon.percentReporting
           view:             null
-          participation:    'results'
+          showParticipation: false
           percentageType:   'ballots'
 
         App.vent.on 'filters:set', (options = {}) ->

@@ -46,7 +46,7 @@
     template: 'scoreboards/list/_participation_view_selector'
 
     modelEvents:
-      'change:participation': 'render'
+      'change:showParticipation': 'render'
 
     className: 'btn-group'
 
@@ -55,12 +55,13 @@
         e.preventDefault()
         link = $(e.target)
         value = link.data('filter')
-        @model.set 'participation', value
+        @model.set 'showParticipation', value
 
   class PercentageTypeSelectorView extends Marionette.ItemView
     template: 'scoreboards/list/_percentage_type_view_selector'
 
     modelEvents:
+      'change:showParticipation': 'updateVisiblity'
       'change:percentageType': 'render'
 
     className: 'btn-group'
@@ -71,3 +72,12 @@
         link = $(e.target)
         value = link.data('type')
         @model.set 'percentageType', value
+
+    updateVisiblity: ->
+      if @model.get('showParticipation')
+        @$el.show()
+      else
+        @$el.hide()
+
+    onShow: ->
+      @updateVisiblity()

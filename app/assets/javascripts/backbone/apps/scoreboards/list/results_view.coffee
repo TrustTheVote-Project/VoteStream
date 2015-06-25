@@ -37,13 +37,13 @@
       return {
         model: model,
         extra: i > 1,
-        hidden: !@withParticipationStats && i > 1,
+        hidden: !@showParticipation && i > 1,
         winner: i is 0 and gon.percentReporting is 'Final Results',
         totalVotes: @model.get('summary').get('votes')
       }
 
     initialize: (opts) ->
-      @withParticipationStats = opts.withParticipationStats
+      @showParticipation = opts.showParticipation
 
     ui:
       rowsList: 'div.candidates'
@@ -67,7 +67,7 @@
       'click': (e) -> @select()
 
     onShow: ->
-      if @options.withParticipationStats 
+      if @options.showParticipation
         @ui.showLessBtn.show()
         @ui.partInfo.show()
       else
@@ -143,19 +143,9 @@
       sync: 'render'
 
     modelEvents:
-      'change:participation': 'onParticipationChange'
+      'change:showParticipation': 'render'
       'change:precinctsReportingCount': 'render'
       'change:totalRegisteredVoters': 'render'
-
-    onParticipationChange: ->
-      @render()
-      # v = @model.get 'participation'
-      # e = $("#participation-info")
-      # if v == 'participation'
-      #   e.show()
-      # else
-      #   e.hide()
-      # @updateMapPosition()
 
     initialize: (opts) ->
       @model = App.request 'entities:scoreboardInfo'
@@ -169,7 +159,7 @@
       return {
         model: model
         selected: false
-        withParticipationStats : @model.get('participation') == 'participation'
+        showParticipation: @model.get('showParticipation')
         collection: model.get('summary').get('rows') }
 
     getItemView: (model) ->
