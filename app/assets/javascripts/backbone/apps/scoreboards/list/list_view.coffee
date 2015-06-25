@@ -17,12 +17,9 @@
 
     initialize: ->
       @si = App.request 'entities:scoreboardInfo'
-      @results = @si.get 'results'
 
     onShow: ->
-      view = new List.ResultsView
-        collection: @results
-
+      view = new List.ResultsLayout
       @resultsRegion.show view
 
       mapView = new App.ScoreboardsApp.Show.MapView
@@ -35,49 +32,3 @@
 
       @filterBarRegion.show new App.ScoreboardsApp.FilterBar.View
         model: @si
-
-      @participationSelectorRegion.show new ParticipationSelectorView
-        model: @si
-
-      @percTypeSelectorRegion.show new PercentageTypeSelectorView
-        model: @si
-
-  class ParticipationSelectorView extends Marionette.ItemView
-    template: 'scoreboards/list/_participation_view_selector'
-
-    modelEvents:
-      'change:showParticipation': 'render'
-
-    className: 'btn-group'
-
-    events:
-      'click button': (e) ->
-        e.preventDefault()
-        link = $(e.target)
-        value = link.data('filter')
-        @model.set 'showParticipation', value
-
-  class PercentageTypeSelectorView extends Marionette.ItemView
-    template: 'scoreboards/list/_percentage_type_view_selector'
-
-    modelEvents:
-      'change:showParticipation': 'updateVisiblity'
-      'change:percentageType': 'render'
-
-    className: 'btn-group'
-
-    events:
-      'click button': (e) ->
-        e.preventDefault()
-        link = $(e.target)
-        value = link.data('type')
-        @model.set 'percentageType', value
-
-    updateVisiblity: ->
-      if @model.get('showParticipation')
-        @$el.show()
-      else
-        @$el.hide()
-
-    onShow: ->
-      @updateVisiblity()

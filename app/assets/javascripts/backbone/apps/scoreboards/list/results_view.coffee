@@ -185,3 +185,71 @@
       data.totalRegisteredVoters = @model.get('totalRegisteredVoters')
       data.turnOut = Math.round((data.totalBallots / (data.totalRegisteredVoters || 1)) * 100)
       data
+
+
+
+
+  class List.ResultsLayout extends Marionette.Layout
+    template: 'scoreboards/list/_results_layout'
+    id: 'results-layout'
+
+    regions:
+      participationSelectorRegion:  '#participation-selector-region'
+      percTypeSelectorRegion:       '#percentage-type-selector-region'
+      resultsViewRegion:            '#results-view-region'
+
+    initialize: ->
+      @si = App.request 'entities:scoreboardInfo'
+      @model = @si
+      @results = @si.get 'results'
+
+    onShow: ->
+      @resultsViewRegion.show new List.ResultsView
+        collection: @results
+
+      @participationSelectorRegion.show new ParticipationSelectorView
+        model: @si
+
+      @percTypeSelectorRegion.show new PercentageTypeSelectorView
+        model: @si
+
+
+  class ParticipationSelectorView extends Marionette.ItemView
+    template: 'scoreboards/list/_participation_view_selector'
+
+    modelEvents:
+      'change:showParticipation': 'render'
+
+    className: 'btn-group'
+
+    events:
+      'click button': (e) ->
+        e.preventDefault()
+        link = $(e.target)
+        value = link.data('filter')
+        @model.set 'showParticipation', value
+
+  class PercentageTypeSelectorView extends Marionette.ItemView
+    template: 'scoreboards/list/_percentage_type_view_selector'
+
+    modelEvents:
+      'change:showParticipation': 'updateVisiblity'
+      'change:percentageType': 'render'
+
+    className: 'btn-group'
+
+    events:
+      'click button': (e) ->
+        e.preventDefault()
+        link = $(e.target)
+        value = link.data('type')
+        @model.set 'percentageType', value
+
+    updateVisiblity: ->
+      if @model.get('showParticipation')
+        @$el.show()
+      else
+        @$el.hide()
+
+    onShow: ->
+      @updateVisiblity()

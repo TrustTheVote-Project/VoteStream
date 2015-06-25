@@ -1,0 +1,29 @@
+<div class="percent-reporting row-fluid">
+	<div class="span3"><%= @percentReporting %></div>
+  <div class="span6 offset3 text-right">
+    <span id="percentage-type-selector-region" />
+    <span id="participation-selector-region" />
+  </div>
+<!--
+	<div class="span6 text-right">
+		<span>Save as</span>
+		<a href="" id="js-save-as-csv" download="<%= @filename %>.csv">CSV</a> |
+		<a href="" id="js-save-as-pdf" download="<%= @filename %>.pdf">PDF</a> |
+		<a href="" id="js-save-as-xml" download="<%= @filename %>.xml">VIP-XML</a>
+	</div>
+-->
+</div>
+<div class="row-fluid">
+  <div class="header bar span9"><%= @refcon.attributes.name %></div>
+</div>
+
+<div class="row-fluid result <%= 'hide' if !@showParticipation %>" id="participation-info">
+  <div class='panel span9 summary'>
+    <div class='header'><h5>Participation Statistics</h5></div>
+    <div class='info'>
+      <%= @totalBallots %> ballots cast from <%= @totalRegisteredVoters %> registered voters in <%= @precinctsReportingCount %> precincts, for aggregate turn-out of <%= @turnOut %>%.
+    </div>
+  </div>
+</div>
+
+<div id="results-view-region"></div>
