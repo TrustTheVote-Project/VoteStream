@@ -250,7 +250,7 @@ class VSSCLoader < BaseLoader
 
                 sel.vote_counts.each do |vc|
                   d_uid =  vc.gp_unit #fix_district_uid(vc.gp_unit)
-                  
+
                   precinct = locality_precincts[d_uid]
                   if precinct
                     precinct = precinct.precinct || precinct
@@ -299,7 +299,7 @@ class VSSCLoader < BaseLoader
                 precinct = locality_precincts[d_uid]
 
                 next if contest_total.ballots_cast.to_i == 0
-                
+
                 if precinct
                   precinct = precinct.precinct || precinct
                   d_uid = precinct.uid
@@ -752,7 +752,7 @@ class VSSCLoader < BaseLoader
 
   def update_election(election, locality)
     # Calculate reporting percent
-    all       = locality.precinct_ids
+    all       = locality.precincts.where(precinct_id: nil).pluck(:id)
     reporting = BallotResponseResult.where(precinct_id: all).select("DISTINCT precinct_id").map(&:precinct_id)
     reporting << CandidateResult.where(precinct_id: all).select("DISTINCT precinct_id").map(&:precinct_id)
     reporting = reporting.flatten.uniq.count
