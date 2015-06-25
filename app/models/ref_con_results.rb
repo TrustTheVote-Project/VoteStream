@@ -50,7 +50,7 @@ class RefConResults
 
     ordered << { name: 'Overvotes', party: { name: 'Stats', abbr: 'stats' }, votes: overvotes, c: ColorScheme.special_colors(:overvotes) }
     ordered << { name: 'Undervotes', party: { name: 'Stats', abbr: 'stats' }, votes: undervotes, c: ColorScheme.special_colors(:undervotes) }
-    ordered << { name: 'Non-Participating', party: { name: 'Stats', abbr: 'stats' }, votes: registered - ballots, c: ColorScheme.special_colors(:non_participating) }
+    ordered << { name: 'Non-Participating', party: { name: 'Stats', abbr: 'stats' }, np: true, votes: registered - ballots, c: ColorScheme.special_colors(:non_participating) }
 
     return {
       summary: {

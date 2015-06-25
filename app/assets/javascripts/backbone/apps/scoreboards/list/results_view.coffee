@@ -14,13 +14,15 @@
       data.totalVotes = @options.totalVotes
       data
     templateHelpers:
-      percent: -> Math.floor(@votes * 100 / (@totalVotes || 1))
-      percentFormatted: -> "#{Math.floor(@votes * 1000 / (@totalVotes || 1)) / 10.0}%"
+      percent: -> if @totalVotes > 0 then Math.floor(@votes * 100 / (@totalVotes || 1)) else 0
+      percentFormatted: -> if @totalVotes > 0 then "#{Math.floor(@votes * 1000 / (@totalVotes || 1)) / 10.0}%" else "0%"
     onShow: ->
       c = @model.get('c')
       if @model.get('party')['abbr'] == 'stats'
-        $(".bar", @$el).hide()
         $(".party", @$el).text('')
+
+      if @model.get('np') and @options.excludeNP
+        $(".bar", @$el).hide()
         $(".percent", @$el).text($(".votes", @$el).text())
         $(".votes", @$el).hide()
 
@@ -39,7 +41,8 @@
         extra: i > 1,
         hidden: !@showParticipation && i > 1,
         winner: i is 0 and gon.percentReporting is 'Final Results',
-        totalVotes: @model.get('summary').get('votes')
+        totalVotes: @options.totalVotes,
+        excludeNP: @options.excludeNP
       }
 
     initialize: (opts) ->
@@ -96,13 +99,14 @@
       data.totalVotes = @options.totalVotes
       data
     templateHelpers:
-      percent: -> Math.floor(@votes * 100 / (@totalVotes || 1))
-      percentFormatted: -> "#{Math.floor(@votes * 1000 / (@totalVotes || 1)) / 10.0}%"
+      percent: -> if @totalVotes > 0 then Math.floor(@votes * 100 / (@totalVotes || 1)) else 0
+      percentFormatted: -> if @totalVotes > 0 then "#{Math.floor(@votes * 1000 / (@totalVotes || 1)) / 10.0}%" else "0%"
     onShow: ->
       c = @model.get('c')
       $("td", @$el).css(color: c)
 
-      if @model.get('party')?['abbr'] == 'stats'
+      if @model.get('np') and @options.excludeNP
+        $(".bar", @$el).hide()
         $(".percent", @$el).text($(".votes", @$el).text())
         $(".votes", @$el).hide()
 
@@ -115,7 +119,8 @@
     itemViewOptions: (model, i) ->
       return {
         model: model,
-        totalVotes: @model.get('summary').get('votes')
+        totalVotes: @options.totalVotes,
+        excludeNP: @options.excludeNP
       }
 
     events:
@@ -139,6 +144,9 @@
     itemView: ContestResultView
     itemViewContainer: '#results'
 
+    modelEvents:
+      "change:percentageType": 'render'
+
     collectionEvents:
       sync: 'render'
 
@@ -153,6 +161,8 @@
     itemViewOptions: (model, i) ->
       return {
         model: model
+        totalVotes: if @model.get('percentageType') == 'voters' then @model.get('totalRegisteredVoters') else @model.get('totalBallotsCast')
+        excludeNP: @model.get('percentageType') == 'ballots'
         selected: false
         showParticipation: @model.get('showParticipation')
         collection: model.get('summary').get('rows') }
