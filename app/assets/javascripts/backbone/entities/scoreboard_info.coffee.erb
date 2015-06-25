@@ -93,6 +93,10 @@
           result  = sb.get 'result'
           region  = sb.get 'region'
 
+          sb.set 'precinctsReportingCount', 0
+          sb.set 'totalRegisteredVoters', 0
+          sb.set 'totalBallotsCast', 0
+        
           App.execute 'when:fetched', App.request('entities:precincts'), =>
             colors  = sb.get 'precinctColors'
             colors.fetchForResult result, region
