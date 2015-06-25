@@ -8,6 +8,7 @@
       classes.push('extra') if @options.extra
       classes.push('hide') if @options.hidden
       classes.push('winner') if @options.winner
+      console.log(classes)
       return classes.join(' ')
     serializeData: ->
       data = Backbone.Marionette.ItemView.prototype.serializeData.apply @, arguments
@@ -36,13 +37,14 @@
     itemView: CandidateRow
     itemViewContainer: 'div.candidates'
     itemViewOptions: (model, i) ->
+      stats = model.get('party')['abbr'] == 'stats'
       return {
-        model: model,
-        extra: i > 1,
-        hidden: !@showParticipation && i > 1,
-        winner: i is 0 and gon.percentReporting is 'Final Results',
-        totalVotes: @options.totalVotes,
-        excludeNP: @options.excludeNP
+        model:       model
+        extra:       if @showParticipation then i > 1 else (!stats and i > 1)
+        hidden:      if @showParticipation then false else (stats or i > 1)
+        winner:      i is 0 and gon.percentReporting is 'Final Results'
+        totalVotes:  @options.totalVotes
+        excludeNP:   @options.excludeNP
       }
 
     initialize: (opts) ->
@@ -146,6 +148,7 @@
 
     modelEvents:
       "change:percentageType": 'render'
+      "change:showParticipation": 'render'
 
     collectionEvents:
       sync: 'render'

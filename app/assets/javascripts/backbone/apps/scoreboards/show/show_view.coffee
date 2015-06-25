@@ -203,9 +203,10 @@
 
     itemViewContainer: 'ul'
     itemViewOptions: (m, i) ->
+      stats = m.get('party')['abbr'] == 'stats'
       return {
-        extra:      i > 1
-        hidden:     m.get('party')['abbr'] == 'stats'
+        extra:      !stats and i > 1
+        hidden:     stats or i > 1
         winner:     i is 0 and gon.percentReporting is 'Final Results'
         totalVotes: @model.get('summary').get('votes')
       }
@@ -232,6 +233,6 @@
 
       'click #js-show-less': (e) ->
         e.preventDefault()
-        $('li.hide', @ui.rowsList).hide()
+        $('li.extra', @ui.rowsList).hide()
         @ui.showLessBtn.hide()
         @ui.showMoreBtn.show()
