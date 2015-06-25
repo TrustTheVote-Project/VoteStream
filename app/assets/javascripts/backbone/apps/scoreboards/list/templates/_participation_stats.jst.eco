@@ -3,4 +3,55 @@
   <div class='info'>
     <strong><%= @totalBallotsCast %></strong> ballots cast from <strong><%= @totalRegisteredVoters %></strong> registered voters in <strong><%= @precinctsReportingCount %></strong> precincts, for aggregate turn-out of <strong><%= @turnOut %>%</strong>.
   </div>
+  <div class="content candidates">
+
+    <div class="row-fluid candidate">
+      <div class='bar'><div class='filler' style='width:41%'></div></div>
+      <div class="row-fluid percentage">
+        <div class="span9"><h5 class="ballot-type">Election-Day</h5></div>
+        <div class="span3"><div class='percent'>41%</div></div>
+      </div>
+      <div class="row-fluid total">
+        <div class='span9 party'></div>
+        <div class='span3 votes'>41</div>
+      </div>
+    </div>
+
+    <div class="row-fluid candidate">
+      <div class='bar'><div class='filler' style='width:33%'></div></div>
+      <div class="row-fluid percentage">
+        <div class="span9"><h5 class="ballot-type">Early</h5></div>
+        <div class="span3"><div class='percent'>33%</div></div>
+      </div>
+      <div class="row-fluid total">
+        <div class='span9 party'></div>
+        <div class='span3 votes'>33</div>
+      </div>
+    </div>
+
+    <div class="row-fluid candidate">
+      <div class='bar'><div class='filler' style='width:24%'></div></div>
+      <div class="row-fluid percentage">
+        <div class="span9"><h5 class="ballot-type">Absentee</h5></div>
+        <div class="span3"><div class='percent'>24%</div></div>
+      </div>
+      <div class="row-fluid total">
+        <div class='span9 party'></div>
+        <div class='span3 votes'>24</div>
+      </div>
+    </div>
+
+    <div class="row-fluid candidate">
+      <div class='bar'><div class='filler' style='width:2%'></div></div>
+      <div class="row-fluid percentage">
+        <div class="span9"><h5 class="ballot-type">Provisional</h5></div>
+        <div class="span3"><div class='percent'>2%</div></div>
+      </div>
+      <div class="row-fluid total">
+        <div class='span9 party'></div>
+        <div class='span3 votes'>2</div>
+      </div>
+    </div>
+
+  </div>
 </div>
