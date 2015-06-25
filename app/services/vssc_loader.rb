@@ -1,54 +1,22 @@
 require 'vssc'
 class VSSCLoader < BaseLoader
 
-  GEO_QUERY                   = 'geo = ST_SimplifyPreserveTopology(ST_GeomFromKML(?), 0.0001)'
-  MULTI                       = '<MultiGeometry>%s</MultiGeometry>'
+  GEO_QUERY    = 'geo = ST_SimplifyPreserveTopology(ST_GeomFromKML(?), 0.0001)'
+  MULTI        = '<MultiGeometry>%s</MultiGeometry>'
 
-  TIE_COLOR                       = 't0'
-  NONPARTISAN                     = 'nonpartisan'
-  REPUBLICAN                      = 'republican'
-  DEMOCRATIC_1                    = 'democratic-farmer-labor'
-  DEMOCRATIC_2                    = 'democratic'
-  YES                             = 'yes'
-  FOR                             = 'for'
-  NO                              = 'no'
-  AGAINST                         = 'against'
+  TIE_COLOR    = 't0'
+  NONPARTISAN  = 'nonpartisan'
+  REPUBLICAN   = 'republican'
+  DEMOCRATIC_1 = 'democratic-farmer-labor'
+  DEMOCRATIC_2 = 'democratic'
+  YES          = 'yes'
+  FOR          = 'for'
+  NO           = 'no'
+  AGAINST      = 'against'
 
 
   def initialize(xml_source)
     @xml_source = xml_source
-  end
-
-  private
-  def fix_district_uid(d_uid)
-    # TODO: This is a temp "guesser" for the ID format to match existing ones
-    w = 'district'
-    if d_uid =~ /precinct-\d/
-      w = 'precinct'
-    elsif d_uid =~ /district-\d/
-      w = 'district'
-    else
-      return d_uid
-    end
-    d_id = d_uid.gsub(/#{w}-/,'')
-    num_zeros = 4 - d_id.size
-    if num_zeros > 0
-      num_zeros.times do
-        d_id = "0#{d_id}"
-      end
-      d_uid = "#{w}-#{d_id}"
-    end
-    return d_uid
-  end
-  public
-
-  def create_locality(name, state_abbreviation, uid)
-    state = State.find_by_code(state_abbreviation)
-    return Locality.create(name: name, locality_type: "County", state: state, uid: uid)
-  end
-
-  def status_report(message)
-    Rails.logger.info "LOADING: #{message}"
   end
 
   def load_results(locality_id)
@@ -60,7 +28,7 @@ class VSSCLoader < BaseLoader
       mismatches = {}
 
       # Pull in extra precinct data
-      
+
       precinct_splits = {}
       er.gp_unit_collection.gp_unit.each do |gp_unit|
         if gp_unit.is_a?(VSSC::District)
@@ -214,8 +182,8 @@ class VSSCLoader < BaseLoader
 
               end
 
-              
-              
+
+
               # at this point all ContestResults should be built
               c.contest_total_counts_by_gp_unit.each do |contest_total|
                 d_uid = contest_total.gp_unit #fix_district_uid(vc.gp_unit)
@@ -224,9 +192,9 @@ class VSSCLoader < BaseLoader
                 if precinct
                   precinct = precinct.precinct || precinct
                   d_uid = precinct.uid
-                  cr = precinct_results[d_uid] 
+                  cr = precinct_results[d_uid]
                   if cr.nil?
-                    raise "No contest result for contest total count #{contest_total}"                    
+                    raise "No contest result for contest total count #{contest_total}"
                   end
                   cr.total_votes += contest_total.ballots_cast
                   cr.undervotes += contest_total.undervotes
@@ -235,7 +203,7 @@ class VSSCLoader < BaseLoader
                   raise "No pct for contest total count #{contest_total}"
                 end
               end
-              
+
               precinct_results.values.each do |cr|
                 if !cr.precinct_id.blank? && cr.candidate_results.size > 0
                   items = cr.candidate_results.to_a.sort {|a,b| b.votes <=> a.votes}
@@ -302,7 +270,7 @@ class VSSCLoader < BaseLoader
                   cr.total_valid_votes ||= 0
                   cr.undervotes ||= 0
                   cr.overvotes ||= 0
-                  
+
                   if precinct
                     cr.total_valid_votes += vc.count
                     ref_response_uid = "#{ref.uid}-#{precinct.uid}-#{response.uid}-#{vc.ballot_type}"
@@ -336,9 +304,9 @@ class VSSCLoader < BaseLoader
                 if precinct
                   precinct = precinct.precinct || precinct
                   d_uid = precinct.uid
-                  cr = precinct_results[d_uid] 
+                  cr = precinct_results[d_uid]
                   if cr.nil?
-                    raise "No contest result for contest total count #{contest_total}"                    
+                    raise "No contest result for contest total count #{contest_total}"
                   end
                   cr.total_votes += contest_total.ballots_cast
                   cr.undervotes += contest_total.undervotes
@@ -347,7 +315,7 @@ class VSSCLoader < BaseLoader
                   raise "No pct for contest total count #{contest_total}"
                 end
               end
-              
+
               precinct_results.values.each do |cr|
                 if !cr.precinct_id.blank? && cr.ballot_response_results.size > 0
                   items = cr.ballot_response_results.to_a.sort {|a,b| b.votes <=> a.votes}
@@ -400,6 +368,8 @@ class VSSCLoader < BaseLoader
 
       locality.save!
 
+
+      update_election(election, locality)
 
       election.save!
 
@@ -751,7 +721,6 @@ class VSSCLoader < BaseLoader
       BallotResponse.import(all_responses)
 
 
-
       election.save!
 
       return mismatches
@@ -759,5 +728,48 @@ class VSSCLoader < BaseLoader
 
   end
 
+  private
+
+  def fix_district_uid(d_uid)
+    # TODO: This is a temp "guesser" for the ID format to match existing ones
+    w = 'district'
+    if d_uid =~ /precinct-\d/
+      w = 'precinct'
+    elsif d_uid =~ /district-\d/
+      w = 'district'
+    else
+      return d_uid
+    end
+    d_id = d_uid.gsub(/#{w}-/,'')
+    num_zeros = 4 - d_id.size
+    if num_zeros > 0
+      num_zeros.times do
+        d_id = "0#{d_id}"
+      end
+      d_uid = "#{w}-#{d_id}"
+    end
+    return d_uid
+  end
+
+  def update_election(election, locality)
+    # Calculate reporting percent
+    all       = locality.precinct_ids
+    reporting = BallotResponseResult.where(precinct_id: all).select("DISTINCT precinct_id").map(&:precinct_id)
+    reporting << CandidateResult.where(precinct_id: all).select("DISTINCT precinct_id").map(&:precinct_id)
+    reporting = reporting.flatten.uniq.count
+
+    Rails.logger.info "----#{reporting} / #{all.count}"
+    election.reporting = reporting * 100.0 / [ all.count, 1 ].max
+    election.seq += 1
+  end
+
+  def create_locality(name, state_abbreviation, uid)
+    state = State.find_by_code(state_abbreviation)
+    return Locality.create(name: name, locality_type: "County", state: state, uid: uid)
+  end
+
+  def status_report(message)
+    Rails.logger.info "LOADING: #{message}"
+  end
 
 end

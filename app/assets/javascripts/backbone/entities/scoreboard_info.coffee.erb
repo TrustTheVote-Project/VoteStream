@@ -20,7 +20,7 @@
   API =
     getScoreboardInfo: ->
       unless Entities.scoreboardInfo?
-        Entities.scoreboardInfo = sb = new Entities.ScoreboardInfo
+        Entities.scoreboardInfo = window.sb = sb = new Entities.ScoreboardInfo
           localityId:       gon.locality_id
           localityName:     gon.locality_name
           localityInfo:     gon.locality_info
@@ -84,7 +84,6 @@
 
         sb.get('results').on 'reset', ->
           # compute stats
-          console.log sb.get('results')
           sb.set 'totalBallotsCast', _.inject(sb.get('results').models, ( (m, r) -> s = r.get('summary'); m + s.get('overvotes') + s.get('undervotes') + s.get('votes') ), 0)
 
           result = sb.pickResult()
