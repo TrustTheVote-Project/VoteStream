@@ -161,7 +161,14 @@
       @selectedModel = @model.get('result')
 
     itemViewOptions: (model, i) ->
-      totalVotes = if @model.get('percentageType') == 'voters' then @model.get('totalRegisteredVoters') else @model.get('totalBallotsCast')
+      summary = model.get('summary')
+
+      if @model.get('showParticipation')
+        totalVotes = if @model.get('percentageType') == 'voters' then summary.get('voters') else summary.get('ballots')
+      else
+        totalVotes = summary.get('votes')
+
+      console.log totalVotes
       return {
         model:              model
         totalVotes:         totalVotes

@@ -31,9 +31,10 @@
           precinctColors:   new Entities.PrecinctColors
           precinctResults:  new Entities.PrecinctResultData
 
-          precinctsReportingCount: 0
-          totalBallotsCast: 0
-          totalRegisteredVoters: 0
+          precinctsReportingCount:  0
+          totalBallotsCast:         0
+          totalValidVotes:          0
+          totalRegisteredVoters:    0
 
           refcon:           App.request('entities:refcon:all-Federal')
           refconLabel:      ->
@@ -84,6 +85,7 @@
           sb.set 'precinctsReportingCount', precincts.length
           sb.set 'totalRegisteredVoters', precinctResults.get('voters')
           sb.set 'totalBallotsCast', precinctResults.get('ballots')
+          sb.set 'totalValidVotes', precinctResults.get('votes')
 
         sb.get('results').on 'reset', ->
           result = sb.pickResult()
@@ -96,6 +98,7 @@
           sb.set 'precinctsReportingCount', 0
           sb.set 'totalRegisteredVoters', 0
           sb.set 'totalBallotsCast', 0
+          sb.set 'totalValidVotes', 0
         
           App.execute 'when:fetched', App.request('entities:precincts'), =>
             colors  = sb.get 'precinctColors'

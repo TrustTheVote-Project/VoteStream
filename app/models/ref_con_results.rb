@@ -46,8 +46,6 @@ class RefConResults
     end
 
 
-    total = results.sum(:votes)
-
     ordered << { name: 'Overvotes', party: { name: 'Stats', abbr: 'stats' }, votes: overvotes, c: ColorScheme.special_colors(:overvotes) }
     ordered << { name: 'Undervotes', party: { name: 'Stats', abbr: 'stats' }, votes: undervotes, c: ColorScheme.special_colors(:undervotes) }
     ordered << { name: 'Non-Participating', party: { name: 'Stats', abbr: 'stats' }, np: true, votes: registered - ballots, c: ColorScheme.special_colors(:non_participating) }
@@ -56,7 +54,8 @@ class RefConResults
       summary: {
         title:         contest.office,
         contest_type:  contest.district_type,
-        votes:         total,
+        votes:         ballots - overvotes - undervotes,
+        voters:        registered,
         overvotes:     overvotes,
         undervotes:    undervotes,
         ballots:       ballots,
@@ -99,8 +98,6 @@ class RefConResults
       { name: b.name, votes: votes, c: ColorScheme.ballot_response_color(b, idx) }
     end
 
-    total = results.sum(:votes)
-
     ordered << { name: 'Overvotes', party: { name: 'Stats', abbr: 'stats' }, votes: overvotes, c: ColorScheme.special_colors(:overvotes) }
     ordered << { name: 'Undervotes', party: { name: 'Stats', abbr: 'stats' }, votes: undervotes, c: ColorScheme.special_colors(:undervotes) }
     ordered << { name: 'Non-Participating', party: { name: 'Stats', abbr: 'stats' }, votes: registered - ballots, c: ColorScheme.special_colors(:non_participating) }
@@ -110,10 +107,11 @@ class RefConResults
         title:       referendum.title,
         subtitle:    referendum.subtitle,
         text:        referendum.question,
-        votes:       total,
+        votes:       ballots - overvotes - undervotes,
         overvotes:   overvotes,
         undervotes:  undervotes,
         ballots:     ballots,
+        voters:      registered,
         rows:        ordered
       }
     }
@@ -282,6 +280,7 @@ class RefConResults
     return {
       items:      candidates.map { |c| { id:  c.id, name:  c.name, party:  { name:  c.party_name, abbr:  c.party.abbr }, c:  ColorScheme.candidate_color(c, candidates.index(c)) } },
       ballots:    ballots,
+      votes:      ballots - overvotes - undervotes,
       voters:     registered,
       precincts:  pmap
     }
@@ -329,6 +328,7 @@ class RefConResults
     return {
       items:      responses.map { |r| { id:  r.id, name:  r.name, c:  ColorScheme.ballot_response_color(r, responses.index(r)) } },
       ballots:    ballots,
+      votes:      ballots - overvotes - undervotes,
       voters:     registered,
       precincts:  pmap
     }

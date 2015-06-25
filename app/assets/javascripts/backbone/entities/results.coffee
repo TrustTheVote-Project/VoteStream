@@ -90,17 +90,19 @@
   class Entities.PrecinctResultData extends Backbone.Model
     initialize: ->
       @set
-        items: new PrecinctRowItems
-        precincts: new PrecinctResults
-        voters: 0
-        ballots: 0
+        items:      new PrecinctRowItems
+        precincts:  new PrecinctResults
+        voters:     0
+        ballots:    0
+        votes:      0
 
     parse: (data) ->
       @set
-        items: new PrecinctRowItems data.items
-        precincts: new PrecinctResults data.precincts
-        voters: data.voters
-        ballots: data.ballots
+        items:      new PrecinctRowItems data.items
+        precincts:  new PrecinctResults data.precincts
+        voters:     data.voters
+        ballots:    data.ballots
+        votes:      data.votes
       @._previousAttributes = null
       @trigger 'reset'
 
