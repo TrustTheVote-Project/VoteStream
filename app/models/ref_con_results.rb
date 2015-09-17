@@ -259,7 +259,7 @@ class RefConResults
 
       pcr = precinct_candidate_results[p.id] || []
       candidate_votes = pcr.inject({}) do |memo, r|
-        memo[r.candidate_id] = r.votes
+        memo[r.candidate_id] = (memo[r.candidate_id] || 0) + r.votes
         memo
       end
 
