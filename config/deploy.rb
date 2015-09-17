@@ -1,5 +1,5 @@
 set :application, 'enrs'
-set :repo_url, 'git@github.com:trustthevote/ElectionNightReportingService.git'
+set :repo_url, 'git@github.com:TrustTheVote-Project/VoteStream.git'
 
 set :branch, proc { `git rev-parse --abbrev-ref HEAD`.chomp }
 
