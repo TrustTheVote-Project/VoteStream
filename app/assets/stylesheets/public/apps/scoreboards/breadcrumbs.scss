@@ -24,6 +24,15 @@ $bc-font-size: 18px;
 $selector-icon-size: 24px;
 $selector-icon-padding: 0px;
 
+#coloring-type-selector-region button {
+  line-height: 30px;
+  padding: {
+    top: 0;
+    bottom: 0;
+  }
+  margin-left: 0;
+}
+
 #map-view-selector, #list-view-selector {
   padding-left: $selector-icon-size + $selector-icon-padding;
   background-position: 0 50%;

@@ -27,6 +27,7 @@
 
       breadcrumbsRegion:      '#breadcrumbs-region'
       viewSelectorRegion:     '#view-selector-region'
+      coloringTypeSelectorRegion: '#coloring-type-selector-region'
 
     closePopovers: ->
       $(".popover", @$el).hide()
@@ -103,6 +104,8 @@
         model: scoreboardInfo
       @.viewSelectorRegion.show new ViewSelectorView
         model: scoreboardInfo
+      @.coloringTypeSelectorRegion.show new ColoringTypeSelectorView
+        model: scoreboardInfo
 
       $("body").on "click", => @closePopovers()
 
@@ -178,6 +181,20 @@
     template: 'scoreboards/filter_bar/_breadcrumbs'
     modelEvents:
       'change:refcon change:region': 'render'
+
+  class ColoringTypeSelectorView extends Marionette.ItemView
+    template: 'scoreboards/filter_bar/_coloring_type_selector'
+
+    modelEvents:
+      'change:coloringType': 'render'
+
+    className: 'btn-group'
+
+    events:
+      'click button': (e) ->
+        e.preventDefault()
+        link = $(e.target)
+        @model.set 'coloringType', link.data('type')
 
   class ViewSelectorView extends Marionette.ItemView
     template: 'scoreboards/filter_bar/_view_selector'

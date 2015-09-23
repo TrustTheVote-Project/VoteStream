@@ -15,7 +15,7 @@ class Contest < ActiveRecord::Base
   # a hack to isolate locality contests from other localities
   # as we don't have standardized contest UIDs they duplicate on federal and state levels
   belongs_to :locality
-  
+
   # contests won't necessarily have unique IDs between elections
   belongs_to :election
 

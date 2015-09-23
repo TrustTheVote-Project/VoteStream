@@ -168,7 +168,6 @@
       else
         totalVotes = summary.get('votes')
 
-      console.log totalVotes
       return {
         model:              model
         totalVotes:         totalVotes

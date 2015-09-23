@@ -134,15 +134,25 @@ class RefConResults
     results = ContestResult.where(contest_id: cid, referendum_id: rid).select("*, precinct_id in (#{(region_pids || [ -1 ]).join(',')}) as inregion")
 
     # colors for precincts with results
-    reported_precinct_ids = []
-    colors = results.map do |r|
-      reported_precinct_ids << r.precinct_id
+    reported_precinct_ids = results.map(&:precinct_id)
+    precinct_registered_voters = Precinct.where(id: reported_precinct_ids).select("id, registered_voters").inject({}) do |memo, r|
+      memo[r.id] = r.registered_voters
+      memo
+    end
 
+    colors = results.map do |r|
       region = r.inregion ? 'i' : 'o'
       code   = r.color_code || 'n0'
       color  = "#{region}#{code}"
 
-      { id: r.precinct_id, c: color }
+      ballots = r.undervotes + r.overvotes + r.total_valid_votes
+      registered = precinct_registered_voters[r.precinct_id] || 0
+      participation = case
+        when registered <= ballots then 100
+        else ballots * 100.0 / registered
+      end
+
+      { id: r.precinct_id, c: color, p: "ip#{participation_shade(participation)}", pp: participation, r: registered, b: ballots }
     end
 
     # colors for precincts in range
@@ -159,8 +169,8 @@ class RefConResults
     in_pids  = (pids & region_pids) - reported_precinct_ids
     out_pids = region_pids - pids
 
-    colors = colors + in_pids.map  { |pid| { id: pid, c: "in0" } }
-    colors = colors + out_pids.map { |pid| { id: pid, c: "on0" } }
+    colors = colors + in_pids.map  { |pid| { id: pid, c: "in0", p: "in0" } }
+    colors = colors + out_pids.map { |pid| { id: pid, c: "on0", p: "on0" } }
 
     colors
   end
@@ -449,6 +459,20 @@ class RefConResults
     raise ApiError.new("Not supported") if options.compact.size > 1
 
     return options
+  end
+
+  def participation_shade(v)
+    if v < 10
+      4
+    elsif v < 30
+      3
+    elsif v < 50
+      2
+    elsif v < 70
+      1
+    else
+      0
+    end
   end
 
 end

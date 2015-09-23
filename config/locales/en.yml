@@ -40,6 +40,10 @@ en:
         map: Map view
         list: List view
 
+      coloring_type_selector:
+        results: Results Map
+        participation: Participation Map
+
       filter_selector:
         results: Results
         participation: Results + Participation

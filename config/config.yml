@@ -24,6 +24,8 @@ map_color:
     undervotes:     '#666666'
     writeins:       '#444444'
 
+    participation:  '#A52A2A'
+
   threshold:
     lower:  10
     upper:  20
