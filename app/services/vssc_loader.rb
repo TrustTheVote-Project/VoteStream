@@ -553,7 +553,8 @@ class VSSCLoader < BaseLoader
       DistrictsPrecinct.import district_precincts
 
       polygon_queries.each do |uid, polygons|
-        Precinct.where(locality: locality, uid: uid).update_all([ DataLoader::GEO_QUERY, DataLoader::MULTI % polygons.join ])
+        kml = (DataLoader::MULTI % polygons.join).gsub(',0 ', ' ')
+        Precinct.where(locality: locality, uid: uid).update_all([ DataLoader::GEO_QUERY, kml ])
       end
 
 
