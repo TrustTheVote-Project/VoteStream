@@ -24,7 +24,7 @@ class Admin::DataController < Admin::BaseController
     contents = params[:file].read
     doc = Nokogiri::XML(contents) { |config| config.noblanks }
     if doc.root.name == "ElectionReport"
-      VSSCLoader.new(contents).load
+      NistErrLoader.new(contents).load
     else
       DataLoader.new(contents).load
     end
@@ -37,7 +37,7 @@ class Admin::DataController < Admin::BaseController
   end
 
   def load_vssc
-    mismatches = VSSCLoader.new(params[:file]).load(params[:locality_id])
+    mismatches = NistErrLoader.new(params[:file]).load(params[:locality_id])
     if !mismatches.empty?
       raise mismatches.to_s
     end
@@ -45,7 +45,7 @@ class Admin::DataController < Admin::BaseController
   end
   
   def load_vssc_results
-    mismatches = VSSCLoader.new(params[:file]).load_results(params[:locality_id])    
+    mismatches = NistErrLoader.new(params[:file]).load_results(params[:locality_id])    
     if !mismatches.empty?
       raise mismatches.to_s
     end

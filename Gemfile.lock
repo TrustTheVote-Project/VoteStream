@@ -1,8 +1,9 @@
 GIT
-  remote: https://github.com/amekelburg/vssc_ruby.git
-  revision: 9ced232c0347b3bd82a94234db32c98315bb4494
+  remote: https://github.com/TrustTheVote-Project/VEDaSpace
+  revision: c36cd080899a583ea44816626d118281d71f4fc3
+  branch: add-parser
   specs:
-    vssc-ruby (0.0.2)
+    vedaspace (1.1.5)
       activemodel (~> 4)
       activesupport (~> 4)
       nokogiri (~> 1.6)
@@ -279,7 +280,10 @@ DEPENDENCIES
   therubyracer
   twitter-bootstrap-rails
   uglifier (>= 1.3.0)
-  vssc-ruby!
+  vedaspace (= 1.1.5)!
   web-console (~> 2.0)
   wicked_pdf
   wkhtmltopdf-binary
+
+BUNDLED WITH
+   1.10.4

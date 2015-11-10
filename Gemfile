@@ -44,7 +44,11 @@ gem "twitter-bootstrap-rails"
 
 
 # User VSSC parser libary to load VSSC files
-gem "vssc-ruby", :git=>"https://github.com/amekelburg/vssc_ruby.git"
+# gem "vssc-ruby", :git=>"https://github.com/amekelburg/vssc_ruby.git"
+
+# Use VEDaSpace to load NIST ERR files
+gem "vedaspace", "1.1.5", :git=>"https://github.com/TrustTheVote-Project/VEDaSpace", :branch=>'add-parser'
+
 
 group :doc do
   # bundle exec rake doc:rails generates the API under doc/api.

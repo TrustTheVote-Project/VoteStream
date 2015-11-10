@@ -1,5 +1,4 @@
-require 'vssc'
-class VSSCLoader < BaseLoader
+class NistErrLoader < BaseLoader
 
   GEO_QUERY    = 'geo = ST_SimplifyPreserveTopology(ST_GeomFromKML(?), 0.0001)'
   MULTI        = '<MultiGeometry>%s</MultiGeometry>'
@@ -20,7 +19,7 @@ class VSSCLoader < BaseLoader
   end
 
   def load_results(locality_id)
-    er = ::VSSC::Parser.parse(@xml_source)
+    er = Vedaspace::Parser.parse(@xml_source)
     status_report("Loaded parser from XML source")
     locality = Locality.find(locality_id)
     Election.transaction do
@@ -424,22 +423,23 @@ class VSSCLoader < BaseLoader
   end
 
   def load(locality_id = nil)
-    er = ::VSSC::Parser.parse(@xml_source)
+    er = Vedaspace::Parser.parse_ved_file(@xml_source)
     Election.transaction do
-      election = Election.new(uid: er.object_id + '-vssc')
-      Election.where(uid: election.uid).destroy_all
+      election = Election.new(uid: 'GENERATE_UID')
+      # Election.where(uid: election.uid).destroy_all
 
-      election.held_on = er.date
-      election.state = State.find_by(code: er.state_abbreviation)
+      # TODO: shouldn't be required
+      election.held_on = er.election ? er.election.start_date : Date.today
+      election.state = State.find_by(code: (er.issuer_abbreviation || "CA"))
 
       # election.statewide = false # what does this mean ??
 
 
-      election.election_type = "general"
+      election.election_type = er.election ? er.election.election_type.to_s : "pre-election" #"general"
       election.save!
 
       if locality_id.nil?
-        locality = create_locality(er.issuer, er.state_abbreviation, er.object_id)
+        locality = create_locality(er.issuer, (er.issuer_abbreviation || "CA"), er.object_id)
       else
         locality = Locality.find(locality_id)
       end
@@ -451,15 +451,17 @@ class VSSCLoader < BaseLoader
       locality_districts = {}
       locality_precincts = {}
       polygon_queries = {}
-      er.gp_unit_collection.gp_unit.each do |gp_unit|
-        if gp_unit.is_a?(VSSC::District)
+      er.gp_units.each do |gp_unit|
+        if gp_unit.is_a?(Vedaspace::ReportingUnit) && gp_unit.is_districted
           # TODO: This is a temp "guesser" for the ID format to match existing ones
-          type = case gp_unit.district_type
-          when VSSC::DistrictType.congressional
+          type = case gp_unit.reporting_unit_type
+          when Vedaspace::Enum::ReportingUnitType.congressional
             "Federal"
-          when VSSC::DistrictType.state_house, VSSC::DistrictType.state_senate, VSSC::DistrictType.statewide
+          when Vedaspace::Enum::ReportingUnitType.state_house, Vedaspace::Enum::ReportingUnitType.state_senate, Vedaspace::Enum::ReportingUnitType.state, 
             "State"
-          when VSSC::DistrictType.locality
+          when Vedaspace::Enum::ReportingUnitType.municipality, Vedaspace::Enum::ReportingUnitType.utility, Vedaspace::Enum::ReportingUnitType.water
+            "MCD"
+          when Vedaspace::Enum::ReportingUnitType.city, Vedaspace::Enum::ReportingUnitType.city_council, Vedaspace::Enum::ReportingUnitType.combined_precinct, Vedaspace::Enum::ReportingUnitType.county, Vedaspace::Enum::ReportingUnitType.county_council, Vedaspace::Enum::ReportingUnitType.judicial, Vedaspace::Enum::ReportingUnitType.precinct, Vedaspace::Enum::ReportingUnitType.school, Vedaspace::Enum::ReportingUnitType.split_precinct, Vedaspace::Enum::ReportingUnitType.town, Vedaspace::Enum::ReportingUnitType.township, Vedaspace::Enum::ReportingUnitType.village, Vedaspace::Enum::ReportingUnitType.ward
             "MCD"
           else
             "Other"
@@ -471,22 +473,23 @@ class VSSCLoader < BaseLoader
             uid:            gp_unit.object_id,
             locality_id:    locality.id
           })
+          puts d.uid
 
           locality_districts[d.uid] = d
           precinct_splits[d.uid] ||= { districts: [], precincts: [] }
           precinct_splits[d.uid][:districts] << d
-          gp_unit.gp_sub_unit_ref.each do |sub_gp_id|
-            sub_gp_id = fix_district_uid(sub_gp_id)
+          (gp_unit.gp_unit_composing_gp_unit_id_refs || []).each do |sub_gp_id|
+            #sub_gp_id = sib#fix_district_uid(sub_gp_id)
             precinct_splits[sub_gp_id] ||= { districts: [], precincts: [] }
             precinct_splits[sub_gp_id][:districts] << d
           end
         else
           p = nil
-          if geo_code = gp_unit.local_geo_code
-            name = "Precinct-#{geo_code}"
+          if gp_unit.is_a?(Vedaspace::ReportingUnit) #geo_code = gp_unit.external_identifier_collection && gp_unit.external_identifier_collection.external_identifiers.detect {|ext_id| ext_id.identifier_type == Vedaspace::Enum::IdentifierType.ocd_id}
+            name = "Precinct-#{gp_unit.name}"
           else
             # Precinct split
-            name = "Precinct-Split-#{gp_unit.object_id.split('-').last}"
+            name = "Precinct-Split-#{gp_unit.object_id}"
           end
 
           p = Precinct.new({
@@ -496,7 +499,7 @@ class VSSCLoader < BaseLoader
           })
 
           locality_precincts[p.uid] = p
-          gp_unit.gp_sub_unit_ref.each do |sub_gp_id|
+          (gp_unit.gp_unit_composing_gp_unit_id_refs || []).each do |sub_gp_id|
             sub_gp_id = fix_district_uid(sub_gp_id)
             precinct_splits[sub_gp_id] ||= { districts: [], precincts: [] }
             precinct_splits[sub_gp_id][:precincts] << p
@@ -504,8 +507,8 @@ class VSSCLoader < BaseLoader
 
           # save KML for future bulk update
           polygons = []
-          if gp_unit.spatial_dimension.any?
-            spatial_xml = gp_unit.spatial_dimension.first.spatial_extent.coordinates.to_s
+          if gp_unit.spatial_dimension
+            spatial_xml = gp_unit.spatial_dimension.spatial_extent.coordinates.to_s
             doc = Nokogiri::XML(spatial_xml.gsub("<![CDATA[",'').gsub(']]>',''))
             doc.css("Polygon").each do |p|
               p2 = p.to_s.gsub(/(-?\d+\.\d+,-?\d+\.\d+),-?\d+\.\d+/, '\1')
@@ -532,11 +535,16 @@ class VSSCLoader < BaseLoader
         locality_precincts[p.uid] = p
       end
 
-      precinct_splits.each do |split, matched_gpus|
+      # precinct splits are subrefs of any gpunits in the form
+      # oid=>[districts], [children]
+      # the oid *may* actually be a precinct
+      precinct_splits.each do |split, parent_gpunits|
         p_split = locality_precincts[split]
-        matched_gpus[:precincts].each do |p|
-          p_obj = locality_precincts[p.uid]
-          p_split.update_attributes(precinct_id: p_obj.id) unless p_split.uid == p.uid
+        if p_split && p_split.name =~ /precinct-split/i
+          parent_gpunits[:precincts].each do |p|
+            p_obj = locality_precincts[p.uid]
+            p_split.update_attributes(precinct_id: p_obj.id) unless p_split.uid == p.uid
+          end
         end
       end
 
@@ -546,7 +554,8 @@ class VSSCLoader < BaseLoader
           matched_gpus[:precincts].each do |p|
             district_precincts << DistrictsPrecinct.new(
               precinct: locality_precincts[p.uid],
-              district: locality_districts[d.uid])
+              district: locality_districts[d.uid]
+            )
           end
         end
       end
@@ -563,32 +572,29 @@ class VSSCLoader < BaseLoader
 
 
       locality_parties = {}
-      if er.party_collection
-        er.party_collection.party.each_with_index do |p,i|
-          name = p.name
+      if er.parties
+        er.parties.each_with_index do |p,i|
+          name = p.name.language_strings.first.text
           name = p.abbreviation if name.blank?
           existing_party = Party.where(uid: p.object_id, locality_id: locality.id)
           if !existing_party.any?
-            new_party =  Party.new(uid: p.object_id, name: name, sort_order: i, abbr: p.abbreviation, locality_id: locality.id)
+            new_party =  Party.new(uid: p.object_id, name: name, sort_order: i, abbr: p.abbreviation || p.object_id, locality_id: locality.id)
             locality_parties[p.object_id] = new_party
 
           end
         end
       end
+      before = Party.count
       Party.import(locality_parties.values)
       locality_parties = {}
-      Party.where(locality: locality).all.each do |p|
+      Party.where(locality_id: locality.id).all.each do |p|
         locality_parties[p.uid] = p
       end
 
 
       offices = {}
-      if er.office_collection
-        if er.office_collection
-          er.office_collection.office.each do |o|
-            offices[o.object_id] = o
-          end
-        end
+      (er.offices || []).each do |o|
+        offices[o.object_id] = o
       end
       mismatches = {}
 
@@ -598,41 +604,44 @@ class VSSCLoader < BaseLoader
       contest_candidates = {}
       ref_responses = {}
 
-      if er.election && er.election.first
-        er.election.first.tap do |e|
+      if er.election
+        er.election.tap do |e|
           candidates = {}
-          e.candidate_collection.candidate.each do |c|
+          (e.candidates || []).each do |c|
             candidates[c.object_id] = c
           end
 
           # where is this in hart??
           #   election.election_type = e.type
-          e.contest_collection.contest.each do |c|
-            if c.is_a?(VSSC::CandidateChoice)
+          (e.contests || []).each do |c|
+            if c.is_a?(Vedaspace::CandidateContest)
+              
+              contest_office = c.contest_office_id_refs && c.contest_office_id_refs.any? && offices[c.contest_office_id_refs.first.office_id_ref] ? offices[c.contest_office_id_refs.first.office_id_ref].name.language_strings.first.text : nil
+              contest_office ||= c.name.language_strings.first.text
               contest = Contest.new(uid: c.object_id, election: election, locality_id: locality.id,
-                office: offices[c.office] ? offices[c.office].name : c.name,
+                office: contest_office,
                 sort_order: c.sequence_order)
 
-              contest.district = locality_districts[c.contest_gp_scope]
+              contest.district = locality_districts[c.electoral_district_identifier]
               if contest.district.nil?
-                raise c.contest_gp_scope.to_s
+                raise c.electoral_district_identifier.to_s
                 mismatches[:districts] ||= []
                 mismatches[:districts] << c.contest_gp_scope
               end
 
-              c.ballot_selection.each_with_index do |candidate_sel, i|
+              c.ballot_selections.each_with_index do |candidate_sel, i|
                 next if candidate_sel.is_write_in #TODO: don't know write-in party_ids
 
-                sel = candidates[candidate_sel.candidate.first] #TODO: can be multiple candidates in VSSC
-                next if sel.party.blank?
-                party = locality_parties[sel.party]
+                sel = candidates[candidate_sel.ballot_selection_candidate_id_refs.first.candidate_id_ref] #TODO: can be multiple candidates in NIST ERR
+                next if sel.party_identifier.blank?
+                party = locality_parties[sel.party_identifier]
                 if party.nil? && !candidate_sel.is_write_in
                   raise sel.inspect.to_s + ' ' + locality.parties.collect(&:uid).to_s
                 end
                 color = party ? ColorScheme.candidate_pre_color(party.name) : nil
                 candidate = Candidate.new(uid: sel.object_id,
                   name: sel.ballot_name,
-                  sort_order: sel.sequence_order,
+                  sort_order: candidate_sel.sequence_order,
                   party_id: party ? party.id : nil,
                   color: color)
 
