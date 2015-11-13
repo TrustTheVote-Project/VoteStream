@@ -468,7 +468,7 @@ class NistErrLoader < BaseLoader
           end
 
           d = District.new({
-            name:           gp_unit.name,
+            name:           gp_unit.name || gp_unit.object_id,
             district_type:  type,
             uid:            gp_unit.object_id,
             locality_id:    locality.id
@@ -477,11 +477,12 @@ class NistErrLoader < BaseLoader
 
           locality_districts[d.uid] = d
           precinct_splits[d.uid] ||= { districts: [], precincts: [] }
-          precinct_splits[d.uid][:districts] << d
+          # precinct_splits[d.uid][:districts] << d
           (gp_unit.gp_unit_composing_gp_unit_id_refs || []).each do |sub_gp_id|
             #sub_gp_id = sib#fix_district_uid(sub_gp_id)
-            precinct_splits[sub_gp_id] ||= { districts: [], precincts: [] }
-            precinct_splits[sub_gp_id][:districts] << d
+            ref_id = sub_gp_id.composing_gp_unit_id_ref
+            precinct_splits[ref_id] ||= { districts: [], precincts: [] }
+            precinct_splits[ref_id][:districts] << d
           end
         else
           p = nil
@@ -500,9 +501,10 @@ class NistErrLoader < BaseLoader
 
           locality_precincts[p.uid] = p
           (gp_unit.gp_unit_composing_gp_unit_id_refs || []).each do |sub_gp_id|
-            sub_gp_id = fix_district_uid(sub_gp_id)
-            precinct_splits[sub_gp_id] ||= { districts: [], precincts: [] }
-            precinct_splits[sub_gp_id][:precincts] << p
+            #sub_gp_id = fix_district_uid(sub_gp_id)
+            ref_id = sub_gp_id.composing_gp_unit_id_ref
+            precinct_splits[ref_id] ||= { districts: [], precincts: [] }
+            precinct_splits[ref_id][:precincts] << p
           end
 
           # save KML for future bulk update
@@ -526,7 +528,7 @@ class NistErrLoader < BaseLoader
       District.where(locality: locality).all.each do |d|
         locality_districts[d.uid] = d
       end
-
+      
       Precinct.import locality_precincts.values
 
       # reload all the precincts
@@ -548,14 +550,27 @@ class NistErrLoader < BaseLoader
         end
       end
 
+      # precinct splits are subrefs of any gpunits in the form
+      # oid=>[districts], [children]
+      # the oid *may* actually be a precinct
       district_precincts = []
       precinct_splits.each do |split, matched_gpus|
         matched_gpus[:districts].each do |d|
-          matched_gpus[:precincts].each do |p|
+          if matched_gpus[:precincts].any?
+            matched_gpus[:precincts].each do |p|
+              district_precincts << DistrictsPrecinct.new(
+                precinct: locality_precincts[p.uid],
+                district: locality_districts[d.uid]
+              )
+            end
+          elsif locality_precincts[split]
+            raise d.inspect if locality_districts[d.uid].nil?
             district_precincts << DistrictsPrecinct.new(
-              precinct: locality_precincts[p.uid],
+              precinct: locality_precincts[split],
               district: locality_districts[d.uid]
             )
+          else
+            raise [split, matched_gpus].inspect
           end
         end
       end
