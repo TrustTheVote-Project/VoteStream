@@ -70,9 +70,9 @@ class RefConResults
 
     # order(nil) is important as AR adds default order which breaks the SQL query
     r = contest_results.select('sum(overvotes) o, sum(undervotes) u, sum(total_valid_votes) v').order(nil).first
-    overvotes  = r.o
-    undervotes = r.u
-    ballots    = r.v + r.o + r.u
+    overvotes  = r.o || 0
+    undervotes = r.u || 0
+    ballots    = (r.v || 0) + overvotes + undervotes
 
     registered = Precinct
     registered = registered.where(id: pids.blank? ? refcon.precinct_ids : pids.to_a)
@@ -265,7 +265,7 @@ class RefConResults
     voters = 0
 
     pmap = precincts.map do |p|
-      voters += p.registered_voters
+      voters += p.registered_voters || 0
 
       pcr = precinct_candidate_results[p.id] || []
       candidate_votes = pcr.inject({}) do |memo, r|

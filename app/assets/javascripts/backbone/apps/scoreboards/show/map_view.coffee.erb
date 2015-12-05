@@ -336,6 +336,8 @@ InfoBubble.prototype.panToView = ->
 
         App.vent.trigger 'region:selected', precinct
         App.navigate 'list', trigger: true
+      # else # show the info at least!
+      #   console.log(@.data)
 
     updateColorKey: ->
       @colorKey = if @si.get('coloringType') == 'results' then 'c' else 'p'

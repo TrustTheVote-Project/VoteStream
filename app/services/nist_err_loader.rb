@@ -19,7 +19,7 @@ class NistErrLoader < BaseLoader
   end
 
   def load_results(locality_id)
-    er = Vedaspace::Parser.parse(@xml_source)
+    er = Vedaspace::Parser.parse_ved_file(@xml_source)
     status_report("Loaded parser from XML source")
     locality = Locality.find(locality_id)
     Election.transaction do
@@ -454,14 +454,14 @@ class NistErrLoader < BaseLoader
       er.gp_units.each do |gp_unit|
         if gp_unit.is_a?(Vedaspace::ReportingUnit) && gp_unit.is_districted
           # TODO: This is a temp "guesser" for the ID format to match existing ones
-          type = case gp_unit.reporting_unit_type
-          when Vedaspace::Enum::ReportingUnitType.congressional
+          type = case gp_unit.reporting_unit_type.to_s
+          when Vedaspace::Enum::ReportingUnitType.congressional.to_s
             "Federal"
-          when Vedaspace::Enum::ReportingUnitType.state_house, Vedaspace::Enum::ReportingUnitType.state_senate, Vedaspace::Enum::ReportingUnitType.state, 
+          when Vedaspace::Enum::ReportingUnitType.state_house.to_s, Vedaspace::Enum::ReportingUnitType.state_senate.to_s, Vedaspace::Enum::ReportingUnitType.state.to_s
             "State"
-          when Vedaspace::Enum::ReportingUnitType.municipality, Vedaspace::Enum::ReportingUnitType.utility, Vedaspace::Enum::ReportingUnitType.water
+          when Vedaspace::Enum::ReportingUnitType.municipality.to_s, Vedaspace::Enum::ReportingUnitType.utility.to_s, Vedaspace::Enum::ReportingUnitType.water.to_s
             "MCD"
-          when Vedaspace::Enum::ReportingUnitType.city, Vedaspace::Enum::ReportingUnitType.city_council, Vedaspace::Enum::ReportingUnitType.combined_precinct, Vedaspace::Enum::ReportingUnitType.county, Vedaspace::Enum::ReportingUnitType.county_council, Vedaspace::Enum::ReportingUnitType.judicial, Vedaspace::Enum::ReportingUnitType.precinct, Vedaspace::Enum::ReportingUnitType.school, Vedaspace::Enum::ReportingUnitType.split_precinct, Vedaspace::Enum::ReportingUnitType.town, Vedaspace::Enum::ReportingUnitType.township, Vedaspace::Enum::ReportingUnitType.village, Vedaspace::Enum::ReportingUnitType.ward
+          when Vedaspace::Enum::ReportingUnitType.city.to_s, Vedaspace::Enum::ReportingUnitType.city_council.to_s, Vedaspace::Enum::ReportingUnitType.combined_precinct.to_s, Vedaspace::Enum::ReportingUnitType.county.to_s, Vedaspace::Enum::ReportingUnitType.county_council.to_s, Vedaspace::Enum::ReportingUnitType.judicial.to_s, Vedaspace::Enum::ReportingUnitType.precinct.to_s, Vedaspace::Enum::ReportingUnitType.school.to_s, Vedaspace::Enum::ReportingUnitType.split_precinct.to_s, Vedaspace::Enum::ReportingUnitType.town.to_s, Vedaspace::Enum::ReportingUnitType.township.to_s, Vedaspace::Enum::ReportingUnitType.village.to_s, Vedaspace::Enum::ReportingUnitType.ward.to_s
             "MCD"
           else
             "Other"
@@ -483,6 +483,9 @@ class NistErrLoader < BaseLoader
             ref_id = sub_gp_id.composing_gp_unit_id_ref
             precinct_splits[ref_id] ||= { districts: [], precincts: [] }
             precinct_splits[ref_id][:districts] << d
+          end
+          if !d.valid?
+            raise d.errors.join("\n")
           end
         else
           p = nil
@@ -632,7 +635,7 @@ class NistErrLoader < BaseLoader
             if c.is_a?(Vedaspace::CandidateContest)
               
               contest_office = c.contest_office_id_refs && c.contest_office_id_refs.any? && offices[c.contest_office_id_refs.first.office_id_ref] ? offices[c.contest_office_id_refs.first.office_id_ref].name.language_strings.first.text : nil
-              contest_office ||= c.name.language_strings.first.text
+              contest_office ||= c.name #.language_strings.first.text
               contest = Contest.new(uid: c.object_id, election: election, locality_id: locality.id,
                 office: contest_office,
                 sort_order: c.sequence_order)
@@ -645,9 +648,11 @@ class NistErrLoader < BaseLoader
               end
 
               c.ballot_selections.each_with_index do |candidate_sel, i|
-                next if candidate_sel.is_write_in #TODO: don't know write-in party_ids
-
-                sel = candidates[candidate_sel.ballot_selection_candidate_id_refs.first.candidate_id_ref] #TODO: can be multiple candidates in NIST ERR
+                sel = candidates[candidate_sel.ballot_selection_candidate_id_refs.first.candidate_id_ref]
+                
+                next if !sel || candidate_sel.is_write_in #TODO: don't know write-in party_ids
+                
+                 #TODO: can be multiple candidates in NIST ERR
                 next if sel.party_identifier.blank?
                 party = locality_parties[sel.party_identifier]
                 if party.nil? && !candidate_sel.is_write_in
@@ -655,7 +660,7 @@ class NistErrLoader < BaseLoader
                 end
                 color = party ? ColorScheme.candidate_pre_color(party.name) : nil
                 candidate = Candidate.new(uid: sel.object_id,
-                  name: sel.ballot_name,
+                  name: sel.ballot_name.language_strings.first.text,
                   sort_order: candidate_sel.sequence_order,
                   party_id: party ? party.id : nil,
                   color: color)
