@@ -429,7 +429,7 @@ class NistErrLoader < BaseLoader
       # Election.where(uid: election.uid).destroy_all
 
       # TODO: shouldn't be required
-      election.held_on = er.election ? er.election.start_date : Date.today
+      election.held_on = er.election && er.election.start_date ? er.election.start_date : Date.today
       election.state = State.find_by(code: (er.issuer_abbreviation || "CA"))
 
       # election.statewide = false # what does this mean ??
@@ -512,7 +512,7 @@ class NistErrLoader < BaseLoader
 
           # save KML for future bulk update
           polygons = []
-          if gp_unit.spatial_dimension
+          if gp_unit.respond_to?(:spatial_dimension) && gp_unit.spatial_dimension
             spatial_xml = gp_unit.spatial_dimension.spatial_extent.coordinates.to_s
             doc = Nokogiri::XML(spatial_xml.gsub("<![CDATA[",'').gsub(']]>',''))
             doc.css("Polygon").each do |p|
@@ -573,7 +573,7 @@ class NistErrLoader < BaseLoader
               district: locality_districts[d.uid]
             )
           else
-            raise [split, matched_gpus].inspect
+            raise Precinct.count.to_s + ' ' + [split, matched_gpus].inspect.to_s
           end
         end
       end
@@ -647,54 +647,57 @@ class NistErrLoader < BaseLoader
                 mismatches[:districts] << c.contest_gp_scope
               end
 
-              c.ballot_selections.each_with_index do |candidate_sel, i|
-                sel = candidates[candidate_sel.ballot_selection_candidate_id_refs.first.candidate_id_ref]
+              if c.ballot_selections
+                c.ballot_selections.each_with_index do |candidate_sel, i|
+                  sel = candidates[candidate_sel.ballot_selection_candidate_id_refs.first.candidate_id_ref]
                 
-                next if !sel || candidate_sel.is_write_in #TODO: don't know write-in party_ids
+                  next if !sel || candidate_sel.is_write_in #TODO: don't know write-in party_ids
                 
-                 #TODO: can be multiple candidates in NIST ERR
-                next if sel.party_identifier.blank?
-                party = locality_parties[sel.party_identifier]
-                if party.nil? && !candidate_sel.is_write_in
-                  raise sel.inspect.to_s + ' ' + locality.parties.collect(&:uid).to_s
+                   #TODO: can be multiple candidates in NIST ERR
+                  next if sel.party_identifier.blank?
+                  party = locality_parties[sel.party_identifier]
+                  if party.nil? && !candidate_sel.is_write_in
+                    raise sel.inspect.to_s + ' ' + locality.parties.collect(&:uid).to_s
+                  end
+                  color = party ? ColorScheme.candidate_pre_color(party.name) : nil
+                  candidate = Candidate.new(uid: sel.object_id,
+                    name: sel.ballot_name.language_strings.first.text,
+                    sort_order: candidate_sel.sequence_order,
+                    party_id: party ? party.id : nil,
+                    color: color)
+
+                  contest_candidates[contest.uid] ||= []
+                  contest_candidates[contest.uid] << candidate
+
                 end
-                color = party ? ColorScheme.candidate_pre_color(party.name) : nil
-                candidate = Candidate.new(uid: sel.object_id,
-                  name: sel.ballot_name.language_strings.first.text,
-                  sort_order: candidate_sel.sequence_order,
-                  party_id: party ? party.id : nil,
-                  color: color)
-
-                contest_candidates[contest.uid] ||= []
-                contest_candidates[contest.uid] << candidate
-
               end
               locality_contests[contest.uid] = contest
-            elsif c.is_a?(VSSC::BallotMeasure)
+            elsif c.is_a?(Vedaspace::BallotMeasureContest)
               ref = Referendum.new(uid: c.object_id, locality_id: locality.id,
                 sort_order: c.sequence_order,
                 title: c.name,
-                subtitle: c.summary_text,
-                question: c.full_text)
+                subtitle: c.summary_text && c.summary_text.language_strings.any? ? c.summary_text.language_strings.first.text : '',
+                question: c.full_text  && c.full_text.language_strings.any? ? c.full_text.language_strings.first.text : '')
 
-              ref.district = locality_districts[c.contest_gp_scope]
+              ref.district = locality_districts[c.electoral_district_identifier]
               if ref.district.nil?
-                raise c.contest_gp_scope.to_s
+                raise c.electoral_district_identifier.to_s
                 mismatches[:districts] ||= []
                 mismatches[:districts] << c.contest_gp_scope
               end
 
-              c.ballot_selection.each_with_index do |sel, i|
+              c.ballot_selections.each_with_index do |sel, i|
 
                 response = BallotResponse.new(uid: sel.object_id,
-                  name: sel.selection, sort_order: i+1)
+                  name: (sel.selection && sel.selection.language_strings.any? ? language_strings.first.text : ''), 
+                  sort_order: i+1)
 
                 ref_responses[ref.uid] ||= []
                 ref_responses[ref.uid] << response
 
               end
               locality_referendums[ref.uid] = ref
-            elsif c.is_a?(VSSC::StraightParty)
+            elsif c.is_a?(Vedaspace::PartyContest)
               # contest = Contest.new(uid: c.object_id,
               #   partisan: true,
               #   sort_order: c.sequence_order,)
