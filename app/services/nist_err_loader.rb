@@ -23,22 +23,22 @@ class NistErrLoader < BaseLoader
     status_report("Loaded parser from XML source")
     locality = Locality.find(locality_id)
     Election.transaction do
-      election = Election.find_by_uid(er.object_id + '-vssc')
+      election = Election.find_by_uid('GENERATE_UID')
       mismatches = {}
 
       # Pull in extra precinct data
 
       precinct_splits = {}
-      er.gp_unit_collection.gp_unit.each do |gp_unit|
-        if gp_unit.is_a?(VSSC::District)
+      er.gp_units.each do |gp_unit|
+        if gp_unit.is_a?(Vedaspace::ReportingUnit) && gp_unit.is_districted
           # skip it
         else
-          if gp_unit.local_geo_code
+          if gp_unit.external_identifier_collection.external_identifiers.detect {|i| i.label == 'internal_id' }
             # It's a regular precinct
           else
             # Precinct split, add the reg-voters to i's parents
             name = "Precinct-Split-#{gp_unit.object_id.split('-').last}"
-            precinct_splits[gp_unit.object_id] = gp_unit.registered_voters
+            #precinct_splits[gp_unit.object_id] = gp_unit.voters_registered
           end
         end
       end
@@ -57,13 +57,13 @@ class NistErrLoader < BaseLoader
       end
 
 
-      if er.election && er.election.first
-        er.election.first.tap do |e|
+      if er.election
+        er.election.tap do |e|
           #load candidates from the file
-          vssc_candidates = {}
+          ved_candidates = {}
           status_report "Loading Candidates from file"
-          e.candidate_collection.candidate.each do |c|
-            vssc_candidates[c.object_id] = c
+          e.candidates.each do |c|
+            ved_candidates[c.object_id] = c
           end
 
           # Load all the precincts into a hash
@@ -82,8 +82,8 @@ class NistErrLoader < BaseLoader
 
           # where is this in hart??
           #   election.election_type = e.type
-          e.contest_collection.contest.each do |c|
-            if c.is_a?(VSSC::CandidateChoice)
+          e.contests.each do |c|
+            if c.is_a?(Vedaspace::CandidateContest)
               contest = election.contests.find_by_uid(c.object_id)
               status_report "Loading Results for #{contest.inspect}"
 
@@ -99,15 +99,15 @@ class NistErrLoader < BaseLoader
               precinct_results = {}
               contest_response_results = {}
 
-              c.ballot_selection.each_with_index do |candidate_sel, i|
+              c.ballot_selections.each_with_index do |candidate_sel, i|
 
-                candidate = contest_candidates[candidate_sel.candidate.first]  #it's just a UID
+                candidate = contest_candidates[candidate_sel.ballot_selection_candidate_id_refs.first.candidate_id_ref]  #it's just a UID
                 # If it's a write-in, create it
                 if candidate.nil? && candidate_sel.is_write_in
 
-                  sel = vssc_candidates[candidate_sel.candidate.first] #TODO: can be multiple candidates in VSSC
+                  sel = ved_candidates[candidate_sel.ballot_selection_candidate_id_refs.first.candidate_id_ref] #TODO: can be multiple candidates in VSSC
                   if sel.nil?
-                    raise candidate_sel.candidate.first.to_s + ' ' + vssc_candidates.inspect.to_s
+                    raise candidate_sel.candidate.first.to_s + ' ' + ved_candidates.inspect.to_s
                   end
 
                   write_in_party ||= locality.parties.create(:name=>"write-in", abbr: "write-in", uid: "write-in", sort_order:  locality_parties.size + 1 )
@@ -115,8 +115,8 @@ class NistErrLoader < BaseLoader
                   color = ColorScheme.candidate_pre_color(write_in_party.name)
 
                   candidate = Candidate.new(uid: sel.object_id,
-                    name: sel.ballot_name,
-                    sort_order: sel.sequence_order,
+                    name: sel.ballot_name.language_strings.first.text,
+                    sort_order: candidate_sel.sequence_order,
                     party_id: write_in_party ? write_in_party.id : nil,
                     color: color)
 
@@ -129,7 +129,7 @@ class NistErrLoader < BaseLoader
 
 
 
-                candidate_sel.vote_counts.each do |vc|
+                (candidate_sel.counts || []).each do |vc|
                   d_uid = vc.gp_unit #fix_district_uid(vc.gp_unit)
                   precinct = locality_precincts[d_uid]
 
@@ -181,24 +181,25 @@ class NistErrLoader < BaseLoader
 
 
               # at this point all ContestResults should be built
-              c.contest_total_counts_by_gp_unit.each do |contest_total|
-                d_uid = contest_total.gp_unit #fix_district_uid(vc.gp_unit)
-                precinct = locality_precincts[d_uid]
-
-                if precinct
-                  precinct = precinct.precinct || precinct
-                  d_uid = precinct.uid
-                  cr = precinct_results[d_uid]
-                  if cr.nil?
-                    raise "No contest result for contest total count #{contest_total}"
-                  end
-                  cr.total_votes += contest_total.ballots_cast
-                  cr.undervotes += contest_total.undervotes
-                  cr.overvotes += contest_total.overvotes
-                else
-                  raise "No pct for contest total count #{contest_total}"
-                end
-              end
+              # What is the new equivalent to content_total_counts_by_qp_unit?
+              # c.contest_total_counts_by_gp_unit.each do |contest_total|
+              #   d_uid = contest_total.gp_unit #fix_district_uid(vc.gp_unit)
+              #   precinct = locality_precincts[d_uid]
+              #
+              #   if precinct
+              #     precinct = precinct.precinct || precinct
+              #     d_uid = precinct.uid
+              #     cr = precinct_results[d_uid]
+              #     if cr.nil?
+              #       raise "No contest result for contest total count #{contest_total}"
+              #     end
+              #     cr.total_votes += contest_total.ballots_cast
+              #     cr.undervotes += contest_total.undervotes
+              #     cr.overvotes += contest_total.overvotes
+              #   else
+              #     raise "No pct for contest total count #{contest_total}"
+              #   end
+              # end
 
               precinct_results.values.each do |cr|
                 if !cr.precinct_id.blank? && cr.candidate_results.size > 0
@@ -227,7 +228,7 @@ class NistErrLoader < BaseLoader
               end
               CandidateResult.import all_results
 
-            elsif c.is_a?(VSSC::BallotMeasure)
+            elsif c.is_a?(Vedaspace::BallotMeasureContest)
               ref = locality.referendums.find_by_uid(c.object_id)
               if ref.nil?
                 raise c.object_id
@@ -244,10 +245,10 @@ class NistErrLoader < BaseLoader
               ref_results = {}
               contest_response_results = {}
 
-              c.ballot_selection.each_with_index do |sel, i|
+              c.ballot_selections.each_with_index do |sel, i|
                 response = ref_responses[sel.object_id]
 
-                sel.vote_counts.each do |vc|
+                (sel.counts || []).each do |vc|
                   d_uid =  vc.gp_unit #fix_district_uid(vc.gp_unit)
 
                   precinct = locality_precincts[d_uid]
@@ -293,27 +294,28 @@ class NistErrLoader < BaseLoader
               end
 
               # at this point all ContestResults should be built
-              c.contest_total_counts_by_gp_unit.each do |contest_total|
-                d_uid = contest_total.gp_unit #fix_district_uid(vc.gp_unit)
-                precinct = locality_precincts[d_uid]
-
-                # TODO: Remove this once vspub handles it better
-                next if contest_total.ballots_cast.to_i == 0
-
-                if precinct
-                  precinct = precinct.precinct || precinct
-                  d_uid = precinct.uid
-                  cr = precinct_results[d_uid]
-                  if cr.nil?
-                    raise "No contest result for contest total count #{contest_total}"
-                  end
-                  cr.total_votes += contest_total.ballots_cast
-                  cr.undervotes += contest_total.undervotes
-                  cr.overvotes += contest_total.overvotes
-                else
-                  raise "No pct for contest total count #{contest_total}"
-                end
-              end
+              # TODO: what's the new equivalent?
+              # c.contest_total_counts_by_gp_unit.each do |contest_total|
+              #   d_uid = contest_total.gp_unit #fix_district_uid(vc.gp_unit)
+              #   precinct = locality_precincts[d_uid]
+              #
+              #   # TODO: Remove this once vspub handles it better
+              #   next if contest_total.ballots_cast.to_i == 0
+              #
+              #   if precinct
+              #     precinct = precinct.precinct || precinct
+              #     d_uid = precinct.uid
+              #     cr = precinct_results[d_uid]
+              #     if cr.nil?
+              #       raise "No contest result for contest total count #{contest_total}"
+              #     end
+              #     cr.total_votes += contest_total.ballots_cast
+              #     cr.undervotes += contest_total.undervotes
+              #     cr.overvotes += contest_total.overvotes
+              #   else
+              #     raise "No pct for contest total count #{contest_total}"
+              #   end
+              # end
 
               precinct_results.values.each do |cr|
                 if !cr.precinct_id.blank? && cr.ballot_response_results.size > 0
@@ -342,7 +344,7 @@ class NistErrLoader < BaseLoader
               end
               BallotResponseResult.import all_results
 
-            elsif c.is_a?(VSSC::StraightParty)
+            elsif c.is_a?(Vedaspace::PartyContest)
               # contest = Contest.new(uid: c.object_id,
               #   partisan: true,
               #   sort_order: c.sequence_order,)
