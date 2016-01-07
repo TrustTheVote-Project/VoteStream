@@ -66,9 +66,9 @@ class DataProcessor
     end
 
     # DEBUG remove this
-    Rails.cache.fetch("locality:#{locality_id}:#{params.hash}:precinct_results") do
+    # Rails.cache.fetch("locality:#{locality_id}:#{params.hash}:precinct_results") do
       RefConResults.new.precinct_results(params).to_json
-    end
+    # end
   end
 
   def self.precinct_colors_json(params)

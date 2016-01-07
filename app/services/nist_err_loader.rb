@@ -28,7 +28,7 @@ class NistErrLoader < BaseLoader
 
       # Pull in extra precinct data
 
-      precinct_splits = {}
+      precinct_splits_voters = {}
       er.gp_units.each do |gp_unit|
         if gp_unit.is_a?(Vedaspace::ReportingUnit) && gp_unit.is_districted
           # skip it
@@ -38,17 +38,17 @@ class NistErrLoader < BaseLoader
           else
             # Precinct split, add the reg-voters to i's parents
             name = "Precinct-Split-#{gp_unit.object_id.split('-').last}"
-            #precinct_splits[gp_unit.object_id] = gp_unit.voters_registered
+            precinct_splits_voters[gp_unit.object_id] = gp_unit.voters_registered
           end
         end
       end
-      precinct_children = Precinct.includes(:precinct).where(uid: precinct_splits.keys)
+      precinct_children = Precinct.includes(:precinct).where(uid: precinct_splits_voters.keys)
       precinct_parents = precinct_children.inject({}) do |h, pc|
         h[pc.uid] = pc.precinct
         h
       end
       precinct_children.each do |p_child|
-        reg_voters = precinct_splits[p_child.uid].to_i
+        reg_voters = precinct_splits_voters[p_child.uid].to_i
         p_parent = precinct_parents[p_child.uid]
         p_parent.registered_voters = (p_parent.registered_voters || 0) + reg_voters
       end
@@ -90,8 +90,8 @@ class NistErrLoader < BaseLoader
               #load pre-defined candidates
               status_report "Loading Candidates from DB"
               contest_candidates = {}
-              contest.candidates.all.each do |c|
-                contest_candidates[c.uid] = c
+              contest.candidates.all.each do |can|
+                contest_candidates[can.uid] = can
               end
 
 
@@ -99,13 +99,15 @@ class NistErrLoader < BaseLoader
               precinct_results = {}
               contest_response_results = {}
 
-              c.ballot_selections.each_with_index do |candidate_sel, i|
-
-                candidate = contest_candidates[candidate_sel.ballot_selection_candidate_id_refs.first.candidate_id_ref]  #it's just a UID
+              (c.ballot_selections || []).each_with_index do |candidate_sel, i|
+                
+                candidate_uid = candidate_sel.ballot_selection_candidate_id_refs.first.candidate_id_ref
+                
+                candidate = contest_candidates[candidate_uid]  #it's just a UID
                 # If it's a write-in, create it
                 if candidate.nil? && candidate_sel.is_write_in
 
-                  sel = ved_candidates[candidate_sel.ballot_selection_candidate_id_refs.first.candidate_id_ref] #TODO: can be multiple candidates in VSSC
+                  sel = ved_candidates[candidate_uid]
                   if sel.nil?
                     raise candidate_sel.candidate.first.to_s + ' ' + ved_candidates.inspect.to_s
                   end
@@ -120,6 +122,7 @@ class NistErrLoader < BaseLoader
                     party_id: write_in_party ? write_in_party.id : nil,
                     color: color)
 
+
                   contest.candidates << candidate
 
                 end
@@ -130,7 +133,7 @@ class NistErrLoader < BaseLoader
 
 
                 (candidate_sel.counts || []).each do |vc|
-                  d_uid = vc.gp_unit #fix_district_uid(vc.gp_unit)
+                  d_uid = vc.gp_unit_identifier #fix_district_uid(vc.gp_unit)
                   precinct = locality_precincts[d_uid]
 
                   if precinct
@@ -148,10 +151,10 @@ class NistErrLoader < BaseLoader
                   cr.overvotes ||= 0
                   if precinct
                     cr.total_valid_votes += vc.count
-                    can_result_uid = "#{contest.uid}-#{precinct.uid}-#{candidate.uid}-#{vc.ballot_type.to_s}"
+                    can_result_uid = "#{contest.uid}-#{precinct.uid}-#{candidate.uid}-#{vc.count_item_type.to_s}"
                     can_res = can_results[can_result_uid]
                     if can_res.nil?
-                      can_res = CandidateResult.new(candidate: candidate, precinct_id: precinct.id, uid: can_result_uid, votes: vc.count, ballot_type: vc.ballot_type.to_s)
+                      can_res = CandidateResult.new(candidate: candidate, precinct_id: precinct.id, uid: can_result_uid, votes: vc.count, ballot_type: vc.count_item_type.to_s)
                       can_results[can_result_uid] = can_res
                       contest_response_results[cr.uid] ||= []
                       contest_response_results[cr.uid] << can_res
@@ -247,9 +250,9 @@ class NistErrLoader < BaseLoader
 
               c.ballot_selections.each_with_index do |sel, i|
                 response = ref_responses[sel.object_id]
-
+                raise sel.object_id.to_s if response.nil?
                 (sel.counts || []).each do |vc|
-                  d_uid =  vc.gp_unit #fix_district_uid(vc.gp_unit)
+                  d_uid =  vc.gp_unit_identifier
 
                   precinct = locality_precincts[d_uid]
                   if precinct
@@ -270,11 +273,11 @@ class NistErrLoader < BaseLoader
 
                   if precinct
                     cr.total_valid_votes += vc.count
-                    ref_response_uid = "#{ref.uid}-#{precinct.uid}-#{response.uid}-#{vc.ballot_type.to_s}"
+                    ref_response_uid = "#{ref.uid}-#{precinct.uid}-#{response.uid}-#{vc.count_item_type.to_s}"
                     ref_res = ref_results[ref_response_uid]
                     if ref_res.nil?
                       ref_res = BallotResponseResult.new(ballot_response: response, precinct_id: precinct.id,
-                      votes: vc.count, uid: ref_response_uid, ballot_type: vc.ballot_type.to_s)
+                      votes: vc.count, uid: ref_response_uid, ballot_type: vc.count_item_type.to_s)
                       ref_results[ref_response_uid] = ref_res
                       contest_response_results[cr.uid] ||= []
                       contest_response_results[cr.uid] << ref_res
@@ -286,7 +289,7 @@ class NistErrLoader < BaseLoader
                     mismatches[:precincts] ||= []
                     mismatches[:precincts] << d_uid
                     cr.ballot_response_results << BallotResponseResult.new(ballot_response: response,
-                      votes: vc.count, uid: "#{ref.uid}-no_precinct-#{response.uid}-#{vc.ballot_type.to_s}", ballot_type: vc.ballot_type.to_s)
+                      votes: vc.count, uid: "#{ref.uid}-no_precinct-#{response.uid}-#{vc.count_item_type.to_s}", ballot_type: vc.ballot_type.to_s)
                   end
                   precinct_results[d_uid] ||= cr
                 end
@@ -457,9 +460,9 @@ class NistErrLoader < BaseLoader
         if gp_unit.is_a?(Vedaspace::ReportingUnit) && gp_unit.is_districted
           # TODO: This is a temp "guesser" for the ID format to match existing ones
           type = case gp_unit.reporting_unit_type.to_s
-          when Vedaspace::Enum::ReportingUnitType.congressional.to_s
+          when Vedaspace::Enum::ReportingUnitType.congressional.to_s, Vedaspace::Enum::ReportingUnitType.state.to_s
             "Federal"
-          when Vedaspace::Enum::ReportingUnitType.state_house.to_s, Vedaspace::Enum::ReportingUnitType.state_senate.to_s, Vedaspace::Enum::ReportingUnitType.state.to_s
+          when Vedaspace::Enum::ReportingUnitType.state_house.to_s, Vedaspace::Enum::ReportingUnitType.state_senate.to_s
             "State"
           when Vedaspace::Enum::ReportingUnitType.municipality.to_s, Vedaspace::Enum::ReportingUnitType.utility.to_s, Vedaspace::Enum::ReportingUnitType.water.to_s
             "MCD"
@@ -491,16 +494,17 @@ class NistErrLoader < BaseLoader
           end
         else
           p = nil
-          if gp_unit.is_a?(Vedaspace::ReportingUnit) #geo_code = gp_unit.external_identifier_collection && gp_unit.external_identifier_collection.external_identifiers.detect {|ext_id| ext_id.identifier_type == Vedaspace::Enum::IdentifierType.ocd_id}
-            name = "Precinct-#{gp_unit.name}"
-          else
-            # Precinct split
-            name = "Precinct-Split-#{gp_unit.object_id}"
-          end
+          name = gp_unit.name
+          # if gp_unit.is_a?(Vedaspace::ReportingUnit)
+          #   name = "Precinct-#{gp_unit.name}"
+          # else
+          #   # Precinct split
+          #   name = "Precinct-Split-#{gp_unit.object_id}"
+          # end
 
           p = Precinct.new({
             uid:          gp_unit.object_id,
-            name:         name,
+            name:         name.blank? ? gp_unit.object_id : name ,
             locality_id:  locality.id
           })
 
@@ -541,6 +545,7 @@ class NistErrLoader < BaseLoader
       Precinct.where(locality: locality).all.each do |p|
         locality_precincts[p.uid] = p
       end
+      
 
       # precinct splits are subrefs of any gpunits in the form
       # oid=>[districts], [children]
@@ -687,11 +692,9 @@ class NistErrLoader < BaseLoader
                 mismatches[:districts] ||= []
                 mismatches[:districts] << c.contest_gp_scope
               end
-
               c.ballot_selections.each_with_index do |sel, i|
-
                 response = BallotResponse.new(uid: sel.object_id,
-                  name: (sel.selection && sel.selection.language_strings.any? ? language_strings.first.text : ''), 
+                  name: (sel.selection && sel.selection.language_strings.any? ? sel.selection.language_strings.first.text : ''), 
                   sort_order: i+1)
 
                 ref_responses[ref.uid] ||= []
@@ -753,8 +756,8 @@ class NistErrLoader < BaseLoader
           all_responses << resp
         end
       end
+      
       BallotResponse.import(all_responses)
-
 
       election.save!
 

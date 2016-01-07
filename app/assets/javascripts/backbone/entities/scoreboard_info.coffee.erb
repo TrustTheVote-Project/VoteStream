@@ -87,6 +87,12 @@
           sb.set 'totalRegisteredVoters', precinctResults.get('voters')
           sb.set 'totalBallotsCast', precinctResults.get('ballots')
           sb.set 'totalValidVotes', precinctResults.get('votes')
+          sb.set 'electionDayVotes', precinctResults.get('channels')['election-day']
+          sb.set 'electionDayPercent', 100 * (sb.get('electionDayVotes') / sb.get('totalBallotsCast'))
+          sb.set 'earlyVotes', precinctResults.get('channels')['early']
+          sb.set 'earlyPercent', 100 * (sb.get('earlyVotes') / sb.get('totalBallotsCast'))
+          sb.set 'absenteeVotes', precinctResults.get('channels')['absentee']
+          sb.set 'absenteePercent', 100 * (sb.get('absenteeVotes') / sb.get('totalBallotsCast'))
 
         sb.get('results').on 'reset', ->
           result = sb.pickResult()
@@ -100,6 +106,12 @@
           sb.set 'totalRegisteredVoters', 0
           sb.set 'totalBallotsCast', 0
           sb.set 'totalValidVotes', 0
+          sb.set 'electionDayVotes', 0
+          sb.set 'electionDayPercent', 0
+          sb.set 'earlyDayVotes', 0
+          sb.set 'earlyDayPercent', 0
+          sb.set 'absenteeDayVotes', 0
+          sb.set 'absenteeDayPercent', 0
         
           App.execute 'when:fetched', App.request('entities:precincts'), =>
             colors  = sb.get 'precinctColors'

@@ -95,6 +95,7 @@
         voters:     0
         ballots:    0
         votes:      0
+        channels:   {}
 
     parse: (data) ->
       @set
@@ -103,6 +104,7 @@
         voters:     data.voters
         ballots:    data.ballots
         votes:      data.votes
+        channels:   data.channels
       @._previousAttributes = null
       @trigger 'reset'
 

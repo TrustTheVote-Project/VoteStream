@@ -39,7 +39,7 @@ class RefConResults
       m
     end
 
-    ballots, overvotes, undervotes, registered = get_vote_stats(contest, pids)
+    ballots, overvotes, undervotes, registered, channels = get_vote_stats(contest, pids)
 
     ordered = ordered_records(candidates, candidate_votes) do |c, votes, idx|
       { name: c.name, party: { name: c.party_name, abbr: c.party.abbr }, votes: votes, c: ColorScheme.candidate_color(c, idx) }
@@ -74,10 +74,16 @@ class RefConResults
     undervotes = r.u || 0
     ballots    = (r.v || 0) + overvotes + undervotes
 
+    candidate_results = CandidateResult.where(contest_result_id: contest_results.pluck(:id))
+    br_results = BallotResponseResult.where(contest_result_id: contest_results.pluck(:id))
+
+    type_results = candidate_results.select('ballot_type, sum(votes) v').group(:ballot_type).order(nil)
+    channels = type_results.inject({}) {|h,r| h[r.ballot_type] = r.v; h; }
+
     registered = Precinct
     registered = registered.where(id: pids.blank? ? refcon.precinct_ids : pids.to_a)
 
-    return ballots, overvotes, undervotes, registered.sum(:registered_voters)
+    return ballots, overvotes, undervotes, registered.sum(:registered_voters), channels
   end
 
   def referendum_data(referendum, params)
@@ -87,7 +93,7 @@ class RefConResults
     results   = BallotResponseResult.where(ballot_response_id: brids)
     results   = results.where(precinct_id: pids) unless pids.blank?
 
-    ballots, overvotes, undervotes, registered = get_vote_stats(referendum, pids)
+    ballots, overvotes, undervotes, registered, channels = get_vote_stats(referendum, pids)
 
     response_votes = results.group('ballot_response_id').select("sum(votes) v, ballot_response_id").inject({}) do |m, br|
       m[br.ballot_response_id] = br.v
@@ -285,13 +291,14 @@ class RefConResults
         rows:     ordered[0, 2] }
     end
 
-    ballots, overvotes, undervotes, registered = get_vote_stats(contest, rc_pids)
+    ballots, overvotes, undervotes, registered, channels = get_vote_stats(contest, rc_pids)
 
     return {
       items:      candidates.map { |c| { id:  c.id, name:  c.name, party:  { name:  c.party_name, abbr:  c.party.abbr }, c:  ColorScheme.candidate_color(c, candidates.index(c)) } },
       ballots:    ballots,
       votes:      ballots - overvotes - undervotes,
       voters:     registered,
+      channels:   channels,
       precincts:  pmap
     }
   end
@@ -333,7 +340,7 @@ class RefConResults
         rows:     ordered[0, 2] }
     end
 
-    ballots, overvotes, undervotes, registered = get_vote_stats(referendum, rc_pids)
+    ballots, overvotes, undervotes, registered, channels = get_vote_stats(referendum, rc_pids)
 
     return {
       items:      responses.map { |r| { id:  r.id, name:  r.name, c:  ColorScheme.ballot_response_color(r, responses.index(r)) } },
