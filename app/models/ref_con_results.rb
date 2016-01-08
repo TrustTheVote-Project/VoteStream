@@ -34,15 +34,28 @@ class RefConResults
     results    = CandidateResult.where(candidate_id: cids)
     results    = results.where(precinct_id: pids) unless pids.blank?
 
-    candidate_votes = results.group('candidate_id').select("sum(votes) v, candidate_id").inject({}) do |m, cr|
-      m[cr.candidate_id] = cr.v
+
+    candidate_votes = results.select("sum(votes) v, candidate_id, ballot_type").group('ballot_type, candidate_id').order(nil).inject({}) do |m, cr|
+      m[cr.candidate_id] ||= {}
+      m[cr.candidate_id][:total] ||= 0
+      m[cr.candidate_id][:total] += cr.v
+      m[cr.candidate_id][cr.ballot_type] = cr.v
       m
     end
 
     ballots, overvotes, undervotes, registered, channels = get_vote_stats(contest, pids)
 
-    ordered = ordered_records(candidates, candidate_votes) do |c, votes, idx|
-      { name: c.name, party: { name: c.party_name, abbr: c.party.abbr }, votes: votes, c: ColorScheme.candidate_color(c, idx) }
+    ordered = ordered_records(candidates, candidate_votes) do |c, votes, vote_channels, idx|
+      { 
+        name: c.name, 
+        party: { 
+          name: c.party_name, 
+          abbr: c.party.abbr 
+        }, 
+        votes: votes,
+        vote_channels: vote_channels,
+        c: ColorScheme.candidate_color(c, idx) 
+      }
     end
 
 
@@ -95,13 +108,17 @@ class RefConResults
 
     ballots, overvotes, undervotes, registered, channels = get_vote_stats(referendum, pids)
 
-    response_votes = results.group('ballot_response_id').select("sum(votes) v, ballot_response_id").inject({}) do |m, br|
-      m[br.ballot_response_id] = br.v
+    
+    response_votes = results.select("sum(votes) v, ballot_response_id, ballot_type").group('ballot_type, ballot_response_id').order(nil).inject({}) do |m, br|
+      m[br.ballot_response_id] ||= {}
+      m[br.ballot_response_id][:total] ||= 0
+      m[br.ballot_response_id][:total] += br.v
+      m[br.ballot_response_id][ballot_type] = br.v
       m
     end
 
-    ordered = ordered_records(responses, response_votes) do |b, votes, idx|
-      { name: b.name, votes: votes, c: ColorScheme.ballot_response_color(b, idx) }
+    ordered = ordered_records(responses, response_votes) do |b, votes, vote_channels, idx|
+      { name: b.name, votes: votes, vote_channels: vote_channels, c: ColorScheme.ballot_response_color(b, idx) }
     end
 
     ordered << { name: 'Overvotes', party: { name: 'Stats', abbr: 'stats' }, votes: overvotes, c: ColorScheme.special_colors(:overvotes) }
@@ -275,12 +292,13 @@ class RefConResults
 
       pcr = precinct_candidate_results[p.id] || []
       candidate_votes = pcr.inject({}) do |memo, r|
-        memo[r.candidate_id] = (memo[r.candidate_id] || 0) + r.votes
+        memo[r.candidate_id] ||= { total: 0 }
+        memo[r.candidate_id][:total] += r.votes
         memo
       end
 
-      ordered = ordered_records(candidates, candidate_votes) do |i, votes, idx|
-        { id: i.id, votes: votes }
+      ordered = ordered_records(candidates, candidate_votes) do |i, votes, vote_channels, idx|
+        { id: i.id, votes: votes, vote_channels: vote_channels }
       end
 
       li = leader_info(pcr)
@@ -324,12 +342,13 @@ class RefConResults
 
       pcr = precinct_referendum_results[p.id] || []
       response_votes = pcr.inject({}) do |memo, r|
-        memo[r.ballot_response_id] = r.votes
+        memo[r.ballot_response_id] ||= { total: 0 }
+        memo[r.ballot_response_id][:total] += r.votes
         memo
       end
 
-      ordered = ordered_records(responses, response_votes) do |i, votes, idx|
-        { id: i.id, votes: votes }
+      ordered = ordered_records(responses, response_votes) do |i, votes, vote_channels, idx|
+        { id: i.id, votes: votes, vote_channels: vote_channels }
       end
 
       li = leader_info(pcr)
@@ -367,9 +386,9 @@ class RefConResults
     }
   end
 
-  def ordered_records(items, items_votes, &block)
+  def ordered_records(items, items_votes_hash, &block)
     unordered = items.map do |i|
-      votes = items_votes[i.id].to_i
+      votes = items_votes_hash[i.id] ? items_votes_hash[i.id][:total].to_i : 0
       { order: (@order_by_votes ? -votes * 10000 : 0) + i.sort_order.to_i, item: i }
     end
 
@@ -377,8 +396,14 @@ class RefConResults
 
     idx = 0
     return ordered.map do |i|
-      votes = items_votes[i.id].to_i
-      data = block.call i, votes, idx
+      votes = items_votes_hash[i.id] ? items_votes_hash[i.id][:total].to_i : 0
+      vote_channels = items_votes_hash[i.id]
+      # if items_votes_hash[i.id]
+      #   items_votes_hash[i.id].keys.each do |k|
+      #     if k != nil
+      #   end
+      # end
+      data = block.call i, votes, vote_channels, idx
       idx += 1
       data
     end

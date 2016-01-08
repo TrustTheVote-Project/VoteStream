@@ -148,8 +148,8 @@
       data.totalVotes = @options.totalVotes
       data
     templateHelpers:
-      percent: -> Math.floor(@votes * 100 / (@totalVotes || 1))
-      percentFormatted: -> "#{Math.floor(@votes * 1000 / (@totalVotes || 1)) / 10.0}%"
+      percent: -> App.ScoreboardsApp.Helpers.percent(@votes, @totalVotes)
+      percentFormatted: -> App.ScoreboardsApp.Helpers.percentFormatted(@votes, @totalVotes)
     onShow: ->
       c = @model.get('c')
       $("h5, .percent", @$el).css(color: c)
@@ -170,8 +170,8 @@
       data.totalVotes = @options.totalVotes
       data
     templateHelpers:
-      percent: -> Math.floor(@votes * 100 / (@totalVotes || 1))
-      percentFormatted: -> "#{Math.floor(@votes * 1000 / (@totalVotes || 1)) / 10.0}%"
+      percent: -> App.ScoreboardsApp.Helpers.percent(@votes, @totalVotes)
+      percentFormatted: -> App.ScoreboardsApp.Helpers.percentFormatted(@votes, @totalVotes)
     onShow: ->
       c = @model.get('c')
       $("h5", @$el).css(color: c)

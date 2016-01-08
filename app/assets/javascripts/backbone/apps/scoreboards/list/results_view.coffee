@@ -14,8 +14,11 @@
       data.totalVotes = @options.totalVotes
       data
     templateHelpers:
-      percent: -> if @totalVotes > 0 then Math.floor(@votes * 100 / (@totalVotes || 1)) else 0
-      percentFormatted: -> if @totalVotes > 0 then "#{Math.floor(@votes * 1000 / (@totalVotes || 1)) / 10.0}%" else "0%"
+      percent: -> App.ScoreboardsApp.Helpers.percent(@votes, @totalVotes)
+      percentFormatted: -> App.ScoreboardsApp.Helpers.percentFormatted(@votes, @totalVotes)
+      voteChannels: -> 
+        console.log(@vote_channels)
+        @vote_channels || {}
     onShow: ->
       c = @model.get('c')
       if @model.get('party')['abbr'] == 'stats'
@@ -100,8 +103,8 @@
       data.totalVotes = @options.totalVotes
       data
     templateHelpers:
-      percent: -> if @totalVotes > 0 then Math.floor(@votes * 100 / (@totalVotes || 1)) else 0
-      percentFormatted: -> if @totalVotes > 0 then "#{Math.floor(@votes * 1000 / (@totalVotes || 1)) / 10.0}%" else "0%"
+      percent: -> App.ScoreboardsApp.Helpers.percent(@votes, @totalVotes)
+      percentFormatted: -> App.ScoreboardsApp.Helpers.percentFormatted(@votes, @totalVotes)
     onShow: ->
       c = @model.get('c')
       $("td", @$el).css(color: c)
@@ -204,6 +207,12 @@
       'change:precinctsReportingCount': 'render'
       'change:totalRegisteredVoters': 'render'
       'change:totalBallotsCast': 'render'
+      'change:electionDayVotes': 'render'
+      'change:electionDayPercent': 'render'
+      'change:earlyVotes': 'render'
+      'change:earlyPercent': 'render'
+      'change:absenteeVotes': 'render'
+      'change:absenteePercent': 'render'
 
     serializeData: ->
       data = Backbone.Marionette.ItemView.prototype.serializeData.apply @, arguments

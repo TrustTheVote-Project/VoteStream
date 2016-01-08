@@ -35,7 +35,14 @@
           totalBallotsCast:         0
           totalValidVotes:          0
           totalRegisteredVoters:    0
-
+          electionDayVotes:         0
+          electionDayPercent:       0
+          earlyVotes:               0
+          earlyPercent:             0
+          absenteeVotes:            0
+          absenteePercent:          0
+          
+          
           refcon:           App.request('entities:refcon:all-Federal')
           refconLabel:      ->
             type = @refcon.get('type')
@@ -88,11 +95,11 @@
           sb.set 'totalBallotsCast', precinctResults.get('ballots')
           sb.set 'totalValidVotes', precinctResults.get('votes')
           sb.set 'electionDayVotes', precinctResults.get('channels')['election-day']
-          sb.set 'electionDayPercent', 100 * (sb.get('electionDayVotes') / sb.get('totalBallotsCast'))
+          sb.set 'electionDayPercent', App.ScoreboardsApp.Helpers.percentFormatted(sb.get('electionDayVotes'), sb.get('totalBallotsCast'))
           sb.set 'earlyVotes', precinctResults.get('channels')['early']
-          sb.set 'earlyPercent', 100 * (sb.get('earlyVotes') / sb.get('totalBallotsCast'))
+          sb.set 'earlyPercent', App.ScoreboardsApp.Helpers.percentFormatted(sb.get('earlyVotes'), sb.get('totalBallotsCast'))
           sb.set 'absenteeVotes', precinctResults.get('channels')['absentee']
-          sb.set 'absenteePercent', 100 * (sb.get('absenteeVotes') / sb.get('totalBallotsCast'))
+          sb.set 'absenteePercent', App.ScoreboardsApp.Helpers.percentFormatted(sb.get('absenteeVotes'), sb.get('totalBallotsCast'))
 
         sb.get('results').on 'reset', ->
           result = sb.pickResult()
@@ -108,10 +115,10 @@
           sb.set 'totalValidVotes', 0
           sb.set 'electionDayVotes', 0
           sb.set 'electionDayPercent', 0
-          sb.set 'earlyDayVotes', 0
-          sb.set 'earlyDayPercent', 0
-          sb.set 'absenteeDayVotes', 0
-          sb.set 'absenteeDayPercent', 0
+          sb.set 'earlyVotes', 0
+          sb.set 'earlyPercent', 0
+          sb.set 'absenteeVotes', 0
+          sb.set 'absenteePercent', 0
         
           App.execute 'when:fetched', App.request('entities:precincts'), =>
             colors  = sb.get 'precinctColors'

@@ -6,4 +6,15 @@
 <div class="row-fluid total">
   <div class='span9 party'><%= @party.name %></div>
   <div class='span3 votes'><%= @votes %></div>
+  <div class='vote_channels'>
+    <% vcStats = @voteChannels() %>
+    <% vcKeys = Object.keys(vcStats) %>
+    <% if vcKeys.length: %>
+      <div class='bar'>
+        <% for channel in vcKeys: %>
+          <div class='filler <%= channel %>' style='width:<%= vcStats[channel] * 100 / vcStats['total'] %>%'></div>
+        <% end %>
+      </div>
+    <% end %>
+  </div>
 </div>

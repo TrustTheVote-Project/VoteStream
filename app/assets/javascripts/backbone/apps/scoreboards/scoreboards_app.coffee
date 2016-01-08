@@ -5,7 +5,23 @@
     appRoutes:
       "map(/:ctype/:cid)(/:rtype)(/:rid)"  : "show"
       "list(/:ctype/:cid)(/:rtype)(/:rid)" : "list"
-
+    
+  
+  class ScoreboardsApp.Helpers
+    @percent: 
+      (count, total) -> 
+        if total > 0
+          Math.floor(count * 100 / (total || 1))
+        else
+          0
+          
+    @percentFormatted: 
+      (count, total) -> 
+        if total > 0 
+          "#{Math.floor(count * 1000 / (total || 1)) / 10.0}%" 
+        else 
+          "0%"
+  
   setParams = (ctype, cid, rtype, rid) ->
     waitingFor = []
     if ctype == 'c' or ctype == 'r'
