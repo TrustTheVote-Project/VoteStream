@@ -12,7 +12,9 @@
     <% if vcKeys.length: %>
       <div class='bar'>
         <% for channel in vcKeys: %>
-          <div class='filler <%= channel %>' style='width:<%= vcStats[channel] * 100 / vcStats['total'] %>%'></div>
+          <% if channel != 'total': %>
+            <div class='filler <%= channel %>' style='width: <%= (vcStats[channel] * @percent() / vcStats['total']) %>%' title='<%= channel %>' ></div>
+          <% end %>
         <% end %>
       </div>
     <% end %>

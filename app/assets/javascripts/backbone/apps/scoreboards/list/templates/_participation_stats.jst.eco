@@ -6,7 +6,7 @@
   <div class="content candidates">
 
     <div class="row-fluid candidate">
-      <div class='bar'><div class='filler' style='width:<%= @electionDayPercent %>%'></div></div>
+      <div class='bar'><div class='filler' style='width:<%= @electionDayPercent %>'></div></div>
       <div class="row-fluid percentage">
         <div class="span9"><h5 class="ballot-type">Election-Day</h5></div>
         <div class="span3"><div class='percent'><%= @electionDayPercent %></div></div>
@@ -18,7 +18,7 @@
     </div>
 
     <div class="row-fluid candidate">
-      <div class='bar'><div class='filler' style='width:<%= @earlyPercent %>%'></div></div>
+      <div class='bar'><div class='filler' style='width:<%= @earlyPercent %>'></div></div>
       <div class="row-fluid percentage">
         <div class="span9"><h5 class="ballot-type">Early</h5></div>
         <div class="span3"><div class='percent'><%= @earlyPercent %></div></div>
@@ -30,7 +30,7 @@
     </div>
 
     <div class="row-fluid candidate">
-      <div class='bar'><div class='filler' style='width:<%= @absenteePercent %>%'></div></div>
+      <div class='bar'><div class='filler' style='width:<%= @absenteePercent %>'></div></div>
       <div class="row-fluid percentage">
         <div class="span9"><h5 class="ballot-type">Absentee</h5></div>
         <div class="span3"><div class='percent'><%= @absenteePercent %></div></div>
