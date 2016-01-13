@@ -94,12 +94,13 @@
           sb.set 'totalRegisteredVoters', precinctResults.get('voters')
           sb.set 'totalBallotsCast', precinctResults.get('ballots')
           sb.set 'totalValidVotes', precinctResults.get('votes')
-          sb.set 'electionDayVotes', precinctResults.get('channels')['election-day']
-          sb.set 'electionDayPercent', App.ScoreboardsApp.Helpers.percentFormatted(sb.get('electionDayVotes'), sb.get('totalBallotsCast'))
-          sb.set 'earlyVotes', precinctResults.get('channels')['early']
-          sb.set 'earlyPercent', App.ScoreboardsApp.Helpers.percentFormatted(sb.get('earlyVotes'), sb.get('totalBallotsCast'))
-          sb.set 'absenteeVotes', precinctResults.get('channels')['absentee']
-          sb.set 'absenteePercent', App.ScoreboardsApp.Helpers.percentFormatted(sb.get('absenteeVotes'), sb.get('totalBallotsCast'))
+          if precinctResults.get('channels')
+            sb.set 'electionDayVotes', precinctResults.get('channels')['election-day']
+            sb.set 'electionDayPercent', App.ScoreboardsApp.Helpers.percentFormatted(sb.get('electionDayVotes'), sb.get('totalBallotsCast'))
+            sb.set 'earlyVotes', precinctResults.get('channels')['early']
+            sb.set 'earlyPercent', App.ScoreboardsApp.Helpers.percentFormatted(sb.get('earlyVotes'), sb.get('totalBallotsCast'))
+            sb.set 'absenteeVotes', precinctResults.get('channels')['absentee']
+            sb.set 'absenteePercent', App.ScoreboardsApp.Helpers.percentFormatted(sb.get('absenteeVotes'), sb.get('totalBallotsCast'))
 
         sb.get('results').on 'reset', ->
           result = sb.pickResult()

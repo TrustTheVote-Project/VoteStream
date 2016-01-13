@@ -17,7 +17,6 @@
       percent: -> App.ScoreboardsApp.Helpers.percent(@votes, @totalVotes)
       percentFormatted: -> App.ScoreboardsApp.Helpers.percentFormatted(@votes, @totalVotes)
       voteChannels: -> 
-        console.log(@vote_channels)
         @vote_channels || {}
     onShow: ->
       c = @model.get('c')

@@ -22,8 +22,9 @@ class NistErrLoader < BaseLoader
     er = Vedaspace::Parser.parse_ved_file(@xml_source)
     status_report("Loaded parser from XML source")
     locality = Locality.find(locality_id)
+    er_uid = er.issuer + " " + (er.election ? er.election.start_date : nil).to_s
     Election.transaction do
-      election = Election.find_by_uid('GENERATE_UID')
+      election = Election.find_by_uid(er_uid)
       mismatches = {}
 
       # Pull in extra precinct data
@@ -430,7 +431,7 @@ class NistErrLoader < BaseLoader
   def load(locality_id = nil)
     er = Vedaspace::Parser.parse_ved_file(@xml_source)
     Election.transaction do
-      election = Election.new(uid: 'GENERATE_UID')
+      election = Election.new(uid: er_uid = er.issuer + " " + (er.election ? er.election.start_date : nil).to_s)
       # Election.where(uid: election.uid).destroy_all
 
       # TODO: shouldn't be required
@@ -587,7 +588,7 @@ class NistErrLoader < BaseLoader
       DistrictsPrecinct.import district_precincts
 
       polygon_queries.each do |uid, polygons|
-        kml = (DataLoader::MULTI % polygons.join).gsub(',0 ', ' ')
+        kml = (DataLoader::MULTI % polygons.join).gsub(',0 ', ' ').gsub(',0<', '<')
         Precinct.where(locality: locality, uid: uid).update_all([ DataLoader::GEO_QUERY, kml ])
       end
 
