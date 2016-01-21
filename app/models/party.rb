@@ -10,4 +10,14 @@ class Party < ActiveRecord::Base
     locality.parties.create(name: "Undefined-#{uid}", sort_order: 9999, abbr: 'UNDEF', uid: uid)
   end
   
+  
+  def self.no_party(locality)
+    locality.parties.where(abbr: "NP").first || locality.parties.create(
+      name: "No Party",
+      sort_order: 9999,
+      abbr: "NP",
+      uid: locality.uid.to_s + "-no-party"
+    )
+  end
+  
 end

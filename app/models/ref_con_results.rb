@@ -38,8 +38,8 @@ class RefConResults
     candidate_votes = results.select("sum(votes) v, candidate_id, ballot_type").group('ballot_type, candidate_id').order(nil).inject({}) do |m, cr|
       m[cr.candidate_id] ||= {}
       m[cr.candidate_id][:total] ||= 0
-      m[cr.candidate_id][:total] += cr.v
-      m[cr.candidate_id][cr.ballot_type] = cr.v
+      m[cr.candidate_id][:total] += cr.v.to_i
+      m[cr.candidate_id][cr.ballot_type] = cr.v.to_i
       m
     end
 
@@ -112,8 +112,8 @@ class RefConResults
     response_votes = results.select("sum(votes) v, ballot_response_id, ballot_type").group('ballot_type, ballot_response_id').order(nil).inject({}) do |m, br|
       m[br.ballot_response_id] ||= {}
       m[br.ballot_response_id][:total] ||= 0
-      m[br.ballot_response_id][:total] += br.v
-      m[br.ballot_response_id][ballot_type] = br.v
+      m[br.ballot_response_id][:total] += br.v.to_i
+      m[br.ballot_response_id][ballot_type] = br.v.to_i
       m
     end
 
@@ -293,7 +293,7 @@ class RefConResults
       pcr = precinct_candidate_results[p.id] || []
       candidate_votes = pcr.inject({}) do |memo, r|
         memo[r.candidate_id] ||= { total: 0 }
-        memo[r.candidate_id][:total] += r.votes
+        memo[r.candidate_id][:total] += r.votes.to_i
         memo
       end
 
@@ -338,12 +338,12 @@ class RefConResults
 
     voters = 0
     pmap = precincts.map do |p|
-      voters += p.registered_voters
+      voters += p.registered_voters.to_i
 
       pcr = precinct_referendum_results[p.id] || []
       response_votes = pcr.inject({}) do |memo, r|
         memo[r.ballot_response_id] ||= { total: 0 }
-        memo[r.ballot_response_id][:total] += r.votes
+        memo[r.ballot_response_id][:total] += r.votes.to_i
         memo
       end
 
@@ -371,10 +371,10 @@ class RefConResults
   end
 
   def leader_info(pcr)
-    total_votes = pcr.sum(&:votes)
+    total_votes = pcr.collect {|res| res.votes }.compact.sum
 
     if total_votes > 0
-      pcr_s        = pcr.sort_by(&:votes).reverse
+      pcr_s        = pcr.sort{ |a,b| a.votes.to_i <=> b.votes.to_i}.reverse
       leader       = pcr_s[0]
     else
       leader       = nil

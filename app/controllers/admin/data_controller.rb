@@ -14,8 +14,13 @@ class Admin::DataController < Admin::BaseController
     Referendum.delete_all
     BallotResponse.delete_all
     BallotResponseResult.delete_all
+    ContestResult.destroy_all
     Precinct.destroy_all
     District.delete_all
+    DistrictsPrecinct.delete_all
+    Party.delete_all
+    PollingLocation.delete_all
+    
 
     redirect_to :admin_data, notice: "Data has been reset"
   end

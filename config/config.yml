@@ -9,6 +9,9 @@ map_color:
     republican:     '#dc1521'
     democrat:       '#023582'
     other:          '#998675'
+    other1:         '#ff0000'
+    other2:         '#00ff00'
+    other3:         '#0000ff'
 
     nonpartisan1:   '#67aee8'
     nonpartisan2:   '#e5a433'

@@ -17,17 +17,23 @@ class ColorScheme
   def self.candidate_color(candidate, index)
     c = 'not_reporting'
 
+    
     if candidate
       party = candidate.party.name.downcase.strip
-
       if party == 'nonpartisan'
         c = index == 0 ? 'nonpartisan1' : 'nonpartisan2'
       elsif party == 'republican'
         c = 'republican'
       elsif party == 'democratic-farmer-labor' or party == 'democratic'
         c = 'democrat'
-      else
+      elsif party == 'write-in'
         c = 'other'
+      else
+        if candidate.color
+          return candidate.color
+        else
+          c = "other#{index+1}"
+        end
       end
     end
 

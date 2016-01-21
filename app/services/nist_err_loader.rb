@@ -45,13 +45,17 @@ class NistErrLoader < BaseLoader
       end
       precinct_children = Precinct.includes(:precinct).where(uid: precinct_splits_voters.keys)
       precinct_parents = precinct_children.inject({}) do |h, pc|
-        h[pc.uid] = pc.precinct
+        h[pc.uid] = pc.precinct || pc # may have sub-precinct, may not
         h
       end
       precinct_children.each do |p_child|
         reg_voters = precinct_splits_voters[p_child.uid].to_i
         p_parent = precinct_parents[p_child.uid]
-        p_parent.registered_voters = (p_parent.registered_voters || 0) + reg_voters
+        if p_parent
+          p_parent.registered_voters = (p_parent.registered_voters || 0) + reg_voters
+        else
+          raise p_child.uid.to_s
+        end
       end
       precinct_parents.values.each do |p|
         p.save
@@ -151,7 +155,7 @@ class NistErrLoader < BaseLoader
                   cr.undervotes ||= 0
                   cr.overvotes ||= 0
                   if precinct
-                    cr.total_valid_votes += vc.count
+                    cr.total_valid_votes += vc.count.to_i
                     can_result_uid = "#{contest.uid}-#{precinct.uid}-#{candidate.uid}-#{vc.count_item_type.to_s}"
                     can_res = can_results[can_result_uid]
                     if can_res.nil?
@@ -166,11 +170,11 @@ class NistErrLoader < BaseLoader
                   else
                     mismatches[:precincts] ||= []
                     mismatches[:precincts] << d_uid
-                    cr.total_valid_votes += vc.count
-                    can_result_uid = "#{contest.uid}-no-precinct-#{candidate.uid}-#{vc.ballot_type.to_s}"
+                    cr.total_valid_votes += vc.count.to_i
+                    can_result_uid = "#{contest.uid}-no-precinct-#{candidate.uid}-#{vc.count_item_type.to_s}"
                     can_res = can_results[can_result_uid]
                     if can_res.nil?
-                      can_res = CandidateResult.new(candidate: candidate, uid: can_result_uid, votes: vc.count, ballot_type: vc.ballot_type.to_s)
+                      can_res = CandidateResult.new(candidate: candidate, uid: can_result_uid, votes: vc.count, ballot_type: vc.count_item_type.to_s)
                       can_results[can_result_uid] = can_res
                       cr.candidate_results << can_res
                     else
@@ -207,7 +211,7 @@ class NistErrLoader < BaseLoader
 
               precinct_results.values.each do |cr|
                 if !cr.precinct_id.blank? && cr.candidate_results.size > 0
-                  items = cr.candidate_results.to_a.sort {|a,b| b.votes <=> a.votes}
+                  items = cr.candidate_results.to_a.sort {|a,b| b.votes.to_i <=> a.votes.to_i}
                   total_votes = cr.total_votes || 0
                   diff = (items[0].votes - (items[1].try(:votes) || 0)) * 100 / (total_votes == 0 ? 1 : total_votes)
                   leader = items[0].candidate
@@ -273,7 +277,7 @@ class NistErrLoader < BaseLoader
                   cr.overvotes ||= 0
 
                   if precinct
-                    cr.total_valid_votes += vc.count
+                    cr.total_valid_votes += vc.count.to_i
                     ref_response_uid = "#{ref.uid}-#{precinct.uid}-#{response.uid}-#{vc.count_item_type.to_s}"
                     ref_res = ref_results[ref_response_uid]
                     if ref_res.nil?
@@ -290,7 +294,7 @@ class NistErrLoader < BaseLoader
                     mismatches[:precincts] ||= []
                     mismatches[:precincts] << d_uid
                     cr.ballot_response_results << BallotResponseResult.new(ballot_response: response,
-                      votes: vc.count, uid: "#{ref.uid}-no_precinct-#{response.uid}-#{vc.count_item_type.to_s}", ballot_type: vc.ballot_type.to_s)
+                      votes: vc.count, uid: "#{ref.uid}-no_precinct-#{response.uid}-#{vc.count_item_type.to_s}", ballot_type: vc.count_item_type.to_s)
                   end
                   precinct_results[d_uid] ||= cr
                 end
@@ -323,7 +327,7 @@ class NistErrLoader < BaseLoader
 
               precinct_results.values.each do |cr|
                 if !cr.precinct_id.blank? && cr.ballot_response_results.size > 0
-                  items = cr.ballot_response_results.to_a.sort {|a,b| b.votes <=> a.votes}
+                  items = cr.ballot_response_results.to_a.sort {|a,b| b.votes.to_i <=> a.votes.to_i}
                   total_votes = cr.total_votes || 0
                   diff = (items[0].votes - (items[1].try(:votes) || 0)) * 100 / (total_votes == 0 ? 1 : total_votes)
                   leader = items[0].ballot_response
@@ -396,7 +400,7 @@ class NistErrLoader < BaseLoader
       elsif party == DEMOCRATIC_1 or party == DEMOCRATIC_2
         c = 'd'
       else
-        c = 'o'
+        c = candidate.color
       end
 
       return "#{c}#{shade(diff)}"
@@ -444,6 +448,7 @@ class NistErrLoader < BaseLoader
       election.election_type = er.election ? er.election.election_type.to_s : "pre-election" #"general"
       election.save!
 
+      locality = nil
       if locality_id.nil?
         locality = create_locality(er.issuer, (er.issuer_abbreviation || "CA"), er.object_id)
       else
@@ -661,13 +666,17 @@ class NistErrLoader < BaseLoader
                 
                   next if !sel || candidate_sel.is_write_in #TODO: don't know write-in party_ids
                 
-                   #TODO: can be multiple candidates in NIST ERR
-                  next if sel.party_identifier.blank?
-                  party = locality_parties[sel.party_identifier]
+                  #TODO: can be multiple candidates in NIST ERR
+                  color = nil
+                  
+                  party = locality_parties[sel.party_identifier] || Party.no_party(locality)
+
                   if party.nil? && !candidate_sel.is_write_in
                     raise sel.inspect.to_s + ' ' + locality.parties.collect(&:uid).to_s
                   end
+
                   color = party ? ColorScheme.candidate_pre_color(party.name) : nil
+                  
                   candidate = Candidate.new(uid: sel.object_id,
                     name: sel.ballot_name.language_strings.first.text,
                     sort_order: candidate_sel.sequence_order,
