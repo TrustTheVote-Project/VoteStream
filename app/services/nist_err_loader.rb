@@ -400,7 +400,8 @@ class NistErrLoader < BaseLoader
       elsif party == DEMOCRATIC_1 or party == DEMOCRATIC_2
         c = 'd'
       else
-        c = candidate.color
+        c = 'o'
+        #c = candidate.color
       end
 
       return "#{c}#{shade(diff)}"

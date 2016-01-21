@@ -9,7 +9,6 @@
     fetchForResult: (result, region) ->
       @reset []
       @trigger 'sync'
-
       return if !result?
 
       filter = {}
