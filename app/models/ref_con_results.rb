@@ -45,6 +45,8 @@ class RefConResults
 
     ballots, overvotes, undervotes, registered, channels = get_vote_stats(contest, pids)
 
+    ordered_candidates = contest.candidates_by_votes
+
     ordered = ordered_records(candidates, candidate_votes) do |c, votes, vote_channels, idx|
       { 
         name: c.name, 
@@ -54,7 +56,7 @@ class RefConResults
         }, 
         votes: votes,
         vote_channels: vote_channels,
-        c: ColorScheme.candidate_color(c, idx) 
+        c: ColorScheme.candidate_color(c, ordered_candidates.index(c)) 
       }
     end
 
