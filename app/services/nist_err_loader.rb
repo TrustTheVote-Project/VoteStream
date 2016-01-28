@@ -223,11 +223,12 @@ class NistErrLoader < BaseLoader
               precinct_results.values.each do |cr|
                 if !cr.precinct_id.blank? && cr.candidate_results.size > 0
                   items = cr.candidate_results.to_a.sort {|a,b| b.votes.to_i <=> a.votes.to_i}
-                  total_votes = cr.total_votes || 0
+                  total_votes = cr.total_valid_votes || 0
                   diff = (items[0].votes - (items[1].try(:votes) || 0)) * 100 / (total_votes == 0 ? 1 : total_votes)
                   leader = items[0].candidate
 
                   cr.color_code = self.candidate_color_code(leader, diff, total_votes, top_cans)
+                  Rails.logger.warn(cr.color_code)
                 end
               end
 
