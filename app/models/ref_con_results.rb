@@ -314,8 +314,10 @@ class RefConResults
 
     ballots, overvotes, undervotes, registered, channels = get_vote_stats(contest, rc_pids)
 
+    ordered_candidates = contest.candidates_by_votes
+    
     return {
-      items:      candidates.map { |c| { id:  c.id, name:  c.name, party:  { name:  c.party_name, abbr:  c.party.abbr }, c:  ColorScheme.candidate_color(c, candidates.index(c)) } },
+      items:      candidates.map { |c,i| { id:  c.id, name:  c.name, party:  { name:  c.party_name, abbr:  c.party.abbr }, c:  ColorScheme.candidate_color(c, ordered_candidates.index(c))} },
       ballots:    ballots,
       votes:      ballots - overvotes - undervotes,
       voters:     registered,
@@ -364,8 +366,10 @@ class RefConResults
 
     ballots, overvotes, undervotes, registered, channels = get_vote_stats(referendum, rc_pids)
 
+    
+
     return {
-      items:      responses.map { |r| { id:  r.id, name:  r.name, c:  ColorScheme.ballot_response_color(r, responses.index(r)) } },
+      items:      responses.map { |r| { id:  r.id, name:  r.name, c:  ColorScheme.ballot_response_color(r, responses.index(r)-1) } },
       ballots:    ballots,
       votes:      ballots - overvotes - undervotes,
       voters:     registered,

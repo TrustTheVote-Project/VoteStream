@@ -27,6 +27,18 @@ class Contest < ActiveRecord::Base
   validates :uid, presence: true
   before_save :set_district_type
 
+
+  def candidates_by_votes
+    cs = {}
+    contest_results.includes(:candidate_results=>[:candidate]).each do |cr|
+      cr.candidate_results.each do |can_r|
+        cs[can_r.candidate] ||= 0
+        cs[can_r.candidate] += can_r.votes.to_i
+      end
+    end
+    return cs.to_a.sort {|c1,c2| c2[1]<=>c1[1] }.collect {|c| c[0]}    
+  end
+
   def district_type_normalized
     dt = self.district_type.try(:downcase)
     DISTRICT_TYPES.include?(dt) ? dt : 'other'

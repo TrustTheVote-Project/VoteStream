@@ -51,8 +51,6 @@ InfoBubble.prototype.panToView = ->
 
       for p in @polygons
         color = @precinctColors.get p.data.precinctId
-        if color and color.get('c')[0]
-          console.log(color.get('c')[1])
         newColors = @findPrecinctColors(color)
         p.data.colors = newColors
         p.setOptions p.data.colors
@@ -329,7 +327,6 @@ InfoBubble.prototype.panToView = ->
     onPolygonClick: ->
       pid = @.data.precinctId
       result = @.data.mapView.precinctResults.get('precincts').get(pid)
-
       if result? and @.data.mapView.options.infoWindow isnt 'simple'
         @setOptions
           fillColor:   @.data.colors.hoverFillColor
