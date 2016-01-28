@@ -51,6 +51,8 @@ InfoBubble.prototype.panToView = ->
 
       for p in @polygons
         color = @precinctColors.get p.data.precinctId
+        if color and color.get('c')[0]
+          console.log(color.get('c')[1])
         newColors = @findPrecinctColors(color)
         p.data.colors = newColors
         p.setOptions p.data.colors
@@ -198,6 +200,9 @@ InfoBubble.prototype.panToView = ->
         for cl in [ [ 'r', '<%= AppConfig['map_color']['colors']['republican'] %>' ],
                     [ 'd', '<%= AppConfig['map_color']['colors']['democrat'] %>' ],
                     [ 'o', '<%= AppConfig['map_color']['colors']['other'] %>' ],
+                    [ 'a', '<%= AppConfig['map_color']['colors']['other1'] %>' ],
+                    [ 'b', '<%= AppConfig['map_color']['colors']['other2'] %>' ],
+                    [ 'c', '<%= AppConfig['map_color']['colors']['other3'] %>' ],
                     [ 'n', '<%= AppConfig['map_color']['colors']['not_reporting'] %>' ],
                     [ '1', '<%= AppConfig['map_color']['colors']['nonpartisan1'] %>' ],
                     [ '2', '<%= AppConfig['map_color']['colors']['nonpartisan2'] %>' ],
@@ -358,7 +363,6 @@ InfoBubble.prototype.panToView = ->
           color = @precinctColors.get precinctId
           kml = precinct.get 'kml'
           colors = @findPrecinctColors color
-
           lines = @pointsFromKml(kml)
 
           for points in lines

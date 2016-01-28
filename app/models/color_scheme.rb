@@ -29,11 +29,11 @@ class ColorScheme
       elsif party == 'write-in'
         c = 'other'
       else
-        if candidate.color
-          return candidate.color
-        else
-          c = "other#{index+1}"
-        end
+        # if candidate.color
+        #   return candidate.color
+        # else
+        c = "other#{index+1}"
+        # end
       end
     end
 

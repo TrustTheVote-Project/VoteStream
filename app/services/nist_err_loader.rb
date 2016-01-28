@@ -209,6 +209,17 @@ class NistErrLoader < BaseLoader
               #   end
               # end
 
+
+              # Overall winner
+              con_winners = {}
+              precinct_results.values.each do |cr|
+                cr.candidate_results.to_a.each do |can|
+                  con_winners[can.candidate] ||= 0
+                  con_winners[can.candidate] += can.votes.to_i
+                end
+              end
+              top_cans = con_winners.to_a.sort {|a,b| b[1]<=>a[1] }.collect {|a| a[0]}
+
               precinct_results.values.each do |cr|
                 if !cr.precinct_id.blank? && cr.candidate_results.size > 0
                   items = cr.candidate_results.to_a.sort {|a,b| b.votes.to_i <=> a.votes.to_i}
@@ -216,7 +227,7 @@ class NistErrLoader < BaseLoader
                   diff = (items[0].votes - (items[1].try(:votes) || 0)) * 100 / (total_votes == 0 ? 1 : total_votes)
                   leader = items[0].candidate
 
-                  cr.color_code = self.candidate_color_code(leader, diff, total_votes)
+                  cr.color_code = self.candidate_color_code(leader, diff, total_votes, top_cans)
                 end
               end
 
@@ -387,7 +398,7 @@ class NistErrLoader < BaseLoader
     end
   end
 
-  def candidate_color_code(candidate, diff, total_votes)
+  def candidate_color_code(candidate, diff, total_votes, top_cans)
     if diff == 0
       return TIE_COLOR
     else
@@ -400,7 +411,16 @@ class NistErrLoader < BaseLoader
       elsif party == DEMOCRATIC_1 or party == DEMOCRATIC_2
         c = 'd'
       else
-        c = 'o'
+        if candidate.uid == top_cans[0].uid
+          c = 'a'
+        elsif candidate.uid == top_cans[1].uid
+          c = 'b'
+        elsif candidate.uid == top_cans[2].uid
+          c = 'c'
+        else
+          c = 'o'
+        end
+        Rails.logger.warn("Setting #{c} for #{candidate.inspect} #{top_cans[0].inspect}")
         #c = candidate.color
       end
 

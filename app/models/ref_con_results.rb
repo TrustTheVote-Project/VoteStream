@@ -113,7 +113,7 @@ class RefConResults
       m[br.ballot_response_id] ||= {}
       m[br.ballot_response_id][:total] ||= 0
       m[br.ballot_response_id][:total] += br.v.to_i
-      m[br.ballot_response_id][ballot_type] = br.v.to_i
+      m[br.ballot_response_id][m] = br.v.to_i
       m
     end
 
@@ -174,7 +174,10 @@ class RefConResults
         when registered <= ballots then 100
         else ballots * 100.0 / registered
       end
-
+      
+      
+      
+      
       { id: r.precinct_id, c: color, p: "ip#{participation_shade(participation)}", pp: participation, r: registered, b: ballots }
     end
 
