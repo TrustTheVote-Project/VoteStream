@@ -45,7 +45,7 @@ class RefConResults
 
     ballots, overvotes, undervotes, registered, channels = get_vote_stats(contest, pids)
 
-    ordered_candidates = contest.candidates_by_votes
+    ordered_candidates = contest.winning_candidates
 
     ordered = ordered_records(candidates, candidate_votes) do |c, votes, vote_channels, idx|
       { 
@@ -316,7 +316,7 @@ class RefConResults
 
     ballots, overvotes, undervotes, registered, channels = get_vote_stats(contest, rc_pids)
 
-    ordered_candidates = contest.candidates_by_votes
+    ordered_candidates = contest.winning_candidates
     
     return {
       items:      candidates.map { |c,i| { id:  c.id, name:  c.name, party:  { name:  c.party_name, abbr:  c.party.abbr }, c:  ColorScheme.candidate_color(c, ordered_candidates.index(c))} },

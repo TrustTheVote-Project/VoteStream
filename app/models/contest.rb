@@ -23,13 +23,22 @@ class Contest < ActiveRecord::Base
   has_many   :precincts, through: :district
   has_many   :candidates, dependent: :destroy
   has_many   :contest_results, dependent: :destroy
+  has_many   :candidate_results, through: :contest_results
 
   validates :uid, presence: true
   before_save :set_district_type
 
 
+  def winning_candidates
+    candidate_ids = candidate_results.select("candidate_results.candidate_id, sum(candidate_results.votes) as votes").group("candidate_results.candidate_id").order("votes DESC").collect(&:candidate_id)
+    candidates_by_id = Candidate.find(candidate_ids).index_by(&:id)
+    candidate_ids.collect {|id| candidates_by_id[id] }
+  end
+
   def candidates_by_votes
     cs = {}
+    
+    contest_results.includes(:candidate_results=>[:candidate]).sum("candidate_results.votes")
     contest_results.includes(:candidate_results=>[:candidate]).each do |cr|
       cr.candidate_results.each do |can_r|
         cs[can_r.candidate] ||= 0
