@@ -9,7 +9,7 @@ class Election < ActiveRecord::Base
   validates :election_type, presence: true
 
 
-  before_create :set_election_type
+  before_validation :set_election_type
   
   private
   def set_election_type
