@@ -20,8 +20,7 @@ class Admin::DataController < Admin::BaseController
     DistrictsPrecinct.delete_all
     Party.delete_all
     PollingLocation.delete_all
-    ColorScheme.delete_all
-
+    
     redirect_to :admin_data, notice: "Data has been reset"
   end
 
