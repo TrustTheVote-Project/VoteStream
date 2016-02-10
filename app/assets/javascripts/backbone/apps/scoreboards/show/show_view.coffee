@@ -150,6 +150,7 @@
     templateHelpers:
       percent: -> App.ScoreboardsApp.Helpers.percent(@votes, @totalVotes)
       percentFormatted: -> App.ScoreboardsApp.Helpers.percentFormatted(@votes, @totalVotes)
+      
     onShow: ->
       c = @model.get('c')
       $("h5, .percent", @$el).css(color: c)
@@ -172,6 +173,7 @@
     templateHelpers:
       percent: -> App.ScoreboardsApp.Helpers.percent(@votes, @totalVotes)
       percentFormatted: -> App.ScoreboardsApp.Helpers.percentFormatted(@votes, @totalVotes)
+      
     onShow: ->
       c = @model.get('c')
       $("h5", @$el).css(color: c)

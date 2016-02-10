@@ -103,7 +103,7 @@
       data
     templateHelpers:
       percent: -> App.ScoreboardsApp.Helpers.percent(@votes, @totalVotes)
-      percentFormatted: -> App.ScoreboardsApp.Helpers.percentFormatted(@votes, @totalVotes)
+      percentFormatted: -> App.ScoreboardsApp.Helpers.percentFormatted(@votes, @totalVotes)      
     onShow: ->
       c = @model.get('c')
       $("td", @$el).css(color: c)
@@ -212,6 +212,8 @@
       'change:earlyPercent': 'render'
       'change:absenteeVotes': 'render'
       'change:absenteePercent': 'render'
+      'change:npVotes': 'render'
+      'change:npPercent': 'render'
 
     serializeData: ->
       data = Backbone.Marionette.ItemView.prototype.serializeData.apply @, arguments

@@ -13,7 +13,7 @@
 
     templateHelpers:
       percent: -> App.ScoreboardsApp.Helpers.percent(@votes, @totalVotes)
-      percentFormatted: -> App.ScoreboardsApp.Helpers.percentFormatted(@votes, @totalVotes)
+      percentFormatted: -> App.ScoreboardsApp.Helpers.percentFormatted(@votes, @totalVotes)      
 
     initialize: ->
       @si = App.request 'entities:scoreboardInfo'

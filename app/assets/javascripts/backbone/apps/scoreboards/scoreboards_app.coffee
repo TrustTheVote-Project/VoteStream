@@ -21,6 +21,10 @@
           "#{Math.floor(count * 1000 / (total || 1)) / 10.0}%" 
         else 
           "0%"
+          
+    @numberFormatted:
+      (number) ->
+        numeral(number).format('0,0')
   
   setParams = (ctype, cid, rtype, rid) ->
     waitingFor = []

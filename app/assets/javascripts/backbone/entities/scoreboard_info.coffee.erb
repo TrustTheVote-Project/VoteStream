@@ -41,6 +41,8 @@
           earlyPercent:             0
           absenteeVotes:            0
           absenteePercent:          0
+          npVotes:                  0
+          npPercent:                0
           
           
           refcon:           App.request('entities:refcon:all-Federal')
@@ -96,12 +98,14 @@
           sb.set 'totalValidVotes', precinctResults.get('votes')
           if precinctResults.get('channels')
             sb.set 'electionDayVotes', precinctResults.get('channels')['election-day']
-            sb.set 'electionDayPercent', App.ScoreboardsApp.Helpers.percentFormatted(sb.get('electionDayVotes'), sb.get('totalBallotsCast'))
+            sb.set 'electionDayPercent', App.ScoreboardsApp.Helpers.percentFormatted(sb.get('electionDayVotes'), sb.get('totalRegisteredVoters'))
             sb.set 'earlyVotes', precinctResults.get('channels')['early']
-            sb.set 'earlyPercent', App.ScoreboardsApp.Helpers.percentFormatted(sb.get('earlyVotes'), sb.get('totalBallotsCast'))
+            sb.set 'earlyPercent', App.ScoreboardsApp.Helpers.percentFormatted(sb.get('earlyVotes'), sb.get('totalRegisteredVoters'))
             sb.set 'absenteeVotes', precinctResults.get('channels')['absentee']
-            sb.set 'absenteePercent', App.ScoreboardsApp.Helpers.percentFormatted(sb.get('absenteeVotes'), sb.get('totalBallotsCast'))
-
+            sb.set 'absenteePercent', App.ScoreboardsApp.Helpers.percentFormatted(sb.get('absenteeVotes'), sb.get('totalRegisteredVoters'))
+            sb.set 'npVotes', sb.get('totalRegisteredVoters') - sb.get('totalBallotsCast')
+            sb.set 'npPercent', App.ScoreboardsApp.Helpers.percentFormatted(sb.get('npVotes'), sb.get('totalRegisteredVoters'))
+            
         sb.get('results').on 'reset', ->
           result = sb.pickResult()
           sb.set 'result', result
@@ -120,6 +124,8 @@
           sb.set 'earlyPercent', 0
           sb.set 'absenteeVotes', 0
           sb.set 'absenteePercent', 0
+          sb.set 'npVotes', 0
+          sb.set 'npPercent', 0
         
           App.execute 'when:fetched', App.request('entities:precincts'), =>
             colors  = sb.get 'precinctColors'
