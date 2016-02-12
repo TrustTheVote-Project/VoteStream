@@ -36,6 +36,9 @@ en:
           districts: Districts
           precincts: Precincts
 
+      channel_menu:
+        label: Filter by Channel(s)
+
       view_selector:
         map: Map view
         list: List view
