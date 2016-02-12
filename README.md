@@ -16,6 +16,10 @@ PostgreSQL
 
       GRANT SELECT ON public.geometry_columns TO enrs;
 
+* Run the database migrations and seed the database:
+
+      rake db:migrate
+      rake db:seed
 
 NGINX
 -----

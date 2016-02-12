@@ -25,6 +25,10 @@
       districtDropdownRegion: '#district-dropdown-region'
       precinctDropdownRegion: '#precinct-dropdown-region'
 
+      earlyChannelToggle: '#early-channel-toggle'
+      samedayChannelToggle: '#sameday-channel-toggle'
+      absenteeChannelToggle: '#absentee-channel-toggle'
+
       breadcrumbsRegion:      '#breadcrumbs-region'
       viewSelectorRegion:     '#view-selector-region'
       coloringTypeSelectorRegion: '#coloring-type-selector-region'
@@ -78,6 +82,18 @@
         ])
         model: scoreboardInfo
         collection: App.request 'entities:refcons:other'
+      @.earlyChannelToggle.show new ValueToggleView
+        name: 'Early'
+        scoreboardInfo: scoreboardInfo
+        key: 'channelEarly'
+      @.samedayChannelToggle.show new ValueToggleView
+        name: 'Same-day'
+        scoreboardInfo: scoreboardInfo
+        key: 'channelElectionday'
+      @.absenteeChannelToggle.show new ValueToggleView
+        name: 'Absentee'
+        scoreboardInfo: scoreboardInfo
+        key: 'channelAbsentee'
 
       App.execute 'when:fetched', App.request('entities:precincts'), =>
         # We give time for the map to load
@@ -150,6 +166,40 @@
 
       @endBuffering()
 
+  class ValueToggleView extends Marionette.ItemView
+    template: 'scoreboards/filter_bar/_toggle'
+    itemViewContainer: 'span'
+    tagName: 'span'
+    className: 'toggle-box'
+    
+    initialize: (options) ->
+      @scoreboardInfo = options.scoreboardInfo
+      @key = options.key
+      @model = new Backbone.Model
+        name: options.name
+    
+    performToggle: (e) ->
+      if e
+        e.preventDefault()
+      checkbox = this.$el.find('input[type=checkbox]')
+      value = checkbox.prop('checked')
+      checkbox.prop('checked', !value)
+      this.filterToggled()
+    
+    onRender: ->
+      this.$el.find('input[type=checkbox]').prop(
+        'checked', @scoreboardInfo.get(@key))
+    
+    filterToggled: (e) ->
+      if e
+        e.stopPropagation()
+      checkbox = this.$el.find('input[type=checkbox]')
+      value = checkbox.prop('checked')
+      @scoreboardInfo.set @key, value
+  
+    events:
+      'click [type="checkbox"]': 'filterToggled'
+      'click a': 'performToggle'
 
   class DistrictSelectorRow extends Marionette.ItemView
     template: 'scoreboards/filter_bar/_district_selector_row'

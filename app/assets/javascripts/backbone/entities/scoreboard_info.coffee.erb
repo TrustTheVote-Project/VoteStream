@@ -5,7 +5,7 @@
       return if @noResultsReload
       @preselectedRefconId = options.refcon?.id
       results = @get 'results'
-      results.fetchForFilter @get('localityId'), @get('region'), @get('refcon')
+      results.fetchForFilter @get('localityId'), @get('region'), @get('refcon'), this.extraOpts()
 
     pickResult: ->
       results = @get 'results'
@@ -16,6 +16,12 @@
 
     disableResultsReload: -> @noResultsReload = true
     enableResultsReload: -> @noResultsReload = false
+    
+    extraOpts: -> {
+      channel_early: @get('channelEarly'),
+      channel_electionday: @get('channelElectionday'),
+      channel_absentee: @get('channelAbsentee')
+      }
 
   API =
     getScoreboardInfo: ->
@@ -26,10 +32,13 @@
           localityInfo:     gon.locality_info
           electionInfo:     gon.election_info
 
-          results:          new Entities.ResultsCollection
-          result:           null
-          precinctColors:   new Entities.PrecinctColors
-          precinctResults:  new Entities.PrecinctResultData
+          results:            new Entities.ResultsCollection
+          result:             null
+          precinctColors:     new Entities.PrecinctColors
+          precinctResults:    new Entities.PrecinctResultData
+          channelEarly:       true
+          channelElectionday: true
+          channelAbsentee:    true
 
           precinctsReportingCount:  0
           totalBallotsCast:         0
@@ -86,7 +95,8 @@
         App.vent.on 'result:selected', (result) ->
           sb.set 'result', result
 
-        sb.on 'change:region change:refcon', -> @reloadResults()
+        sb.on 'change:region change:refcon change:channel', -> @reloadResults()
+        sb.on 'change:channelEarly change:channelElectionday change:channelAbsentee', (e) -> @reloadResults()
 
         sb.get('precinctResults').on 'reset', ->
           # compute stats
@@ -132,7 +142,7 @@
             colors.fetchForResult result, region
 
             results = sb.get 'precinctResults'
-            results.fetchForResult result, region
+            results.fetchForResult result, region, sb.extraOpts()
 
       Entities.scoreboardInfo
 

@@ -31,7 +31,7 @@ class RefConResults
     pids       = precinct_ids_for_region(params)
     cids       = contest.candidate_ids
     candidates = contest.candidates.includes(:party)
-    results    = CandidateResult.where(candidate_id: cids)
+    results    = set_ballot_type_filters(CandidateResult.where(candidate_id: cids), params)
     results    = results.where(precinct_id: pids) unless pids.blank?
 
 
@@ -105,7 +105,7 @@ class RefConResults
     pids      = precinct_ids_for_region(params)
     brids     = referendum.ballot_response_ids
     responses = referendum.ballot_responses
-    results   = BallotResponseResult.where(ballot_response_id: brids)
+    results   = set_ballot_type_filters(BallotResponseResult.where(ballot_response_id: brids), params)
     results   = results.where(precinct_id: pids) unless pids.blank?
 
     ballots, overvotes, undervotes, registered, channels = get_vote_stats(referendum, pids)
@@ -275,7 +275,24 @@ class RefConResults
 
     { puid: precinct.uid, pname: precinct.name, r: results }
   end
-
+  
+  def set_ballot_type_filters(query, params)
+    ballot_type_filters = [
+      ['channel_early', 'early'],
+      ['channel_electionday', 'election-day'],
+      ['channel_absentee', 'absentee']
+    ]
+    
+    ballot_type_filters.each do |key, row_value|
+      # Treat unspecified params as 'true'
+      if params.has_key?(key) and params[key].downcase == "false"
+        query = query.where.not(ballot_type: row_value)
+      end
+    end
+    
+    query
+  end
+  
   def contest_precinct_results(contest, params)
     pids       = precinct_ids_for_region(params)
     rc_pids    = contest.precinct_ids.uniq
@@ -283,7 +300,7 @@ class RefConResults
     precincts  = Precinct.select("precincts.id, registered_voters").where(id: rc_pids)
 
     candidates = contest.candidates.includes(:party)
-    results    = CandidateResult.where(candidate_id: contest.candidate_ids, precinct_id: rc_pids)
+    results    = set_ballot_type_filters(CandidateResult.where(candidate_id: contest.candidate_ids, precinct_id: rc_pids), params)
 
     precinct_candidate_results = results.group_by(&:precinct_id).inject({}) do |memo, (pid, results)|
       memo[pid] = results
@@ -336,7 +353,7 @@ class RefConResults
     rc_pids    = rc_pids & pids unless pids.nil?
     precincts = Precinct.select("precincts.id, registered_voters").where(id: rc_pids)
 
-    results   = BallotResponseResult.where(ballot_response_id: ids, precinct_id: rc_pids)
+    results   = set_ballot_type_filters(BallotResponseResult.where(ballot_response_id: ids, precinct_id: rc_pids), params)
 
     precinct_referendum_results = results.group_by(&:precinct_id).inject({}) do |memo, (pid, results)|
       memo[pid] = results

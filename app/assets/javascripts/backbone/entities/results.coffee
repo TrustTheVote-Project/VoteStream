@@ -45,7 +45,7 @@
   class Entities.ResultsCollection extends Backbone.Collection
     model: Entities.Results
 
-    fetchForFilter: (localityId, region, refcon) ->
+    fetchForFilter: (localityId, region, refcon, extraOpts) ->
       filter = locality_id: localityId
       if region?
         rid = region.get 'id'
@@ -63,6 +63,8 @@
           filter.contest_id = id
         else if type == 'r'
           filter.referendum_id = id
+
+      $.extend(filter, extraOpts)
 
       @fetch
         url:   '/data/region_refcons'
@@ -108,7 +110,7 @@
       @._previousAttributes = null
       @trigger 'reset'
 
-    fetchForResult: (result, region) ->
+    fetchForResult: (result, region, extraOpts) ->
       if !result?
         @parse {}
         @trigger 'reset'
@@ -129,6 +131,8 @@
           filter.district_id = rid
         else
           filter.precinct_id = rid
+
+      $.extend(filter, extraOpts)
 
       @fetch
         url:   '/data/precinct_results'

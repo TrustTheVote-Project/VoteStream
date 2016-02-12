@@ -24,3 +24,23 @@
 .dropdown-menu > li > a:hover {
   background: #DDDCDC;
 }
+
+.toggle-box > a {
+  text-shadow: 0 1px 1px rgba(255, 255, 255, 0.75);
+  color: #333333;
+  text-decoration: none;
+  font-size: 12px;
+  background: #DDDCDC;
+  border: none;
+  padding-bottom: 4px;
+  padding-left: 8px;
+  padding-right: 8px;
+  padding-top: 4px;
+  margin-right: 2px;
+  line-height: 20px;
+}
+
+.toggle-box input {
+  margin-top: 0px;
+}
+
