@@ -102,9 +102,11 @@ InfoBubble.prototype.panToView = ->
           style: google.maps.MapTypeControlStyle.DROPDOWN_MENU
         mapOptions.navigationControl = true
 
+      #always no zoom viz scrollwheel
+      mapOptions.scrollwheel = false
       if @options.noZoom
         mapOptions.disableDoubleClickZoom = true
-        mapOptions.scrollwheel = false
+        # mapOptions.scrollwheel = false
       if @options.noPanning
         mapOptions.draggable = false
 

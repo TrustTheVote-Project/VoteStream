@@ -17,7 +17,7 @@
       @resultsSummaryRegion.show @layout
       @mapRegion.show new Show.MapView
         infoWindow: true
-        noPanning: true
+        noPanning: false
 
   class ResultsRotator
     constructor: ->
