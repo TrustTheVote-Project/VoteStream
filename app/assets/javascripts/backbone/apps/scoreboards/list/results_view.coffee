@@ -31,9 +31,33 @@
       $("h5, .percent", @$el).css(color: c)
       $(".filler", @$el).css(background: c)
 
-  class ContestResultView extends Marionette.CompositeView
+  # A common class for shared Contest/Referendum ResultView logic
+  class BaseResultView extends Marionette.CompositeView
+    
+    # Requires @district and @ui.mapContainer to be defined in the subclass.
+    toggleMapView: () ->
+      @ui.mapContainer.toggleClass('hidden')
+      
+      if !@mapViewInstance
+        PrecinctColors = App.module('Entities').PrecinctColors
+        colors = new PrecinctColors
+        colors.fetchForResult(@model, @region).done () =>
+          @mapRegion = new Marionette.Region
+            el: @ui.mapContainer
+
+          @mapViewInstance = new App.ScoreboardsApp.Show.MapView
+            hideControls:     true
+            whiteBackground:  false
+            noZoom:           false
+            noPanning:        false
+            infoWindow:       'simple'
+            staticColors:     colors
+          @mapRegion.show  @mapViewInstance
+    
+
+  class ContestResultView extends BaseResultView
     template: 'scoreboards/list/_contest_result'
-    className: -> "contest result #{ if @options.selected then 'selected' else '' }".trim()
+    className: -> "contest result"
 
     itemView: CandidateRow
     itemViewContainer: 'div.candidates'
@@ -41,21 +65,20 @@
       stats = model.get('party')['abbr'] == 'stats'
       return {
         model:       model
-        extra:       if @showParticipation then i > 1 else (!stats and i > 1)
-        hidden:      if @showParticipation then false else (stats or i > 1)
+        extra:       !stats and i > 1
+        hidden:      stats or i > 1
         winner:      i is 0 and gon.percentReporting is 'Final Results'
         totalVotes:  @options.totalVotes
         excludeNP:   @options.excludeNP
       }
-
-    initialize: (opts) ->
-      @showParticipation = opts.showParticipation
 
     ui:
       rowsList: 'div.candidates'
       partInfo: 'div.participaction-info'
       showMoreBtn: '#js-show-more'
       showLessBtn: '#js-show-less'
+      mapToggle: '.map-toggle'
+      mapContainer: '.map-container'
 
     events:
       'click #js-show-more': (e) ->
@@ -69,28 +92,19 @@
         $('.candidate.extra', @ui.rowsList).hide()
         @ui.showLessBtn.hide()
         @ui.showMoreBtn.show()
+      
+      'click .map-toggle': (e) ->
+        e.preventDefault()
+        @ui.mapToggle.toggleClass('active')
+        this.toggleMapView()
 
-      'click': (e) -> @select()
+    initialize: (opts) ->
+      @model = opts.model
+      @region = opts.region
 
     onShow: ->
-      if @options.showParticipation
-        @ui.showLessBtn.show()
-        @ui.partInfo.show()
-      else
-        if @collection.length > 2 and !@options.simpleVersion
-          @ui.showMoreBtn.show()
-
-      si = App.request 'entities:scoreboardInfo'
-      @markSelected() if si.get('result') == @model
-
-    markSelected: ->
-      $(".result").removeClass 'selected'
-      @$el.addClass 'selected'
-
-    select: ->
-      @markSelected()
-      App.vent.trigger 'result:selected', @model
-
+      if @collection.length > 2 and !@options.simpleVersion
+        @ui.showMoreBtn.show()
 
 
   class ResponseRow extends Marionette.ItemView
@@ -113,9 +127,9 @@
         $(".percent", @$el).text($(".votes", @$el).text())
         $(".votes", @$el).hide()
 
-  class ReferendumResultView extends Marionette.CompositeView
+  class ReferendumResultView extends BaseResultView
     template: 'scoreboards/list/_referendum_result'
-    className: -> "referendum result #{ if @options.selected then 'selected' else '' }".trim()
+    className: -> "referendum result"
 
     itemView: ResponseRow
     itemViewContainer: 'div.content'
@@ -125,22 +139,20 @@
         totalVotes: @options.totalVotes,
         excludeNP: @options.excludeNP
       }
-
+      
+    ui:
+      mapToggle: '.map-toggle'
+      mapContainer: '.map-container'
+    
     events:
-      'click': (e) -> @select()
+      'click .map-toggle': (e) ->
+        e.preventDefault()
+        @ui.mapToggle.toggleClass('active')
+        this.toggleMapView()
 
-    onShow: ->
-      si = App.request 'entities:scoreboardInfo'
-      @markSelected() if si.get('result') == @model
-
-    markSelected: ->
-      $(".result").removeClass 'selected'
-      @$el.addClass 'selected'
-
-    select: ->
-      @markSelected()
-      App.vent.trigger 'result:selected', @model
-
+    initialize: (opts) ->
+      @model = opts.model
+      @region = opts.region
 
   class List.ResultsView extends Marionette.CompositeView
     template: 'scoreboards/list/_results'
@@ -157,10 +169,6 @@
     initialize: (opts) ->
       @model = App.request 'entities:scoreboardInfo'
       @.listenTo @model.get('precinctResults'), 'sync', => @render()
-      @.listenTo @model, 'change:result', => @updateMapPosition()
-
-    onBeforeRender: ->
-      @selectedModel = @model.get('result')
 
     itemViewOptions: (model, i) ->
       summary = model.get('summary')
@@ -176,6 +184,7 @@
         excludeNP:          @model.get('percentageType') == 'ballots'
         selected:           false
         showParticipation:  @model.get('showParticipation')
+        region:             @model.get('region')
         collection:         model.get('summary').get('rows') }
 
     getItemView: (model) ->
@@ -183,18 +192,6 @@
         ContestResultView
       else
         ReferendumResultView
-
-    onCompositeCollectionRendered: ->
-      @updateMapPosition()
-
-    updateMapPosition: ->
-      selected = $('.result.selected')
-      if selected.length > 0
-        top = selected.position().top
-        $("#map-region").css(top: top, opacity: 1)
-      else
-        $("#map-region").css(opacity: 0)
-
 
   # Participation stats panel
   class ParticipationStatsView extends Marionette.ItemView
@@ -240,10 +237,24 @@
       percTypeSelectorRegion:       '#percentage-type-selector-region'
       resultsViewRegion:            '#results-view-region'
 
+    modelEvents:
+      'change:showParticipation': 'setResultsWidth'
+
     initialize: ->
       @si = App.request 'entities:scoreboardInfo'
       @model = @si
       @results = @si.get 'results'
+
+    setResultsWidth: ->
+      $results = this.$(@regions.resultsViewRegion)
+      fullWidth = 'span12'
+      halfWidth = 'span6'
+      if @model.get('showParticipation')
+        $results.addClass(halfWidth)
+        $results.removeClass(fullWidth)
+      else
+        $results.addClass(fullWidth)
+        $results.removeClass(halfWidth)
 
     onShow: ->
       @resultsViewRegion.show new List.ResultsView
@@ -257,6 +268,8 @@
 
       @participationStatsRegion.show new ParticipationStatsView
         model: @si
+      
+      this.setResultsWidth()
 
 
   class ParticipationSelectorView extends Marionette.ItemView

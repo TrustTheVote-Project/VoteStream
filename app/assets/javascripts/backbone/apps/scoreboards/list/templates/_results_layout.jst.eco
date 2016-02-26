@@ -14,8 +14,10 @@
 -->
 </div>
 <div class="row-fluid">
-  <div class="header bar span9"><%= @refcon.attributes.name %></div>
+  <div class="header bar"><%= @refcon.attributes.name %></div>
 </div>
 
-<div id="participation-stats-region"></div>
-<div id="results-view-region"></div>
+<div class="row-fluid">
+	<div id="results-view-region" class="span6"></div>
+	<div id="participation-stats-region" class="span6"></div>
+</div>

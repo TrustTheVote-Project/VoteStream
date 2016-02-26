@@ -1,5 +1,9 @@
-<div class='panel span9 summary'>
-  <div class='header'><h5><%= @summary.get('title') %></h5></div>
+<div class='panel summary'>
+  <div class='header'>
+    <h5><%= @summary.get('title') %></h5>
+    <a class="map-toggle" href="return false;"></a>
+  </div>
+  <div class="map-container hidden"></div>
   <h6><%= @summary.get('subtitle') %></h6>
   <p class="muted"><%= @summary.get('text') %></p>
   <div class="content responses"></div>

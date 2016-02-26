@@ -6,6 +6,9 @@ $unselected-header-fg: #133a54;
 $selected-header-bg: #fff;
 $selected-header-fg: #133a54;
 $party-color: #808080;
+$map-toggle-corner-radius: 15px;
+$map-toggle-active-color: #133A54;
+$inline-map-height: 250px;
 
 @mixin panel() {
   box-shadow: 2px 6px 30px rgba(black, 0.3);
@@ -26,7 +29,32 @@ $party-color: #808080;
       margin: 0;
       line-height: $header-height * 2;
     }
+    
+    .map-toggle {
+      position: absolute;
+      top: 8px;
+      right: 0px;
+      
+      background-position: 0 50%;
+      background-repeat: no-repeat;
+      height: 30px;
+      width: 30px;
+      
+      background-image: image-url('mapview_icon_normal.png');
+      &.active {
+        background-image: image-url('mapview_icon_selected.png');
+        background-color: $map-toggle-active-color;
+        -moz-border-radius: $map-toggle-corner-radius;
+        border-radius: $map-toggle-corner-radius;
+      }
+    }
+  
   }
+  
+  .map-view {
+    height: $inline-map-height;
+  }
+
 }
 
 #list {
@@ -52,7 +80,7 @@ $party-color: #808080;
     right: 0;
     top: 0;
 
-    #map-view {
+    .map-view {
       height: 100%;
     }
   }

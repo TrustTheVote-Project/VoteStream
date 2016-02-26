@@ -1,4 +1,4 @@
-<div class='panel span9 summary'>
+<div class='panel summary'>
   <div class='header'><h5>Participation Statistics</h5></div>
   <div class='info'>
     <strong><%= App.ScoreboardsApp.Helpers.numberFormatted(@totalBallotsCast) %></strong> ballots cast from <strong><%= App.ScoreboardsApp.Helpers.numberFormatted(@totalRegisteredVoters) %></strong> registered voters in <strong><%= App.ScoreboardsApp.Helpers.numberFormatted(@precinctsReportingCount) %></strong> precincts, for aggregate turn-out of <strong><%= @turnOut %>%</strong>.

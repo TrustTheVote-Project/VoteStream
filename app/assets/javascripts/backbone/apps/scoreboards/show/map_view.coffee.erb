@@ -26,7 +26,7 @@ InfoBubble.prototype.panToView = ->
 
   class Show.MapView extends Marionette.ItemView
     template: 'scoreboards/show/_map'
-    id: 'map-view'
+    className: 'map-view'
 
     initialize: (options = {}) ->
       @polygons = []
@@ -37,9 +37,12 @@ InfoBubble.prototype.panToView = ->
       @si = si = App.request 'entities:scoreboardInfo'
       @precinctResults = si.get 'precinctResults'
 
-      @precinctColors = si.get 'precinctColors'
-      @precinctColors.on 'sync', @updateColors, @
-      si.on 'change:coloringType', @updateColors, @
+      if @options.staticColors
+        @precinctColors = @options.staticColors
+      else
+        @precinctColors = si.get 'precinctColors'
+        @precinctColors.on 'sync', @updateColors, @
+        si.on 'change:coloringType', @updateColors, @
 
       @precincts = App.request 'entities:precincts'
 
