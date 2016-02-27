@@ -312,6 +312,8 @@ class RefConResults
     Rails.logger.info("T::#{DateTime.now.strftime('%Q')} Exec Grouping")
 
     precinct_candidate_results = {}
+    puts results.count.to_s
+    Rails.logger.info("T::#{DateTime.now.strftime('%Q')} Count Grouping")
     results.each do |r|
       precinct_candidate_results[r.precinct_id] ||= []
       precinct_candidate_results[r.precinct_id] << r
