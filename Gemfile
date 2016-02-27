@@ -85,5 +85,9 @@ group :test, :development do
   gem 'rspec-rails'
 end
 
+group :production do
+  gem 'redis-rails'
+end
+
 # Use debugger
 # gem 'debugger', group: [:development, :test]
