@@ -59,7 +59,7 @@ class DataProcessor
   end
 
   def self.precinct_results_json(params)
-    Rails.logger.info("T::#{DateTime.now} Start DP")
+    Rails.logger.info("T::#{DateTime.now.to_i} Start DP")
     if params[:contest_id]
       locality_id = Contest.find(params[:contest_id]).locality_id
     else
@@ -68,9 +68,9 @@ class DataProcessor
 
     # DEBUG remove this
     Rails.cache.fetch("locality:#{locality_id}:#{params.hash}:precinct_results") do
-      Rails.logger.info("T::#{DateTime.now} Inside Cache")
+      Rails.logger.info("T::#{DateTime.now.to_i} Inside Cache")
       RefConResults.new.precinct_results(params).to_json
-      Rails.logger.info("T::#{DateTime.now} Done Inside Cache")
+      Rails.logger.info("T::#{DateTime.now.to_i} Done Inside Cache")
       
     end
   end
