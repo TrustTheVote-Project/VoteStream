@@ -294,7 +294,7 @@ class RefConResults
   end
   
   def contest_precinct_results(contest, params)
-    Rails.logger.info("T::#{DateTime.now.to_i} Start Contest Precinct results")
+    Rails.logger.info("T::#{DateTime.now.strftime('%Q')} Start Contest Precinct results")
     
     pids       = precinct_ids_for_region(params)
     rc_pids    = contest.precinct_ids.uniq
@@ -304,14 +304,14 @@ class RefConResults
     candidates = contest.candidates.includes(:party)
     results    = set_ballot_type_filters(CandidateResult.where(candidate_id: contest.candidate_ids, precinct_id: rc_pids), params)
 
-    Rails.logger.info("T::#{DateTime.now.to_i} Done Initial load")
+    Rails.logger.info("T::#{DateTime.now.strftime('%Q')} Done Initial load")
 
     precinct_candidate_results = results.group_by(&:precinct_id).inject({}) do |memo, (pid, results)|
       memo[pid] = results
       memo
     end
     
-    Rails.logger.info("T::#{DateTime.now.to_i} Done Grouping")
+    Rails.logger.info("T::#{DateTime.now.strftime('%Q')} Done Grouping")
     
 
     voters = 0
@@ -338,15 +338,15 @@ class RefConResults
         rows:     ordered[0, 2] }
     end
 
-    Rails.logger.info("T::#{DateTime.now.to_i} Done Total Counts")
+    Rails.logger.info("T::#{DateTime.now.strftime('%Q')} Done Total Counts")
 
     ballots, overvotes, undervotes, registered, channels = get_vote_stats(contest, rc_pids)
 
-    Rails.logger.info("T::#{DateTime.now.to_i} Done Vote Stats")
+    Rails.logger.info("T::#{DateTime.now.strftime('%Q')} Done Vote Stats")
 
     ordered_candidates = contest.winning_candidates
     
-    Rails.logger.info("T::#{DateTime.now.to_i} Done Winning Candidates")
+    Rails.logger.info("T::#{DateTime.now.strftime('%Q')} Done Winning Candidates")
     
     
     return {
