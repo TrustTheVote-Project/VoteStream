@@ -369,9 +369,12 @@ class RefConResults
     
     Rails.logger.info("T::#{DateTime.now.strftime('%Q')} Done Winning Candidates")
     
+    items = candidates.map { |c,i| { id:  c.id, name:  c.name, party:  { name:  c.party_name, abbr:  c.party.abbr }, c:  ColorScheme.candidate_color(c, ordered_candidates.index(c))} }
+    
+    Rails.logger.info("T::#{DateTime.now.strftime('%Q')} Done  calculating items")
     
     return {
-      items:      candidates.map { |c,i| { id:  c.id, name:  c.name, party:  { name:  c.party_name, abbr:  c.party.abbr }, c:  ColorScheme.candidate_color(c, ordered_candidates.index(c))} },
+      items:      items,
       ballots:    ballots,
       votes:      ballots - overvotes - undervotes,
       voters:     registered,

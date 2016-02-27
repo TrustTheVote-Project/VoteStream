@@ -69,9 +69,7 @@ class DataProcessor
     # DEBUG remove this
     Rails.cache.fetch("locality:#{locality_id}:#{params.hash}:precinct_results") do
       Rails.logger.info("T::#{DateTime.now.strftime('%Q')} Inside Cache")
-      RefConResults.new.precinct_results(params).to_json
-      Rails.logger.info("T::#{DateTime.now.strftime('%Q')} Done Inside Cache")
-      
+      RefConResults.new.precinct_results(params).to_json      
     end
   end
 
