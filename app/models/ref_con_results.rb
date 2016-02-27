@@ -302,14 +302,25 @@ class RefConResults
     precincts  = Precinct.select("precincts.id, registered_voters").where(id: rc_pids)
 
     candidates = contest.candidates.includes(:party)
+    Rails.logger.info("T::#{DateTime.now.strftime('%Q')} Done Initial load")
+    
     results    = set_ballot_type_filters(CandidateResult.where(candidate_id: contest.candidate_ids, precinct_id: rc_pids), params)
 
-    Rails.logger.info("T::#{DateTime.now.strftime('%Q')} Done Initial load")
+    
+    #grp_only = results.group_by(&:precinct_id)
 
-    precinct_candidate_results = results.group_by(&:precinct_id).inject({}) do |memo, (pid, results)|
-      memo[pid] = results
-      memo
+    Rails.logger.info("T::#{DateTime.now.strftime('%Q')} Exec Grouping")
+
+    precinct_candidate_results = {}
+    results.each do |r|
+      precinct_candidate_results[r.precinct_id] ||= []
+      precinct_candidate_results[r.precinct_id] << r
     end
+    
+    # precinct_candidate_results = grp_only.inject({}) do |memo, (pid, results)|
+    #   memo[pid] = results
+    #   memo
+    # end
     
     Rails.logger.info("T::#{DateTime.now.strftime('%Q')} Done Grouping")
     
