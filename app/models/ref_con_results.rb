@@ -311,13 +311,21 @@ class RefConResults
 
     Rails.logger.info("T::#{DateTime.now.strftime('%Q')} Exec Grouping")
 
+    
+    results = results.select("SUM(candidate_results.votes) as votes, candidate_results.precinct_id as precinct_id, candidate_results.candidate_id as candidate_id").group("candidate_results.candidate_id, candidate_results.precinct_id")
     precinct_candidate_results = {}
-    puts results.count.to_s
-    Rails.logger.info("T::#{DateTime.now.strftime('%Q')} Count Grouping")
     results.each do |r|
       precinct_candidate_results[r.precinct_id] ||= []
       precinct_candidate_results[r.precinct_id] << r
     end
+    
+    # precinct_candidate_results = {}
+    # puts results.count.to_s
+    # Rails.logger.info("T::#{DateTime.now.strftime('%Q')} Count Grouping")
+    # results.each do |r|
+    #   precinct_candidate_results[r.precinct_id] ||= []
+    #   precinct_candidate_results[r.precinct_id] << r
+    # end
     
     # precinct_candidate_results = grp_only.inject({}) do |memo, (pid, results)|
     #   memo[pid] = results
