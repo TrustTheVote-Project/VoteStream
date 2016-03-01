@@ -208,19 +208,37 @@
       'change:totalRegisteredVoters': 'render'
       'change:totalBallotsCast': 'render'
       'change:electionDayVotes': 'render'
-      'change:electionDayPercent': 'render'
       'change:earlyVotes': 'render'
-      'change:earlyPercent': 'render'
       'change:absenteeVotes': 'render'
-      'change:absenteePercent': 'render'
       'change:npVotes': 'render'
-      'change:npPercent': 'render'
 
     serializeData: ->
       data = Backbone.Marionette.ItemView.prototype.serializeData.apply @, arguments
       totalBallots = @model.get('totalBallotsCast')
       totalRegisteredVoters = @model.get('totalRegisteredVoters')
       data.turnOut = Math.round((totalBallots / (totalRegisteredVoters || 1)) * 100)
+
+      percentageDenom = switch @model.get('percentageType')
+        when 'voters'
+          totalRegisteredVoters
+        when 'ballots'
+          totalBallots
+        else
+          console.error('Unhandled percentageType:' + @model.get('percentageType')) if console?
+          0
+
+      percentFormatted = App.ScoreboardsApp.Helpers.percentFormatted
+
+      data.electionDayPercent = percentFormatted(@model.get('electionDayVotes'), percentageDenom)
+      data.earlyPercent = percentFormatted(@model.get('earlyVotes'), percentageDenom)
+      data.absenteePercent = percentFormatted(@model.get('absenteeVotes'), percentageDenom)
+
+      # Denominating NP votes by number of ballots doesn't make sense
+      if @model.get('percentageType') == 'voters'
+        data.npPercent = percentFormatted(@model.get('npVotes'), percentageDenom)
+      else
+        data.npPercent = null
+
       data
 
     onRender: ->
