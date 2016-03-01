@@ -64,13 +64,14 @@
               @refcon.get('name')
             @refcon.get('name')
 
-          region:           null
-          regionLabel:      -> if !@region then "<%= I18n.t 'scoreboard.header.right_menu.tabs.all' %>" else @region.get('name')
-          percentReporting: gon.percentReporting
-          view:             null
-          coloringType:     'results'
-          showParticipation: false
-          percentageType:   'ballots'
+          region:            null
+          regionLabel:       -> if !@region then "<%= I18n.t 'scoreboard.header.right_menu.tabs.all' %>" else @region.get('name')
+          percentReporting:  gon.percentReporting
+          view:              null
+          coloringType:      'results'
+          showParticipation: true
+          showVotingMethod:  false
+          percentageType:    'ballots' # Can be 'ballots' or 'voters'
 
         App.vent.on 'filters:set', (options = {}) ->
           su = App.request 'entities:scoreboardUrl'

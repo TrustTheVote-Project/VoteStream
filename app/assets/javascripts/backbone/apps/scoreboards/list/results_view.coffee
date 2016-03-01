@@ -12,6 +12,7 @@
     serializeData: ->
       data = Backbone.Marionette.ItemView.prototype.serializeData.apply @, arguments
       data.totalVotes = @options.totalVotes
+      data.showVotingMethod = @options.showVotingMethod
       data
     templateHelpers:
       percent: -> App.ScoreboardsApp.Helpers.percent(@votes, @totalVotes)
@@ -22,7 +23,6 @@
       c = @model.get('c')
       if @model.get('party')['abbr'] == 'stats'
         $(".party", @$el).text('')
-
       if @model.get('np') and @options.excludeNP
         $(".bar", @$el).hide()
         $(".percent", @$el).text($(".votes", @$el).text())
@@ -64,12 +64,13 @@
     itemViewOptions: (model, i) ->
       stats = model.get('party')['abbr'] == 'stats'
       return {
-        model:       model
-        extra:       !stats and i > 1
-        hidden:      stats or i > 1
-        winner:      i is 0 and gon.percentReporting is 'Final Results'
-        totalVotes:  @options.totalVotes
-        excludeNP:   @options.excludeNP
+        model:             model
+        extra:             !stats and i > 1
+        hidden:            stats or i > 1
+        winner:            i is 0 and gon.percentReporting is 'Final Results'
+        totalVotes:        @options.totalVotes
+        excludeNP:         @options.excludeNP,
+        showVotingMethod:  @options.showVotingMethod
       }
 
     ui:
@@ -162,6 +163,7 @@
     modelEvents:
       "change:percentageType": 'render'
       "change:showParticipation": 'render'
+      "change:showVotingMethod": 'render'
 
     collectionEvents:
       sync: 'render'
@@ -179,13 +181,14 @@
         totalVotes = summary.get('votes')
 
       return {
-        model:              model
-        totalVotes:         totalVotes
-        excludeNP:          @model.get('percentageType') == 'ballots'
-        selected:           false
-        showParticipation:  @model.get('showParticipation')
-        region:             @model.get('region')
-        collection:         model.get('summary').get('rows') }
+        model:             model
+        totalVotes:        totalVotes
+        excludeNP:         @model.get('percentageType') == 'ballots'
+        selected:          false
+        showParticipation: @model.get('showParticipation')
+        showVotingMethod:  @model.get('showVotingMethod')
+        region:            @model.get('region')
+        collection:        model.get('summary').get('rows') }
 
     getItemView: (model) ->
       if model.get('type') == 'c'
@@ -200,6 +203,7 @@
     className: 'row-fluid result'
     modelEvents:
       'change:showParticipation': 'render'
+      'change:percentageType': 'render'
       'change:precinctsReportingCount': 'render'
       'change:totalRegisteredVoters': 'render'
       'change:totalBallotsCast': 'render'
@@ -233,8 +237,6 @@
 
     regions:
       participationStatsRegion:     '#participation-stats-region'
-      participationSelectorRegion:  '#participation-selector-region'
-      percTypeSelectorRegion:       '#percentage-type-selector-region'
       resultsViewRegion:            '#results-view-region'
 
     modelEvents:
@@ -260,54 +262,8 @@
       @resultsViewRegion.show new List.ResultsView
         collection: @results
 
-      @participationSelectorRegion.show new ParticipationSelectorView
-        model: @si
-
-      @percTypeSelectorRegion.show new PercentageTypeSelectorView
-        model: @si
-
       @participationStatsRegion.show new ParticipationStatsView
         model: @si
       
       this.setResultsWidth()
 
-
-  class ParticipationSelectorView extends Marionette.ItemView
-    template: 'scoreboards/list/_participation_view_selector'
-
-    modelEvents:
-      'change:showParticipation': 'render'
-
-    className: 'btn-group'
-
-    events:
-      'click button': (e) ->
-        e.preventDefault()
-        link = $(e.target)
-        value = link.data('filter')
-        @model.set 'showParticipation', value
-
-  class PercentageTypeSelectorView extends Marionette.ItemView
-    template: 'scoreboards/list/_percentage_type_view_selector'
-
-    modelEvents:
-      'change:showParticipation': 'updateVisiblity'
-      'change:percentageType': 'render'
-
-    className: 'btn-group'
-
-    events:
-      'click button': (e) ->
-        e.preventDefault()
-        link = $(e.target)
-        value = link.data('type')
-        @model.set 'percentageType', value
-
-    updateVisiblity: ->
-      if @model.get('showParticipation')
-        @$el.show()
-      else
-        @$el.hide()
-
-    onShow: ->
-      @updateVisiblity()

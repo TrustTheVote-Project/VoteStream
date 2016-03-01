@@ -1,6 +1,7 @@
 @import "public/_config";
 
 $bc-font-size: 18px;
+$bc-line-height: 30px;
 
 #bread-crumbs {
   padding: $section-padding $side-padding;
@@ -8,12 +9,14 @@ $bc-font-size: 18px;
   color: $header-color;
   font-size: $bc-font-size;
 
-  line-height: 30px;
+  line-height: $bc-line-height;
 
   .view-selector {
     text-align: right;
   }
+}
 
+#breadcrumbs-region {
   label {
     display: inline;
     font-size: $bc-font-size;
@@ -24,8 +27,12 @@ $bc-font-size: 18px;
 $selector-icon-size: 24px;
 $selector-icon-padding: 0px;
 
-#coloring-type-selector-region button {
-  line-height: 30px;
+#map-view-selector, #list-view-selector {
+  padding-left: $selector-icon-size + $selector-icon-padding;
+  background-position: 0 50%;
+  background-repeat: no-repeat;
+  background-size: $selector-icon-size $selector-icon-size;
+  line-height: $bc-line-height;
   padding: {
     top: 0;
     bottom: 0;
@@ -33,18 +40,38 @@ $selector-icon-padding: 0px;
   margin-left: 0;
 }
 
-#map-view-selector, #list-view-selector {
-  padding-left: $selector-icon-size + $selector-icon-padding;
-  background-position: 0 50%;
-  background-repeat: no-repeat;
-  background-size: $selector-icon-size $selector-icon-size;
-  line-height: 30px;
-  padding: {
-    top: 0;
-    bottom: 0;
-  }
-  margin-left: 0;
+#view-settings-button {
+    font-size: $bc-font-size;
+    height: $bc-line-height;
+    margin-left: 5px;
+    padding-top: 0px;
+    padding-bottom: 0px;
+    outline: none;
+    
+    .caret {
+      margin-left: 4px;
+    }
 }
+
+#view-settings-region {
+  .btn-group.open {
+    .caret {
+      border-top-color: white;
+    }
+  }
+  
+  // Override blue theme
+  .dropdown-menu > li > a {
+    color: #333 !important;
+    background-image: none !important;
+    background-color: white !important;
+    &:hover {
+      color: white !important;
+      background-color: #DDDCDC !important;
+    }
+  }
+}
+
 
 #map-view-selector {
   background-image: image-url('mapview_icon_normal.png');

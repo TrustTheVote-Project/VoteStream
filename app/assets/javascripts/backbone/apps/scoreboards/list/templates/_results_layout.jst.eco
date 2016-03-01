@@ -1,9 +1,5 @@
 <div class="percent-reporting row-fluid">
-	<div class="span3"><%= @percentReporting %></div>
-  <div class="span9 text-right">
-    <span id="percentage-type-selector-region" />
-    <span id="participation-selector-region" />
-  </div>
+	<div class="span12"><%= @percentReporting %></div>
 <!--
 	<div class="span6 text-right">
 		<span>Save as</span>

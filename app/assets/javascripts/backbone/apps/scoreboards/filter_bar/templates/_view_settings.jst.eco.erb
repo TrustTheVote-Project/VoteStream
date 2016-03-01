@@ -1,0 +1,29 @@
+<button class="btn btn-small settings-menu-button dropdown-toggle" data-toggle="dropdown" title="<%= I18n.t 'scoreboard.header.view_selector.settings' %>" id="view-settings-button">
+  <span class="fa fa-cog"></span><span class="caret"></span>
+</button>
+
+<ul class="dropdown-menu pull-right" role="menu">
+  <%% for setting in @view_settings: %>
+    <%% if setting.settingType == 'radio': %>
+      <li class="text-left">
+        <a href="" <%% unless setting.enabled: %> class="disabled" <%% end %>>
+          <input type="radio"
+                 name="<%%= setting.property %>"
+                 data-value="<%%= setting.value %>"
+                 <%% unless setting.enabled: %>disabled="disabled" <%% end %>
+                 <%% if @optionSelected(setting): %>checked="checked" <%% end %>
+                 /> <%%= setting.title %>
+        </a>
+      </li>
+    <%% else if setting.settingType == 'checkbox': %>
+      <li class="text-left">
+        <a href="">
+          <input type="checkbox"
+            name="<%%= setting.property %>"
+            <%% if setting.trueValue: %>data-true-value="<%%= setting.trueValue %>"<%% end %>
+            <%% if setting.falseValue: %>data-false-value="<%%= setting.falseValue %>"<%% end %>
+            <%% if @optionSelected(setting): %>checked="checked" <%% end %>
+            /> <%%= setting.title %></a></li>
+    <%% end %>
+  <%% end %>
+</ul>

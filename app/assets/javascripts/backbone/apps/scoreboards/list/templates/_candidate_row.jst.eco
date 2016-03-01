@@ -1,4 +1,4 @@
-<div class='bar'><div class='filler' style='width:<%= @percent() %>%'></div></div>
+<% if @showVotingMethod: %>
 <div class='vote_channels'>
   <% vcStats = @voteChannels() %>
   <% vcKeys = Object.keys(vcStats) %>
@@ -12,7 +12,9 @@
     </div>
   <% end %>
 </div>
-  
+<% else: %>
+<div class='bar'><div class='filler' style='width:<%= @percent() %>%'></div></div>
+<% end %>
   
   
 <div class="row-fluid percentage">
