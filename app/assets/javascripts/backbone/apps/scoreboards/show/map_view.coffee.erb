@@ -94,9 +94,10 @@ InfoBubble.prototype.panToView = ->
       center = new google.maps.LatLng gon.mapCenterLat, gon.mapCenterLon
       mapOptions =
         center:                 center
-        zoom:                   gon.mapZoom
+        zoom:                   @options.zoomLevel || gon.mapZoom
         mapTypeId:              google.maps.MapTypeId.ROADMAP
 
+      # https://developers.google.com/maps/documentation/javascript/controls
       if @options.hideControls
         mapOptions.disableDefaultUI = true
       else
@@ -110,6 +111,8 @@ InfoBubble.prototype.panToView = ->
       if @options.noZoom
         mapOptions.disableDoubleClickZoom = true
         # mapOptions.scrollwheel = false
+      else
+        mapOptions.zoomControl = true
       if @options.noPanning
         mapOptions.draggable = false
 

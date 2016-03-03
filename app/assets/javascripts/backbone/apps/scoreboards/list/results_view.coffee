@@ -58,6 +58,7 @@
             el: @ui.mapContainer
 
           @mapViewInstance = new App.ScoreboardsApp.Show.MapView
+            zoomLevel: 12
             hideControls:     true
             whiteBackground:  false
             noZoom:           false
