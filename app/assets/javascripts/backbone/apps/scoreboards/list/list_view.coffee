@@ -7,8 +7,6 @@
     regions:
       filterBarRegion:              '#filter-bar-region'
       resultsRegion:                '#results-region'
-      participationSelectorRegion:  '#participation-selector-region'
-      percTypeSelectorRegion:       '#percentage-type-selector-region'
 
     templateHelpers:
       percent: -> App.ScoreboardsApp.Helpers.percent(@votes, @totalVotes)

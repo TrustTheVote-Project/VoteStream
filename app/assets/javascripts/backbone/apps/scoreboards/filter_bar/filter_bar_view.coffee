@@ -31,7 +31,7 @@
 
       breadcrumbsRegion:      '#breadcrumbs-region'
       viewSelectorRegion:     '#view-selector-region'
-      coloringTypeSelectorRegion: '#coloring-type-selector-region'
+      viewSettingsRegion:     '#view-settings-region'
 
     closePopovers: ->
       $(".popover", @$el).hide()
@@ -120,7 +120,7 @@
         model: scoreboardInfo
       @.viewSelectorRegion.show new ViewSelectorView
         model: scoreboardInfo
-      @.coloringTypeSelectorRegion.show new ColoringTypeSelectorView
+      @.viewSettingsRegion.show new ViewSettingsDropdown
         model: scoreboardInfo
 
       $("body").on "click", => @closePopovers()
@@ -232,20 +232,6 @@
     modelEvents:
       'change:refcon change:region': 'render'
 
-  class ColoringTypeSelectorView extends Marionette.ItemView
-    template: 'scoreboards/filter_bar/_coloring_type_selector'
-
-    modelEvents:
-      'change:coloringType': 'render'
-
-    className: 'btn-group'
-
-    events:
-      'click button': (e) ->
-        e.preventDefault()
-        link = $(e.target)
-        @model.set 'coloringType', link.data('type')
-
   class ViewSelectorView extends Marionette.ItemView
     template: 'scoreboards/filter_bar/_view_selector'
 
@@ -259,3 +245,92 @@
         e.preventDefault()
         link = $(e.target)
         App.navigate link.data('view'), trigger: true
+
+  radiobox = (title, property, value) ->
+    if value
+      { settingType: 'radio', title: title, property: property, value: value, enabled: true }
+    else
+      { settingType: 'radio', title: title, property: property, value: value, enabled: false }
+
+  checkbox = (title, property) ->
+    { settingType: 'checkbox', title: title, property: property }
+
+  valueCheckbox = (title, property, trueValue, falseValue) ->
+    { settingType: 'checkbox', title: title, property: property, trueValue: trueValue, falseValue: falseValue }
+
+  class ViewSettingsDropdown extends Marionette.ItemView
+    template: 'scoreboards/filter_bar/_view_settings'
+
+    className: 'btn-group'
+
+    initialize: () ->
+      @settings_groups =
+        'map': [
+          radiobox('Show Results', 'coloringType', 'results')
+          radiobox('Show Participation', 'coloringType', 'participation')
+          radiobox('Show Party Registration', 'map_type', null)
+          radiobox('Show Demographics', 'map_type', null)
+        ],
+        'list': [
+          checkbox('Voting Method Per Contest', 'showVotingMethod')
+          checkbox('Participation Per Contest', 'showParticipation')
+          valueCheckbox('Percentages by Voter', 'percentageType', 'voters', 'ballots')
+        ]
+
+    events:
+      'click .dropdown-menu a': (e) ->
+        $anchor = $(e.currentTarget)
+        if $anchor.hasClass('disabled')
+          e.preventDefault()
+          return false
+
+        $input = $anchor.find('input')
+        propertyName = $input.prop('name')
+        inputType = $input.prop('type')
+
+        # Use setTimeout to manually set element checked property after click event is resolved
+        setTimeout(() =>
+          switch inputType
+            when 'checkbox'
+              boolValue = !$input.prop('checked')
+              $input.prop('checked', boolValue)
+              newValue = if boolValue
+                $input.data('true-value') ? true
+              else
+                $input.data('false-value') ? false
+            when 'radio'
+              newValue = $input.data('value')
+              $input.prop('checked', true)
+            else
+              console.error('Unexpected checkbox type: ' + checkboxType) if console?
+              return
+          @model.set propertyName, newValue
+        , 0)
+
+        return false
+
+    templateHelpers: () ->
+      optionSelected: (o) ->
+        unless o.property of this
+          console.error("Unknown option property: " + o.property) if console?
+          return false
+
+        switch o.settingType
+          when 'checkbox'
+            if o.trueValue
+              this[o.property] == o.trueValue
+            else
+              this[o.property]
+          when 'radio'
+            this[o.property] == o.value
+          else
+            console.error('Unexpected settingType: ' + o.settingType) if console?
+            false
+
+    serializeData: () ->
+      data = @model.toJSON()
+      if data.view of @settings_groups
+        data.view_settings = @settings_groups[data.view]
+      else
+        console.error('Unhandled view type', data.view) if console?
+      data
