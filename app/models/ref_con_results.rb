@@ -294,7 +294,7 @@ class RefConResults
   end
   
   def contest_precinct_results(contest, params)
-    Rails.logger.info("T::#{DateTime.now} Start Contest Precinct results")
+    Rails.logger.debug("T::#{DateTime.now.strftime('%Q')} Start Contest Precinct results")
     
     pids       = precinct_ids_for_region(params)
     rc_pids    = contest.precinct_ids.uniq
@@ -302,16 +302,24 @@ class RefConResults
     precincts  = Precinct.select("precincts.id, registered_voters").where(id: rc_pids)
 
     candidates = contest.candidates.includes(:party)
+    Rails.logger.debug("T::#{DateTime.now.strftime('%Q')} Done Initial load")
+    
     results    = set_ballot_type_filters(CandidateResult.where(candidate_id: contest.candidate_ids, precinct_id: rc_pids), params)
 
-    Rails.logger.info("T::#{DateTime.now} Done Initial load")
+    
+    #grp_only = results.group_by(&:precinct_id)
 
-    precinct_candidate_results = results.group_by(&:precinct_id).inject({}) do |memo, (pid, results)|
-      memo[pid] = results
-      memo
+    Rails.logger.debug("T::#{DateTime.now.strftime('%Q')} Exec Grouping")
+
+    
+    results = results.select("SUM(candidate_results.votes) as votes, candidate_results.precinct_id as precinct_id, candidate_results.candidate_id as candidate_id").group("candidate_results.candidate_id, candidate_results.precinct_id")
+    precinct_candidate_results = {}
+    results.each do |r|
+      precinct_candidate_results[r.precinct_id] ||= []
+      precinct_candidate_results[r.precinct_id] << r
     end
     
-    Rails.logger.info("T::#{DateTime.now} Done Grouping")
+    Rails.logger.debug("T::#{DateTime.now.strftime('%Q')} Done Grouping")
     
 
     voters = 0
@@ -338,19 +346,22 @@ class RefConResults
         rows:     ordered[0, 2] }
     end
 
-    Rails.logger.info("T::#{DateTime.now} Done Total Counts")
+    Rails.logger.debug("T::#{DateTime.now.strftime('%Q')} Done Total Counts")
 
     ballots, overvotes, undervotes, registered, channels = get_vote_stats(contest, rc_pids)
 
-    Rails.logger.info("T::#{DateTime.now} Done Vote Stats")
+    Rails.logger.debug("T::#{DateTime.now.strftime('%Q')} Done Vote Stats")
 
     ordered_candidates = contest.winning_candidates
     
-    Rails.logger.info("T::#{DateTime.now} Done Winning Candidates")
+    Rails.logger.debug("T::#{DateTime.now.strftime('%Q')} Done Winning Candidates")
     
+    items = candidates.map { |c,i| { id:  c.id, name:  c.name, party:  { name:  c.party_name, abbr:  c.party.abbr }, c:  ColorScheme.candidate_color(c, ordered_candidates.index(c))} }
+    
+    Rails.logger.debug("T::#{DateTime.now.strftime('%Q')} Done  calculating items")
     
     return {
-      items:      candidates.map { |c,i| { id:  c.id, name:  c.name, party:  { name:  c.party_name, abbr:  c.party.abbr }, c:  ColorScheme.candidate_color(c, ordered_candidates.index(c))} },
+      items:      items,
       ballots:    ballots,
       votes:      ballots - overvotes - undervotes,
       voters:     registered,
