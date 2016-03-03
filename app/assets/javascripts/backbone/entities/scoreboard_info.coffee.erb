@@ -65,6 +65,7 @@
           percentReporting:  gon.percentReporting
           view:              null
           coloringType:      'results'
+          map_type:          null
           showParticipation: true
           showVotingMethod:  false
           percentageType:    'ballots' # Can be 'ballots' or 'voters'
@@ -80,6 +81,7 @@
           sb.enableResultsReload()
           su.enableAndUpdate()
 
+          console.log(options.region)
           sb.reloadResults
             refcon: options.refcon
 

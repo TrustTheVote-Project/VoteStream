@@ -3,9 +3,10 @@
 
   class ScoreboardsApp.Router extends Marionette.AppRouter
     appRoutes:
-      "map(/:ctype/:cid)(/:rtype)(/:rid)"  : "show"
+      "map(/:ctype/:cid)(/:rtype)(/:rid)(*params)": "show"
+      #"map(/:ctype/:cid)(/:rtype)(/:rid)"  : "show"
       "list(/:ctype/:cid)(/:rtype)(/:rid)" : "list"
-    
+      #'*notFound': 'notFound'
   
   class ScoreboardsApp.Helpers
     @percent: 
@@ -28,6 +29,7 @@
   
   setParams = (ctype, cid, rtype, rid) ->
     waitingFor = []
+    
     if ctype == 'c' or ctype == 'r'
       waitingFor.push App.request('entities:refcons')
     if rtype == 'd'
@@ -42,9 +44,8 @@
       else if ctype == 'c' or ctype == 'r'
         refcons = App.request 'entities:refcons'
         all = refcons.get('all')
-        refcon = all.findWhere
-          type: ctype
-          id:   cid
+        refcon = all.find (rc) ->
+          return rc.get('id') == parseInt(cid) and rc.get('type') == ctype
 
       region = null
       if rtype == 'd'
@@ -53,15 +54,19 @@
       else if rtype == 'p'
         precincts = App.request 'entities:precincts'
         region = precincts.get rid
-        
+      
       App.vent.trigger 'filters:set',
         region: region
         refcon: refcon
 
 
   API =
-    show: (category, regionType, regionId, refconId) ->
-      setParams(category, regionType, regionId, refconId)
+    notFound: (params) ->
+      console.log(params)
+    
+    show: (category, refconId, regionType, regionId, params) ->
+      console.log(category, refconId, regionType, regionId, params)
+      setParams(category, refconId, regionType, regionId)
 
       su = App.request 'entities:scoreboardUrl'
       su.setView 'map'
