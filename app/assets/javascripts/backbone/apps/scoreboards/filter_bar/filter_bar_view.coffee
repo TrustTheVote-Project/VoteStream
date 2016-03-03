@@ -268,8 +268,8 @@
         'map': [
           radiobox('Show Results', 'coloringType', 'results')
           radiobox('Show Participation', 'coloringType', 'participation')
-          radiobox('Show Party Registration', 'map_type', null)
-          radiobox('Show Demographics', 'map_type', null)
+          radiobox('Show Party Registration', 'coloringType', null)
+          radiobox('Show Demographics', 'coloringType', null)
         ],
         'list': [
           checkbox('Voting Method Per Contest', 'showVotingMethod')
