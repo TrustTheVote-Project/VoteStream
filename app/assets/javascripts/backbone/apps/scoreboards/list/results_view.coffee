@@ -63,14 +63,18 @@
     itemViewContainer: 'div.candidates'
     itemViewOptions: (model, i) ->
       stats = model.get('party')['abbr'] == 'stats'
+      excludeNP = @options.excludeNP
+      # hidden if this is stats and excludeNP OR
+      # hidden if this is NOT stats and i > 1
+      hidden = (stats and excludeNP) or (!stats and i > 1)      
       return {
         model:             model
         extra:             !stats and i > 1
-        hidden:            stats or i > 1
+        hidden:            hidden
         winner:            i is 0 and gon.percentReporting is 'Final Results'
         totalVotes:        @options.totalVotes
-        excludeNP:         @options.excludeNP,
-        showVotingMethod:  @options.showVotingMethod
+        excludeNP:         excludeNP,
+        showVotingMethod:  @options.showVotingMethod && !stats
       }
 
     ui:
@@ -175,10 +179,7 @@
     itemViewOptions: (model, i) ->
       summary = model.get('summary')
 
-      if @model.get('showParticipation')
-        totalVotes = if @model.get('percentageType') == 'voters' then summary.get('voters') else summary.get('ballots')
-      else
-        totalVotes = summary.get('votes')
+      totalVotes = if @model.get('percentageType') == 'voters' then summary.get('voters') else summary.get('ballots')
 
       return {
         model:             model

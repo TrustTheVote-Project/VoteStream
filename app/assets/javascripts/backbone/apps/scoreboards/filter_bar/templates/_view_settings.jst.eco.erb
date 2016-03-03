@@ -23,7 +23,26 @@
             <%% if setting.trueValue: %>data-true-value="<%%= setting.trueValue %>"<%% end %>
             <%% if setting.falseValue: %>data-false-value="<%%= setting.falseValue %>"<%% end %>
             <%% if @optionSelected(setting): %>checked="checked" <%% end %>
-            /> <%%= setting.title %></a></li>
+            /> 
+          <%%= setting.title %>
+        </a>
+      </li>
+    <%% else if setting.settingType == 'valueCheckbox': %>
+      <li class="text-left">
+        <a href="">
+          <input type="checkbox"
+            name="<%%= setting.property %>"
+            <%% if setting.trueValue: %>data-true-value="<%%= setting.trueValue %>"<%% end %>
+            <%% if setting.falseValue: %>data-false-value="<%%= setting.falseValue %>"<%% end %>
+            <%% if @optionSelected(setting): %>checked="checked" <%% end %>
+            /> 
+          <%% if @optionSelected(setting): %>
+            <%%= setting.trueTitle %>
+          <%% else: %>
+            <%%= setting.falseTitle %>
+          <%% end %>
+        </a>
+      </li>
     <%% end %>
   <%% end %>
 </ul>

@@ -28,7 +28,7 @@ module Enrs
     config.assets.enabled = true
     config.assets.precompile += %w{ demo_federal.js demo_state.js admin.js admin.css scoreboards.js pdf.css }
 
-    config.assets.version = '2.0'
+    config.assets.version = '2.1'
 
     # create a db specific dump in structure.sql file rather than schema.rb. IIRC when :sql is set rails test code loads that instead of the schema.rb
     config.active_record.schema_format = :sql

@@ -255,8 +255,8 @@
   checkbox = (title, property) ->
     { settingType: 'checkbox', title: title, property: property }
 
-  valueCheckbox = (title, property, trueValue, falseValue) ->
-    { settingType: 'checkbox', title: title, property: property, trueValue: trueValue, falseValue: falseValue }
+  valueCheckbox = (trueTitle, falseTitle, property, trueValue, falseValue) ->
+    { settingType: 'valueCheckbox', trueTitle: trueTitle, falseTitle: falseTitle, property: property, trueValue: trueValue, falseValue: falseValue }
 
   class ViewSettingsDropdown extends Marionette.ItemView
     template: 'scoreboards/filter_bar/_view_settings'
@@ -272,9 +272,11 @@
           radiobox('Show Demographics', 'map_type', null)
         ],
         'list': [
-          checkbox('Voting Method Per Contest', 'showVotingMethod')
-          checkbox('Participation Per Contest', 'showParticipation')
-          valueCheckbox('Percentages by Voter', 'percentageType', 'voters', 'ballots')
+          checkbox('Show Vote Method', 'showVotingMethod')
+          checkbox('Show Overall Participation', 'showParticipation')
+          radiobox('Show Percentages by Ballots', 'percentageType', 'ballots')
+          radiobox('Show Percentages by Registered Voters', 'percentageType', 'voters')
+          #valueCheckbox('Show Percentages by Ballots', 'Show Percentages by Registered Voters', 'percentageType', 'voters', 'ballots')
         ]
 
     events:
@@ -291,7 +293,7 @@
         # Use setTimeout to manually set element checked property after click event is resolved
         setTimeout(() =>
           switch inputType
-            when 'checkbox'
+            when 'checkbox', 'valueCheckbox'
               boolValue = !$input.prop('checked')
               $input.prop('checked', boolValue)
               newValue = if boolValue
@@ -305,6 +307,7 @@
               console.error('Unexpected checkbox type: ' + checkboxType) if console?
               return
           @model.set propertyName, newValue
+          @render();          
         , 0)
 
         return false
@@ -316,7 +319,7 @@
           return false
 
         switch o.settingType
-          when 'checkbox'
+          when 'checkbox', 'valueCheckbox'
             if o.trueValue
               this[o.property] == o.trueValue
             else

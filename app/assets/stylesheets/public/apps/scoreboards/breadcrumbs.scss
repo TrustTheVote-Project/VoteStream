@@ -69,6 +69,11 @@ $selector-icon-padding: 0px;
       color: white !important;
       background-color: #DDDCDC !important;
     }
+    
+    input[type="radio"], input[type="checkbox"] {
+        margin: 0;
+    }
+    
   }
 }
 
