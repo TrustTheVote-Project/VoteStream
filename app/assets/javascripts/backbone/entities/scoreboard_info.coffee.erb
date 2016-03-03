@@ -45,13 +45,9 @@
           totalValidVotes:          0
           totalRegisteredVoters:    0
           electionDayVotes:         0
-          electionDayPercent:       0
           earlyVotes:               0
-          earlyPercent:             0
           absenteeVotes:            0
-          absenteePercent:          0
           npVotes:                  0
-          npPercent:                0
           
           
           refcon:           App.request('entities:refcon:all-Federal')
@@ -64,13 +60,14 @@
               @refcon.get('name')
             @refcon.get('name')
 
-          region:           null
-          regionLabel:      -> if !@region then "<%= I18n.t 'scoreboard.header.right_menu.tabs.all' %>" else @region.get('name')
-          percentReporting: gon.percentReporting
-          view:             null
-          coloringType:     'results'
-          showParticipation: false
-          percentageType:   'ballots'
+          region:            null
+          regionLabel:       -> if !@region then "<%= I18n.t 'scoreboard.header.right_menu.tabs.all' %>" else @region.get('name')
+          percentReporting:  gon.percentReporting
+          view:              null
+          coloringType:      'results'
+          showParticipation: true
+          showVotingMethod:  false
+          percentageType:    'ballots' # Can be 'ballots' or 'voters'
 
         App.vent.on 'filters:set', (options = {}) ->
           su = App.request 'entities:scoreboardUrl'
@@ -108,13 +105,9 @@
           sb.set 'totalValidVotes', precinctResults.get('votes')
           if precinctResults.get('channels')
             sb.set 'electionDayVotes', precinctResults.get('channels')['election-day']
-            sb.set 'electionDayPercent', App.ScoreboardsApp.Helpers.percentFormatted(sb.get('electionDayVotes'), sb.get('totalRegisteredVoters'))
             sb.set 'earlyVotes', precinctResults.get('channels')['early']
-            sb.set 'earlyPercent', App.ScoreboardsApp.Helpers.percentFormatted(sb.get('earlyVotes'), sb.get('totalRegisteredVoters'))
             sb.set 'absenteeVotes', precinctResults.get('channels')['absentee']
-            sb.set 'absenteePercent', App.ScoreboardsApp.Helpers.percentFormatted(sb.get('absenteeVotes'), sb.get('totalRegisteredVoters'))
             sb.set 'npVotes', sb.get('totalRegisteredVoters') - sb.get('totalBallotsCast')
-            sb.set 'npPercent', App.ScoreboardsApp.Helpers.percentFormatted(sb.get('npVotes'), sb.get('totalRegisteredVoters'))
             
         sb.get('results').on 'reset', ->
           result = sb.pickResult()
@@ -129,13 +122,9 @@
           sb.set 'totalBallotsCast', 0
           sb.set 'totalValidVotes', 0
           sb.set 'electionDayVotes', 0
-          sb.set 'electionDayPercent', 0
           sb.set 'earlyVotes', 0
-          sb.set 'earlyPercent', 0
           sb.set 'absenteeVotes', 0
-          sb.set 'absenteePercent', 0
           sb.set 'npVotes', 0
-          sb.set 'npPercent', 0
         
           App.execute 'when:fetched', App.request('entities:precincts'), =>
             colors  = sb.get 'precinctColors'

@@ -42,6 +42,7 @@ en:
       view_selector:
         map: Map view
         list: List view
+        settings: Settings
 
       coloring_type_selector:
         results: Results Map
