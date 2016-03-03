@@ -294,7 +294,7 @@ class RefConResults
   end
   
   def contest_precinct_results(contest, params)
-    Rails.logger.info("T::#{DateTime.now.strftime('%Q')} Start Contest Precinct results")
+    Rails.logger.debug("T::#{DateTime.now.strftime('%Q')} Start Contest Precinct results")
     
     pids       = precinct_ids_for_region(params)
     rc_pids    = contest.precinct_ids.uniq
@@ -302,14 +302,14 @@ class RefConResults
     precincts  = Precinct.select("precincts.id, registered_voters").where(id: rc_pids)
 
     candidates = contest.candidates.includes(:party)
-    Rails.logger.info("T::#{DateTime.now.strftime('%Q')} Done Initial load")
+    Rails.logger.debug("T::#{DateTime.now.strftime('%Q')} Done Initial load")
     
     results    = set_ballot_type_filters(CandidateResult.where(candidate_id: contest.candidate_ids, precinct_id: rc_pids), params)
 
     
     #grp_only = results.group_by(&:precinct_id)
 
-    Rails.logger.info("T::#{DateTime.now.strftime('%Q')} Exec Grouping")
+    Rails.logger.debug("T::#{DateTime.now.strftime('%Q')} Exec Grouping")
 
     
     results = results.select("SUM(candidate_results.votes) as votes, candidate_results.precinct_id as precinct_id, candidate_results.candidate_id as candidate_id").group("candidate_results.candidate_id, candidate_results.precinct_id")
@@ -319,20 +319,7 @@ class RefConResults
       precinct_candidate_results[r.precinct_id] << r
     end
     
-    # precinct_candidate_results = {}
-    # puts results.count.to_s
-    # Rails.logger.info("T::#{DateTime.now.strftime('%Q')} Count Grouping")
-    # results.each do |r|
-    #   precinct_candidate_results[r.precinct_id] ||= []
-    #   precinct_candidate_results[r.precinct_id] << r
-    # end
-    
-    # precinct_candidate_results = grp_only.inject({}) do |memo, (pid, results)|
-    #   memo[pid] = results
-    #   memo
-    # end
-    
-    Rails.logger.info("T::#{DateTime.now.strftime('%Q')} Done Grouping")
+    Rails.logger.debug("T::#{DateTime.now.strftime('%Q')} Done Grouping")
     
 
     voters = 0
@@ -359,19 +346,19 @@ class RefConResults
         rows:     ordered[0, 2] }
     end
 
-    Rails.logger.info("T::#{DateTime.now.strftime('%Q')} Done Total Counts")
+    Rails.logger.debug("T::#{DateTime.now.strftime('%Q')} Done Total Counts")
 
     ballots, overvotes, undervotes, registered, channels = get_vote_stats(contest, rc_pids)
 
-    Rails.logger.info("T::#{DateTime.now.strftime('%Q')} Done Vote Stats")
+    Rails.logger.debug("T::#{DateTime.now.strftime('%Q')} Done Vote Stats")
 
     ordered_candidates = contest.winning_candidates
     
-    Rails.logger.info("T::#{DateTime.now.strftime('%Q')} Done Winning Candidates")
+    Rails.logger.debug("T::#{DateTime.now.strftime('%Q')} Done Winning Candidates")
     
     items = candidates.map { |c,i| { id:  c.id, name:  c.name, party:  { name:  c.party_name, abbr:  c.party.abbr }, c:  ColorScheme.candidate_color(c, ordered_candidates.index(c))} }
     
-    Rails.logger.info("T::#{DateTime.now.strftime('%Q')} Done  calculating items")
+    Rails.logger.debug("T::#{DateTime.now.strftime('%Q')} Done  calculating items")
     
     return {
       items:      items,
