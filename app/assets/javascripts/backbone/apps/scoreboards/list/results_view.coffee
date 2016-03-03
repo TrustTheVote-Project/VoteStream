@@ -19,6 +19,17 @@
       percentFormatted: -> App.ScoreboardsApp.Helpers.percentFormatted(@votes, @totalVotes)
       voteChannels: -> 
         @vote_channels || {}
+      channelLabel: (channel) -> 
+        cData = @vote_channels[channel]
+        label = switch channel
+          when 'election-day'
+            "Election Day"
+          when 'absentee'
+            "Absentee"
+          when 'early'
+            "Early"
+        return label + ' ' + App.ScoreboardsApp.Helpers.percentFormatted(cData, @votes)
+        
     onShow: ->
       c = @model.get('c')
       if @model.get('party')['abbr'] == 'stats'
@@ -30,6 +41,7 @@
 
       $("h5, .percent", @$el).css(color: c)
       $(".filler", @$el).css(background: c)
+      $('[data-toggle="tooltip"]', @$el).tooltip();
 
   # A common class for shared Contest/Referendum ResultView logic
   class BaseResultView extends Marionette.CompositeView

@@ -2,11 +2,12 @@
 <div class='vote_channels'>
   <% vcStats = @voteChannels() %>
   <% vcKeys = Object.keys(vcStats) %>
+  <% vcKeys = ['early', 'absentee', 'election-day'] %>
   <% if vcKeys.length: %>
     <div class='bar'>
       <% for channel in vcKeys: %>
-        <% if channel != 'total': %>
-          <div class='filler <%= channel %>' style='width: <%= (vcStats[channel] * @percent() / vcStats['total']) %>%' title='<%= channel %>' ></div>
+        <% if vcStats[channel]: %>
+          <div class='filler <%= channel %>' style='width: <%= (vcStats[channel] * @percent() / vcStats['total']) %>%' title='<%= @channelLabel(channel) %>' data-toggle="tooltip"></div>
         <% end %>
       <% end %>
     </div>
