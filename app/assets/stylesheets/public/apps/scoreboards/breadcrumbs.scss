@@ -3,7 +3,7 @@
 $bc-font-size: 18px;
 $bc-line-height: 30px;
 
-#bread-crumbs {
+#bread-crumbs, #view-options {
   padding: $section-padding $side-padding;
   border-bottom: $section-border;
   color: $header-color;
@@ -13,6 +13,47 @@ $bc-line-height: 30px;
 
   .view-selector {
     text-align: right;
+  }
+}
+
+#view-options {
+  border: none;
+  #view-saving-region {
+    display: inline-block;
+    font-size: 14px;
+    .map-saved-items {
+      display: inline-block;
+      position: relative;
+      cursor: default;
+      ul {
+        margin: 0;
+        right: 0;
+        padding: 3px 5px;
+        position: absolute;
+        top: 100%;
+        display: none;
+        background: white;
+        z-index: 1000000;
+        border: 1px solid #aaa;
+        box-shadow: 0px 1px 3px #ccc;
+        list-style: none;
+        li {
+          display: block;
+          padding: 3px 5px;
+          white-space: nowrap;
+        }
+      }
+    }
+    .map-saved-items:hover {
+      ul {
+        display: block;
+      }
+    }
+    .btn {
+      span.btn-label {
+        font-size: 14px;
+      }
+    }
   }
 }
 

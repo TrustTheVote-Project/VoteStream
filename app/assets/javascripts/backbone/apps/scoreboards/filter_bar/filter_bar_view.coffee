@@ -20,6 +20,7 @@
       'change:channelEarly': 'showChannels'
       'change:channelElectionday': 'showChannels'
       'change:channelAbsentee': 'showChannels'
+      'change:coloringType': 'showSettings'
       
       
     regions:
@@ -37,8 +38,11 @@
 
       breadcrumbsRegion:      '#breadcrumbs-region'
       viewSelectorRegion:     '#view-selector-region'
+      viewSavingRegion:     '#view-saving-region'
       viewSettingsRegion:     '#view-settings-region'
 
+    initialize: ->
+      @scoreboardInfo = App.request "entities:scoreboardInfo"
 
     closePopovers: ->
       $(".popover", @$el).hide()
@@ -60,41 +64,43 @@
       window.open "https://plus.google.com/share?url=#{encodeURIComponent(url)}"
 
     showChannels: ->
-      scoreboardInfo = App.request "entities:scoreboardInfo"
-      
       @.earlyChannelToggle?.show new ValueToggleView
         name: 'Early'
-        scoreboardInfo: scoreboardInfo
+        scoreboardInfo: @scoreboardInfo
         key: 'channelEarly'        
       @.samedayChannelToggle?.show new ValueToggleView
         name: 'Same-day'
-        scoreboardInfo: scoreboardInfo
+        scoreboardInfo: @scoreboardInfo
         key: 'channelElectionday'
       @.absenteeChannelToggle?.show new ValueToggleView
         name: 'Absentee'
-        scoreboardInfo: scoreboardInfo
+        scoreboardInfo: @scoreboardInfo
         key: 'channelAbsentee'
 
-    onShow: ->
-      scoreboardInfo = App.request "entities:scoreboardInfo"
 
+    showSettings: ->
+      @.viewSettingsRegion?.show new ViewSettingsDropdown
+        model: @scoreboardInfo
+      
+      
+    onShow: ->
       @.federalDropdownRegion.show new SelectorView
         name: 'Federal'
         itemView: ContestSelectorRow
         prependedCollection: new Backbone.Collection([ App.request("entities:refcon:all-Federal") ])
-        model: scoreboardInfo
+        model: @scoreboardInfo
         collection: App.request 'entities:refcons:federal'
       @.stateDropdownRegion.show new SelectorView
         name: 'State'
         itemView: ContestSelectorRow
         prependedCollection: new Backbone.Collection([ App.request("entities:refcon:all-State") ])
-        model: scoreboardInfo
+        model: @scoreboardInfo
         collection: App.request 'entities:refcons:state'
       @.localDropdownRegion.show new SelectorView
         name: 'Local'
         itemView: ContestSelectorRow
         prependedCollection: new Backbone.Collection([ App.request("entities:refcon:all-MCD") ])
-        model: scoreboardInfo
+        model: @scoreboardInfo
         collection: App.request 'entities:refcons:local'
       @.otherDropdownRegion.show new SelectorView
         name: 'Other'
@@ -103,7 +109,7 @@
           App.request("entities:refcon:all-Other"),
           App.request("entities:refcon:all-referenda")
         ])
-        model: scoreboardInfo
+        model: @scoreboardInfo
         collection: App.request 'entities:refcons:other'
 
       @showChannels()
@@ -114,7 +120,7 @@
           @.districtDropdownRegion?.show new SelectorView
             name: 'Districts'
             itemView: DistrictSelectorRow
-            model: scoreboardInfo
+            model: @scoreboardInfo
             prependedCollection: new Backbone.Collection([
               { id: null, name: gon.locality_name }
             ])
@@ -122,7 +128,7 @@
           @.precinctDropdownRegion?.show new SelectorView
             name: 'Precincts'
             itemView: PrecinctSelectorRow
-            model: scoreboardInfo
+            model: @scoreboardInfo
             prependedCollection: new Backbone.Collection([
               { id: null, name: 'All Precincts' }
             ])
@@ -130,11 +136,14 @@
           ), 2000
 
       @.breadcrumbsRegion.show new BreadcrumbsView
-        model: scoreboardInfo
+        model: @scoreboardInfo
       @.viewSelectorRegion.show new ViewSelectorView
-        model: scoreboardInfo
-      @.viewSettingsRegion.show new ViewSettingsDropdown
-        model: scoreboardInfo
+        model: @scoreboardInfo
+      
+      @showSettings()
+      
+      @.viewSavingRegion.show new ViewSavingView
+        model: @scoreboardInfo
 
       $("body").on "click", => @closePopovers()
 
@@ -277,10 +286,32 @@
   valueCheckbox = (trueTitle, falseTitle, property, trueValue, falseValue) ->
     { settingType: 'valueCheckbox', trueTitle: trueTitle, falseTitle: falseTitle, property: property, trueValue: trueValue, falseValue: falseValue }
 
+  class ViewSavingView extends Marionette.ItemView
+    template: 'scoreboards/filter_bar/_view_saver'
+    className: 'menu-group'
+
+    initialize: () ->
+      @su = App.request "entities:scoreboardUrl"
+      @saved_maps = App.request "entities:savedMaps"
+      
+    templateHelpers: () ->
+      saved_count: @saved_maps.count()
+      view: @su.view
+      maps: @saved_maps.maps()
+  
+    events:
+      'click .map-save-button': (e) ->
+        url = @su.path()
+        @saved_maps.add_map(url)        
+        @render()
+      'click a.map-link': (e) ->
+        url = $(e.currentTarget).attr('href')
+        App.navigate url, true
+  
   class ViewSettingsDropdown extends Marionette.ItemView
     template: 'scoreboards/filter_bar/_view_settings'
-
     className: 'btn-group'
+
 
     initialize: () ->
       @settings_groups =
@@ -295,7 +326,6 @@
           checkbox('Show Overall Participation', 'showParticipation')
           radiobox('Show Percentages by Ballots', 'percentageType', 'ballots')
           radiobox('Show Percentages by Registered Voters', 'percentageType', 'voters')
-          #valueCheckbox('Show Percentages by Ballots', 'Show Percentages by Registered Voters', 'percentageType', 'voters', 'ballots')
         ]
 
     events:

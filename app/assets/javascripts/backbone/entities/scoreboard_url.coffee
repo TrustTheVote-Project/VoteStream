@@ -5,7 +5,7 @@
       @si = App.request 'entities:scoreboardInfo'
       @view = null
       @enabled = false
-      @si.on 'change:region change:refcon change:channelEarly change:channelElectionday change:channelAbsentee', @updatePath
+      @si.on 'change:region change:refcon change:channelEarly change:channelElectionday change:channelAbsentee change:coloringType', @updatePath
 
     disable: -> @enabled = false
     enable: -> @enabled = true
@@ -52,7 +52,9 @@
       if !@si.get('channelElectionday')
         queryParams.push('dayof=off') 
       if !@si.get('channelAbsentee')
-        queryParams.push('absentee=off') 
+        queryParams.push('absentee=off')
+      if @si.get('coloringType') != 'results' 
+        queryParams.push('coloringType=' + @si.get('coloringType'))
       if queryParams.length > 0
         fullPath = fullPath + "/" + queryParams.join("&")
       

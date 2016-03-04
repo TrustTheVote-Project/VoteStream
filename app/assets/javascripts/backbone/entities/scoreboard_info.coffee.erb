@@ -84,6 +84,8 @@
             App.vent.trigger 'channelEarly:selected', options.channelEarly
           if options.channelAbsentee?
             App.vent.trigger 'channelAbsentee:selected', options.channelAbsentee
+          if options.coloringType?
+            App.vent.trigger 'coloringType:selected', options.coloringType
           sb.enableResultsReload()
           su.enableAndUpdate()
 
@@ -104,6 +106,9 @@
 
         App.vent.on 'channelAbsentee:selected', (channelAbsentee) ->
           sb.set 'channelAbsentee', channelAbsentee
+
+        App.vent.on 'coloringType:selected', (coloringType) ->
+          sb.set 'coloringType', coloringType
 
         App.vent.on 'result:selected', (result) ->
           sb.set 'result', result

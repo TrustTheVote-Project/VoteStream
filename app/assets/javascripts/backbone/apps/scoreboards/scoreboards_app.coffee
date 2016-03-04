@@ -56,9 +56,12 @@
         precincts = App.request 'entities:precincts'
         region = precincts.get rid
       
-      channelEarly = true
-      channelElectionday = true
-      channelAbsentee = true
+      filters = 
+        region: region
+        refcon: refcon
+        channelEarly: true
+        channelElectionday: true
+        channelAbsentee: true
       
       if params
         for part in params.split "&"
@@ -66,19 +69,15 @@
           if values.length == 2 and values[1] == 'off'
             switch values[0]
               when 'dayof'
-                channelElectionday = false
+                filters.channelElectionday = false
               when 'early'
-                channelEarly = false
+                filters.channelEarly = false
               when 'absentee'
-                channelAbsentee = false
+                filters.channelAbsentee = false
+          else if values.length == 2
+            filters[values[0]] = values[1]
         
-      
-      App.vent.trigger 'filters:set',
-        region: region
-        refcon: refcon
-        channelEarly: channelEarly
-        channelElectionday: channelElectionday
-        channelAbsentee: channelAbsentee
+      App.vent.trigger 'filters:set', filters
 
   API =
     notFound: (params) ->
