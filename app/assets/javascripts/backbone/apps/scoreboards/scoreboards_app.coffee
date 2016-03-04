@@ -3,8 +3,7 @@
 
   class ScoreboardsApp.Router extends Marionette.AppRouter
     appRoutes:
-      "map(/:ctype/:cid)(/:rtype)(/:rid)(*params)": "show"
-      #"map(/:ctype/:cid)(/:rtype)(/:rid)"  : "show"
+      "map/:ctype-:cid(/:region)(/:params)": "show"
       "list(/:ctype/:cid)(/:rtype)(/:rid)" : "list"
       #'*notFound': 'notFound'
   
@@ -27,7 +26,7 @@
       (number) ->
         numeral(number).format('0,0')
   
-  setParams = (ctype, cid, rtype, rid) ->
+  setParams = (ctype, cid, rtype, rid, params) ->
     waitingFor = []
     
     if ctype == 'c' or ctype == 'r'
@@ -55,18 +54,43 @@
         precincts = App.request 'entities:precincts'
         region = precincts.get rid
       
+      channelEarly = true
+      channelElectionday = true
+      channelAbsentee = true
+      
+      if params
+        for part in params.split "&"
+          values = part.split "="
+          if values.length == 2 and values[1] == 'off'
+            switch values[0]
+              when 'dayof'
+                channelElectionday = false
+              when 'early'
+                channelEarly = false
+              when 'absentee'
+                channelAbsentee = false
+        
+      
       App.vent.trigger 'filters:set',
         region: region
         refcon: refcon
-
+        channelEarly: channelEarly
+        channelElectionday: channelElectionday
+        channelAbsentee: channelAbsentee
 
   API =
     notFound: (params) ->
       console.log(params)
     
-    show: (category, refconId, regionType, regionId, params) ->
-      console.log(category, refconId, regionType, regionId, params)
-      setParams(category, refconId, regionType, regionId)
+    show: (ctype, cid, region, params) ->
+      if region and region.match('=')
+        params = region
+      else if region
+        regionParts = region.split('-')
+        regionType = regionParts[0]
+        regionId = regionParts[1]
+        
+      setParams(ctype, cid, regionType, regionId, params)
 
       su = App.request 'entities:scoreboardUrl'
       su.setView 'map'

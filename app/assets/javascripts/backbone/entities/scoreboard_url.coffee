@@ -5,7 +5,7 @@
       @si = App.request 'entities:scoreboardInfo'
       @view = null
       @enabled = false
-      @si.on 'change:region change:refcon', @updatePath
+      @si.on 'change:region change:refcon change:channelEarly change:channelElectionday change:channelAbsentee', @updatePath
 
     disable: -> @enabled = false
     enable: -> @enabled = true
@@ -33,8 +33,7 @@
       ctype = 'a' if ctype == 'all'
       cid = refcon.get('id')
       if region? or cid != 'federal'
-        parts.push ctype
-        parts.push cid
+        parts.push ctype + '-' + cid
 
       # region
       if region?
@@ -44,16 +43,25 @@
         else
           rtype = 'd'
 
-        parts.push rtype
-        parts.push rid
+        parts.push rtype + '-' + rid
 
-      parts.join '/'
-
+      fullPath = parts.join '/'
+      queryParams = []
+      if (!@si.get('channelEarly'))
+        queryParams.push('early=off') 
+      if !@si.get('channelElectionday')
+        queryParams.push('dayof=off') 
+      if !@si.get('channelAbsentee')
+        queryParams.push('absentee=off') 
+      if queryParams.length > 0
+        fullPath = fullPath + "/" + queryParams.join("&")
+      
+      return fullPath
 
   API =
     getScoreboardUrl: ->
       unless Entities.scoreboardUrl?
-        Entities.scoreboardUrl = su = new ScoreboardUrl
+        Entities.scoreboardUrl = window.su = su = new ScoreboardUrl
 
       Entities.scoreboardUrl
 

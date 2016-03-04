@@ -16,6 +16,12 @@
       'click #js-facebook-share': 'onFacebookShare'
       'click #js-gplus': 'onGooglePlus'
 
+    modelEvents:
+      'change:channelEarly': 'showChannels'
+      'change:channelElectionday': 'showChannels'
+      'change:channelAbsentee': 'showChannels'
+      
+      
     regions:
       federalDropdownRegion:  '#federal-dropdown-region'
       stateDropdownRegion:    '#state-dropdown-region'
@@ -32,6 +38,7 @@
       breadcrumbsRegion:      '#breadcrumbs-region'
       viewSelectorRegion:     '#view-selector-region'
       viewSettingsRegion:     '#view-settings-region'
+
 
     closePopovers: ->
       $(".popover", @$el).hide()
@@ -51,6 +58,22 @@
       e.preventDefault()
       url = document.location.href
       window.open "https://plus.google.com/share?url=#{encodeURIComponent(url)}"
+
+    showChannels: ->
+      scoreboardInfo = App.request "entities:scoreboardInfo"
+      
+      @.earlyChannelToggle.show new ValueToggleView
+        name: 'Early'
+        scoreboardInfo: scoreboardInfo
+        key: 'channelEarly'        
+      @.samedayChannelToggle.show new ValueToggleView
+        name: 'Same-day'
+        scoreboardInfo: scoreboardInfo
+        key: 'channelElectionday'
+      @.absenteeChannelToggle.show new ValueToggleView
+        name: 'Absentee'
+        scoreboardInfo: scoreboardInfo
+        key: 'channelAbsentee'
 
     onShow: ->
       scoreboardInfo = App.request "entities:scoreboardInfo"
@@ -82,18 +105,8 @@
         ])
         model: scoreboardInfo
         collection: App.request 'entities:refcons:other'
-      @.earlyChannelToggle.show new ValueToggleView
-        name: 'Early'
-        scoreboardInfo: scoreboardInfo
-        key: 'channelEarly'
-      @.samedayChannelToggle.show new ValueToggleView
-        name: 'Same-day'
-        scoreboardInfo: scoreboardInfo
-        key: 'channelElectionday'
-      @.absenteeChannelToggle.show new ValueToggleView
-        name: 'Absentee'
-        scoreboardInfo: scoreboardInfo
-        key: 'channelAbsentee'
+
+      @showChannels()
 
       App.execute 'when:fetched', App.request('entities:precincts'), =>
         # We give time for the map to load
@@ -171,6 +184,10 @@
     itemViewContainer: 'span'
     tagName: 'span'
     className: 'toggle-box'
+    
+    modelEvents:
+      'change': 'render'
+    
     
     initialize: (options) ->
       @scoreboardInfo = options.scoreboardInfo

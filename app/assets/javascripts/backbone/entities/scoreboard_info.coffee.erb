@@ -78,10 +78,15 @@
             App.vent.trigger 'region:selected', options.region
           if options.refcon?
             App.vent.trigger 'refcon:selected', options.refcon
+          if options.channelElectionday?
+            App.vent.trigger 'channelElectionday:selected', options.channelElectionday
+          if options.channelEarly?
+            App.vent.trigger 'channelEarly:selected', options.channelEarly
+          if options.channelAbsentee?
+            App.vent.trigger 'channelAbsentee:selected', options.channelAbsentee
           sb.enableResultsReload()
           su.enableAndUpdate()
 
-          console.log(options.region)
           sb.reloadResults
             refcon: options.refcon
 
@@ -90,6 +95,15 @@
 
         App.vent.on 'refcon:selected', (refcon) ->
           sb.set 'refcon', refcon
+
+        App.vent.on 'channelElectionday:selected', (channelElectionday) ->
+          sb.set 'channelElectionday', channelElectionday
+
+        App.vent.on 'channelEarly:selected', (channelEarly) ->
+          sb.set 'channelEarly', channelEarly
+
+        App.vent.on 'channelAbsentee:selected', (channelAbsentee) ->
+          sb.set 'channelAbsentee', channelAbsentee
 
         App.vent.on 'result:selected', (result) ->
           sb.set 'result', result
