@@ -62,15 +62,15 @@
     showChannels: ->
       scoreboardInfo = App.request "entities:scoreboardInfo"
       
-      @.earlyChannelToggle.show new ValueToggleView
+      @.earlyChannelToggle?.show new ValueToggleView
         name: 'Early'
         scoreboardInfo: scoreboardInfo
         key: 'channelEarly'        
-      @.samedayChannelToggle.show new ValueToggleView
+      @.samedayChannelToggle?.show new ValueToggleView
         name: 'Same-day'
         scoreboardInfo: scoreboardInfo
         key: 'channelElectionday'
-      @.absenteeChannelToggle.show new ValueToggleView
+      @.absenteeChannelToggle?.show new ValueToggleView
         name: 'Absentee'
         scoreboardInfo: scoreboardInfo
         key: 'channelAbsentee'
@@ -261,7 +261,9 @@
       'click button': (e) ->
         e.preventDefault()
         link = $(e.target)
-        App.navigate link.data('view'), trigger: true
+        scoreboardUrl = App.request "entities:scoreboardUrl"
+        scoreboardUrl.setView(link.data('view'))
+        # App.navigate link.data('view'), trigger: true
 
   radiobox = (title, property, value) ->
     if value

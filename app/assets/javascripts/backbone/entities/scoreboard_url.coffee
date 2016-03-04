@@ -15,11 +15,11 @@
 
     setView: (v) ->
       @view = v
-      @updatePath()
+      @updatePath(true)
 
-    updatePath: =>
+    updatePath: (refresh) =>
       return unless @enabled
-      App.navigate @path()
+      App.navigate @path(), refresh
 
     path: ->
       parts = []

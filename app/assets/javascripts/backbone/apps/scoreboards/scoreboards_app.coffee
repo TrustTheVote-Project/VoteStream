@@ -3,8 +3,10 @@
 
   class ScoreboardsApp.Router extends Marionette.AppRouter
     appRoutes:
+      "map": "show"
       "map/:ctype-:cid(/:region)(/:params)": "show"
-      "list(/:ctype/:cid)(/:rtype)(/:rid)" : "list"
+      "list": "list"
+      "list/:ctype-:cid(/:region)(/:params)": "list"
       #'*notFound': 'notFound'
   
   class ScoreboardsApp.Helpers
@@ -96,8 +98,15 @@
       su.setView 'map'
       ScoreboardsApp.Show.Controller.show()
 
-    list: (category, regionType, regionId, refconId) ->
-      setParams(category, regionType, regionId, refconId)
+    list: (ctype, cid, region, params)->
+      if region and region.match('=')
+        params = region
+      else if region
+        regionParts = region.split('-')
+        regionType = regionParts[0]
+        regionId = regionParts[1]
+        
+      setParams(ctype, cid, regionType, regionId, params)
 
       su = App.request 'entities:scoreboardUrl'
       su.setView 'list'
