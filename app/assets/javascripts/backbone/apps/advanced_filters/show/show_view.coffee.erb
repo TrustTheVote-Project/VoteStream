@@ -23,7 +23,8 @@
       @filterBarRegion.show new Show.FilterBarView()
       @contestsRegion.show new Show.ContestsSelectorView()
       @locationsRegion.show new Show.LocationsSelectorView()
-
+      $('[data-toggle="tooltip"]', @$el).tooltip();
+      
     saveAs: (e, format) ->
       e.preventDefault()
       af = App.request 'entities:advancedFilter'

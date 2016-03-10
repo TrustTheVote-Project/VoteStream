@@ -13,6 +13,16 @@ $selector-stats-fg: #B4B3B4;
 
     h3 {
       margin: 0;
+      width: auto;
+      display: inline;
+    }
+
+    #view-options {
+      display: inline-block;
+      .btn {
+        background: #4AA5D6;
+        border: 0;
+      }
     }
 
     #js-election-metadata, #js-view-feed {
@@ -31,6 +41,9 @@ $selector-stats-fg: #B4B3B4;
   .save-as {
     margin: 20px 0;
     text-align: right;
+    .saved-maps {
+      text-align: left;
+    }
     label {
       display: inline-block;
       color: #808080;
