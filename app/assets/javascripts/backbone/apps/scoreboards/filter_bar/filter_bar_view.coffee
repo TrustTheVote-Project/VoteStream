@@ -6,6 +6,10 @@
 
   class FilterBar.View extends Marionette.Layout
     template: 'scoreboards/filter_bar/view'
+    templateHelpers:
+      shouldShowFilters: ->
+        return !App.request("entities:scoreboardUrl").advancedView()
+        
     id: 'filter_bar'
 
     ui:
@@ -15,6 +19,7 @@
       'click #js-tweet': 'onTweet'
       'click #js-facebook-share': 'onFacebookShare'
       'click #js-gplus': 'onGooglePlus'
+      'click #js-advanced-filters': 'viewAdvancedFilters'
 
     modelEvents:
       'change:channelEarly': 'showChannels'
@@ -43,6 +48,12 @@
 
     initialize: ->
       @scoreboardInfo = App.request "entities:scoreboardInfo"
+
+    viewAdvancedFilters: (e) ->
+      e.preventDefault()
+      af = App.request ('entities:advancedFilter')
+      data = af.requestData()
+      App.navigate "advanced-filters/#{$.param(data)}", true
 
     closePopovers: ->
       $(".popover", @$el).hide()
@@ -257,6 +268,12 @@
     template: 'scoreboards/filter_bar/_breadcrumbs'
     modelEvents:
       'change:refcon change:region': 'render'
+      
+    initialize: ->
+      af = App.request 'entities:advancedFilter'
+      af.on 'changedAdvancedFilter', =>
+        @render()
+      
 
   class ViewSelectorView extends Marionette.ItemView
     template: 'scoreboards/filter_bar/_view_selector'

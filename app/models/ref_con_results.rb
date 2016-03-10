@@ -158,6 +158,10 @@ class RefConResults
     rid = params[:referendum_id]
     results = ContestResult.where(contest_id: cid, referendum_id: rid).select("*, precinct_id in (#{(region_pids || [ -1 ]).join(',')}) as inregion")
 
+    # r = results.all.detect {|r| r.precinct_id == 51757}
+    # raise r.inregion.to_s
+    # raise 'a'
+
     # colors for precincts with results
     reported_precinct_ids = results.map(&:precinct_id)
     precinct_registered_voters = Precinct.where(id: reported_precinct_ids).select("id, registered_voters").inject({}) do |memo, r|
@@ -166,7 +170,7 @@ class RefConResults
     end
 
     colors = results.map do |r|
-      region = r.inregion ? 'i' : 'o'
+      region = (r.inregion || region_pids.nil? ) ? 'i' : 'o'
       code   = r.color_code || 'n0'
       color  = "#{region}#{code}"
 
@@ -297,6 +301,7 @@ class RefConResults
     Rails.logger.debug("T::#{DateTime.now.strftime('%Q')} Start Contest Precinct results")
     
     pids       = precinct_ids_for_region(params)
+    
     rc_pids    = contest.precinct_ids.uniq
     rc_pids    = rc_pids & pids unless pids.nil?
     precincts  = Precinct.select("precincts.id, registered_voters").where(id: rc_pids)
@@ -486,11 +491,15 @@ class RefConResults
   end
 
   def precinct_ids_for_region(params)
-    if (pid = params[:precinct_id]) || (did = params[:district_id])
-      pid ? [ pid.to_i ] : DistrictsPrecinct.where(district_id: did).uniq.pluck("precinct_id").to_a
-    else
-      nil
+    pid = params[:precinct_id]
+    pid = [ pid ].flatten.reject {|pid| pid.blank? }.collect(&:to_i)
+    did = params[:district_id]
+    if (did)
+      pid += DistrictsPrecinct.where(district_id: did).uniq.pluck("precinct_id").to_a
     end
+    #raise pid.to_s
+    pid = pid.uniq
+    pid.empty? ? nil : pid
   end
 
   def refcons_in_region(params)
@@ -523,7 +532,8 @@ class RefConResults
     contests = contests.select("*, lpad(sort_order, 5, '0') || lower(office) as sort_order") if contests
     referendums = referendums.select("*, lpad(sort_order, 5, '0') || lower(title) as sort_order") if referendums
 
-    [ contests, referendums ].compact.flatten.sort_by(&:sort_order)
+    rir = [ contests, referendums ].compact.flatten.sort_by(&:sort_order)
+    rir
   end
 
 

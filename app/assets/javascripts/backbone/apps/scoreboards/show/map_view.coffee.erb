@@ -172,14 +172,17 @@ InfoBubble.prototype.panToView = ->
 
       if region == 'i'
         strokeColor = '#000000'
+        fillOpacity = saturation
       else if colorCode == 'n'
         strokeColor = '<%= AppConfig['map_color']['colors']['not_voting'] %>'
+        fillOpacity = 1
       else
         strokeColor = '#ffffff'
+        fillOpacity = 0.2
 
       @colors[key] = {
         fillColor:    color
-        fillOpacity:  if colorCode == 'n' then 1 else saturation
+        fillOpacity:  fillOpacity
         hoverColor:   color
         hoverOpacity: 0.9
         strokeColor:  strokeColor
@@ -376,11 +379,11 @@ InfoBubble.prototype.panToView = ->
               bounds.extend(point)
 
           precinct.bounds = this_bounds
-
+          
           poly = new google.maps.Polygon
             paths:          lines,
             strokeColor:    colors.strokeColor
-            strokeOpacity:  1
+            strokeOpacity:  0.5
             strokeWeight:   colors.strokeWeight
             fillColor:      colors.fillColor
             fillOpacity:    colors.fillOpacity

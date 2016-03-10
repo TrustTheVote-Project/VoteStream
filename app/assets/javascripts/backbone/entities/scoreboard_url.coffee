@@ -6,7 +6,14 @@
       @view = null
       @enabled = false
       @si.on 'change:region change:refcon change:channelEarly change:channelElectionday change:channelAbsentee change:coloringType', @updatePath
-
+      @si.on 'change:advanced', =>
+        @updatePath()
+        params = @si.get 'advanced'
+        if params
+          App.execute 'when:fetched', App.request('entities:precincts'),  =>
+            af = App.request 'entities:advancedFilter'
+            af.fromParams(params)
+          
     disable: -> @enabled = false
     enable: -> @enabled = true
     enableAndUpdate: ->
@@ -21,7 +28,16 @@
       return unless @enabled
       App.navigate @path(), refresh
 
+    advancedView: ->
+      @view == 'advanced-map' || @view == 'advanced-list'
+
     path: ->
+      if @advancedView()
+        af = App.request 'entities:advancedFilter'
+        params = af.requestData()
+        return "#{@view}/#{$.param(params)}"
+        
+      
       parts = []
       parts.push @view or 'map'
 

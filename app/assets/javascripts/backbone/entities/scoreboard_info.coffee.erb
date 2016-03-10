@@ -5,7 +5,7 @@
       return if @noResultsReload
       @preselectedRefconId = options.refcon?.id
       results = @get 'results'
-      results.fetchForFilter @get('localityId'), @get('region'), @get('refcon'), this.extraOpts()
+      results.fetchForFilter @get('localityId'), @get('region'), @get('refcon'), this.extraOpts(), @get('advanced')
 
     pickResult: ->
       results = @get 'results'
@@ -52,22 +52,32 @@
           
           refcon:           App.request('entities:refcon:all-Federal')
           refconLabel:      ->
-            type = @refcon.get('type')
-            if type == 'all'
-              id = @refcon.get('id')
-              gon.categories[id]
+            if App.request('entities:scoreboardUrl').advancedView()
+              af = App.request 'entities:advancedFilter'
+              af.breadcrumbsContestName()              
             else
+              type = @refcon.get('type')
+              if type == 'all'
+                id = @refcon.get('id')
+                gon.categories[id]
               @refcon.get('name')
-            @refcon.get('name')
 
           region:            null
-          regionLabel:       -> if !@region then "<%= I18n.t 'scoreboard.header.right_menu.tabs.all' %>" else @region.get('name')
+          regionLabel:       -> 
+            if @region 
+              @region.get('name')
+            else if @advanced
+              af = App.request 'entities:advancedFilter'
+              af.breadcrumbsRegionName()
+            else 
+              "<%= I18n.t 'scoreboard.header.right_menu.tabs.all' %>" 
           percentReporting:  gon.percentReporting
           view:              null
           coloringType:      'results'
           map_type:          null
           showParticipation: true
           showVotingMethod:  false
+          advanced:          null
           percentageType:    'ballots' # Can be 'ballots' or 'voters'
 
         App.vent.on 'filters:set', (options = {}) ->
@@ -86,6 +96,8 @@
             App.vent.trigger 'channelAbsentee:selected', options.channelAbsentee
           if options.coloringType?
             App.vent.trigger 'coloringType:selected', options.coloringType
+          if options.advanced?
+            App.vent.trigger 'advanced:selected', options.advanced
           sb.enableResultsReload()
           su.enableAndUpdate()
 
@@ -93,9 +105,11 @@
             refcon: options.refcon
 
         App.vent.on 'region:selected', (region) ->
+          sb.set 'advanced', null
           sb.set 'region', region
 
         App.vent.on 'refcon:selected', (refcon) ->
+          sb.set 'advanced', null
           sb.set 'refcon', refcon
 
         App.vent.on 'channelElectionday:selected', (channelElectionday) ->
@@ -109,6 +123,9 @@
 
         App.vent.on 'coloringType:selected', (coloringType) ->
           sb.set 'coloringType', coloringType
+
+        App.vent.on 'advanced:selected', (advanced) ->
+          sb.set 'advanced', advanced
 
         App.vent.on 'result:selected', (result) ->
           sb.set 'result', result
@@ -137,6 +154,7 @@
         sb.on 'change:result', ->
           result  = sb.get 'result'
           region  = sb.get 'region'
+          advanced = sb.get 'advanced'
 
           sb.set 'precinctsReportingCount', 0
           sb.set 'totalRegisteredVoters', 0
@@ -149,10 +167,10 @@
         
           App.execute 'when:fetched', App.request('entities:precincts'), =>
             colors  = sb.get 'precinctColors'
-            colors.fetchForResult result, region
+            colors.fetchForResult result, region, advanced
 
             results = sb.get 'precinctResults'
-            results.fetchForResult result, region, sb.extraOpts()
+            results.fetchForResult result, region, sb.extraOpts(), advanced
 
       Entities.scoreboardInfo
 

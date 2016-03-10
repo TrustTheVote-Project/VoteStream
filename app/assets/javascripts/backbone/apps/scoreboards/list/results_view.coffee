@@ -53,7 +53,8 @@
       if !@mapViewInstance
         PrecinctColors = App.module('Entities').PrecinctColors
         colors = new PrecinctColors
-        colors.fetchForResult(@model, @region).done () =>
+        si = App.request 'entities:scoreboardInfo'
+        colors.fetchForResult(@model, @region, si.get('advanced')).done () =>
           @mapRegion = new Marionette.Region
             el: @ui.mapContainer
 

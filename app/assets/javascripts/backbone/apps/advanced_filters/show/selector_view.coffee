@@ -41,6 +41,7 @@
 
     onSelectionChange: ->
       @statsView.render()
+      App.vent.trigger 'advancedFilterChange'
 
 
   class SelectionStatsView extends Marionette.ItemView
@@ -58,6 +59,15 @@
   class OptionView extends Marionette.ItemView
     template: 'advanced_filters/show/_selector_view_option'
 
+    initialize: (options) ->
+      @af = App.request 'entities:advancedFilter'
+      @model.on 'setSelected', =>
+        @doSelect()
+
+    doSelect: ->
+      @$el.addClass('selected')
+      
+
     events:
       'click': (e) ->
         e.preventDefault()
@@ -67,9 +77,8 @@
           @options.selection?.remove(@model)
           @model.set('selected', false)
         else
-          @$el.addClass('selected')
-          @options.selection?.add(@model)
-          @model.set('selected', true)
+          @af.select(@options.selection, @model)
+          @doSelect()
 
         @trigger "selection:changed"
 

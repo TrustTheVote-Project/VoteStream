@@ -5,8 +5,10 @@
     appRoutes:
       "map": "show"
       "map/:ctype-:cid(/:region)(/:params)": "show"
+      "advanced-map/:params": "showAdvanced"
       "list": "list"
       "list/:ctype-:cid(/:region)(/:params)": "list"
+      "advanced-list/:params": "showAdvancedList"
       #'*notFound': 'notFound'
   
   class ScoreboardsApp.Helpers
@@ -28,6 +30,11 @@
       (number) ->
         numeral(number).format('0,0')
   
+  setAdvancedParams = (params) ->
+    App.execute 'when:fetched', [App.request('entities:refcons'), App.request('entities:districts'), App.request('entities:precincts')], ->
+      App.vent.trigger 'filters:set', {advanced: params}
+    
+    
   setParams = (ctype, cid, rtype, rid, params) ->
     waitingFor = []
     
@@ -83,6 +90,22 @@
     notFound: (params) ->
       console.log(params)
     
+    showAdvancedList: (params) ->
+      setAdvancedParams(params)
+      su = App.request 'entities:scoreboardUrl'
+      su.view = 'advanced-list'
+      
+      ScoreboardsApp.List.Controller.show()
+      
+      
+    showAdvanced: (params) ->
+      setAdvancedParams(params)
+      
+      su = App.request 'entities:scoreboardUrl'
+      su.view = 'advanced-map'
+      
+      ScoreboardsApp.Show.Controller.show()
+      
     show: (ctype, cid, region, params) ->
       if region and region.match('=')
         params = region

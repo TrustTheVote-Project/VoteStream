@@ -19,12 +19,20 @@
       else
         filter.referendum_id = rid
 
-      if region?
+      af = App.request('entities:advancedFilter')
+      advanced = af.filterParams()
+
+      if advanced and App.request('entities:scoreboardUrl').advancedView()
+        filter.district_id = advanced.district_id
+        filter.precinct_id = advanced.precinct_id
+
+      else if region?
         rid = region.get 'id'
         if region instanceof App.Entities.District
           filter.district_id = rid
         else
           filter.precinct_id = rid
+
 
       @fetch
         url:   '/data/precinct_colors'

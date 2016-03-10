@@ -15,8 +15,10 @@
     <div class="span6">
       <label>Save as</label>
       <a href="" title="Save as CSV" data-toggle="tooltip" id="js-save-as-csv" class="btn btn-primary" download="<%= @filename %>.csv">CSV</a>
-      <a href="" title="Save as PDF" data-toggle="tooltip" id="js-save-as-pdf" class="btn btn-primary" download="<%= @filename %>.pdf">PDF</a>
-      <a href="" title="Save as NIST-XML" data-toggle="tooltip"id="js-save-as-xml" class="btn btn-primary" download="<%= @filename %>.xml">NIST-XML</a>
+      <!-- <a href="" title="Save as PDF" data-toggle="tooltip" id="js-save-as-pdf" class="btn btn-primary" download="<%= @filename %>.pdf">PDF</a> //-->
+      <a href="" title="Save as JSON" data-toggle="tooltip" id="js-save-as-json" class="btn btn-primary" download="<%= @filename %>.json">JSON</a>
+      <a href="" title="Save as NIST Election Results Standard Format" data-toggle="tooltip" id="js-save-as-nist-xml" class="btn btn-primary" download="<%= @filename %>-nist.xml">NIST XML</a>
+      <a href="" title="Save as VIP XML" data-toggle="tooltip" id="js-save-as-vip-xml" class="btn btn-primary" download="<%= @filename %>-vip.xml">VIP XML</a>
     </div>
   </div>
 </div>

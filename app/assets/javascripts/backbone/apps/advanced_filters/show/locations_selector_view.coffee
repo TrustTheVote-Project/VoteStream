@@ -23,5 +23,6 @@
       App.execute 'when:fetched', App.request('entities:scoreboardInfo').get('precinctColors'), =>
         # We give time for the map to load
         setTimeout (=>
-          @precinctsRegion.show new Show.SelectorView title: 'Precincts', rows: 20, collection: App.request('entities:precincts'), selection: sp
+          if @precinctsRegion
+            @precinctsRegion.show new Show.SelectorView title: 'Precincts', rows: 20, collection: App.request('entities:precincts'), selection: sp
         ), 2000

@@ -1,9 +1,9 @@
 GIT
   remote: https://github.com/TrustTheVote-Project/VEDaSpace
-  revision: 81977eab16c6d446a58bdc5d1c54c6ff9644156c
+  revision: a8407bbe01c81ac2ea7e0cf6ee84a1192d0015bf
   branch: master
   specs:
-    vedaspace (1.1.6.6)
+    vedaspace (1.2)
       activemodel (~> 4)
       activesupport (~> 4)
       nokogiri (~> 1.6)
@@ -298,7 +298,7 @@ DEPENDENCIES
   therubyracer
   twitter-bootstrap-rails
   uglifier (>= 1.3.0)
-  vedaspace (= 1.1.6.6)!
+  vedaspace (= 1.2)!
   web-console (~> 2.0)
   wicked_pdf
   wkhtmltopdf-binary

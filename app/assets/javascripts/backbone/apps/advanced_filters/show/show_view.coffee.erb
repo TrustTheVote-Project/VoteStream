@@ -12,7 +12,12 @@
     events:
       'click #js-save-as-csv': (e) -> @saveAs(e, 'csv')
       'click #js-save-as-pdf': (e) -> @saveAs(e, 'pdf')
-      'click #js-save-as-xml': (e) -> @saveAs(e, 'xml')
+      'click #js-save-as-json': (e) -> @saveAs(e, 'json')
+      'click #js-save-as-nist-xml': (e) -> @saveAs(e, 'nist')
+      'click #js-save-as-vip-xml': (e) -> @saveAs(e, 'xml')
+      'click #js-add-advanced-view-to-maps': (e) -> false
+      'click #js-view-maps': (e) -> false
+      'click #js-clear-maps': (e) -> false
 
     serializeData: ->
       data = {}
@@ -25,9 +30,16 @@
       @locationsRegion.show new Show.LocationsSelectorView()
       $('[data-toggle="tooltip"]', @$el).tooltip();
       
+      
+      
     saveAs: (e, format) ->
       e.preventDefault()
       af = App.request 'entities:advancedFilter'
       data = af.requestData()
       data.lid = gon.locality_id
-      window.open "#{gon.feed_url}.#{format}?#{$.param(data)}"
+      url = gon.feed_url
+      if format == 'nist'
+        url = "#{url}-nist.xml"
+      else
+        url = "#{url}.#{format}"
+      window.open "#{url}?#{$.param(data)}"

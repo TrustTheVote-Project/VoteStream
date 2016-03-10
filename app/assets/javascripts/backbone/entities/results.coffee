@@ -45,27 +45,31 @@
   class Entities.ResultsCollection extends Backbone.Collection
     model: Entities.Results
 
-    fetchForFilter: (localityId, region, refcon, extraOpts) ->
+    fetchForFilter: (localityId, region, refcon, extraOpts, advanced) ->
       filter = locality_id: localityId
-      if region?
-        rid = region.get 'id'
-        if region instanceof App.Entities.District
-          filter.district_id = rid
-        else
-          filter.precinct_id = rid
+      if advanced and App.request('entities:scoreboardUrl').advancedView()
+        # Process advanced filter query string to settings for getting results
+        af = App.request('entities:advancedFilter')
+        $.extend(filter, af.filterParams())
+      else
+        if region?
+          rid = region.get 'id'
+          if region instanceof App.Entities.District
+            filter.district_id = rid
+          else
+            filter.precinct_id = rid
 
-      if refcon?
-        type = refcon.get('type')
-        id = refcon.get('id')
-        if type == 'all'
-          filter.category = id
-        else if type == 'c'
-          filter.contest_id = id
-        else if type == 'r'
-          filter.referendum_id = id
+        if refcon?
+          type = refcon.get('type')
+          id = refcon.get('id')
+          if type == 'all'
+            filter.category = id
+          else if type == 'c'
+            filter.contest_id = id
+          else if type == 'r'
+            filter.referendum_id = id
 
-      $.extend(filter, extraOpts)
-
+        $.extend(filter, extraOpts)
       @fetch
         url:   '/data/region_refcons'
         reset: true
@@ -110,7 +114,7 @@
       @._previousAttributes = null
       @trigger 'reset'
 
-    fetchForResult: (result, region, extraOpts) ->
+    fetchForResult: (result, region, extraOpts, advanced) ->
       if !result?
         @parse {}
         @trigger 'reset'
@@ -118,19 +122,34 @@
         return
 
       filter = {}
-
+      
       rid = result.get('id')
       if result.get('type') == 'c'
         filter.contest_id = rid
       else
         filter.referendum_id = rid
+      
+      if advanced and App.request('entities:scoreboardUrl').advancedView()
+        # Process advanced filter query string to settings for getting results
+        params = advanced.split('&')
+        for param in params
+          kv = param.split('=')
+          if kv[0]=='did'
+            filter['district_id'] = kv[1].split('-')
+          if kv[0]=='pid'
+            filter['precinct_id'] = kv[1].split('-')
+          if kv[0]=='cid'
+            filter['cr_id'] = kv[1].split('-')
+        
+      else
+        
 
-      if region?
-        rid = region.get 'id'
-        if region instanceof App.Entities.District
-          filter.district_id = rid
-        else
-          filter.precinct_id = rid
+        if region?
+          rid = region.get 'id'
+          if region instanceof App.Entities.District
+            filter.district_id = rid
+          else
+            filter.precinct_id = rid
 
       $.extend(filter, extraOpts)
 

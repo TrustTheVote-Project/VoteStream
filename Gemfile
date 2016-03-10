@@ -47,7 +47,7 @@ gem "twitter-bootstrap-rails"
 # gem "vssc-ruby", :git=>"https://github.com/amekelburg/vssc_ruby.git"
 
 # Use VEDaSpace to load NIST ERR files
-gem "vedaspace", "1.1.6.6", :git=>"https://github.com/TrustTheVote-Project/VEDaSpace", :branch=>'master'
+gem "vedaspace", "1.2", :git=>"https://github.com/TrustTheVote-Project/VEDaSpace", :branch=>'master'
 
 
 group :doc do

@@ -66,7 +66,7 @@ class DataProcessor
       locality_id = Referendum.find(params[:referendum_id]).locality_id
     end
 
-    # DEBUG remove this
+    # DEBUG remove this caching
     Rails.cache.fetch("locality:#{locality_id}:#{params.hash}:precinct_results") do
       Rails.logger.debug("T::#{DateTime.now.strftime('%Q')} Inside Cache")
       RefConResults.new.precinct_results(params).to_json      

@@ -68,6 +68,14 @@ class Api::V1Controller < Api::BaseController
     render text: ElectionXmlFeed.new(election).render
   end
 
+  def nist_election_feed
+    respond_to do |format|
+      format.xml do
+        render text: ElectionNistXmlFeed.new(election, params).render
+      end
+    end
+  end
+
   def filtered_election_feed
     respond_to do |format|
       format.xml do
