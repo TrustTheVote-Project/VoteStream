@@ -5,6 +5,7 @@
     model: Entities.District
     fetchForLocality: (localityId) ->
       @fetch
+        type: 'POST'
         url: '/data/districts'
         reset: true
         data:
@@ -16,6 +17,7 @@
       @set 'state',   new Backbone.Collection
       @set 'local',   new Backbone.Collection
       @set 'other',   new Backbone.Collection
+      
 
     parse: (data) ->
       @get('federal').reset data.federal
@@ -24,6 +26,7 @@
       @get('other').reset data.other
 
     fetchForLocality: (localityId) ->
+      
       @fetch
         url: '/data/districts'
         reset: true

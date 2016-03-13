@@ -11,6 +11,7 @@
       @set 'state',   new Refcons
       @set 'local',   new Refcons
       @set 'other',   new Refcons
+      
 
     parse: (data) ->
       @get('all').reset (data.federal || []).concat(data.state || [], data.mcd || [], data.other || [])
@@ -21,6 +22,7 @@
 
     fetchForLocality: (localityId) ->
       @fetch
+        type: 'POST'
         url: '/data/all_refcons'
         reset: true
         data:

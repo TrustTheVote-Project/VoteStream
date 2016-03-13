@@ -71,6 +71,7 @@
 
         $.extend(filter, extraOpts)
       @fetch
+        type: 'POST'
         url:   '/data/region_refcons'
         reset: true
         data:  filter
@@ -102,6 +103,7 @@
         ballots:    0
         votes:      0
         channels:   {}
+        
 
     parse: (data) ->
       @set
@@ -154,6 +156,7 @@
       $.extend(filter, extraOpts)
 
       @fetch
+        type: 'POST'
         url:   '/data/precinct_results'
         reset: true
         data:  filter

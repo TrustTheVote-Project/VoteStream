@@ -35,6 +35,7 @@
 
 
       @fetch
+        type: 'POST'      
         url:   '/data/precinct_colors'
         reset: true
         data:  filter

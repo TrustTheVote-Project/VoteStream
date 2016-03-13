@@ -5,6 +5,7 @@
     model: Entities.Precinct
     fetchForLocality: (localityId) ->
       @fetch
+        type: 'POST'
         url: '/data/precincts'
         data:
           locality_id: localityId

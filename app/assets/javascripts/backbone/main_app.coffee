@@ -7,6 +7,13 @@
     mainRegion: "#main-region"
 
   App.addInitializer ->
+    
+    csrfToken = $("meta[name='csrf-token']").attr("content")
+    $.ajaxSetup
+      headers: 
+        'X-CSRF-Token': csrfToken
+    
+    
     App.module("HeaderApp").start()
     App.module("ScoreboardsApp").start()
     App.module("AdvancedFiltersApp").start()
