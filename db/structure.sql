@@ -586,6 +586,77 @@ ALTER SEQUENCE states_id_seq OWNED BY states.id;
 
 
 --
+-- Name: voter_registration_classifications; Type: TABLE; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE TABLE voter_registration_classifications (
+    id integer NOT NULL,
+    voter_registration_id integer,
+    name character varying(255),
+    created_at timestamp without time zone,
+    updated_at timestamp without time zone
+);
+
+
+--
+-- Name: voter_registration_classifications_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE voter_registration_classifications_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: voter_registration_classifications_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE voter_registration_classifications_id_seq OWNED BY voter_registration_classifications.id;
+
+
+--
+-- Name: voter_registrations; Type: TABLE; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE TABLE voter_registrations (
+    id integer NOT NULL,
+    precinct_id integer,
+    date_of_birth character varying(255),
+    phone character varying(255),
+    race character varying(255),
+    sex character varying(255),
+    party character varying(255),
+    voter_id_type character varying(255),
+    voter_id_value character varying(255),
+    registration_address character varying(255),
+    created_at timestamp without time zone,
+    updated_at timestamp without time zone
+);
+
+
+--
+-- Name: voter_registrations_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE voter_registrations_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: voter_registrations_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE voter_registrations_id_seq OWNED BY voter_registrations.id;
+
+
+--
 -- Name: id; Type: DEFAULT; Schema: public; Owner: -
 --
 
@@ -681,6 +752,20 @@ ALTER TABLE ONLY referendums ALTER COLUMN id SET DEFAULT nextval('referendums_id
 --
 
 ALTER TABLE ONLY states ALTER COLUMN id SET DEFAULT nextval('states_id_seq'::regclass);
+
+
+--
+-- Name: id; Type: DEFAULT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY voter_registration_classifications ALTER COLUMN id SET DEFAULT nextval('voter_registration_classifications_id_seq'::regclass);
+
+
+--
+-- Name: id; Type: DEFAULT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY voter_registrations ALTER COLUMN id SET DEFAULT nextval('voter_registrations_id_seq'::regclass);
 
 
 --
@@ -785,6 +870,22 @@ ALTER TABLE ONLY referendums
 
 ALTER TABLE ONLY states
     ADD CONSTRAINT states_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: voter_registration_classifications_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
+--
+
+ALTER TABLE ONLY voter_registration_classifications
+    ADD CONSTRAINT voter_registration_classifications_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: voter_registrations_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
+--
+
+ALTER TABLE ONLY voter_registrations
+    ADD CONSTRAINT voter_registrations_pkey PRIMARY KEY (id);
 
 
 --
@@ -1083,10 +1184,24 @@ CREATE UNIQUE INDEX index_states_on_uid ON states USING btree (uid);
 
 
 --
+-- Name: index_voter_registrations_on_precinct_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE INDEX index_voter_registrations_on_precinct_id ON voter_registrations USING btree (precinct_id);
+
+
+--
 -- Name: unique_schema_migrations; Type: INDEX; Schema: public; Owner: -; Tablespace: 
 --
 
 CREATE UNIQUE INDEX unique_schema_migrations ON schema_migrations USING btree (version);
+
+
+--
+-- Name: voter_reg_class_index; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE INDEX voter_reg_class_index ON voter_registration_classifications USING btree (voter_registration_id);
 
 
 --
@@ -1188,3 +1303,7 @@ INSERT INTO schema_migrations (version) VALUES ('20150624102912');
 INSERT INTO schema_migrations (version) VALUES ('20150624104722');
 
 INSERT INTO schema_migrations (version) VALUES ('20150624111229');
+
+INSERT INTO schema_migrations (version) VALUES ('20160313222221');
+
+INSERT INTO schema_migrations (version) VALUES ('20160313222329');
