@@ -51,6 +51,10 @@
     initialize: (options) ->
       @options = options
 
+
+    onShow: ->
+      # console.log(@options.selection)
+      
     serializeData: ->
       data = {}
       data.count = @$el.parents(".selector-view").find(".selected").length
@@ -66,7 +70,7 @@
 
     doSelect: ->
       @$el.addClass('selected')
-      
+      @trigger "selection:changed"
 
     events:
       'click': (e) ->
@@ -80,7 +84,7 @@
           @af.select(@options.selection, @model)
           @doSelect()
 
-        @trigger "selection:changed"
+        
 
     onShow: ->
       id = @model.get('id')

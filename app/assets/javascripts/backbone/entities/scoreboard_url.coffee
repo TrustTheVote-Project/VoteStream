@@ -7,12 +7,15 @@
       @enabled = false
       @si.on 'change:region change:refcon change:channelEarly change:channelElectionday change:channelAbsentee change:coloringType', @updatePath
       @si.on 'change:advanced', =>
-        @updatePath()
+        #@updatePath()
         params = @si.get 'advanced'
         if params
           App.execute 'when:fetched', App.request('entities:precincts'),  =>
             af = App.request 'entities:advancedFilter'
+            console.log('fetched')
             af.fromParams(params)
+            @updatePath()
+            
           
     disable: -> @enabled = false
     enable: -> @enabled = true

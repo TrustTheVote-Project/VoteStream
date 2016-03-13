@@ -46,9 +46,9 @@
         filter[kv[0]] = kv[1].split('-')
         
       for cid in filter.cid
-        d = fedCons.get(did) || stateCons.get(did) || localCons.get(did) || otherCons.get(did) || refcons.get(did)
-        if d
-          @select(sd, d)
+        c = fedCons.get(did) || stateCons.get(did) || localCons.get(did) || otherCons.get(did) || refcons.get(did)
+        if c
+          @select(sc, c)
         
       for did in filter.did
         d = fedDistricts.get(did) || stateDistricts.get(did) || localDistricts.get(did) || otherDistricts.get(did) || districts.get(did)
