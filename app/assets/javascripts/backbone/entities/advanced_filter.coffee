@@ -27,6 +27,11 @@
       sp = @get 'selectedPrecincts'
       sd = @get 'selectedDistricts'
       
+      # clear it all
+      sc.reset()
+      sp.reset()
+      sd.reset()
+      
       # needs to use these, because these are the object inst/types that the selector views use
       fedDistricts = App.request('entities:districts:federal') 
       stateDistricts = App.request('entities:districts:state')

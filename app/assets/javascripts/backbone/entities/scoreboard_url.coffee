@@ -12,7 +12,6 @@
         if params
           App.execute 'when:fetched', App.request('entities:precincts'),  =>
             af = App.request 'entities:advancedFilter'
-            console.log('fetched')
             af.fromParams(params)
             @updatePath()
             

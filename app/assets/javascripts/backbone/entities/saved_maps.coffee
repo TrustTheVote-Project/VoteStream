@@ -17,6 +17,10 @@
       @storage.setItem('saved_maps', JSON.stringify(maps))
       
 
+    clearMaps: ->
+      @storage.setItem('saved_maps', JSON.stringify([]))
+    
+
   API =
     getSavedMaps: ->
       unless Entities.savedMaps?

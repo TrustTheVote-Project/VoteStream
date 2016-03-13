@@ -311,9 +311,10 @@
       @su = App.request "entities:scoreboardUrl"
       @saved_maps = App.request "entities:savedMaps"
       
+      
     templateHelpers: () ->
       saved_count: @saved_maps.count()
-      view: @su.view
+      view: @model.get('view')
       maps: @saved_maps.maps()
   
     events:
