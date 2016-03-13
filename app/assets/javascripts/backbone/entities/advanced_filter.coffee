@@ -68,6 +68,11 @@
       model.set('selected', true)
       model.trigger('setSelected')
       
+    unselect: (list, model) ->
+      list?.remove(model)
+      model.set('selected', false)
+      model.trigger('setUnSelected')
+      
     filterParams: ->
       sc = @get 'selectedContests'
       sd = @get 'selectedDistricts'

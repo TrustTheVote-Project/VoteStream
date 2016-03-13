@@ -31,13 +31,13 @@
       e.preventDefault()
       @options.selection?.add(m) for m in @options.collection.models
       @optionsView.render()
-      @statsView.render()
+      @onSelectionChange()
 
     onDeselectAll: (e) ->
       e.preventDefault()
       @options.selection?.remove(m) for m in @options.collection.models
       @optionsView.render()
-      @statsView.render()
+      @onSelectionChange()
 
     onSelectionChange: ->
       @statsView.render()
@@ -71,15 +71,18 @@
     doSelect: ->
       @$el.addClass('selected')
       @trigger "selection:changed"
+    
+    doUnSelect: ->
+      @$el.removeClass('selected')
+      @trigger "selection:changed"
 
     events:
       'click': (e) ->
         e.preventDefault()
 
         if @$el.hasClass('selected')
-          @$el.removeClass('selected')
-          @options.selection?.remove(@model)
-          @model.set('selected', false)
+          @af.unselect(@options.selection, @model)
+          @doUnSelect();
         else
           @af.select(@options.selection, @model)
           @doSelect()
