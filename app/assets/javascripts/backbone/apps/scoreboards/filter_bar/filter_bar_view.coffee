@@ -20,6 +20,8 @@
       'click #js-facebook-share': 'onFacebookShare'
       'click #js-gplus': 'onGooglePlus'
       'click #js-advanced-filters': 'viewAdvancedFilters'
+      'click #js-back-to-advanced-filters': 'viewAdvancedFilters'
+      'click #js-view-metadata': (e) -> App.request('entities:scoreboardUrl').setView('metadata')
 
     modelEvents:
       'change:channelEarly': 'showChannels'

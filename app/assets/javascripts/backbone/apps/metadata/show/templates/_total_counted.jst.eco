@@ -1,0 +1,28 @@
+<div class='panel pie-panel'>
+  <div class='row-fluid'>
+    <div class='span4' id="total-counted">
+      <div class='header'>
+        <h6>Total Ballots Counted</h6>
+      </div>
+      <span class='big-num'><%= @total %></span>
+    </div>
+    <div class='span2'>
+      <canvas id="metadata-total-counted-chart" class="pie-chart"></canvas>
+    </div>
+    <div class='span6'>
+      <table>
+        <tbody>
+          <tr class="election-day">
+            <td>In Person</td><td><%= @electionDayPercentage %></td><td><%= @electionDay %></td>
+          </tr>
+          <tr class='early'>
+            <td>In Person Early</td><td><%= @earlyPercentage %></td><td><%= @early %></td>
+          </tr>
+          <tr class='absentee'>
+            <td>Absentee</td><td><%= @absenteePercentage %></td><td><%= @absentee %></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>

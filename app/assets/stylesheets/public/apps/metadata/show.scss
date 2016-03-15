@@ -1,0 +1,104 @@
+@import 'public/_config';
+@import 'public/_mixins';
+
+#content {
+  .stats-box {
+    @include panel();
+    .panel {
+      padding: 10px 20px;
+      .header {
+        padding: 0;          
+        h6 {
+          margin-top: 0;
+        }
+      }
+    }
+    h6 {
+      color: #acacac;
+      text-transform: uppercase;
+    }
+    
+    .label {
+      color: #acacac;
+      background: none;
+      padding: 3px 0 7px;
+      margin: 0;
+    }
+    
+    .big-num {
+      display: block;
+      padding-bottom: 10px;
+      font-size: 30px;
+      line-height: 1em;
+      height: 30px;
+      font-weight: bold;
+      color: #113d54;
+    }
+  
+    .bars {
+      width: 100%;
+      table {
+        width: 100%;
+        td.bar {
+          width: 80%;
+        }
+        td {
+          padding-right: 5px;
+          .filler {
+            height: 1em;
+            color: white;
+            background: black;
+            &.domestic {
+              background: #113d54;
+            }
+            &.overseas {
+              background: #9a9a9a;
+            }
+            &.military {
+              background: #f29101;
+            }
+          }
+        }
+      }
+    }
+    
+    .pie-panel {
+      padding-top: 25px;
+      padding-bottom: 20px;
+      .big-num {
+        padding-bottom: 10px;
+        font-size: 50px;
+        height: 50px;
+      }
+  
+      #total-counted {
+        border-right: $section-border;
+      }
+      .pie-chart {
+        height: 100px;
+        width: 100px;
+      }
+      table {
+        margin: 15px 0;
+        height:70px;
+        width: 100%;
+        font-weight: bold;
+        font-size: 14px;
+        td {
+          padding-right: 5px;
+        }
+        tr.election-day {
+          color: #41aef4;
+        }
+        tr.early {
+          color: #5a7688;
+        }
+        tr.absentee {
+          color: #cbc5c1;
+        }
+      }
+    }
+    
+  }
+  
+}

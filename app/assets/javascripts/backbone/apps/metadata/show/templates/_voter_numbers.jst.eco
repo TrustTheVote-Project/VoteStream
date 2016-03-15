@@ -1,0 +1,24 @@
+<div id="metadata-ballots-cast-election-day" class='stats-box'>
+  <div class='panel'>
+    <div class='header'>
+      <h6>Ballots Cast In Person On Election Day</h6>
+    </div>
+    <span class='big-num'><%= @electionDay %></span>
+  </div>
+</div>
+<div id="metadata-ballots-cast-in-person" class='stats-box'>
+  <div class='panel'>
+    <div class='header'>
+      <h6>Ballots Cast In Peson Early</h6>
+    </div>
+    <span class='big-num'><%= @early %></span>
+  </div>
+</div>
+<div id="metadata-voters-checked-in" class='stats-box'>
+  <div class='panel'>
+    <div class='header'>
+      <h6>Voters Checked In</h6>
+    </div>
+    <span class='big-num'><%= @total_voters %></span>
+  </div>
+</div>

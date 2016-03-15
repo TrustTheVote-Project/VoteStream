@@ -37,6 +37,13 @@ class DataController < ApplicationController
     precincts = locality.precincts
     render json: precincts.map { |p| { id: p.id, name: p.name } }
   end
+  
+  def election_metadata
+    locality = Locality.find(params[:locality_id])
+    election_metadata = locality.election_metadata
+    render json: election_metadata.to_json
+  end
+  
 
   private
 

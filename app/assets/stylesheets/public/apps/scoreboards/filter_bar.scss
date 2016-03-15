@@ -2,6 +2,15 @@
 @import 'public/_mixins';
 @import "public/_config";
 
+
+
+#js-election-metadata, #js-view-feed, #js-advanced-filters {
+  display: block;
+  text-align: right;
+  line-height: 1.6em;
+  text-decoration: none;
+}
+
 #filter-bar {
   padding: $section-padding $side-padding 20px;
   border-bottom: $section-border;

@@ -17,6 +17,7 @@
     App.module("HeaderApp").start()
     App.module("ScoreboardsApp").start()
     App.module("AdvancedFiltersApp").start()
+    App.module("MetadataApp").start()
 
   App.rootRoute = "map"
 
