@@ -30,6 +30,22 @@ class Locality < ActiveRecord::Base
     contests.collect {|c| c.contest_results }
   end
 
+  def registrants
+    VoterRegistration.where(precinct_id: precincts.pluck(:id))    
+  end
+
+  def demographic_metadata
+    basics = {
+      voter_registrations: registrants.count,
+      sex:  registrants.group(:sex).count,
+      race: registrants.group(:race).count,
+      party: registrants.group(:party).count,
+      birth_years: registrants.group(:date_of_birth).count,
+      voter_characteristics: VoterRegistrationClassification.where(voter_registration_id: registrants.pluck(:id)).group(:name).count
+    }
+    
+  end
+
   def election_metadata
     contest_votes = []
     stats = []
@@ -63,7 +79,8 @@ class Locality < ActiveRecord::Base
       election_day: vote_types["election-day"],
       absentee: vote_types["absentee"],
       early: vote_types["early"],
-      registrants: registrant_count
+      registrants: registrant_count,
+      demographics: demographic_metadata      
     }
   end
 

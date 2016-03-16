@@ -12,7 +12,46 @@
           margin-top: 0;
         }
       }
+      hr {
+        margin: 10px 0;
+      }
+      
+      .border-right {
+        position: relative;
+        padding-right: 15px;
+        &:after {
+          content: " ";
+          position: absolute;
+          top: 0;
+          bottom: 0;
+          right: 5px;
+          width: 0px;
+          border-left: $section-border;  
+        }        
+      }
+      
+      
     }
+    .toggler {
+      margin: 0 0 1em;
+      ul.toggle {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+        li {
+          background: white;
+          font-size: 10px;
+          line-height: 10px;
+          float: left;
+          padding: 4px 15px;
+          border: 1px solid #989898;
+          &.active {
+            background: #989898;
+          }
+        }
+      }
+    }
+
     h6 {
       color: #acacac;
       text-transform: uppercase;
@@ -49,13 +88,13 @@
             color: white;
             background: black;
             &.domestic {
-              background: #113d54;
+              background: $domestic;
             }
             &.overseas {
-              background: #9a9a9a;
+              background: $overseas;
             }
             &.military {
-              background: #f29101;
+              background: $military;
             }
           }
         }
@@ -71,12 +110,12 @@
         height: 50px;
       }
   
-      #total-counted {
-        border-right: $section-border;
-      }
       .pie-chart {
         height: 100px;
         width: 100px;
+        &#metadata-non-participating-chart {
+          margin-top: 20px;
+        }
       }
       table {
         margin: 15px 0;
@@ -87,18 +126,60 @@
         td {
           padding-right: 5px;
         }
+        tr.domestic {
+          color: $domestic;
+        }
+        tr.military {
+          color: $military;
+        }
+        tr.overseas {
+          color: $overseas;
+        }
+        tr.provisional {
+          color: $provisional;
+        }
         tr.election-day {
-          color: #41aef4;
+          color: $election-day;
         }
         tr.early {
-          color: #5a7688;
+          color: $early;
         }
         tr.absentee {
-          color: #cbc5c1;
+          color: $absentee;
         }
       }
     }
     
+    .large-pie-panel {
+      .pie-chart {
+        height: 200px;
+        width: 200px;
+        margin: 0px auto;
+        display: block;
+      }
+    }
+    
+    
+    table.bars {
+      width: 100%;
+      td {
+        position: relative;
+        font-size: 16px;
+        line-height: 1em;
+        .fill {
+          height: 24px;
+        }
+        &:first-child {
+          width: 80%;
+          span {
+            display: block;
+            position: absolute;
+            top: 5px;
+            left: 8px;
+          }
+        } 
+      }
+    }
+    
   }
-  
 }

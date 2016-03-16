@@ -1,6 +1,6 @@
 <div class='panel pie-panel'>
   <div class='row-fluid'>
-    <div class="span4">
+    <div class="span4 border-right">
       <div class='header'>
         <h6>Turnout and Voter Participation</h6>          
       </div>

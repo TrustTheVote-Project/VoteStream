@@ -16,39 +16,17 @@
       </div>
     </div>
     <div class="span4">
-      <div id="metadata-absentee" class='stats-box'>
-        <div class='panel'>
-          <div class='header'>
-            <h6>Provisional</h6>
-          </div>
-          <div>Counted</div>
-          <div>Uncounted</div>
-        </div>
+      <div id="metadata-provisional" class='stats-box'>
       </div>
     </div>
   </div>
   <div class="row-fluid">
     <div class="span8">
-      <div id="metadata-absentee" class='stats-box'>
-        <div class='panel'>
-          <div class='row-fluid'>
-            <div class='span6'>
-              <div class='header'>
-                <h6>Total Number of Non-Participating Registered Voters</h6>
-              </div>
-              <div>Non-voting domestic, Non-voting military, Non-voting overseas</div>
-              <div>Cast Absentee Ballot not counted</div>
-              <div>Cast Provisional Ballot not counted</div>
-            </div>
-            <div class='span6'>
-              PIE
-            </div>
-          </div>
-        </div>
+      <div id="metadata-non-participating" class='stats-box'>
       </div>
     </div>
     <div class="span4">
-      <div id="metadata-absentee" class='stats-box'>
+      <div id="metadata-tbd" class='stats-box'>
         <div class='panel'>
           <div class='header'>
             <h6>TBD</h6>
@@ -59,65 +37,29 @@
   </div>
   <div class="row-fluid">
     <div class="span4">
-      <div id="metadata-absentee" class='stats-box'>
-        <div class='panel'>
-          <div>Total Ballots / Registered Voters</div>
-          <div class='header'>
-            <h6>Breakdown by Gender</h6>
-          </div>
-        </div>
+      <div id="metadata-gender" class='stats-box'>
       </div>
     </div>
     <div class="span4">
-      <div id="metadata-absentee" class='stats-box'>
-        <div class='panel'>
-          <div>Total Ballots / Registered Voters</div>
-          <div class='header'>
-            <h6>Breakdown by Age</h6>
-          </div>
-        </div>
+      <div id="metadata-age" class='stats-box'>        
       </div>
     </div>
     <div class="span4">
-      <div id="metadata-absentee" class='stats-box'>
-        <div class='panel'>
-          <div>Total Ballots / Registered Voters</div>
-          <div class='header'>
-            <h6>Breakdown by Party</h6>
-          </div>
-        </div>
+      <div id="metadata-party" class='stats-box'>
       </div>
     </div>
   </div>
   <div class="row-fluid">
     <div class="span4">
-      <div id="metadata-absentee" class='stats-box'>
-        <div class='panel'>
-          <div>Total Ballots / Registered Voters</div>
-          <div class='header'>
-            <h6>Breakdown by Race or Ethnicity</h6>
-          </div>
-        </div>
+      <div id="metadata-race" class='stats-box'>
       </div>
     </div>
     <div class="span4">
-      <div id="metadata-absentee" class='stats-box'>
-        <div class='panel'>
-          <div>Total Ballots / Registered Voters</div>
-          <div class='header'>
-            <h6>Breakdown by Voter Characteristtics</h6>
-          </div>
-        </div>
+      <div id="metadata-voter-characteristics" class='stats-box'>
       </div>
     </div>
     <div class="span4">
-      <div id="metadata-absentee" class='stats-box'>
-        <div class='panel'>
-          <div>Total Ballots / Registered Voters</div>
-          <div class='header'>
-            <h6>Breakdown by ZIP Code</h6>
-          </div>
-        </div>
+      <div id="metadata-zip-codes" class='stats-box'>
       </div>
     </div>
   </div>

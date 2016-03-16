@@ -1,11 +1,11 @@
 <div class='panel'>
   <div class='row-fluid'>
-    <div class='span6'>
+    <div class='span6 '>
       <div class='header'>
         <h6>Absentee Ballots</h6>
       </div>
       <div class='row-fluid'>
-        <div class='span6'>
+        <div class='span6 border-right'>
           <div class='label'>Counted</div> 
           <span class='big-num'><%= @counted %></span>
         </div>

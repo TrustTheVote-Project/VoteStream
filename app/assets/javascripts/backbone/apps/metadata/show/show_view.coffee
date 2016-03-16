@@ -10,7 +10,15 @@
       turnoutRegion: '#metadata-turnout'
       voterNumbersRegion: '#metadata-voter-numbers'
       absentee: '#metadata-absentee'
-
+      provisional: '#metadata-provisional'
+      nonParticipating: '#metadata-non-participating'
+      gender: '#metadata-gender'
+      age: '#metadata-age'
+      party: '#metadata-party'
+      race: '#metadata-race'
+      voterCharacteristics: '#metadata-voter-characteristics'
+      zipCodes: '#metadata-zip-codes'
+      
     events:
       'click #js-clear-maps': (e) -> @clearMaps(e)
 
@@ -26,3 +34,11 @@
         @turnoutRegion.show new Show.TurnoutView()
         @voterNumbersRegion.show new Show.VoterNumbersView()
         @absentee.show new Show.AbsenteeView()
+        @provisional.show new Show.ProvisionalView()
+        @nonParticipating.show new Show.NonParticipatingView()
+        @gender.show new Show.GenderView()
+        @age.show new Show.AgeView()
+        @party.show new Show.PartyView()
+        @race.show new Show.RaceView()
+        @voterCharacteristics.show new Show.VoterCharacteristicsView()
+        @zipCodes.show new Show.ZipCodesView()

@@ -1,6 +1,6 @@
 <div class='panel pie-panel'>
   <div class='row-fluid'>
-    <div class='span4' id="total-counted">
+    <div class='span4 border-right' id="total-counted">
       <div class='header'>
         <h6>Total Ballots Counted</h6>
       </div>

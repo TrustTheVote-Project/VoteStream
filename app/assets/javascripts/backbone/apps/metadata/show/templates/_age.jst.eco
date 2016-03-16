@@ -1,0 +1,8 @@
+<div class='panel'>
+  <div id="metadata-age-toggle">
+  </div>
+  <div class='header'>
+    <h6>Breakdown by Age</h6>
+  </div>
+  <canvas id="metadata-age-chart" class="line-chart"></canvas>
+</div>
