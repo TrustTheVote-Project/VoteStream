@@ -39,9 +39,12 @@ class DataController < ApplicationController
   end
   
   def election_metadata
-    locality = Locality.find(params[:locality_id])
-    election_metadata = locality.election_metadata
-    render json: election_metadata.to_json
+    locality_id = params[:locality_id]
+    election_metadata = Rails.cache.fetch("locality:#{locality_id}:#{params.hash}:metadata") do
+      locality = Locality.find(locality_id)
+      locality.election_metadata.to_json    
+    end
+    render json: election_metadata
   end
   
 
