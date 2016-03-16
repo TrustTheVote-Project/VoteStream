@@ -2,7 +2,7 @@ class DemographicsLoader < BaseLoader
 
   def initialize(csv_source)
     @csv_source = csv_source
-    @grp_size = 2000
+    @grp_size = 1000
   end
 
   attr_reader :grp_size
