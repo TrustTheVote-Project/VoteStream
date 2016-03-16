@@ -1,5 +1,5 @@
 <div class='panel pie-panel'>
-  <div id="metadata-zip-code-toggle">
+  <div id="metadata-zip-codes-toggle">
   </div>
   <div class='header'>
     <h6>Breakdown by Zip Code</h6>
