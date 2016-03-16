@@ -1192,6 +1192,13 @@ CREATE INDEX index_voter_registrations_on_precinct_id ON voter_registrations USI
 
 
 --
+-- Name: index_voter_registrations_on_uid; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE INDEX index_voter_registrations_on_uid ON voter_registrations USING btree (uid);
+
+
+--
 -- Name: unique_schema_migrations; Type: INDEX; Schema: public; Owner: -; Tablespace: 
 --
 
@@ -1310,3 +1317,5 @@ INSERT INTO schema_migrations (version) VALUES ('20160313222221');
 INSERT INTO schema_migrations (version) VALUES ('20160313222329');
 
 INSERT INTO schema_migrations (version) VALUES ('20160316151449');
+
+INSERT INTO schema_migrations (version) VALUES ('20160316153123');

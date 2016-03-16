@@ -78,7 +78,7 @@ class DemographicsLoader < BaseLoader
     
     # Save the classifications
     i=0
-    total = @voter_registration_classifications.values..flatten.size
+    total = @voter_registration_classifications.values.flatten.size
     @voter_registration_classifications.values.flatten.in_groups_of(grp_size, false) do |group|    
       puts "Importing VR Classification #{i * grp_size} - #{(i+1)*grp_size} of #{total}"
       VoterRegistrationClassification.import(group)
