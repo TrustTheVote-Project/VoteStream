@@ -2,7 +2,7 @@ class DemographicsLoader < BaseLoader
 
   def initialize(csv_source)
     @csv_source = csv_source
-    @grp_size = 1000
+    @grp_size = 2000
   end
 
   attr_reader :grp_size
@@ -50,6 +50,8 @@ class DemographicsLoader < BaseLoader
         @voter_registration_classifications[v.uid] << VoterRegistrationClassification.new(name: cname)
       end
     end
+    
+    save_voter_regs
   end
   
   def save_voter_regs
