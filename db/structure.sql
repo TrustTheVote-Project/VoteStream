@@ -633,7 +633,8 @@ CREATE TABLE voter_registrations (
     voter_id_value character varying(255),
     registration_address character varying(255),
     created_at timestamp without time zone,
-    updated_at timestamp without time zone
+    updated_at timestamp without time zone,
+    uid character varying(255) NOT NULL
 );
 
 
@@ -1307,3 +1308,5 @@ INSERT INTO schema_migrations (version) VALUES ('20150624111229');
 INSERT INTO schema_migrations (version) VALUES ('20160313222221');
 
 INSERT INTO schema_migrations (version) VALUES ('20160313222329');
+
+INSERT INTO schema_migrations (version) VALUES ('20160316151449');
