@@ -41,9 +41,19 @@ class Locality < ActiveRecord::Base
       race: registrants.group(:race).count,
       party: registrants.group(:party).count,
       birth_years: registrants.group(:date_of_birth).count,
-      voter_characteristics: VoterRegistrationClassification.where(voter_registration_id: registrants.pluck(:id)).group(:name).count
     }
     
+    voter_characteristics = {}
+    VoterRegistration::CLASSIFICATIONS.each do |k,v|
+      voter_characteristics[k] = registrants.where(v => true).count
+    end
+    # TODO: how to get "other" characteristics?
+    # voter_characteristics: VoterRegistrationClassification.where(precinct_id: precincts.pluck(:id)).group(:name).count
+    
+    
+    basics[:voter_characteristics] = voter_characteristics
+    
+    return basics
   end
 
   def election_metadata

@@ -634,7 +634,15 @@ CREATE TABLE voter_registrations (
     registration_address character varying(255),
     created_at timestamp without time zone,
     updated_at timestamp without time zone,
-    uid character varying(255) NOT NULL
+    uid character varying(255) NOT NULL,
+    is_citizen boolean DEFAULT false NOT NULL,
+    is_eighteen_election_day boolean DEFAULT false NOT NULL,
+    is_election_absentee boolean DEFAULT false NOT NULL,
+    is_residing_at_registration_address boolean DEFAULT false NOT NULL,
+    is_active_duty_uniformed_services boolean DEFAULT false NOT NULL,
+    is_permanent_absetee boolean DEFAULT false NOT NULL,
+    is_eligible_military_spouse_or_dependent boolean DEFAULT false NOT NULL,
+    is_residing_abroad_uncertain_return boolean DEFAULT false NOT NULL
 );
 
 
@@ -1199,6 +1207,62 @@ CREATE INDEX index_voter_registrations_on_uid ON voter_registrations USING btree
 
 
 --
+-- Name: index_vr_on_is_abroad; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE INDEX index_vr_on_is_abroad ON voter_registrations USING btree (is_residing_abroad_uncertain_return);
+
+
+--
+-- Name: index_vr_on_is_absentee; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE INDEX index_vr_on_is_absentee ON voter_registrations USING btree (is_election_absentee);
+
+
+--
+-- Name: index_vr_on_is_citizen; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE INDEX index_vr_on_is_citizen ON voter_registrations USING btree (is_citizen);
+
+
+--
+-- Name: index_vr_on_is_eighteen; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE INDEX index_vr_on_is_eighteen ON voter_registrations USING btree (is_eighteen_election_day);
+
+
+--
+-- Name: index_vr_on_is_home; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE INDEX index_vr_on_is_home ON voter_registrations USING btree (is_residing_at_registration_address);
+
+
+--
+-- Name: index_vr_on_is_military; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE INDEX index_vr_on_is_military ON voter_registrations USING btree (is_active_duty_uniformed_services);
+
+
+--
+-- Name: index_vr_on_is_military_dep; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE INDEX index_vr_on_is_military_dep ON voter_registrations USING btree (is_eligible_military_spouse_or_dependent);
+
+
+--
+-- Name: index_vr_on_is_permane; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE INDEX index_vr_on_is_permane ON voter_registrations USING btree (is_permanent_absetee);
+
+
+--
 -- Name: unique_schema_migrations; Type: INDEX; Schema: public; Owner: -; Tablespace: 
 --
 
@@ -1319,3 +1383,5 @@ INSERT INTO schema_migrations (version) VALUES ('20160313222329');
 INSERT INTO schema_migrations (version) VALUES ('20160316151449');
 
 INSERT INTO schema_migrations (version) VALUES ('20160316153123');
+
+INSERT INTO schema_migrations (version) VALUES ('20160317160439');

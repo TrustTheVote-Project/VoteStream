@@ -44,11 +44,18 @@ class DemographicsLoader < BaseLoader
 
       v.uid = SecureRandom.uuid
       
-      @voter_registrations << v
       @voter_registration_classifications[v.uid] ||= []
       r["VoterClassifications"].to_s.split(',').each do |cname|
-        @voter_registration_classifications[v.uid] << VoterRegistrationClassification.new(name: cname)
+        if method = VoterRegistration.is_classification_method(cname)
+          v.send("#{method}=", true)
+        else
+          @voter_registration_classifications[v.uid] << VoterRegistrationClassification.new(name: cname)
+        end
       end
+      
+      @voter_registrations << v
+      
+      
     end
     
     save_voter_regs
