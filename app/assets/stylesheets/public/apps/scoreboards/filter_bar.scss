@@ -4,7 +4,7 @@
 
 
 
-#js-election-metadata, #js-view-feed, #js-advanced-filters {
+#js-election-metadata, #js-view-feed, #js-advanced-filters, #percent-reporting {
   display: block;
   text-align: right;
   line-height: 1.6em;
@@ -16,6 +16,10 @@
   border-bottom: $section-border;
   background: #F3F3F3;
   color: $filter-bar-color;
+
+  h3 {
+    margin: 0;
+  }
 
   label {
     font-size: 80%;
@@ -30,6 +34,27 @@
     //color: $filter-bar-color;
   }
 
+  .full-btn-group, .toggle-box {
+    width: 100%;
+    display: block;
+    margin: 5px -15px 0;
+    .btn, a {
+      display: block;
+      width: calc(100% + 25px);
+      white-space: nowrap;
+      height: 32px;
+    }
+  }
+  .toggle-box a {
+    line-height: 12px;
+    font-size: 12px;
+    padding: 10px 6px;
+    input {
+      margin-top: -1px;
+    }
+  }
+  
+  
   .dropdown-menu {
     max-height: 150px;
     overflow-y: scroll;

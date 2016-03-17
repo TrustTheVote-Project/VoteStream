@@ -171,7 +171,7 @@
 
   class SelectorView extends Marionette.CompositeView
     template: 'scoreboards/filter_bar/_selector'
-    className: 'btn-group'
+    className: 'btn-group full-btn-group'
     itemViewContainer: 'ul'
 
     initialize: (options) ->

@@ -4,6 +4,9 @@
   Use Font Awesome icons (default)
   To use Glyphicons sprites instead of Font Awesome, replace with "require twitter-bootstrap-static/sprites"
   =require twitter-bootstrap-static/fontawesome
+
+
+  = require bootstrap
   */
 
 .btn:active,
@@ -11,4 +14,12 @@
 	-webkit-box-shadow: none;
 	-mox-box-shadow: none;
 	box-shadow: none;
+}
+
+.btn .caret {
+  margin-top: 0;
+}
+
+label {
+  display: block;
 }
