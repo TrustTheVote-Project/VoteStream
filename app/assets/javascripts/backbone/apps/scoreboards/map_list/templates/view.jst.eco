@@ -1,12 +1,15 @@
-<span id="view-saving-region"></span>
-<div>
-  <div class='map-saved-items'>
-    <% if @saved_count > 0: %>
-      <ul>
-        <% for map in @maps: %>
-          <li><a class='map-link' href='#<%= map.url %>'><%= map.url %></a></li>
-        <%% end %>
-      </ul>
-    <% end %>
+<div id="content">
+  <div class="row-fluid">
+    <div id="map-list-region">
+      <div class='map-saved-items'>
+        <% if @saved_count > 0: %>
+          <ul>
+            <% for map in @maps: %>
+              <li><a class='map-link' href='#<%= map.url %>'><%= map.url %></a></li>
+            <% end %>
+          </ul>
+        <% end %>
+      </div>
+    </div>
   </div>
 </div>

@@ -49,7 +49,7 @@
   <%% if @view == 'map': %>
     <li class='dropdown-header'>Save Options</li>
     <li class='text-left'>
-      <a>View Saved Maps (<%%= @saved_count %>)</a>
+      <a href="#map-list">View Saved Maps (<%%= @saved_count %>)</a>
     </li>
     <li class='text-left'>
       <button class="btn btn-small map-save-button dropdown-toggle" data-toggle="dropdown" title="<%= I18n.t 'scoreboard.header.view_selector.settings' %>" id="view-settings-button">

@@ -321,7 +321,10 @@
           checkbox('Show Overall Participation', 'showParticipation')
           radiobox('Show Percentages by Ballots', 'percentageType', 'ballots')
           radiobox('Show Percentages by Registered Voters', 'percentageType', 'voters')
+        ],
+        'map-list': [
         ]
+        
 
     events:
       'click .map-save-button': (e) ->

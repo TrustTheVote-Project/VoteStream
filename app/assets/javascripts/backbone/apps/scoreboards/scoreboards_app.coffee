@@ -6,6 +6,7 @@
       "map": "show"
       "map/:ctype-:cid(/:region)(/:params)": "show"
       "advanced-map/:params": "showAdvanced"
+      "map-list": "mapList"
       "list": "list"
       "list/:ctype-:cid(/:region)(/:params)": "list"
       "advanced-list/:params": "showAdvancedList"
@@ -98,14 +99,6 @@
       ScoreboardsApp.List.Controller.show()
       
       
-    showAdvanced: (params) ->
-      setAdvancedParams(params)
-      
-      su = App.request 'entities:scoreboardUrl'
-      su.view = 'advanced-map'
-      
-      ScoreboardsApp.Show.Controller.show()
-      
     show: (ctype, cid, region, params) ->
       if region and region.match('=')
         params = region
@@ -120,6 +113,20 @@
       su.setView 'map'
       ScoreboardsApp.Show.Controller.show()
 
+    showAdvanced: (params) ->
+      setAdvancedParams(params)
+      
+      su = App.request 'entities:scoreboardUrl'
+      su.view = 'advanced-map'
+      
+      ScoreboardsApp.Show.Controller.show()
+    
+    mapList: (params) ->
+      su = App.request 'entities:scoreboardUrl'
+      su.view = 'map-list'
+      
+      ScoreboardsApp.MapList.Controller.show()
+      
     list: (ctype, cid, region, params)->
       if region and region.match('=')
         params = region
