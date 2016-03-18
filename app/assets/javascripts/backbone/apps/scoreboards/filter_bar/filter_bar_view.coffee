@@ -43,7 +43,6 @@
 
       breadcrumbsRegion:      '#breadcrumbs-region'
       viewSelectorRegion:     '#view-selector-region'
-      viewSavingRegion:     '#view-saving-region'
       viewSettingsRegion:     '#view-settings-region'
 
     initialize: ->
@@ -153,9 +152,6 @@
       
       @showSettings()
       
-      @.viewSavingRegion.show new ViewSavingView
-        model: @scoreboardInfo
-
       $("body").on "click", => @closePopovers()
 
 
@@ -303,35 +299,14 @@
   valueCheckbox = (trueTitle, falseTitle, property, trueValue, falseValue) ->
     { settingType: 'valueCheckbox', trueTitle: trueTitle, falseTitle: falseTitle, property: property, trueValue: trueValue, falseValue: falseValue }
 
-  class ViewSavingView extends Marionette.ItemView
-    template: 'scoreboards/filter_bar/_view_saver'
-    className: 'menu-group'
-
-    initialize: () ->
-      @su = App.request "entities:scoreboardUrl"
-      @saved_maps = App.request "entities:savedMaps"
-      
-      
-    templateHelpers: () ->
-      saved_count: @saved_maps.count()
-      view: @model.get('view')
-      maps: @saved_maps.maps()
-  
-    events:
-      'click .map-save-button': (e) ->
-        url = @su.path()
-        @saved_maps.add_map(url)        
-        @render()
-      'click a.map-link': (e) ->
-        url = $(e.currentTarget).attr('href')
-        App.navigate url, true
-  
   class ViewSettingsDropdown extends Marionette.ItemView
     template: 'scoreboards/filter_bar/_view_settings'
     className: 'btn-group'
 
 
     initialize: () ->
+      @su = App.request "entities:scoreboardUrl"
+      @saved_maps = App.request "entities:savedMaps"
       @settings_groups =
         'map': [
           radiobox('Show Results', 'coloringType', 'results')
@@ -347,7 +322,12 @@
         ]
 
     events:
-      'click .dropdown-menu a': (e) ->
+      'click .map-save-button': (e) ->
+        url = @su.path()
+        @saved_maps.add_map(url)        
+        @render()
+
+      'click .dropdown-menu a.change-setting': (e) ->
         $anchor = $(e.currentTarget)
         if $anchor.hasClass('disabled')
           e.preventDefault()
@@ -380,6 +360,8 @@
         return false
 
     templateHelpers: () ->
+      saved_count: @saved_maps.count()
+      view: @model.get('view')
       optionSelected: (o) ->
         unless o.property of this
           console.error("Unknown option property: " + o.property) if console?
