@@ -20,6 +20,8 @@ class Admin::DataController < Admin::BaseController
     DistrictsPrecinct.delete_all
     Party.delete_all
     PollingLocation.delete_all
+    VoterRegistrationClassification.delete_all
+    VoterRegistration.delete_all
     
     redirect_to :admin_data, notice: "Data has been reset"
   end
@@ -40,15 +42,20 @@ class Admin::DataController < Admin::BaseController
     redirect_to :admin_data, notice: "Results have been uploaded"
   end
 
-  def load_vssc
+  def load_demographics
+    DemographicsLoader.new(params[:file]).load(params[:locality_id])
+    redirect_to admin_locality_path(params[:locality_id]), notice: "Demographics have been uploaded"   
+  end
+
+  def load_nist
     mismatches = NistErrLoader.new(params[:file]).load(params[:locality_id])
     if !mismatches.empty?
       raise mismatches.to_s
     end
-    redirect_to :admin_data, notice: "Definitioins have been uploaded"    
+    redirect_to :admin_data, notice: "Definitions have been uploaded"    
   end
   
-  def load_vssc_results
+  def load_nist_results
     mismatches = NistErrLoader.new(params[:file]).load_results(params[:locality_id])    
     if !mismatches.empty?
       raise mismatches.to_s

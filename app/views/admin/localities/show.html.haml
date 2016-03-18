@@ -16,8 +16,8 @@
         
 .row
   .span12
-    %h3 Upload VSSC Election
-    = form_tag admin_load_vssc_results_path, multipart: true do
+    %h3 Upload NIST Election Report w/Results
+    = form_tag admin_load_nist_results_path, multipart: true do
       .row-fluid
         .span6
           .file-wrap
@@ -25,9 +25,21 @@
             = file_field_tag :file
             = hidden_field_tag :locality_id, @locality.id
         .span6
-          = submit_tag "Upload VSSC", class: 'btn'
+          = submit_tag "Upload NIST XML", class: 'btn'
 
 
+.row
+  .span12
+    %h3 Upload Demographics CSV
+    = form_tag admin_load_demographics_path, multipart: true do
+      .row-fluid
+        .span6
+          .file-wrap
+            %span.file-btn.btn Choose CSV file
+            = file_field_tag :file
+            = hidden_field_tag :locality_id, @locality.id
+        .span6
+          = submit_tag "Upload Demographics CSV", class: 'btn'
 
 
 .row

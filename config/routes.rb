@@ -12,8 +12,9 @@ Enrs::Application.routes.draw do
 
     get  '/data' => 'data#index', as: 'data'
     post '/load_definitions' => 'data#load_definitions', as: 'load_definitions'
-    post '/load_vssc' => 'data#load_vssc', as: 'load_vssc'
-    post '/load_vssc_results' => 'data#load_vssc_results', as: 'load_vssc_results'
+    post '/load_nist' => 'data#load_nist', as: 'load_nist'
+    post '/load_nist_results' => 'data#load_nist_results', as: 'load_nist_results'
+    post '/load_demographics' => 'data#load_demographics', as: 'load_demographics'
     post '/load_results' => 'data#load_results', as: 'load_results'
     get  '/full_reset' => 'data#full_reset', as: 'full_reset'
   end
@@ -32,6 +33,8 @@ Enrs::Application.routes.draw do
   post '/data/precinct_results' => 'data#precinct_results'
   get  '/data/precinct_colors'  => 'data#precinct_colors'
   post '/data/precinct_colors'  => 'data#precinct_colors'
+  get  '/data/election_metadata'   => 'data#election_metadata'
+  post '/data/election_metadata'   => 'data#election_metadata'
 
   get '/feed(.:format)'        => 'api/v1#filtered_election_feed', as: 'feed'
   get '/feed-nist(.:format)'        => 'api/v1#nist_election_feed', as: 'nist_feed'

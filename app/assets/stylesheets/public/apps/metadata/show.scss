@@ -1,0 +1,185 @@
+@import 'public/_config';
+@import 'public/_mixins';
+
+#content {
+  .stats-box {
+    @include panel();
+    .panel {
+      padding: 10px 20px;
+      .header {
+        padding: 0;          
+        h6 {
+          margin-top: 0;
+        }
+      }
+      hr {
+        margin: 10px 0;
+      }
+      
+      .border-right {
+        position: relative;
+        padding-right: 15px;
+        &:after {
+          content: " ";
+          position: absolute;
+          top: 0;
+          bottom: -15%;
+          right: 5px;
+          width: 0px;
+          border-left: $section-border;  
+        }        
+      }
+      
+      
+    }
+    .toggler {
+      margin: 0 0 1em;
+      ul.toggle {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+        li {
+          background: white;
+          font-size: 10px;
+          line-height: 10px;
+          float: left;
+          padding: 4px 15px;
+          border: 1px solid #989898;
+          &.active {
+            background: #989898;
+          }
+        }
+      }
+    }
+
+    h6 {
+      color: #acacac;
+      text-transform: uppercase;
+    }
+    
+    .label {
+      color: #acacac;
+      background: none;
+      padding: 3px 0 7px;
+      margin: 0;
+    }
+    
+    .big-num {
+      display: block;
+      padding-bottom: 10px;
+      font-size: 30px;
+      line-height: 1em;
+      height: 30px;
+      font-weight: bold;
+      color: #113d54;
+    }
+  
+    .bars {
+      width: 100%;
+      table {
+        width: 100%;
+        td.bar {
+          width: 80%;
+        }
+        td {
+          padding-right: 5px;
+          .filler {
+            height: 1em;
+            color: white;
+            background: black;
+            &.domestic {
+              background: $domestic;
+            }
+            &.overseas {
+              background: $overseas;
+            }
+            &.military {
+              background: $military;
+            }
+          }
+        }
+      }
+    }
+    
+    .pie-panel {
+      padding-top: 25px;
+      padding-bottom: 20px;
+      .big-num {
+        padding-bottom: 10px;
+        font-size: 50px;
+        height: 50px;
+      }
+  
+      .pie-chart {
+        height: 100px;
+        width: 100px;
+        &#metadata-non-participating-chart {
+          margin-top: 20px;
+        }
+      }
+      table {
+        margin: 15px 0;
+        height:70px;
+        width: 100%;
+        font-weight: bold;
+        font-size: 14px;
+        td {
+          padding-right: 5px;
+        }
+        tr.domestic {
+          color: $domestic;
+        }
+        tr.military {
+          color: $military;
+        }
+        tr.overseas {
+          color: $overseas;
+        }
+        tr.provisional {
+          color: $provisional;
+        }
+        tr.election-day {
+          color: $election-day;
+        }
+        tr.early {
+          color: $early;
+        }
+        tr.absentee {
+          color: $absentee;
+        }
+      }
+    }
+    
+    .large-pie-panel {
+      .pie-chart {
+        height: 200px;
+        width: 200px;
+        margin: 0px auto;
+        display: block;
+      }
+    }
+    
+    
+    table.bars {
+      width: 100%;
+      td {
+        position: relative;
+        font-size: 16px;
+        line-height: 1em;
+        .fill {
+          height: 24px;
+        }
+        &:first-child {
+          width: 80%;
+          span {
+            display: block;
+            position: absolute;
+            top: 5px;
+            left: 8px;
+          }
+        } 
+      }
+    }
+    
+  }
+}

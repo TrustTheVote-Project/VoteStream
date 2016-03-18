@@ -9,3 +9,77 @@
       -webkit-box-shadow: 0 0 1px rgba(255,255,255,.5);
   }
 }
+
+$default: #888;
+$padding: 5px;
+$header-height: 15px;
+$unselected-header-bg: #fff;
+$unselected-header-fg: #133a54;
+$selected-header-bg: #fff;
+$selected-header-fg: #133a54;
+$party-color: #808080;
+$map-toggle-corner-radius: 15px;
+$map-toggle-active-color: #133A54;
+$inline-map-height: 250px;
+
+@mixin panel() {
+  position: relative;
+  *zoom: 1;
+
+  &:before, &:after {
+    content: " ";
+    display: table;
+  }
+
+  &:after {
+    clear: both;
+  }
+  
+  .panel {
+    box-shadow: 2px 6px 30px rgba(black, 0.3);
+    transition: all 0ms;
+    padding: 0 20px;
+    position: relative;
+    margin-bottom: 30px;
+  
+    .header {
+      background: $unselected-header-bg;
+      color: $unselected-header-fg;
+      //margin-bottom: 10px;
+      padding: 10px 0;
+      position: relative;
+
+      h5 {
+        font-size: 18px;
+        margin: 0;
+        line-height: $header-height * 2;
+      }
+    
+      .map-toggle {
+        position: absolute;
+        top: 8px;
+        right: 0px;
+      
+        background-position: 0 50%;
+        background-repeat: no-repeat;
+        height: 30px;
+        width: 30px;
+      
+        background-image: image-url('mapview_icon_normal.png');
+        &.active {
+          background-image: image-url('mapview_icon_selected.png');
+          background-color: $map-toggle-active-color;
+          -moz-border-radius: $map-toggle-corner-radius;
+          border-radius: $map-toggle-corner-radius;
+        }
+      }
+  
+    }
+  
+    .map-view {
+      height: $inline-map-height;
+    }
+    
+  }
+
+}

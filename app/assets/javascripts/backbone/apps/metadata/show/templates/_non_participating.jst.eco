@@ -1,0 +1,34 @@
+<div class='panel pie-panel'>
+  <div class='row'>
+    <div class='col-xs-8 col-sm-6 col-md-8 col-lg-4  border-right'>
+      <div class='header'>
+        <h6>Total Number of Non-Participating Registered Voters</h6>
+      </div>
+      <div class='big-num'><%= @totalNonParticipating %></div>
+    </div>
+    <div class='col-xs-4 col-sm-6 col-md-4 col-lg-2'>
+      <canvas id="metadata-non-participating-chart" class="pie-chart"></canvas>
+    </div>
+    <div class='col-xs-12 col-lg-6'>
+      <table>
+        <tbody>
+          <tr class="domestic">
+            <td>Non Voting Domestic</td><td><%= @domesticPercentage %></td><td><%= @domestic %></td>
+          </tr>
+          <tr class="military">
+            <td>Non Voting Military</td><td><%= @militaryPercentage %></td><td><%= @military %></td>
+          </tr>
+          <tr class="overseas">
+            <td>Non Voting Overseas</td><td><%= @overseasPercentage %></td><td><%= @overseas %></td>
+          </tr>
+          <tr class="absentee">
+            <td>Absentee Not Counted</td><td><%= @absenteeUncountedPercentage %></td><td><%= @absenteeUncounted %></td>
+          </tr>
+          <tr class="provisional">
+            <td>Provisional Not Counted</td><td><%= @provisionalUncountedPercentage %></td><td><%= @provisionalUncounted %></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>

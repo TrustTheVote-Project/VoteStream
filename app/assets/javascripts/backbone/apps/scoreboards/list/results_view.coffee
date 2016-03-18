@@ -282,8 +282,8 @@
 
     setResultsWidth: ->
       $results = this.$(@regions.resultsViewRegion)
-      fullWidth = 'span12'
-      halfWidth = 'span6'
+      fullWidth = 'col-sm-12'
+      halfWidth = 'col-sm-6  col-sm-pull-6'
       if @model.get('showParticipation')
         $results.addClass(halfWidth)
         $results.removeClass(fullWidth)
