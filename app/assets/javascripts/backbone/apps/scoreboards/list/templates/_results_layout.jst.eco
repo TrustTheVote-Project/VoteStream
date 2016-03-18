@@ -13,7 +13,7 @@
   <div class="header bar"><%= @refcon.attributes.name %></div>
 </div>
 
-<div class="row-fluid">
-	<div id="results-view-region" class="span6"></div>
-	<div id="participation-stats-region" class="span6"></div>
+<div class="row">
+	<div id="participation-stats-region" class="col-xs-12 col-sm-6 col-sm-push-6"></div>
+	<div id="results-view-region" class="col-xs-12 col-sm-6"></div>
 </div>

@@ -1,34 +1,45 @@
 <div id="filter-bar">
+    <div class="row">
+      <div class="col-xs-6">
+        <h3>Election Results</h3>
+      </div>
+  
+      <div class="col-xs-6">
+        <a href="#metadata"  id="js-election-metadata">View Election Metadata &raquo;</a>
+        <label id="percent-reporting"><%%= gon.percentReporting %>&nbsp;&nbsp;</label>
+      </div>
+    </div>
     <div class="row-fluid">
       <%% if @shouldShowFilters(): %>
         <div class="span4">
           <label class="dropdown-label"><%= I18n.t 'scoreboard.header.left_menu.label' %></label>
-          <span id='federal-dropdown-region'></span>
-          <span id='state-dropdown-region'></span>
-          <span id='local-dropdown-region'></span>
-          <span id='other-dropdown-region'></span>
+          <div class="row-fluid">
+            <span id='federal-dropdown-region' class='col-xs-6 col-lg-3'></span>
+            <span id='state-dropdown-region' class='col-xs-6 col-lg-3'></span>
+            <div class='clearfix visible-xs-block'></div>
+            <span id='local-dropdown-region' class='col-xs-6 col-lg-3'></span>
+            <span id='other-dropdown-region' class='col-xs-6 col-lg-3'></span>
+          </div>
         </div>
 
         <div class="span3">
           <label class="dropdown-label"><%= I18n.t 'scoreboard.header.right_menu.label' %></label>
-          <span id='district-dropdown-region'></span>
-          <span id='precinct-dropdown-region'></span>
+          <span id='district-dropdown-region' class='col-xs-12 col-md-6'></span>
+          <div class='clearfix visible-xs-block'></div>
+          <span id='precinct-dropdown-region' class='col-xs-12 col-md-6'></span>
         </div>
       
         <div class="span3">
           <label class="dropdown-label"><%= I18n.t 'scoreboard.header.channel_menu.label' %></label>
-          <span id='early-channel-toggle'></span>
-          <span id='sameday-channel-toggle'></span>
-          <span id='absentee-channel-toggle'></span>
+          <span id='early-channel-toggle' class='col-xs-12 col-md-6 col-lg-4'></span>
+          <span id='sameday-channel-toggle' class='col-xs-12 col-md-6  col-lg-4'></span>
+          <span id='absentee-channel-toggle' class='col-xs-12 col-md-6  col-lg-4'></span>
         </div>
         <div class="span2">
-          <label><%%= gon.percentReporting %></label>
           <a href="#advanced-filters" id="js-advanced-filters">Advanced Filters &raquo;</a>
-          <a href="#metadata"  id="js-election-metadata">View Election Metadata &raquo;</a>
         </div>
       <%% else: %>
         <div class="span9">
-          <label><%%= gon.percentReporting %></label>
           <a href="#advanced-filters" id="js-back-to-advanced-filters">&laquo; Return to Advanced Filters </a>
           <h3>Viewing Advanced Filters</h3>
         </div>

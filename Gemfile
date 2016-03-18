@@ -42,6 +42,7 @@ gem "therubyracer"
 #gem "less-rails" #Sprockets (what Rails 3.1 uses for its asset pipeline) supports LESS
 gem "twitter-bootstrap-rails"
 
+gem 'bootstrap3-rails'
 
 # User VSSC parser libary to load VSSC files
 # gem "vssc-ruby", :git=>"https://github.com/amekelburg/vssc_ruby.git"

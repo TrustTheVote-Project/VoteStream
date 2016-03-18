@@ -1,1 +1,1 @@
-<a href="#"><%= @name %> &nbsp;<input type="checkbox"></a>
+<a href="#"><input type="checkbox">&nbsp;<%= @name %> </a>
