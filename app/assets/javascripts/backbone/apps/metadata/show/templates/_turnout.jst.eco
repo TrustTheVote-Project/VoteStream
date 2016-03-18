@@ -1,0 +1,28 @@
+<div class='panel pie-panel'>
+  <div class='row'>
+    <div class="col-xs-8 col-sm-6 col-md-8 col-lg-4 border-right">
+      <div class='header'>
+        <h6>Turnout and Voter Participation</h6>          
+      </div>
+      <span class='big-num'><%= @turnoutPercentage %></span>
+    </div>
+    <div class='col-xs-4 col-sm-6 col-md-4 col-lg-2'>
+      <canvas id="metadata-turnout-chart" class="pie-chart"></canvas>
+    </div>
+    <div class='col-xs-12 col-lg-6'>
+      <table>
+        <tbody>
+          <tr class="election-day">
+            <td>Voted</td><td><%= @turnoutPercentage %></td><td><%= @total %></td>
+          </tr>
+          <tr class='early'>
+            <td>Registered, Not Voting</td><td><%= @registrantsNotVotedPercentage %></td><td><%= @registrantsNotVoted %></td>
+          </tr>
+          <tr class='absentee'>
+            <td>Registered, Attempted to Vote</td><td><%= @votesNotCountedPercentage %></td><td><%= @votesNotCounted %></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>

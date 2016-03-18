@@ -1,0 +1,67 @@
+<div id="filter-bar-region"></div>
+<div id="content">
+  <div class="row-fluid">
+    <div class="span8">
+      <div id="metadata-total-counted" class='stats-box'>
+      </div>
+      <div id="metadata-turnout" class='stats-box'>
+      </div>
+    </div>
+    <div  class="span4">
+      <div id="metadata-voter-numbers"></div>
+  </div>
+  <div class="row-fluid">
+    <div class="span8">
+      <div id="metadata-absentee" class='stats-box'>        
+      </div>
+    </div>
+    <div class="span4">
+      <div id="metadata-provisional" class='stats-box'>
+      </div>
+    </div>
+  </div>
+  <div class="row-fluid">
+    <div class="span8">
+      <div id="metadata-non-participating" class='stats-box'>
+      </div>
+    </div>
+    <div class="span4">
+      <div id="metadata-tbd" class='stats-box'>
+        <div class='panel'>
+          <div class='header'>
+            <h6>TBD</h6>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-xs-12 col-sm-6 col-lg-4 demographics-box">
+      <div id="metadata-gender" class='stats-box'>
+      </div>
+    </div>
+    <div class="col-xs-12 col-sm-6 col-lg-4 demographics-box">
+      <div id="metadata-age" class='stats-box'>        
+      </div>
+    </div>
+    <div class='clearfix visible-sm-block'></div>
+    <div class="col-xs-12 col-sm-6 col-lg-4 demographics-box">
+      <div id="metadata-party" class='stats-box'>
+      </div>
+    </div>
+    <div class='clearfix visible-lg-block'></div>
+    <div class="col-xs-12 col-sm-6 col-lg-4 demographics-box">
+      <div id="metadata-race" class='stats-box'>
+      </div>
+    </div>
+    <div class='clearfix visible-sm-block'></div>
+    <div class="col-xs-12 col-sm-6 col-lg-4 demographics-box">
+      <div id="metadata-voter-characteristics" class='stats-box'>
+      </div>
+    </div>
+    <div class="col-xs-12 col-sm-6 col-lg-4 demographics-box">
+      <div id="metadata-zip-codes" class='stats-box'>
+      </div>
+    </div>
+  </div>
+</div>

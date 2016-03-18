@@ -1,0 +1,56 @@
+<div class='panel'>
+  <div class='row'>
+    <div class='col-xs-12 col-sm-6 '>
+      <div class='header'>
+        <h6>Absentee Ballots</h6>
+      </div>
+      <div class='row'>
+        <div class='col-xs-6 border-right'>
+          <div class='label'>Counted</div> 
+          <span class='big-num'><%= @counted %></span>
+        </div>
+        <div class='col-xs-6'>
+          <div class='label'>Uncounted</div> 
+          <span class='big-num'><%= @uncounted %></span>       
+        </div>
+      </div>
+    </div>
+    <div class='col-xs-12 col-sm-6'>
+      <div class='label'>Breakdown</div>
+      <div class='bars'>
+        <table>
+          <tr>
+            <td>Domestic</td>
+            <td class='bar'>
+              <div class='filler domestic' style='width: <%= @domesticPercentage %>'>
+              </div>
+            </td>
+            <td>
+              <%= @domesticPercentage %>
+            </td>
+          </tr>
+          <tr>
+            <td>Overseas</td>
+            <td class='bar'>
+              <div class='filler overseas' style='width: <%= @overseasPercentage %>'>                  
+              </div>
+            </td>
+            <td>
+              <%= @overseasPercentage %>
+            </td>
+          </tr>
+          <tr>
+            <td>Military</td>
+            <td class='bar'>
+              <div class='filler military' style='width: <%= @militaryPercentage %>'>
+              </div>
+            </td>
+            <td>
+              <%= @militaryPercentage %>
+            </td>
+          </tr>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>

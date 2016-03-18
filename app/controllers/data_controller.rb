@@ -37,6 +37,16 @@ class DataController < ApplicationController
     precincts = locality.precincts
     render json: precincts.map { |p| { id: p.id, name: p.name } }
   end
+  
+  def election_metadata
+    locality_id = params[:locality_id]
+    election_metadata = Rails.cache.fetch("locality:#{locality_id}:#{params.hash}:metadata") do
+      locality = Locality.find(locality_id)
+      locality.election_metadata.to_json    
+    end
+    render json: election_metadata
+  end
+  
 
   private
 

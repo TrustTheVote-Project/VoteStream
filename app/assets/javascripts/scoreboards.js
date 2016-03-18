@@ -8,5 +8,6 @@
 //= require_tree ./backbone/apps/header
 //= require_tree ./backbone/apps/scoreboards
 //= require_tree ./backbone/apps/advanced_filters
+//= require_tree ./backbone/apps/metadata
 
 App.start();

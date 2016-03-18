@@ -1,0 +1,22 @@
+<div class='panel pie-panel'>
+  <div id="metadata-race-toggle">
+  </div>
+  <div class='header'>
+    <h6>Breakdown by Race or Ethnicity</h6>
+  </div>
+  <div class='row-fluid'>
+    <div class='span4'>
+      <canvas id="metadata-race-chart" class="pie-chart"></canvas>
+    </div>
+    <div class='span8'>
+      <table>
+        <% for race in @races: %>
+          <tr style="color: <%= race.color %>;">
+            <td><%= race.label %></td>
+            <td><%= race.percent %></td>
+          </tr>
+        <% end %>
+      </table>
+    </div>
+  </div>  
+</div>

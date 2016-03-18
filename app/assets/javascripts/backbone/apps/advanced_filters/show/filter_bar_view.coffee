@@ -8,6 +8,7 @@
       'click #js-view-as-map': (e) -> @viewAs(e, 'map')
       'click #js-view-as-list': (e) -> @viewAs(e, 'list')
       'click #js-view-back': (e) -> App.request('entities:scoreboardUrl').setView('map')
+      'click #js-view-metadata': (e) -> App.request('entities:scoreboardUrl').setView('metadata')
 
 
     initialize: ->

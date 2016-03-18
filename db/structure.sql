@@ -586,6 +586,86 @@ ALTER SEQUENCE states_id_seq OWNED BY states.id;
 
 
 --
+-- Name: voter_registration_classifications; Type: TABLE; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE TABLE voter_registration_classifications (
+    id integer NOT NULL,
+    voter_registration_id integer,
+    name character varying(255),
+    created_at timestamp without time zone,
+    updated_at timestamp without time zone
+);
+
+
+--
+-- Name: voter_registration_classifications_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE voter_registration_classifications_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: voter_registration_classifications_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE voter_registration_classifications_id_seq OWNED BY voter_registration_classifications.id;
+
+
+--
+-- Name: voter_registrations; Type: TABLE; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE TABLE voter_registrations (
+    id integer NOT NULL,
+    precinct_id integer,
+    date_of_birth character varying(255),
+    phone character varying(255),
+    race character varying(255),
+    sex character varying(255),
+    party character varying(255),
+    voter_id_type character varying(255),
+    voter_id_value character varying(255),
+    registration_address character varying(255),
+    created_at timestamp without time zone,
+    updated_at timestamp without time zone,
+    uid character varying(255) NOT NULL,
+    is_citizen boolean DEFAULT false NOT NULL,
+    is_eighteen_election_day boolean DEFAULT false NOT NULL,
+    is_election_absentee boolean DEFAULT false NOT NULL,
+    is_residing_at_registration_address boolean DEFAULT false NOT NULL,
+    is_active_duty_uniformed_services boolean DEFAULT false NOT NULL,
+    is_permanent_absetee boolean DEFAULT false NOT NULL,
+    is_eligible_military_spouse_or_dependent boolean DEFAULT false NOT NULL,
+    is_residing_abroad_uncertain_return boolean DEFAULT false NOT NULL
+);
+
+
+--
+-- Name: voter_registrations_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE voter_registrations_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: voter_registrations_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE voter_registrations_id_seq OWNED BY voter_registrations.id;
+
+
+--
 -- Name: id; Type: DEFAULT; Schema: public; Owner: -
 --
 
@@ -681,6 +761,20 @@ ALTER TABLE ONLY referendums ALTER COLUMN id SET DEFAULT nextval('referendums_id
 --
 
 ALTER TABLE ONLY states ALTER COLUMN id SET DEFAULT nextval('states_id_seq'::regclass);
+
+
+--
+-- Name: id; Type: DEFAULT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY voter_registration_classifications ALTER COLUMN id SET DEFAULT nextval('voter_registration_classifications_id_seq'::regclass);
+
+
+--
+-- Name: id; Type: DEFAULT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY voter_registrations ALTER COLUMN id SET DEFAULT nextval('voter_registrations_id_seq'::regclass);
 
 
 --
@@ -785,6 +879,22 @@ ALTER TABLE ONLY referendums
 
 ALTER TABLE ONLY states
     ADD CONSTRAINT states_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: voter_registration_classifications_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
+--
+
+ALTER TABLE ONLY voter_registration_classifications
+    ADD CONSTRAINT voter_registration_classifications_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: voter_registrations_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
+--
+
+ALTER TABLE ONLY voter_registrations
+    ADD CONSTRAINT voter_registrations_pkey PRIMARY KEY (id);
 
 
 --
@@ -1083,10 +1193,87 @@ CREATE UNIQUE INDEX index_states_on_uid ON states USING btree (uid);
 
 
 --
+-- Name: index_voter_registrations_on_precinct_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE INDEX index_voter_registrations_on_precinct_id ON voter_registrations USING btree (precinct_id);
+
+
+--
+-- Name: index_voter_registrations_on_uid; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE INDEX index_voter_registrations_on_uid ON voter_registrations USING btree (uid);
+
+
+--
+-- Name: index_vr_on_is_abroad; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE INDEX index_vr_on_is_abroad ON voter_registrations USING btree (is_residing_abroad_uncertain_return);
+
+
+--
+-- Name: index_vr_on_is_absentee; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE INDEX index_vr_on_is_absentee ON voter_registrations USING btree (is_election_absentee);
+
+
+--
+-- Name: index_vr_on_is_citizen; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE INDEX index_vr_on_is_citizen ON voter_registrations USING btree (is_citizen);
+
+
+--
+-- Name: index_vr_on_is_eighteen; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE INDEX index_vr_on_is_eighteen ON voter_registrations USING btree (is_eighteen_election_day);
+
+
+--
+-- Name: index_vr_on_is_home; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE INDEX index_vr_on_is_home ON voter_registrations USING btree (is_residing_at_registration_address);
+
+
+--
+-- Name: index_vr_on_is_military; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE INDEX index_vr_on_is_military ON voter_registrations USING btree (is_active_duty_uniformed_services);
+
+
+--
+-- Name: index_vr_on_is_military_dep; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE INDEX index_vr_on_is_military_dep ON voter_registrations USING btree (is_eligible_military_spouse_or_dependent);
+
+
+--
+-- Name: index_vr_on_is_permane; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE INDEX index_vr_on_is_permane ON voter_registrations USING btree (is_permanent_absetee);
+
+
+--
 -- Name: unique_schema_migrations; Type: INDEX; Schema: public; Owner: -; Tablespace: 
 --
 
 CREATE UNIQUE INDEX unique_schema_migrations ON schema_migrations USING btree (version);
+
+
+--
+-- Name: voter_reg_class_index; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE INDEX voter_reg_class_index ON voter_registration_classifications USING btree (voter_registration_id);
 
 
 --
@@ -1188,3 +1375,13 @@ INSERT INTO schema_migrations (version) VALUES ('20150624102912');
 INSERT INTO schema_migrations (version) VALUES ('20150624104722');
 
 INSERT INTO schema_migrations (version) VALUES ('20150624111229');
+
+INSERT INTO schema_migrations (version) VALUES ('20160313222221');
+
+INSERT INTO schema_migrations (version) VALUES ('20160313222329');
+
+INSERT INTO schema_migrations (version) VALUES ('20160316151449');
+
+INSERT INTO schema_migrations (version) VALUES ('20160316153123');
+
+INSERT INTO schema_migrations (version) VALUES ('20160317160439');

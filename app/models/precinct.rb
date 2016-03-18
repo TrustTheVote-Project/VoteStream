@@ -12,6 +12,7 @@ class Precinct < ActiveRecord::Base
   has_many   :ballot_response_results, dependent: :delete_all
   has_many   :contest_results,         dependent: :delete_all
   has_many   :districts_precincts
+  has_many   :voter_registrations,     dependent: :delete_all
 
   validates :uid, presence: true
   validates :name, presence: true
