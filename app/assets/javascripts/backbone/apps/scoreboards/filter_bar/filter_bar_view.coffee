@@ -6,7 +6,7 @@
 
   class FilterBar.View extends Marionette.Layout
     template: 'scoreboards/filter_bar/view'
-    templateHelpers:
+    templateHelpers: ->
       shouldShowFilters: ->
         return !App.request("entities:scoreboardUrl").advancedView()
         
@@ -22,6 +22,7 @@
       'click #js-advanced-filters': 'viewAdvancedFilters'
       'click #js-back-to-advanced-filters': 'viewAdvancedFilters'
       'click #js-view-metadata': (e) -> App.request('entities:scoreboardUrl').setView('metadata')
+      'click .map-save-button': (e) -> @showSaveAs()
 
     modelEvents:
       'change:channelEarly': 'showChannels'
@@ -46,9 +47,17 @@
       breadcrumbsRegion:      '#breadcrumbs-region'
       viewSelectorRegion:     '#view-selector-region'
       viewSettingsRegion:     '#view-settings-region'
+      saveAsRegion:           '#save-view-as'
 
     initialize: ->
       @scoreboardInfo = App.request "entities:scoreboardInfo"
+      @scoreboardUrl = App.request 'entities:scoreboardUrl'
+        
+    showSaveAs: ->
+      url = @scoreboardUrl.path()
+      @saveAsRegion.show new SaveAsView
+        name: 'New Map'
+        url: url
 
     viewAdvancedFilters: (e) ->
       e.preventDefault()
@@ -96,6 +105,9 @@
       
       
     onShow: ->
+      
+      App.vent.on 'saveMapAs:show', @showSaveAs
+      
       @.federalDropdownRegion.show new SelectorView
         name: 'Federal'
         itemView: ContestSelectorRow
@@ -301,10 +313,40 @@
   valueCheckbox = (trueTitle, falseTitle, property, trueValue, falseValue) ->
     { settingType: 'valueCheckbox', trueTitle: trueTitle, falseTitle: falseTitle, property: property, trueValue: trueValue, falseValue: falseValue }
 
+  class SaveAsView extends Marionette.ItemView
+    template: 'scoreboards/filter_bar/_save_as'
+    #template: '#save-view-as'
+    
+    initialize: (options) ->
+      @saved_maps = App.request "entities:savedMaps"
+      @url = options.url
+      @mapName = options.name
+      
+    templateHelpers: ->
+      mapName: @mapName
+      
+    events:
+      'click .map-commit-save-button': (e) ->
+        @onSave()
+        
+    onShow: ->
+      $('#save-map-modal').on 'shown.bs.modal', (e) ->
+        $("#save-map-modal input[name='saved-map-name']").focus().select()         
+      
+      $('#save-map-modal').modal() 
+      
+      
+    onSave: ->
+      @mapName = $("#save-map-modal input[name='saved-map-name']").val()
+      @saved_maps.add_map(@url, @mapName) 
+      App.vent.trigger 'saveMapAs:saved'
+      $('#save-map-modal').modal('hide')
+      
+        
+
   class ViewSettingsDropdown extends Marionette.ItemView
     template: 'scoreboards/filter_bar/_view_settings'
     className: 'btn-group'
-
 
     initialize: () ->
       @su = App.request "entities:scoreboardUrl"
@@ -324,14 +366,11 @@
         ],
         'map-list': [
         ]
+      App.vent.on 'saveMapAs:saved', =>
+        @render()
         
 
-    events:
-      'click .map-save-button': (e) ->
-        url = @su.path()
-        @saved_maps.add_map(url)        
-        @render()
-
+    events:        
       'click .dropdown-menu a.change-setting': (e) ->
         $anchor = $(e.currentTarget)
         if $anchor.hasClass('disabled')

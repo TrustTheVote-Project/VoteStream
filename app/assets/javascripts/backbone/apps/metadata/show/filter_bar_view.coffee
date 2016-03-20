@@ -7,4 +7,5 @@
       'click #js-view-back': (e) -> window.history.back()
 
 
-    templateHelpers: {}
+    templateHelpers: ->
+      {}

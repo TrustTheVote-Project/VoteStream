@@ -115,8 +115,12 @@ $selector-icon-padding: 0px;
     
     input[type="radio"], input[type="checkbox"] {
         margin: 0;
-    }
-    
+    }    
+  }
+  
+  #map-save-button {
+    background-color: #989898;
+    margin-left: 20px;
   }
 }
 

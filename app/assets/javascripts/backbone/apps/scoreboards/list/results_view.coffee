@@ -14,7 +14,7 @@
       data.totalVotes = @options.totalVotes
       data.showVotingMethod = @options.showVotingMethod
       data
-    templateHelpers:
+    templateHelpers: ->
       percent: -> App.ScoreboardsApp.Helpers.percent(@votes, @totalVotes)
       percentFormatted: -> App.ScoreboardsApp.Helpers.percentFormatted(@votes, @totalVotes)
       voteChannels: -> 
@@ -134,7 +134,7 @@
       data = Backbone.Marionette.ItemView.prototype.serializeData.apply @, arguments
       data.totalVotes = @options.totalVotes
       data
-    templateHelpers:
+    templateHelpers: ->
       percent: -> App.ScoreboardsApp.Helpers.percent(@votes, @totalVotes)
       percentFormatted: -> App.ScoreboardsApp.Helpers.percentFormatted(@votes, @totalVotes)      
     onShow: ->

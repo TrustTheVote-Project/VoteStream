@@ -12,7 +12,7 @@
       @si = App.request 'entities:scoreboardInfo'
       @saved_maps = App.request "entities:savedMaps"
 
-    templateHelpers:
+    templateHelpers: ->
       saved_count: App.request("entities:savedMaps").count()
       maps: App.request("entities:savedMaps").maps()   
       percent: -> App.ScoreboardsApp.Helpers.percent(@votes, @totalVotes)

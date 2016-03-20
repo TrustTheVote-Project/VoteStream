@@ -5,6 +5,6 @@
       si = App.request 'entities:scoreboardInfo'
       si.set 'view', 'map'
 
-      App.execute 'when:fetched', App.request('entities:savedMaps'),
+      App.execute 'when:fetched', App.request('entities:savedMaps'), ->
         view = new Show.View
         App.mainRegion.show view

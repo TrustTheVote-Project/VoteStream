@@ -5,7 +5,7 @@
         <% if @saved_count > 0: %>
           <ul>
             <% for map in @maps: %>
-              <li><a class='map-link' href='#<%= map.url %>'><%= map.url %></a></li>
+              <li><a class='map-link' href='#<%= map.url %>'><%= map.getName() %></a></li>
             <% end %>
           </ul>
         <% end %>

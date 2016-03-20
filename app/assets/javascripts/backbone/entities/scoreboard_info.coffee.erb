@@ -75,7 +75,7 @@
           view:              null
           coloringType:      'results'
           map_type:          null
-          showParticipation: true
+          showParticipation: false
           showVotingMethod:  false
           advanced:          null
           percentageType:    'ballots' # Can be 'ballots' or 'voters'
@@ -96,6 +96,9 @@
             App.vent.trigger 'channelAbsentee:selected', options.channelAbsentee
           if options.coloringType?
             App.vent.trigger 'coloringType:selected', options.coloringType
+          else
+            App.vent.trigger 'coloringType:selected', 'results'
+              
           if options.advanced?
             App.vent.trigger 'advanced:selected', options.advanced
           sb.enableResultsReload()
