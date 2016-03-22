@@ -34,17 +34,17 @@ InfoBubble.prototype.panToView = ->
 
       @initColors()
 
-      @si = si = App.request 'entities:scoreboardInfo'
-      @precinctResults = si.get 'precinctResults'
+      #@si = si = App.request 'entities:scoreboardInfo'
+      @precinctResults = @options.precinctResults #si.get 'precinctResults'
 
       if @options.staticColors
         @precinctColors = @options.staticColors
       else
-        @precinctColors = si.get 'precinctColors'
+        @precinctColors = @options.precinctColors #si.get 'precinctColors'
         @precinctColors.on 'sync', @updateColors, @
-        si.on 'change:coloringType', @updateColors, @
+        #si.on 'change:coloringType', @updateColors, @
 
-      @precincts = App.request 'entities:precincts'
+      @precincts = @options.precincts #App.request 'entities:precincts'
 
     updateColors: ->
       @closeInfoWindow()
@@ -306,8 +306,9 @@ InfoBubble.prototype.panToView = ->
       si = App.request 'entities:scoreboardInfo'
       results = si.get 'precinctResults'
       result = si.get 'result'
-      title = result.get('summary').get('title')
-
+      summary = result.get 'summary'
+      title = summary.get 'title'
+      
       precinctResult = poly.data.mapView.precinctResults.get('precincts').get(poly.data.precinctId)
       rows  = precinctResult.get('rows')
       votes = precinctResult.get('votes')
@@ -353,7 +354,8 @@ InfoBubble.prototype.panToView = ->
       #   console.log(@.data)
 
     updateColorKey: ->
-      @colorKey = if @si.get('coloringType') == 'results' then 'c' else 'p'
+      #@colorKey = if @si.get('coloringType') == 'results' then 'c' else 'p'
+      @colorKey = if @options.coloringType == 'results' then 'c' else 'p'
 
     renderPrecincts: ->
       App.execute 'when:fetched', @precincts, =>

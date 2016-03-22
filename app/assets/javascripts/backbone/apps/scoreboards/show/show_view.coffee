@@ -10,6 +10,7 @@
       mapRegion: '#map-region'
 
     onShow: ->
+      @si = si = App.request 'entities:scoreboardInfo'
       @layout = new ResultsSummaryLayout
 
       @filterBarRegion.show new App.ScoreboardsApp.FilterBar.View
@@ -18,6 +19,10 @@
       @mapRegion.show new Show.MapView
         infoWindow: true
         noPanning: false
+        precinctResults: si.get 'precinctResults'
+        precinctColors:  si.get 'precinctColors'
+        precincts: App.request 'entities:precincts'
+        coloringType: si.get('coloringType')
 
   class ResultsRotator
     constructor: ->

@@ -1,0 +1,97 @@
+@App.module "ScoreboardsApp.MapComparison", (MapComparison, App, Backbone, Marionette, $, _) ->
+
+  class MapComparison.View extends Marionette.Layout
+    template: 'scoreboards/map_comparison/view'
+    id: 'map_comparison'
+
+    # regions:
+      #filterBarRegion:              '#filter-bar-region'
+      #mapListRegion:                '#map-list-region'
+
+    initialize: ->
+      @si = App.request 'entities:scoreboardInfo'
+      @su = App.request 'entities:scoreboardUrl'
+      @selected_maps = @si.get 'mapComparisonIds'
+      @saved_maps = App.request "entities:savedMaps"
+      
+    events:
+      'click #js-view-back': (e) -> window.history.back()
+      
+    
+    maps: ->
+      maps = []
+      for map in @saved_maps.maps()        
+        if @selected_maps.includes(map.id + '')
+          maps.push(map)
+      maps
+      
+      
+    templateHelpers: ->
+      maps: =>
+        @maps()
+        
+        
+    onShow: ->
+      waitingFor = []
+      waitingFor.push App.request('entities:refcons')
+      waitingFor.push App.request('entities:districts')
+      waitingFor.push App.request('entities:precincts')
+
+      App.execute 'when:fetched', waitingFor, =>
+        for map in @maps()
+          #"map/:ctype-:cid(/:region)(/:params)": "show"
+          paramParts = map.url.split('/')
+          rtype = null
+          rid   = null
+          params = null
+          filters = {}
+          if paramParts[0]=='map'
+            cTypeInfo = paramParts[1].split('-')
+            ctype = cTypeInfo[0]
+            cid   = cTypeInfo[1]
+            region = paramParts[2]
+            if region and region.match('=')
+              params = region
+            else if region
+              params = paramParts[3]
+              regionParts = region.split('-')
+              rtype = regionParts[0]
+              rid = regionParts[1]
+        
+            console.log(ctype, cid, rtype, rid, params)
+            filters = App.ScoreboardsApp.Helpers.filtersFromParams(ctype, cid, rtype, rid, params)
+            console.log(filters)
+        
+          extraOpts = {
+            channel_early: filters.channelEarly,
+            channel_electionday: filters.channelElectionday,
+            channel_absentee: filters.channelAbsentee
+          }
+        
+          advanced = null #get from url if it matches a different one
+        
+          resultsColl = new App.Entities.ResultsCollection
+          resultsColl.fetchForFilter(gon.locality_id, filters.region, filters.refcon, extraOpts, advanced)
+          
+          @listenTo resultsColl, 'reset', ((map, filters, advanced, results)->
+            result = null # Specific selecte result / contesnt ?
+            result = result || results.first()
+
+            precinctResults = new App.Entities.PrecinctResultData
+            precinctResults.fetchForResult result, filters.region, extraOpts, advanced
+
+            precinctColors = new App.Entities.PrecinctColors
+            precinctColors.fetchForResult result, filters.region, advanced
+            
+            console.log(map.id)
+          
+            @addRegion("newRegion", "#map-region-#{map.id}")
+            @newRegion.show new App.ScoreboardsApp.Show.MapView
+              infoWindow: true
+              noPanning: false
+              precinctResults: precinctResults
+              precinctColors:  precinctColors
+              precincts: App.request 'entities:precincts'
+              coloringType: filters.coloringType || 'results'
+          ).bind(this, map, filters, advanced)
+          

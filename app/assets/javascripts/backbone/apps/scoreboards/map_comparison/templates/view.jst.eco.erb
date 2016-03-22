@@ -20,10 +20,10 @@
 </div>
 <div id="content">
   <div class="row">
-    <div class="col-xs-6">
-      <%% for map in @maps(): %>
-      <div id="map-region-<%%= map.id %>"></div>
-      <%% end %>
-    </div>
+    <%% for map in @maps(): %>
+      <div class="col-xs-6">
+        <div id="map-region-<%%= map.id %>"></div>
+      </div>
+    <%% end %>    
   </div>
 </div>

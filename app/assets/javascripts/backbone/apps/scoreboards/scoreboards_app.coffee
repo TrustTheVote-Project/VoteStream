@@ -32,22 +32,8 @@
       (number) ->
         numeral(number).format('0,0')
   
-  setAdvancedParams = (params) ->
-    App.execute 'when:fetched', [App.request('entities:refcons'), App.request('entities:districts'), App.request('entities:precincts')], ->
-      App.vent.trigger 'filters:set', {advanced: params}
-    
-    
-  setParams = (ctype, cid, rtype, rid, params) ->
-    waitingFor = []
-    
-    if ctype == 'c' or ctype == 'r'
-      waitingFor.push App.request('entities:refcons')
-    if rtype == 'd'
-      waitingFor.push App.request('entities:districts')
-    if rtype == 'p'
-      waitingFor.push App.request('entities:precincts')
-
-    App.execute 'when:fetched', waitingFor, ->
+  
+    @filtersFromParams: (ctype, cid, rtype, rid, params) ->
       refcon = null
       if ctype == 'a'
         refcon = App.request "entities:refcon:all-#{cid}"
@@ -64,28 +50,51 @@
       else if rtype == 'p'
         precincts = App.request 'entities:precincts'
         region = precincts.get rid
-      
+    
       filters = 
         region: region
         refcon: refcon
         channelEarly: true
         channelElectionday: true
         channelAbsentee: true
-      
-      if params
-        for part in params.split "&"
-          values = part.split "="
-          if values.length == 2 and values[1] == 'off'
-            switch values[0]
-              when 'dayof'
-                filters.channelElectionday = false
-              when 'early'
-                filters.channelEarly = false
-              when 'absentee'
-                filters.channelAbsentee = false
-          else if values.length == 2
-            filters[values[0]] = values[1]
         
+        
+  
+  setAdvancedParams = (params) ->
+    App.execute 'when:fetched', [App.request('entities:refcons'), App.request('entities:districts'), App.request('entities:precincts')], ->
+      App.vent.trigger 'filters:set', {advanced: params}
+    
+    
+  
+    
+    if params
+      for part in params.split "&"
+        values = part.split "="
+        if values.length == 2 and values[1] == 'off'
+          switch values[0]
+            when 'dayof'
+              filters.channelElectionday = false
+            when 'early'
+              filters.channelEarly = false
+            when 'absentee'
+              filters.channelAbsentee = false
+        else if values.length == 2
+          filters[values[0]] = values[1]
+          
+    return filters
+    
+  setParams = (ctype, cid, rtype, rid, params) ->
+    waitingFor = []
+    
+    if ctype == 'c' or ctype == 'r'
+      waitingFor.push App.request('entities:refcons')
+    if rtype == 'd'
+      waitingFor.push App.request('entities:districts')
+    if rtype == 'p'
+      waitingFor.push App.request('entities:precincts')
+
+    App.execute 'when:fetched', waitingFor, ->
+      filters = ScoreboardsApp.Helpers.filtersFromParams(ctype, cid, rtype, rid, params)
       App.vent.trigger 'filters:set', filters
 
   API =
