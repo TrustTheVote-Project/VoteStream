@@ -57,8 +57,25 @@
         channelEarly: true
         channelElectionday: true
         channelAbsentee: true
+        coloringType: 'results'
         
-        
+  
+    
+      if params
+        for part in params.split "&"
+          values = part.split "="
+          if values.length == 2 and values[1] == 'off'
+            switch values[0]
+              when 'dayof'
+                filters.channelElectionday = false
+              when 'early'
+                filters.channelEarly = false
+              when 'absentee'
+                filters.channelAbsentee = false
+          else if values.length == 2
+            filters[values[0]] = values[1]
+          
+      return filters
   
   setAdvancedParams = (params) ->
     App.execute 'when:fetched', [App.request('entities:refcons'), App.request('entities:districts'), App.request('entities:precincts')], ->
@@ -66,22 +83,6 @@
     
     
   
-    
-    if params
-      for part in params.split "&"
-        values = part.split "="
-        if values.length == 2 and values[1] == 'off'
-          switch values[0]
-            when 'dayof'
-              filters.channelElectionday = false
-            when 'early'
-              filters.channelEarly = false
-            when 'absentee'
-              filters.channelAbsentee = false
-        else if values.length == 2
-          filters[values[0]] = values[1]
-          
-    return filters
     
   setParams = (ctype, cid, rtype, rid, params) ->
     waitingFor = []

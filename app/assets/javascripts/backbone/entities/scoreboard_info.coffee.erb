@@ -96,8 +96,6 @@
             App.vent.trigger 'channelAbsentee:selected', options.channelAbsentee
           if options.coloringType?
             App.vent.trigger 'coloringType:selected', options.coloringType
-          else
-            App.vent.trigger 'coloringType:selected', 'results'
               
           if options.advanced?
             App.vent.trigger 'advanced:selected', options.advanced
