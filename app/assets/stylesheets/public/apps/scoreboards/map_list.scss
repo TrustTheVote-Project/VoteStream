@@ -1,0 +1,12 @@
+#map-list-region {
+  ul {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+    li {
+      input[type=checkbox] {
+        margin: 0;
+      }
+    }
+  }
+}

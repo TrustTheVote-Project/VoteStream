@@ -26,6 +26,11 @@
       @view = v
       @updatePath(true)
 
+    setComparisonView: (mapIds) ->
+      @view = 'map-comparison'
+      @si.set 'mapComparisonIds', mapIds
+      @updatePath(true)
+
     updatePath: (refresh) =>
       return unless @enabled
       App.navigate @path(), refresh
@@ -33,12 +38,17 @@
     advancedView: ->
       @view == 'advanced-map' || @view == 'advanced-list'
 
+    comparisonView: ->
+      @view == 'map-comparison'
+
     path: ->
       if @advancedView()
         af = App.request 'entities:advancedFilter'
         params = af.requestData()
         return "#{@view}/#{$.param(params)}"
-        
+      if @comparisonView()
+        mapIds = @si.get('mapComparisonIds')
+        return "#{@view}/#{mapIds.join('-')}"
       
       parts = []
       parts.push @view or 'map'

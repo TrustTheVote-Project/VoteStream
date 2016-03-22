@@ -5,6 +5,7 @@
       @mapObj = obj
       @name = obj.name
       @url = obj.url
+      @id = obj.id
       
     getName: () ->
       n = @mapObj.name || @mapObj.url
@@ -15,6 +16,7 @@
     constructor: ->
       @storage = window.localStorage
     
+    
     maps: ->
       maps = JSON.parse(@storage.getItem('saved_maps') || '[]')
       mapInstances = []
@@ -22,6 +24,12 @@
         mapInstances.push(new Entities.SavedMap(map))
         
       mapInstances
+      
+    setMaps: (maps)->
+      mapObjs = []
+      for map in maps
+        mapObjs.push(map.mapObj)
+      @storage.setItem('saved_maps', JSON.stringify(mapObjs))
       
       
     count: ->
@@ -40,13 +48,32 @@
 
       return newName
 
+    nextId: (list) ->
+      ids = [0]
+      for map in list
+        ids.push(map.id || 0)
+        
+      console.log(ids)
+      Math.max.apply(Math, ids) + 1
+      
+      
+    deleteIds: (idList) ->
+      newList = []
+      maps = @maps()
+      for map in maps
+        if !idList.includes(map.id)
+          newList.push(map.mapObj)
+      @storage.setItem('saved_maps', JSON.stringify(newList))
+      
+    
     add_map: (url, name) ->
       maps = @maps()
       # Check if @maps include something with this name
       name = @getMapName(name, maps)
-      maps.push({url: url, name: name})
-      @storage.setItem('saved_maps', JSON.stringify(maps))
-      
+      id = @nextId(maps)
+      console.log(id)
+      maps.push(new Entities.SavedMap({url: url, name: name, id: id}))
+      @setMaps(maps)
 
     clearMaps: ->
       @storage.setItem('saved_maps', JSON.stringify([]))

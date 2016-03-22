@@ -7,6 +7,7 @@
       "map/:ctype-:cid(/:region)(/:params)": "show"
       "advanced-map/:params": "showAdvanced"
       "map-list": "mapList"
+      "map-comparison/:params": "mapComparison"
       "list": "list"
       "list/:ctype-:cid(/:region)(/:params)": "list"
       "advanced-list/:params": "showAdvancedList"
@@ -126,6 +127,15 @@
       su.view = 'map-list'
       
       ScoreboardsApp.MapList.Controller.show()
+      
+    mapComparison: (params) ->
+      su = App.request 'entities:scoreboardUrl'
+      si = App.request 'entities:scoreboardInfo'
+      su.view = 'map-comparison'
+      
+      si.set 'mapComparisonIds', params.split('-')
+      
+      ScoreboardsApp.MapComparison.Controller.show()
       
     list: (ctype, cid, region, params)->
       if region and region.match('=')

@@ -1,0 +1,29 @@
+<div id="filter-bar">
+  <div class="row">
+    <div class="col-xs-6">
+      <a href="#" onclick="return false;" id="js-view-back">&laquo; Return to Previous Screen</a>
+      <br/>    
+      <h3>Compare Maps</h3>
+    </div>
+    <div class="col-xs-6">
+      <a href="#metadata"  id="js-election-metadata">View Election Metadata &raquo;</a>
+      <label id="percent-reporting"><%%= gon.percentReporting %>&nbsp;&nbsp;</label>
+    </div>
+  </div>
+  <div class="row-fluid">
+      <div class="col-xs-12 ">
+        <%% for map in @maps(): %>
+          <%%= map.getName() %>
+        <%% end %>
+      </div>
+  </div>
+</div>
+<div id="content">
+  <div class="row">
+    <div class="col-xs-6">
+      <%% for map in @maps(): %>
+      <div id="map-region-<%%= map.id %>"></div>
+      <%% end %>
+    </div>
+  </div>
+</div>
