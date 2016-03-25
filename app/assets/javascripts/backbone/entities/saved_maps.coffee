@@ -11,6 +11,47 @@
       n = @mapObj.name || @mapObj.url
       return n
     
+    getFilters: () ->
+      paramParts = @url.split('/')
+      rtype = null
+      rid   = null
+      params = null
+      filters = {}
+      if paramParts[0]=='map'
+        cTypeInfo = paramParts[1].split('-')
+        ctype = cTypeInfo[0]
+        cid   = cTypeInfo[1]
+        region = paramParts[2]
+        if region and region.match('=')
+          params = region
+        else if region
+          params = paramParts[3]
+          regionParts = region.split('-')
+          rtype = regionParts[0]
+          rid = regionParts[1]
+    
+        filters = App.ScoreboardsApp.Helpers.filtersFromParams(ctype, cid, rtype, rid, params)
+
+      return filters
+    
+    getDescription: () ->
+      filters = @getFilters()
+      console.log(filters)
+      parts = []
+      if filters.region
+        parts.push(filters.region.get 'name')
+      else
+        parts.push("All Regions")
+      
+      if filters.refcon
+        parts.push(filters.refcon.get 'name')
+      else
+        parts.push("All contests")
+        
+      if filters.coloringType == 'participation'
+        parts.push("Participation")
+
+      parts.join(", ")
   
   class Entities.SavedMaps
     constructor: ->

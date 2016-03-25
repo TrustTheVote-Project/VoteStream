@@ -40,27 +40,7 @@
       App.execute 'when:fetched', waitingFor, =>
         for map in @maps()
           #"map/:ctype-:cid(/:region)(/:params)": "show"
-          paramParts = map.url.split('/')
-          rtype = null
-          rid   = null
-          params = null
-          filters = {}
-          if paramParts[0]=='map'
-            cTypeInfo = paramParts[1].split('-')
-            ctype = cTypeInfo[0]
-            cid   = cTypeInfo[1]
-            region = paramParts[2]
-            if region and region.match('=')
-              params = region
-            else if region
-              params = paramParts[3]
-              regionParts = region.split('-')
-              rtype = regionParts[0]
-              rid = regionParts[1]
-        
-            console.log(ctype, cid, rtype, rid, params)
-            filters = App.ScoreboardsApp.Helpers.filtersFromParams(ctype, cid, rtype, rid, params)
-            console.log(filters)
+          filters = map.getFilters()
         
           extraOpts = {
             channel_early: filters.channelEarly,
@@ -85,8 +65,10 @@
             
             console.log(map.id)
           
-            @addRegion("newRegion", "#map-region-#{map.id}")
-            @newRegion.show new App.ScoreboardsApp.Show.MapView
+            $("#map-description-region-#{map.id}").text(map.getDescription())
+          
+            @addRegion("newMapRegion", "#map-region-#{map.id}")
+            @newMapRegion.show new App.ScoreboardsApp.Show.MapView
               infoWindow: true
               noPanning: false
               precinctResults: precinctResults

@@ -19,11 +19,17 @@
   </div>
 </div>
 <div id="content">
-  <div class="row">
-    <%% for map in @maps(): %>
-      <div class="col-xs-6">
-        <div id="map-region-<%%= map.id %>"></div>
-      </div>
-    <%% end %>    
+  <div id="map-comparison">
+    <div class="row">
+      <%% for map in @maps(): %>
+        <div class="col-xs-6 map-comparison-item">
+          <h4>
+            <a href="<%%= map.url %>"><%%= map.getName() %></a>
+          </h4>
+          <p id="map-description-region-<%%= map.id %>">loading</p>
+          <div id="map-region-<%%= map.id %>" class="map-comparison-item-map"></div>
+        </div>
+      <%% end %>    
+    </div>
   </div>
 </div>
