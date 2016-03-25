@@ -37,6 +37,10 @@
       waitingFor.push App.request('entities:districts')
       waitingFor.push App.request('entities:precincts')
 
+      $("span.visible-map-toggle").click ->
+        id = $(@).data('map-id')
+        $("#map-comparison-item-#{id}").toggleClass('hide-map')
+
       App.execute 'when:fetched', waitingFor, =>
         for map in @maps()
           #"map/:ctype-:cid(/:region)(/:params)": "show"
@@ -63,8 +67,6 @@
             precinctColors = new App.Entities.PrecinctColors
             precinctColors.fetchForResult result, filters.region, advanced
             
-            console.log(map.id)
-          
             $("#map-description-region-#{map.id}").text(map.getDescription())
           
             @addRegion("newMapRegion", "#map-region-#{map.id}")

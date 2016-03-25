@@ -7,6 +7,21 @@
       input[type=checkbox] {
         margin: 0;
       }
+      .saved-map-list-item-map {
+        display: none;
+        .map-view {
+            height: 300px;
+            width: 300px;
+        }        
+      }
+      
+      &.preview {
+        .saved-map-list-item-map {
+          display: block;
+        }
+      }
+      
+      
     }
   }
 }

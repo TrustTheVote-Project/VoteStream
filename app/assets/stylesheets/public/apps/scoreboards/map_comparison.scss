@@ -1,5 +1,28 @@
 #map-comparison {
     .map-comparison-item {
+        h4 {
+            span.fa {
+                float: right;
+                &.fa-plus-square-o {
+                    display: none;
+                }
+            }
+        }
+        &.hide-map {
+            h4 {
+                span.fa {
+                    &.fa-minus-square-o {
+                        display: none;
+                    }
+                    &.fa-plus-square-o {
+                        display: block;
+                    }
+                }
+            }
+            .map-comparison-item-map, .map-comparison-item-description {
+                display: none;
+            }            
+        }
         .map-comparison-item-map {
             .map-view {
                 height: 300px;                

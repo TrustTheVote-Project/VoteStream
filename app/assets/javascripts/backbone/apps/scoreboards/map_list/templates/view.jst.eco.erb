@@ -28,7 +28,7 @@
           <%% if @saved_count > 0: %>
             <ul>
               <%% for map in @maps: %>
-                <li>
+                <li class='saved-map-list-item <%%= "preview" if @isPreviewed(map.id) %>  '>
                   <label for="map_<%%= map.id %>">
                     <input name="map_<%%= map.id %>" type="checkbox" value="<%%= map.id %>" 
                       <%% if @isSelected(map.id): %>  
@@ -37,6 +37,7 @@
                       <%% end %>
                     />
                     <a class='map-link' href='#<%%= map.url %>'><%%= map.getName() %></a>
+                    <div id="map-region-<%%= map.id %>" class="saved-map-list-item-map"></div>
                   </label>
                 </li>
               <%% end %>
