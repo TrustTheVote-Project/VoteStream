@@ -54,10 +54,11 @@
         PrecinctColors = App.module('Entities').PrecinctColors
         colors = new PrecinctColors
         si = App.request 'entities:scoreboardInfo'
-        colors.fetchForResult(@model, @region, si.get('advanced')).done () =>
+        colors.fetchForResult(@model, @region, si.get('advanced')).done ((si, colors) =>
           @mapRegion = new Marionette.Region
             el: @ui.mapContainer
 
+              
           @mapViewInstance = new App.ScoreboardsApp.Show.MapView
             zoomLevel: 12
             hideControls:     true
@@ -65,8 +66,12 @@
             noZoom:           false
             noPanning:        false
             infoWindow:       'simple'
-            staticColors:     colors
-          @mapRegion.show  @mapViewInstance
+            precinctColors:     colors
+            precinctResults: si.get 'precinctResults'
+            precincts: App.request 'entities:precincts'
+            coloringType: si.get('coloringType')
+            
+          @mapRegion.show  @mapViewInstance).bind(this, si, colors)
     
 
   class ContestResultView extends BaseResultView
