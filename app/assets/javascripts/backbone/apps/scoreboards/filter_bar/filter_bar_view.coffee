@@ -22,7 +22,10 @@
       'click #js-advanced-filters': 'viewAdvancedFilters'
       'click #js-back-to-advanced-filters': 'viewAdvancedFilters'
       'click #js-view-metadata': (e) -> App.request('entities:scoreboardUrl').setView('metadata')
-      'click .map-save-button': (e) -> @showSaveAs()
+      'click .map-save-button': (e) -> 
+        e.preventDefault();
+        @showSaveAs()
+        return false;
 
     modelEvents:
       'change:channelEarly': 'showChannels'
@@ -56,7 +59,7 @@
     showSaveAs: ->
       url = @scoreboardUrl.path()
       @saveAsRegion.show new SaveAsView
-        name: 'New Map'
+        name: 'Save This Map'
         url: url
 
     viewAdvancedFilters: (e) ->

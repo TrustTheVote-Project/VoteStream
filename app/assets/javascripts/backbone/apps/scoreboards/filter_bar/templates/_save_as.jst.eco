@@ -6,7 +6,11 @@
         <h4 class="modal-title" id="save-map-label">Save Map View</h4>
       </div>
       <div class="modal-body">
-        Name: <input name="saved-map-name" type="text" value="<%= @mapName %>"/>
+        <label for="saved-map-name">Name:</label>
+        <input name="saved-map-name" type="text" value="<%= @mapName %>"/>
+        <p>
+          Provide a name for this saved map. You will be able to view this map and compare it to other saved maps when you view your saved maps.
+        </p>
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
