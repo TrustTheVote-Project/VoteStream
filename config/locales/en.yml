@@ -7,7 +7,6 @@ en:
     footer: 'TrustTheVote Project, powered by Open Source Election Technology Foundation'
 
   scoreboard:
-    title: VoteStream
     live: Live
     tweet: 'Latest election results at:'
 

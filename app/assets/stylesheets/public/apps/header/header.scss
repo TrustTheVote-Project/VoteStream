@@ -22,16 +22,25 @@
   .election-locality {
     font-size: 27px;
     font-weight: 800;
+    
+    .vs-logo {
+      span:first-child {
+        color: $oset-blue;
+      }
+      span:last-child {
+        color: $oset-dark-gray;
+      }
+    }
 
     .live {
-      background: #3fa9f5;
+      background: $ttv-blue;
       color: white;
       padding: 4px 10px;
       font-size: 14px;
       text-transform: uppercase;
       letter-spacing: 0.05em;
       display: inline-block;
-      vertical-align: top;
+      vertical-align: middle;
       margin-top: -3px;
     }
   }
@@ -71,5 +80,6 @@
   .ttv-logo {
     display: inline-block;
     margin-left: 20px;
+    width: 57px;
   }
 }
