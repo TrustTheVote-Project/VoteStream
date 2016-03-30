@@ -229,7 +229,6 @@
         @ui.showMoreBtn.show()
 
       if !@options.simpleVersion
-        console.log @ui.title
         @ui.title.removeClass('hide')
 
     events:

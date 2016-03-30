@@ -7,7 +7,7 @@ InfoBubble.prototype.panToView = ->
 
   anchorHeight = @getAnchorHeight_()
   height       = @bubble_.offsetHeight + anchorHeight
-  gMap          = @get('gMap')
+  gMap         = @get('gMap')
   mapDiv       = map.getDiv()
   mapHeight    = mapDiv.offsetHeight
   latLng       = @getPosition()
@@ -61,7 +61,6 @@ InfoBubble.prototype.panToView = ->
       undefined
 
     onShow: ->
-      @initMap()
       @renderPrecincts()
 
     onClose: ->
@@ -226,8 +225,15 @@ InfoBubble.prototype.panToView = ->
 
       # generate participation shades
       pc = '<%= AppConfig['map_color']['colors']['participation'] %>'
-      for shade in [ 0, 1, 2, 3, 4 ]
+      for shade in [ 0, 1, 2, 3, 4, 5 ]
         @generateColor 'i', 'p', pc, shade, 1 - shade * 0.2
+      # @generateColor 'i', 'p', pc, 0, 1
+      # @generateColor 'i', 'p', pc, 1, .8
+      # @generateColor 'i', 'p', pc, 2, .6
+      # @generateColor 'i', 'p', pc, 3, .4
+      # @generateColor 'i', 'p', pc, 4, .2
+      # @generateColor 'i', 'p', pc, 5, 0
+      
 
       undefined
 
@@ -360,6 +366,7 @@ InfoBubble.prototype.panToView = ->
 
     renderPrecincts: ->
       App.execute 'when:fetched', @precincts, =>
+        @initMap()
         @removePreviousPolygons()
 
         precincts = @precinctResults.get 'precincts'

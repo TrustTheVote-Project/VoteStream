@@ -63,6 +63,11 @@
           
           
           refcon:           refcon
+          dataTypeLabel:    ->
+            if @coloringType == 'participation'
+              return "Participation"
+            else
+              return "Results"
           refconLabel:      ->
             if App.request('entities:scoreboardUrl').advancedView()
               af = App.request 'entities:advancedFilter'
