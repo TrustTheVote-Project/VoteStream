@@ -202,7 +202,7 @@
 
     onShow: ->
       if !@options.simpleVersion
-        @ui.title.show()
+        @ui.title.removeClass('hide')
 
   class Show.ContestSummaryView extends Marionette.CompositeView
     template: 'scoreboards/show/_contest_summary'
@@ -229,7 +229,8 @@
         @ui.showMoreBtn.show()
 
       if !@options.simpleVersion
-        @ui.title.show()
+        console.log @ui.title
+        @ui.title.removeClass('hide')
 
     events:
       'click #js-show-more': (e) ->

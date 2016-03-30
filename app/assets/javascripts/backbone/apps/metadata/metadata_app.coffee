@@ -10,6 +10,6 @@
     show: () ->
       MetadataApp.Show.Controller.show()
 
-  App.addInitializer ->
+  App.on 'dataready', ->
     new MetadataApp.Router
       controller: API

@@ -7,11 +7,11 @@ InfoBubble.prototype.panToView = ->
 
   anchorHeight = @getAnchorHeight_()
   height       = @bubble_.offsetHeight + anchorHeight
-  map          = @get('map')
+  gMap          = @get('gMap')
   mapDiv       = map.getDiv()
   mapHeight    = mapDiv.offsetHeight
   latLng       = @getPosition()
-  centerPos    = projection.fromLatLngToContainerPixel(map.getCenter())
+  centerPos    = projection.fromLatLngToContainerPixel(gMap.getCenter())
   pos          = projection.fromLatLngToContainerPixel(latLng)
 
   padding      = 20 # 20 pixels padding around bubble
@@ -19,7 +19,7 @@ InfoBubble.prototype.panToView = ->
 
   if yDelta > 0
     centerPos.y -= yDelta
-    map.panTo(projection.fromContainerPixelToLatLng(centerPos))
+    gMap.panTo(projection.fromContainerPixelToLatLng(centerPos))
 
 
 @App.module "ScoreboardsApp.Show", (Show, App, Backbone, Marionette, $, _) ->
@@ -68,8 +68,9 @@ InfoBubble.prototype.panToView = ->
       @closeInfoWindow()
       @removePreviousPolygons()
       @precinctColors.off 'sync', @updateColors, @
-      delete @map
-
+      delete @gMap
+      @initMap
+      
       # Looks like everything initialized in #initialize is reused,
       # so can't delete it here
       #delete @polygons
@@ -116,7 +117,7 @@ InfoBubble.prototype.panToView = ->
       if @options.noPanning
         mapOptions.draggable = false
 
-      @map = new google.maps.Map @el, mapOptions
+      @gMap = new google.maps.Map @el, mapOptions
 
       style = [{
           featureType: 'all'
@@ -136,11 +137,11 @@ InfoBubble.prototype.panToView = ->
         }
 
       styledMapType = new google.maps.StyledMapType style,
-        map:  @map
+        map:  @gMap
         name: 'Styled Map'
 
-      @map.mapTypes.set 'map-style', styledMapType
-      @map.setMapTypeId 'map-style'
+      @gMap.mapTypes.set 'map-style', styledMapType
+      @gMap.setMapTypeId 'map-style'
 
     pointFromPair: (pair) ->
       coords = pair
@@ -269,7 +270,7 @@ InfoBubble.prototype.panToView = ->
             window.infoBubble = ib = new InfoBubble
               content: html
               position: e.latLng
-              map: mapView.map
+              gMap: mapView.gMap
               padding: 0
               borderRadius: 0
               hideCloseButton: true
@@ -401,6 +402,6 @@ InfoBubble.prototype.panToView = ->
             google.maps.event.addListener poly, 'click', @onPolygonClick
 
           @polygons.push poly
-          poly.setMap @map
+          poly.setMap @gMap
 
-        @map.fitBounds bounds
+        @gMap.fitBounds bounds

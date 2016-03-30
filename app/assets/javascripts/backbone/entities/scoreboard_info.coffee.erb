@@ -26,6 +26,18 @@
   API =
     getScoreboardInfo: ->
       unless Entities.scoreboardInfo?
+        refs = Entities.refcons
+        refcon = null
+        if refs.get("federal").length > 0
+          refcon = App.request('entities:refcon:all-Federal') 
+        else if refs.get("state").length > 0
+          refcon = App.request('entities:refcon:all-State')
+        else if refs.get("local").length > 0
+          refcon = App.request('entities:refcon:all-MCD')
+        else if refs.get("other").length > 0
+          refcon = App.request('entities:refcon:all-Other')
+        
+        
         Entities.scoreboardInfo = window.sb = sb = new Entities.ScoreboardInfo
           localityId:       gon.locality_id
           localityName:     gon.locality_name
@@ -50,7 +62,7 @@
           npVotes:                  0
           
           
-          refcon:           App.request('entities:refcon:all-Federal')
+          refcon:           refcon
           refconLabel:      ->
             if App.request('entities:scoreboardUrl').advancedView()
               af = App.request 'entities:advancedFilter'

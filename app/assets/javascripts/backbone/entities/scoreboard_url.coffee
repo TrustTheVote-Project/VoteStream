@@ -97,6 +97,6 @@
 
   App.reqres.setHandler 'entities:scoreboardUrl', -> API.getScoreboardUrl()
 
-  App.on 'initialize:after', ->
+  App.on 'dataready', ->
     su = App.request 'entities:scoreboardUrl'
     su.enable()

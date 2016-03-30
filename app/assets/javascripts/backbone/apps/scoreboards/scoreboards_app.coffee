@@ -162,6 +162,6 @@
       ScoreboardsApp.List.Controller.show()
 
 
-  App.addInitializer ->
+  App.on 'dataready', ->
     new ScoreboardsApp.Router
       controller: API

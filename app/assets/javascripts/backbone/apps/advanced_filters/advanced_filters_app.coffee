@@ -22,6 +22,6 @@
           af.fromParams(params)
           #App.vent.trigger 'advancedFilterChange'
 
-  App.addInitializer ->
+  AdvancedFiltersApp.addInitializer ->
     new AdvancedFiltersApp.Router
       controller: API
