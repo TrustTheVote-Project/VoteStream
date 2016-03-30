@@ -555,15 +555,15 @@ class RefConResults
   end
 
   def participation_shade(v)
-    if v < 5
+    if v < 10
       5
-    elsif v < 15
+    elsif v < 25
       4
-    elsif v < 30
+    elsif v < 40
       3
-    elsif v < 45
+    elsif v < 55
       2
-    elsif v < 60
+    elsif v < 70
       1
     else
       0
