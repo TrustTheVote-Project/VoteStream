@@ -358,6 +358,12 @@
         'map': [
           radiobox('Show Results', 'coloringType', 'results')
           radiobox('Show Participation', 'coloringType', 'participation')
+          radiobox('Show Party Registration', 'coloringType', 'partyRegistration')
+          radiobox('Show Gender', 'coloringType', 'gender')
+          radiobox('Show Race/Ethnicity', 'coloringType', 'race')
+          radiobox('Show Age', 'coloringType', 'age')
+          radiobox('Show Characteristics', 'coloringType', 'characteristics')
+          radiobox('Show ZIP', 'coloringType', 'zip')
           radiobox('Show Party Registration', 'map_type', null)
           radiobox('Show Demographics', 'map_type', null)
         ],
