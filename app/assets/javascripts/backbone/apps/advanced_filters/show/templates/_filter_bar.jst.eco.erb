@@ -11,14 +11,36 @@
     <div class='col-xs-5'>
       <label id="percent-reporting"><%%= gon.percentReporting %>&nbsp;&nbsp;</label>
     </div>
-    <div class="col-xs-12 col-sm-7">
-      <div href="#view-back" id="view-options">
-        <a href="#view-as-map" <%%= 'disabled' if !@filtersSelected() %> onclick="return false;" id="js-view-as-map" class='btn btn-primary'>View as Map</a>
-        <a href="#view-as-list" <%%= 'disabled' if !@filtersSelected() %> onclick="return false;" id="js-view-as-list" class='btn btn-primary'>View as List</a>
+  </div>
+  <div class="row ">
+    <div class="col-xs-3 col-md-2">
+      <label>View</label>
+      <div class="advanced-actions">
+        <a href="#view-as-map" title="View as Map" data-toggle="tooltip" <%%= 'disabled' if !@filtersSelected() %> onclick="return false;" id="js-view-as-map" class='btn btn-primary'>Map</a>
+        <a href="#view-as-list" title="View as List" data-toggle="tooltip" <%%= 'disabled' if !@filtersSelected() %> onclick="return false;" id="js-view-as-list" class='btn btn-primary'>List</a>
       </div>   
     </div>
+    <div class="col-xs-9 col-md-5">
+      <label>Download</label>
+      <div class="advanced-actions">
+        <a href="" title="Save as NIST Election Results Standard Format" data-toggle="tooltip" id="js-save-as-nist-xml" class="btn btn-primary" download="<%= @filename %>-nist.xml">NIST XML</a>
+        <a href="" title="Save as CSV" data-toggle="tooltip" id="js-save-as-csv" class="btn btn-primary" download="<%= @filename %>.csv">CSV</a>
+        <!-- <a href="" title="Save as PDF" data-toggle="tooltip" id="js-save-as-pdf" class="btn btn-primary" download="<%= @filename %>.pdf">PDF</a> //-->
+        <a href="" title="Save as JSON" data-toggle="tooltip" id="js-save-as-json" class="btn btn-primary" download="<%= @filename %>.json">JSON</a>
+        <a href="" title="Save as Voting Information Project XML Format" data-toggle="tooltip" id="js-save-as-vip-xml" class="btn btn-primary" download="<%= @filename %>-vip.xml">VIP XML</a>
+      </div>
+    </div>
+    <div class='clearfix visible-xs-block visible-sm-block' style="height: 10px; clear: both;"></div>
+    <div class="col-xs-6 col-md-2 saved-maps">
+      <label>Compare</label>
+      <div class="advanced-actions">
+        <a href="" title="Add this advanced view to Saved Maps" data-toggle="tooltip" id="js-add-advanced-view-to-maps" class="btn btn-primary">Add</a>
+        <a href="#map-list" title="View Your Saved Maps" data-toggle="tooltip" id="js-view-maps" class="btn btn-primary" >View</a>
+      </div>      
+    </div>
+    
 
-    <div class="col-xs-12 col-sm-5">
+    <div class="col-xs-6 col-md-3">
       <a href="#view-feed" id="js-view-feed"><%= I18n.t "scoreboard.advanced_filters.view_feed" %></a>
       <a href="#metadata"  id="js-election-metadata">View Election Metadata &raquo;</a>
     

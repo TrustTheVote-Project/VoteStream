@@ -31,3 +31,7 @@
         'electionUID': gon.election_uid
       }
       window.open "/feed-nist.xml?#{$.param(data)}"
+
+    onRender: ->
+      $('[data-toggle="tooltip"]', @$el).tooltip();
+      

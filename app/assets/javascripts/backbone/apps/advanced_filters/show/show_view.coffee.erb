@@ -16,7 +16,6 @@
       'click #js-save-as-nist-xml': (e) -> @saveAs(e, 'nist')
       'click #js-save-as-vip-xml': (e) -> @saveAs(e, 'xml')
       'click #js-add-advanced-view-to-maps': (e) -> @addMap(e)
-      'click #js-view-maps': (e) -> false
       'click #js-clear-maps': (e) -> @clearMaps(e)
 
     serializeData: ->
@@ -28,7 +27,6 @@
       @filterBarRegion.show new Show.FilterBarView()
       @contestsRegion.show new Show.ContestsSelectorView()
       @locationsRegion.show new Show.LocationsSelectorView()
-      $('[data-toggle="tooltip"]', @$el).tooltip();
       
       
     addMap: (e) ->

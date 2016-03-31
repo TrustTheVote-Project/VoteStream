@@ -9,14 +9,13 @@ $selector-stats-fg: #B4B3B4;
 
 #advanced-filters-show {
   #filter-bar {
-
     h3 {
       margin: 0;
       width: auto;
       display: inline;
     }
 
-    #view-options {
+    .advanced-actions {
       display: inline-block;
       .btn {
         background: #4AA5D6;
