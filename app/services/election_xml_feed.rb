@@ -210,7 +210,10 @@ class ElectionXmlFeed < ElectionFeed
             @xml.total_votes       cr.total_votes
             @xml.total_valid_votes cr.total_valid_votes
 
-            cr.candidate_results.each do |r|
+            cand_results = cr.candidate_results
+            cand_results = cand_results.where(ballot_type: @vmids) unless @vmids.blank?
+
+            cand_results.each do |r|
               @xml.ballot_line_result(id: r.uid, certification: cr.certification) do
                 @xml.jurisdiction_id puid
                 @xml.candidate_id    r.candidate.uid
@@ -229,7 +232,10 @@ class ElectionXmlFeed < ElectionFeed
               @xml.total_votes       cr.total_votes
               @xml.total_valid_votes cr.total_valid_votes
 
-              cr.ballot_response_results.each do |r|
+              ballot_results = cr.ballot_response_results
+              ballot_results = ballot_results.where(ballot_type: @vmids) unless @vmids.blank?
+
+              ballot_results.each do |r|
                 @xml.ballot_line_result(id: r.uid, certification: cr.certification) do
                   @xml.jurisdiction_id puid
                   @xml.ballot_response_id r.ballot_response.uid

@@ -8,6 +8,7 @@
       filterBarRegion: '#filter-bar-region'
       contestsRegion:  '#contests-region'
       locationsRegion: '#locations-region'
+      votingMethodsRegion: '#voting-methods-region'
 
     events:
       'click #js-save-as-csv': (e) -> @saveAs(e, 'csv')
@@ -23,6 +24,7 @@
       @filterBarRegion.show new Show.FilterBarView()
       @contestsRegion.show new Show.ContestsSelectorView()
       @locationsRegion.show new Show.LocationsSelectorView()
+      @votingMethodsRegion.show new Show.VotingMethodsSelectorView()
 
     saveAs: (e, format) ->
       e.preventDefault()

@@ -6,6 +6,7 @@ class ElectionFeed
     @dids = filter[:did].blank? ? [] : filter[:did].split('-').map(&:to_i)
     @dids.map { |did| @pids += District.find(did).precinct_ids }
     @pids.uniq!
+    @vmids = filter[:vmid].blank? ? [] : filter[:vmid].split('-')
 
     @e = election
     localities = election.state.localities
@@ -14,7 +15,8 @@ class ElectionFeed
 
   def contest_query(locality)
     query = locality.contests.joins(:district).select("contests.id, contests.uid, office, sort_order, districts.uid duid")
-    return query.where(contests: { id: @cids }) unless @cids.blank?
+    query.where(contests: { id: @cids }) unless @cids.blank?
+    query
   end
 
   def referendum_query(locality)
