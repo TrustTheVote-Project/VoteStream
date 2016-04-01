@@ -8,4 +8,6 @@
 
     onViewFeed: (e) ->
       e.preventDefault()
-      window.open "/resources/v1/election_feed.xml?electionUID=#{gon.election_uid}"
+      # Encode URI to properly handle whitespace and other special characters in election_uid
+      url = "/resources/v1/election_feed.xml?electionUID=#{gon.election_uid}"
+      window.open encodeURI(url)
