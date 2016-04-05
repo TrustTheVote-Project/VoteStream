@@ -5,12 +5,14 @@
       sc = @get 'selectedContests'
       sd = @get 'selectedDistricts'
       sp = @get 'selectedPrecincts'
+      sm = @get 'selectedVotingMethods'
 
       return {
         electionUID: gon.election_uid
         cid: sc.pluck('id').join('-')
         did: sd.pluck('id').join('-')
         pid: sp.pluck('id').join('-')
+        vmid: sm.pluck('id').join('-')
       }
       
     breadcrumbsContestName: ->
@@ -105,6 +107,8 @@
           selectedContests: new Backbone.Collection
           selectedDistricts: new Backbone.Collection
           selectedPrecincts: new Backbone.Collection
+          # Default to all methods enabled
+          selectedVotingMethods: App.request 'entities:votingmethods'
 
       Entities.advancedFilter
 

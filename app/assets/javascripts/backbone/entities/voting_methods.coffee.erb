@@ -1,0 +1,27 @@
+@App.module "Entities", (Entities, App, Backbone, Marionette, $, _) ->
+
+  class Entities.VotingMethod extends Backbone.Model
+
+  API =
+    getVotingMethods: ->
+      new Backbone.Collection([
+        new Entities.VotingMethod({
+            id: 'early',
+            name: 'Early',
+            scoreboardKey: 'channelEarly'
+        }),
+        new Entities.VotingMethod({
+          id: 'sameday',
+          name: 'Same-day',
+          scoreboardKey: 'channelElectionday'
+        }),
+        new Entities.VotingMethod({
+          id: 'absentee',
+          name: 'Absentee',
+          scoreboardKey: 'channelAbsentee'
+        })
+      ])
+
+  App.reqres.setHandler 'entities:votingmethods', -> API.getVotingMethods()
+
+    

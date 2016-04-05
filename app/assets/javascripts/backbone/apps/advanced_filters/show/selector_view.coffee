@@ -57,7 +57,7 @@
       
     serializeData: ->
       data = {}
-      data.count = @$el.parents(".selector-view").find(".selected").length
+      data.count = @options.selection.length
       data
 
   class OptionView extends Marionette.ItemView

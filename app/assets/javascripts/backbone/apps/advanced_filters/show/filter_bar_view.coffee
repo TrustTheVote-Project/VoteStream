@@ -30,7 +30,9 @@
       data = {
         'electionUID': gon.election_uid
       }
-      window.open "/feed-nist.xml?#{$.param(data)}"
+      # Encode URI to properly handle whitespace and other special characters in election_uid
+      url = "/feed-nist.xml?#{$.param(data)}"
+      window.open encodeURI(url)
 
     onRender: ->
       $('[data-toggle="tooltip"]', @$el).tooltip();

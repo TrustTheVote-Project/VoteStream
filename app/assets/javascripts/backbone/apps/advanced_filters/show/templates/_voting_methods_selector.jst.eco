@@ -1,0 +1,9 @@
+<div class="box">
+  <div class="box-header">
+    Voting Methods
+  </div>
+
+  <div class="box-content">
+    <div id="voting-methods-selector-region"></div>
+  </div>
+</div>
