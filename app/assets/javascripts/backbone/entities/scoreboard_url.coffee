@@ -56,10 +56,13 @@
       region = @si.get 'region'
       refcon = @si.get 'refcon'
 
-      # refcon
-      ctype = refcon.get('type')
+      ctype = 'all'
+      cid = 'federal'
+      if refcon
+        ctype = refcon.get('type')        
+        cid = refcon.get('id')
       ctype = 'a' if ctype == 'all'
-      cid = refcon.get('id')
+      
       if region? or cid != 'federal'
         parts.push ctype + '-' + cid
 

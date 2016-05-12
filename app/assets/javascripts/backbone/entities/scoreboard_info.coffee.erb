@@ -73,11 +73,16 @@
               af = App.request 'entities:advancedFilter'
               af.breadcrumbsContestName()              
             else
-              type = @refcon.get('type')
-              if type == 'all'
-                id = @refcon.get('id')
-                gon.categories[id]
-              @refcon.get('name')
+              type = 'all'
+              if @refcon
+                type = @refcon.get('type')
+                if type == 'all'
+                  id = @refcon.get('id')
+                  gon.categories[id]
+              if @refcon
+                @refcon.get('name')
+              else
+                ''
 
           region:            null
           regionLabel:       -> 
