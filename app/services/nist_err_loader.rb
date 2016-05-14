@@ -724,14 +724,16 @@ class NistErrLoader < BaseLoader
                 mismatches[:districts] ||= []
                 mismatches[:districts] << c.contest_gp_scope
               end
-              c.ballot_selections.each_with_index do |sel, i|
-                response = BallotResponse.new(uid: sel.object_id,
-                  name: (sel.selection && sel.selection.language_strings.any? ? sel.selection.language_strings.first.text : ''), 
-                  sort_order: i+1)
+              if c.ballot_selections
+                c.ballot_selections.each_with_index do |sel, i|
+                  response = BallotResponse.new(uid: sel.object_id,
+                    name: (sel.selection && sel.selection.language_strings.any? ? sel.selection.language_strings.first.text : ''), 
+                    sort_order: i+1)
 
-                ref_responses[ref.uid] ||= []
-                ref_responses[ref.uid] << response
+                  ref_responses[ref.uid] ||= []
+                  ref_responses[ref.uid] << response
 
+                end
               end
               locality_referendums[ref.uid] = ref
             elsif c.is_a?(Vedaspace::PartyContest)
