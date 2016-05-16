@@ -677,7 +677,7 @@ class NistErrLoader < BaseLoader
 
               contest.district = locality_districts[c.electoral_district_identifier]
               if contest.district.nil?
-                raise c.electoral_district_identifier.to_s
+                raise c.electoral_district_identifier.to_s + ' - ' + c.object_id
                 mismatches[:districts] ||= []
                 mismatches[:districts] << c.contest_gp_scope
               end

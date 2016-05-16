@@ -32,7 +32,7 @@ class ColorScheme
         # if candidate.color
         #   return candidate.color
         # else
-        c = "other#{index+1}"
+        c = "other#{index.to_i+1}"
         # end
       end
     end
