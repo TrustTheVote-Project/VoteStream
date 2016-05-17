@@ -457,7 +457,7 @@ class NistErrLoader < BaseLoader
   def load(locality_id = nil)
     er = Vedaspace::Parser.parse_ved_file(@xml_source)
     Election.transaction do
-      election = Election.new(uid: er_uid = er.issuer + " " + (er.election ? er.election.start_date : nil).to_s)
+      election = Election.new(uid: er_uid = er.issuer.to_s + " " + (er.election ? er.election.start_date : nil).to_s)
       # Election.where(uid: election.uid).destroy_all
 
       # TODO: shouldn't be required
