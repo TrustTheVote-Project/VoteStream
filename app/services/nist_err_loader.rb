@@ -189,25 +189,31 @@ class NistErrLoader < BaseLoader
 
 
               # at this point all ContestResults should be built
-              # What is the new equivalent to content_total_counts_by_qp_unit?
-              # c.contest_total_counts_by_gp_unit.each do |contest_total|
-              #   d_uid = contest_total.gp_unit #fix_district_uid(vc.gp_unit)
-              #   precinct = locality_precincts[d_uid]
-              #
-              #   if precinct
-              #     precinct = precinct.precinct || precinct
-              #     d_uid = precinct.uid
-              #     cr = precinct_results[d_uid]
-              #     if cr.nil?
-              #       raise "No contest result for contest total count #{contest_total}"
-              #     end
-              #     cr.total_votes += contest_total.ballots_cast
-              #     cr.undervotes += contest_total.undervotes
-              #     cr.overvotes += contest_total.overvotes
-              #   else
-              #     raise "No pct for contest total count #{contest_total}"
-              #   end
-              # end
+              # <SummaryCounts>
+              #   <GpUnitId>vspub-reporting-unit-1</GpUnitId>
+              #   <Type>total</Type>
+              #   <BallotsCast>2061</BallotsCast>
+              #   <Overvotes>0</Overvotes>
+              #   <Undervotes>757</Undervotes>
+              # </SummaryCounts>
+              c.summary_counts.each do |sc|
+                d_uid = sc.gp_unit_identifier #fix_district_uid(vc.gp_unit)
+                precinct = locality_precincts[d_uid]
+
+                if precinct
+                  precinct = precinct.precinct || precinct
+                  d_uid = precinct.uid
+                  cr = precinct_results[d_uid]
+                  if cr.nil?
+                    raise "No contest result for contest total count #{contest_total}"
+                  end
+                  cr.total_votes += sc.ballots_cast
+                  cr.undervotes += sc.undervotes
+                  cr.overvotes += sc.overvotes
+                else
+                  raise "No pct for contest summary count #{sc}"
+                end
+              end
 
 
               # Overall winner

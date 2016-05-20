@@ -48,7 +48,7 @@ gem 'bootstrap3-rails'
 # gem "vssc-ruby", :git=>"https://github.com/amekelburg/vssc_ruby.git"
 
 # Use VEDaSpace to load NIST ERR files
-gem "vedaspace", "1.2", :git=>"https://github.com/TrustTheVote-Project/VEDaSpace", :branch=>'master'
+gem "vedaspace", "1.3.8", :git=>"https://github.com/TrustTheVote-Project/VEDaSpace", :branch=>'master'
 
 
 group :doc do
