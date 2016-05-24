@@ -32,8 +32,7 @@
         e.stopPropagation()
       checkbox = this.$el.find('input[type=checkbox]')
       value = checkbox.prop('checked')
-      App.vent.trigger 'changedInfo', @key, value
-      @scoreboardInfo.set @key, value
+      App.vent.trigger 'setSbData', @key, value
   
     events:
       'click [type="checkbox"]': 'filterToggled'

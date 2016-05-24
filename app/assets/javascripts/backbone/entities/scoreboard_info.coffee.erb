@@ -5,7 +5,8 @@
       @set('dataTypeLabel', @dataTypeLabel)
       @set('refconLabel', @refconLabel)
       @set('regionLabel', @regionLabel)
-      
+      App.vent.on 'setSbData', (attribute, value) =>
+        @set attribute, value
     
     
     reloadResults: (options = {}) ->
@@ -62,9 +63,7 @@
       else 
         "<%= I18n.t 'scoreboard.header.right_menu.tabs.all' %>" 
       
-    App.vent.on 'changeInfo', (attribute, value) ->
-      console.log(attribute, value)
-      #@set attribute, value
+    
 
   API =
     getScoreboardInfo: ->
@@ -142,15 +141,6 @@
         App.vent.on 'refcon:selected', (refcon) ->
           sb.set 'advanced', null
           sb.set 'refcon', refcon
-
-        App.vent.on 'channelElectionday:selected', (channelElectionday) ->
-          sb.set 'channelElectionday', channelElectionday
-
-        App.vent.on 'channelEarly:selected', (channelEarly) ->
-          sb.set 'channelEarly', channelEarly
-
-        App.vent.on 'channelAbsentee:selected', (channelAbsentee) ->
-          sb.set 'channelAbsentee', channelAbsentee
 
         App.vent.on 'coloringType:selected', (coloringType) ->
           sb.set 'coloringType', coloringType
