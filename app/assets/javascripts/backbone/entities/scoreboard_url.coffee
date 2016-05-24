@@ -5,7 +5,8 @@
       @si = App.request 'entities:scoreboardInfo'
       @view = null
       @enabled = false
-      @si.on 'change:region change:refcon change:channelEarly change:channelElectionday change:channelAbsentee change:coloringType', @updatePath
+      @si.on 'change:region change:refcon change:channelEarly change:channelElectionday change:channelAbsentee change:coloringType', =>
+        @updatePath(false)
       @si.on 'change:advanced', =>
         #@updatePath()
         params = @si.get 'advanced'

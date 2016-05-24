@@ -86,7 +86,7 @@
     
   setParams = (ctype, cid, rtype, rid, params) ->
     waitingFor = []
-    
+    # TODO: all of these should be pre-loaded before appstart so don't need to wait
     if ctype == 'c' or ctype == 'r'
       waitingFor.push App.request('entities:refcons')
     if rtype == 'd'
@@ -96,6 +96,7 @@
 
     App.execute 'when:fetched', waitingFor, ->
       filters = ScoreboardsApp.Helpers.filtersFromParams(ctype, cid, rtype, rid, params)
+      # TODO: ScoreboardUrl should listen to filters:set
       App.vent.trigger 'filters:set', filters
 
   API =
@@ -111,6 +112,7 @@
       
       
     map: (ctype, cid, region, params) ->
+      console.log('hit the controller')
       if region and region.match('=')
         params = region
       else if region

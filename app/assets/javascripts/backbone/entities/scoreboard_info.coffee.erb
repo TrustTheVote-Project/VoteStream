@@ -7,15 +7,100 @@
       @set('regionLabel', @regionLabel)
       App.vent.on 'setSbData', (attribute, value) =>
         @set attribute, value
+        @reloadResults()
+        
+      # Params => filters => entity queries
+      # UI changes => [Params w/out trigger, filters => entity queries]
+      # ScoreboardUrl should listen to this which should pass through to here
+      App.vent.on 'filters:set', (options = {}) =>
+        console.log('filters set', options)
+        @reloadResults options
+          #refcon: options.refcon
+
+      App.vent.on 'region:selected', (region) =>
+        @reloadResults({
+          advanced: null,
+          region: region
+        })
+        
+      App.vent.on 'refcon:selected', (refcon) =>
+        @reloadResults({
+          advanced: null,
+          refcon: refcon
+        })
+      
+      App.vent.on 'advanced:selected', (advanced) =>
+        @reloadResults({
+          advanced: advanced
+        })
+
+      App.vent.on 'result:selected', (result) =>
+        @set 'result', result
+      
+      
+      
+      @get('results').on 'sync', =>
+        result = @pickResult()
+        console.log(@get('result'), result)
+        @set 'result', result
+      
+      @on 'change:result', =>
+        @changeResult()
+        
+      @get('precinctResults').on 'reset', =>
+        @computeStats()
+      
+    computeStats: ->
+      precinctResults = @get('precinctResults')
+      console.log('compute stats: ', precinctResults)
+      precincts = precinctResults.get('precincts')
+      @set 'precinctsReportingCount', precincts.length
+      @set 'totalRegisteredVoters', precinctResults.get('voters')
+      @set 'totalBallotsCast', precinctResults.get('ballots')
+      @set 'totalValidVotes', precinctResults.get('votes')
+      if precinctResults.get('channels')
+        @set 'electionDayVotes', precinctResults.get('channels')['election-day']
+        @set 'earlyVotes', precinctResults.get('channels')['early']
+        @set 'absenteeVotes', precinctResults.get('channels')['absentee']
+        @set 'npVotes', @get('totalRegisteredVoters') - @get('totalBallotsCast')
+      
+    changeResult: ->
+      result  = @get 'result'
+      region  = @get 'region'
+      advanced = @get 'advanced'
+      console.log('the result changed')
+      @set 'precinctsReportingCount', 0
+      @set 'totalRegisteredVoters', 0
+      @set 'totalBallotsCast', 0
+      @set 'totalValidVotes', 0
+      @set 'electionDayVotes', 0
+      @set 'earlyVotes', 0
+      @set 'absenteeVotes', 0
+      @set 'npVotes', 0
     
-    
+      # This should *always* be pre-fetched and not change.
+      #App.execute 'when:fetched', App.request('entities:precincts'), =>
+      colors  = @get 'precinctColors'
+      colors.fetchForResult result, region, advanced
+
+      results = @get 'precinctResults'
+      results.fetchForResult result, region, @extraOpts(), advanced
+        
+        
+        
     reloadResults: (options = {}) ->
       return if @noResultsReload
-      @preselectedRefconId = options.refcon?.id
+      # Set any options
+      for k,v of options
+        @set k, v
+        
+      @preselectedRefconId = options.result?.id
+      console.log(@preselectedRefconId)
       results = @get 'results'
       results.fetchForFilter @get('region'), @get('refcon'), this.extraOpts(), @get('advanced')
 
     pickResult: ->
+      console.log('picking a result')
       results = @get 'results'
       if @preselectedRefconId?
         result = results.get @preselectedRefconId
@@ -108,91 +193,6 @@
           advanced:          null
           percentageType:    'ballots' # Can be 'ballots' or 'voters'
           
-
-        App.vent.on 'filters:set', (options = {}) ->
-          su = App.request 'entities:scoreboardUrl'
-          su.disable()
-          sb.disableResultsReload()
-          if options.region?
-            App.vent.trigger 'region:selected', options.region
-          if options.refcon?
-            App.vent.trigger 'refcon:selected', options.refcon
-          if options.channelElectionday?
-            App.vent.trigger 'channelElectionday:selected', options.channelElectionday
-          if options.channelEarly?
-            App.vent.trigger 'channelEarly:selected', options.channelEarly
-          if options.channelAbsentee?
-            App.vent.trigger 'channelAbsentee:selected', options.channelAbsentee
-          if options.coloringType?
-            App.vent.trigger 'coloringType:selected', options.coloringType
-              
-          if options.advanced?
-            App.vent.trigger 'advanced:selected', options.advanced
-          sb.enableResultsReload()
-          su.enableAndUpdate()
-
-          sb.reloadResults
-            refcon: options.refcon
-
-        App.vent.on 'region:selected', (region) ->
-          sb.set 'advanced', null
-          sb.set 'region', region
-
-        App.vent.on 'refcon:selected', (refcon) ->
-          sb.set 'advanced', null
-          sb.set 'refcon', refcon
-
-        App.vent.on 'coloringType:selected', (coloringType) ->
-          sb.set 'coloringType', coloringType
-
-        App.vent.on 'advanced:selected', (advanced) ->
-          sb.set 'advanced', advanced
-
-        App.vent.on 'result:selected', (result) ->
-          sb.set 'result', result
-
-        sb.on 'change:region change:refcon change:channel', -> @reloadResults()
-        sb.on 'change:channelEarly change:channelElectionday change:channelAbsentee', (e) -> @reloadResults()
-
-        sb.get('precinctResults').on 'reset', ->
-          # compute stats
-          precinctResults = sb.get('precinctResults')
-          precincts = precinctResults.get('precincts')
-          sb.set 'precinctsReportingCount', precincts.length
-          sb.set 'totalRegisteredVoters', precinctResults.get('voters')
-          sb.set 'totalBallotsCast', precinctResults.get('ballots')
-          sb.set 'totalValidVotes', precinctResults.get('votes')
-          if precinctResults.get('channels')
-            sb.set 'electionDayVotes', precinctResults.get('channels')['election-day']
-            sb.set 'earlyVotes', precinctResults.get('channels')['early']
-            sb.set 'absenteeVotes', precinctResults.get('channels')['absentee']
-            sb.set 'npVotes', sb.get('totalRegisteredVoters') - sb.get('totalBallotsCast')
-            
-        sb.get('results').on 'reset', ->
-          result = sb.pickResult()
-          sb.set 'result', result
-
-        sb.on 'change:result', ->
-          result  = sb.get 'result'
-          region  = sb.get 'region'
-          advanced = sb.get 'advanced'
-
-          sb.set 'precinctsReportingCount', 0
-          sb.set 'totalRegisteredVoters', 0
-          sb.set 'totalBallotsCast', 0
-          sb.set 'totalValidVotes', 0
-          sb.set 'electionDayVotes', 0
-          sb.set 'earlyVotes', 0
-          sb.set 'absenteeVotes', 0
-          sb.set 'npVotes', 0
-        
-          App.execute 'when:fetched', App.request('entities:precincts'), =>
-            colors  = sb.get 'precinctColors'
-            colors.fetchForResult result, region, advanced
-
-            results = sb.get 'precinctResults'
-            results.fetchForResult result, region, sb.extraOpts(), advanced
-
       Entities.scoreboardInfo
 
   App.reqres.setHandler 'entities:scoreboardInfo', -> API.getScoreboardInfo()

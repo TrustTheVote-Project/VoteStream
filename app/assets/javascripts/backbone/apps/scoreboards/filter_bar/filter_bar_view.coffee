@@ -58,7 +58,7 @@
         
     showSaveAs: ->
       url = @scoreboardUrl.path()
-      @saveAsRegion.show new SaveAsView
+      @saveAsRegion.show new FilterBar.SaveAsView
         name: 'Save This Map'
         url: url
 
@@ -162,7 +162,7 @@
             collection: App.request 'entities:precincts'
           ), 0
 
-      @.breadcrumbsRegion.show new BreadcrumbsView
+      @.breadcrumbsRegion.show new FilterBar.BreadcrumbsView
         model: @scoreboardInfo
       @.viewSelectorRegion.show new ViewSelectorView
         model: @scoreboardInfo
@@ -172,6 +172,7 @@
       $("body").on "click", => @closePopovers()
 
 
+  
   class ContestSelectorRow extends Marionette.ItemView
     template: 'scoreboards/filter_bar/_contest_selector_row'
     tagName: 'li'
@@ -180,6 +181,7 @@
         e.preventDefault()
         App.vent.trigger 'refcon:selected', @model
 
+  
   class SelectorView extends Marionette.CompositeView
     template: 'scoreboards/filter_bar/_selector'
     className: 'btn-group full-btn-group'
@@ -214,6 +216,7 @@
 
   
 
+  
   class DistrictSelectorRow extends Marionette.ItemView
     template: 'scoreboards/filter_bar/_district_selector_row'
     tagName: 'li'
@@ -224,6 +227,7 @@
         region = null if @model.get('id') == null
         App.vent.trigger 'region:selected', region
 
+  
   class PrecinctSelectorRow extends Marionette.ItemView
     template: 'scoreboards/filter_bar/_precinct_selector_row'
     tagName: 'li'
@@ -234,23 +238,18 @@
         region = null if @model.get('id') == null
         App.vent.trigger 'region:selected', region
 
+  
   class SelectedRegionView extends Marionette.ItemView
     template: 'scoreboards/filter_bar/_selected_region'
     tagName: 'span'
     modelEvents:
       'change:region': 'render'
 
-  class BreadcrumbsView extends Marionette.ItemView
-    template: 'scoreboards/filter_bar/_breadcrumbs'
-    modelEvents:
-      'change:refcon change:region': 'render'
-      
-    initialize: ->
-      af = App.request 'entities:advancedFilter'
-      af.on 'changedAdvancedFilter', =>
-        @render()
+  
+
       
 
+  
   class ViewSelectorView extends Marionette.ItemView
     template: 'scoreboards/filter_bar/_view_selector'
 
@@ -267,6 +266,8 @@
         scoreboardUrl.setView(link.data('view'))
         # App.navigate link.data('view'), trigger: true
 
+  
+  
   radiobox = (title, property, value) ->
     if value
       { settingType: 'radio', title: title, property: property, value: value, enabled: true }
@@ -279,37 +280,11 @@
   valueCheckbox = (trueTitle, falseTitle, property, trueValue, falseValue) ->
     { settingType: 'valueCheckbox', trueTitle: trueTitle, falseTitle: falseTitle, property: property, trueValue: trueValue, falseValue: falseValue }
 
-  class SaveAsView extends Marionette.ItemView
-    template: 'scoreboards/filter_bar/_save_as'
-    #template: '#save-view-as'
-    
-    initialize: (options) ->
-      @saved_maps = App.request "entities:savedMaps"
-      @url = options.url
-      @mapName = options.name
-      
-    templateHelpers: ->
-      mapName: @mapName
-      
-    events:
-      'click .map-commit-save-button': (e) ->
-        @onSave()
-        
-    onShow: ->
-      $('#save-map-modal').on 'shown.bs.modal', (e) ->
-        $("#save-map-modal input[name='saved-map-name']").focus().select()         
-      
-      $('#save-map-modal').modal() 
-      
-      
-    onSave: ->
-      @mapName = $("#save-map-modal input[name='saved-map-name']").val()
-      @saved_maps.add_map(@url, @mapName) 
-      App.vent.trigger 'saveMapAs:saved'
-      $('#save-map-modal').modal('hide')
+  
       
         
 
+  
   class ViewSettingsDropdown extends Marionette.ItemView
     template: 'scoreboards/filter_bar/_view_settings'
     className: 'btn-group'
@@ -367,7 +342,8 @@
             else
               console.error('Unexpected checkbox type: ' + checkboxType) if console?
               return
-          @model.set propertyName, newValue
+          App.vent.trigger('setSbInfo', propertyName, newValue)
+          #@model.set propertyName, newValue
           @render();          
         , 0)
 

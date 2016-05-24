@@ -43,10 +43,13 @@
       res
 
   class Entities.ResultsCollection extends Backbone.Collection
+    initialize: ->
+      @set('filter', {})
+      
     model: Entities.Results
-
+    url: -> "/data/localities/#{App.localityId}/region_refcons"
     fetchForFilter: (region, refcon, extraOpts, advanced) ->
-      filter = locality_id: App.localityId
+      filter = {}
       if advanced and App.request('entities:scoreboardUrl').advancedView()
         # Process advanced filter query string to settings for getting results
         af = App.request('entities:advancedFilter')
@@ -70,12 +73,16 @@
             filter.referendum_id = id
 
         $.extend(filter, extraOpts)
+      console.log('fetch results', filter)
+      # We explicitly set the filter because some filter settings
+      # don't affect whether *this* entity changes - only the PrecinctResultData.fetchForResult changes due
+      # to being passed similar filter extraOpts values
+      @set('filter', filter)
       @fetch
         type: 'POST'
-        url:   '/data/region_refcons'
-        reset: true
         data:  filter
-
+        #reset: true
+        
   # --- Precinct results ---
 
   class PrecinctRowItem extends Backbone.Model
@@ -117,6 +124,7 @@
       @trigger 'reset'
 
     fetchForResult: (result, region, extraOpts, advanced) ->
+      console.log('fetch precinct result data', result)
       if !result?
         @parse {}
         @trigger 'reset'
