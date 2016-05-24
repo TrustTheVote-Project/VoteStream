@@ -46,15 +46,22 @@ class DataProcessor
   end
 
   def self.precincts_json(locality)
+    t = Time.now
     Rails.cache.fetch("locality:#{locality.id}:precincts") do
-      precincts = locality.precincts.where("geo IS NOT NULL").select("id, name, ST_AsGeoJSON(geo) json, registered_voters").order("name")
+      Rails.logger.info(Time.now - t)
+      precincts = locality.precincts.where("geo IS NOT NULL").select("id, name, ST_AsGeoJSON(geo) kml, registered_voters").order("name")
+      Rails.logger.info(Time.now - t)
       data = precincts.map do |p|
-        { id:      p.id,
-          name:    p.name,
-          kml:     JSON.parse(p.json),
-          voters:  p.registered_voters }
+        { "id"=>      p.id,
+          "name"=>    p.name,
+          "kml"=>     JSON.parse(p.kml),
+          #"kml"=>     p.kml
+          "voters"=>  p.registered_voters }
       end
-      data.to_json
+      Rails.logger.info("Map data: #{Time.now - t}" )
+      json = Oj.dump(data)
+      Rails.logger.info("To JSON #{Time.now - t}",)
+      return json
     end
   end
 
@@ -69,31 +76,25 @@ class DataProcessor
     # DEBUG remove this caching
     Rails.cache.fetch("locality:#{locality_id}:#{params.hash}:precinct_results") do
       Rails.logger.debug("T::#{DateTime.now.strftime('%Q')} Inside Cache")
-      RefConResults.new.precinct_results(params).to_json      
+      Oj.dump(RefConResults.new.precinct_results(params))
     end
   end
 
   def self.precinct_colors_json(params)
     locality_id = params[:locality_id]
     Rails.cache.fetch("locality:#{locality_id}:#{params.hash}:precinct_colors") do
-      RefConResults.new.precinct_colors(params).to_json
+      Oj.dump(RefConResults.new.precinct_colors(params))
     end
   end
 
-  def self.districts_json(locality, grouped)
-    Rails.cache.fetch("locality:#{locality.id}:#{grouped ? 'grouped:' : ''}districts") do
-      districts = locality.focused_districts.includes(:precincts).order('name')
+  def self.districts_json(locality)
+    Rails.cache.fetch("locality:#{locality.id}:districts") do
+      districts = locality.focused_districts.order('name')
 
-      if grouped
-        grouped = districts.group_by(&:district_type)
-        data    = Hash[grouped.map { |t, ds| [ (t || 'other').downcase, ds.map { |d| { id: d.id, name: d.name.titleize } } ] }]
-      else
-        order   = %w{ Federal State MCD }
-        ordered = districts.sort_by { |d| "#{order.index(d.district_type) || 5}#{d.name.downcase}" }
-        data    = ordered.map { |d| { id: d.id, name: d.name.titleize } }
-      end
-
-      data.to_json
+      order   = %w{ Federal State MCD }
+      ordered = districts.sort_by { |d| "#{order.index(d.district_type) || 5}#{d.name.downcase}" }
+      data    = ordered.map { |d| { "id" => d.id, "name"=> d.name.titleize, "group"=>(d.district_type || 'other').downcase } }
+      Oj.dump(data)
     end
   end
 

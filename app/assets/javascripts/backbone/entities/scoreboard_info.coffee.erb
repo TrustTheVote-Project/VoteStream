@@ -1,11 +1,18 @@
 @App.module "Entities", (Entities, App, Backbone, Marionette, $, _) ->
 
   class Entities.ScoreboardInfo extends Backbone.Model
+    initialize: ->
+      @set('dataTypeLabel', @dataTypeLabel)
+      @set('refconLabel', @refconLabel)
+      @set('regionLabel', @regionLabel)
+      
+    
+    
     reloadResults: (options = {}) ->
       return if @noResultsReload
       @preselectedRefconId = options.refcon?.id
       results = @get 'results'
-      results.fetchForFilter @get('localityId'), @get('region'), @get('refcon'), this.extraOpts(), @get('advanced')
+      results.fetchForFilter @get('region'), @get('refcon'), this.extraOpts(), @get('advanced')
 
     pickResult: ->
       results = @get 'results'
@@ -23,6 +30,42 @@
       channel_absentee: @get('channelAbsentee')
       }
 
+
+    dataTypeLabel:    ->
+      if @coloringType == 'participation'
+        return "Participation"
+      else
+        return "Results"
+
+    refconLabel:      ->
+      if App.request('entities:scoreboardUrl').advancedView()
+        af = App.request 'entities:advancedFilter'
+        af.breadcrumbsContestName()              
+      else
+        type = 'all'
+        if @refcon
+          type = @refcon.get('type')
+          if type == 'all'
+            id = @refcon.get('id')
+            gon.categories[id]
+        if @refcon
+          @refcon.get('name')
+        else
+          ''
+        
+    regionLabel:       -> 
+      if @region 
+        @region.get('name')
+      else if @advanced
+        af = App.request 'entities:advancedFilter'
+        af.breadcrumbsRegionName()
+      else 
+        "<%= I18n.t 'scoreboard.header.right_menu.tabs.all' %>" 
+      
+    App.vent.on 'changeInfo', (attribute, value) ->
+      console.log(attribute, value)
+      #@set attribute, value
+
   API =
     getScoreboardInfo: ->
       unless Entities.scoreboardInfo?
@@ -37,13 +80,8 @@
         else if refs.get("other").length > 0
           refcon = App.request('entities:refcon:all-Other')
         
-        
-        Entities.scoreboardInfo = window.sb = sb = new Entities.ScoreboardInfo
-          localityId:       gon.locality_id
-          localityName:     gon.locality_name
-          localityInfo:     gon.locality_info
-          electionInfo:     gon.election_info
-
+        # Scoreboard info is a *state* object
+        Entities.scoreboardInfo = sb = window.sb = new Entities.ScoreboardInfo
           results:            new Entities.ResultsCollection
           result:             null
           precinctColors:     new Entities.PrecinctColors
@@ -61,39 +99,8 @@
           absenteeVotes:            0
           npVotes:                  0
           
-          
           refcon:           refcon
-          dataTypeLabel:    ->
-            if @coloringType == 'participation'
-              return "Participation"
-            else
-              return "Results"
-          refconLabel:      ->
-            if App.request('entities:scoreboardUrl').advancedView()
-              af = App.request 'entities:advancedFilter'
-              af.breadcrumbsContestName()              
-            else
-              type = 'all'
-              if @refcon
-                type = @refcon.get('type')
-                if type == 'all'
-                  id = @refcon.get('id')
-                  gon.categories[id]
-              if @refcon
-                @refcon.get('name')
-              else
-                ''
-
           region:            null
-          regionLabel:       -> 
-            if @region 
-              @region.get('name')
-            else if @advanced
-              af = App.request 'entities:advancedFilter'
-              af.breadcrumbsRegionName()
-            else 
-              "<%= I18n.t 'scoreboard.header.right_menu.tabs.all' %>" 
-          percentReporting:  gon.percentReporting
           view:              null
           coloringType:      'results'
           map_type:          null
@@ -101,6 +108,7 @@
           showVotingMethod:  false
           advanced:          null
           percentageType:    'ballots' # Can be 'ballots' or 'voters'
+          
 
         App.vent.on 'filters:set', (options = {}) ->
           su = App.request 'entities:scoreboardUrl'

@@ -45,8 +45,8 @@
   class Entities.ResultsCollection extends Backbone.Collection
     model: Entities.Results
 
-    fetchForFilter: (localityId, region, refcon, extraOpts, advanced) ->
-      filter = locality_id: localityId
+    fetchForFilter: (region, refcon, extraOpts, advanced) ->
+      filter = locality_id: App.localityId
       if advanced and App.request('entities:scoreboardUrl').advancedView()
         # Process advanced filter query string to settings for getting results
         af = App.request('entities:advancedFilter')

@@ -1,6 +1,6 @@
 <!--
 <div class="percent-reporting row-fluid">
-	<div class="span12"><%= @percentReporting %></div>
+	<div class="span12"><%= App.percentReporting %></div>
 	<div class="span6 text-right">
 		<span>Save as</span>
 		<a href="" id="js-save-as-csv" download="<%= @filename %>.csv">CSV</a> |

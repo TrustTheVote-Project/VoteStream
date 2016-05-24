@@ -4,12 +4,13 @@ class DataController < ApplicationController
 
   def districts
     locality  = Locality.find(params[:locality_id])
-    render text: DataProcessor.districts_json(locality, params[:grouped])
+    render text: DataProcessor.districts_json(locality)
   end
 
   def precincts
     locality = Locality.find(params[:locality_id])
-    render text: DataProcessor.precincts_json(locality)
+    precincts_json = DataProcessor.precincts_json(locality)
+    render text: precincts_json
   end
 
   # the list of all refcons grouped
@@ -42,7 +43,7 @@ class DataController < ApplicationController
     locality_id = params[:locality_id]
     election_metadata = Rails.cache.fetch("locality:#{locality_id}:#{params.hash}:metadata") do
       locality = Locality.find(locality_id)
-      locality.election_metadata.to_json    
+      Oj.dump(locality.election_metadata)
     end
     render json: election_metadata
   end

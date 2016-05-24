@@ -5,6 +5,8 @@
     model: Refcon
 
   class Entities.RefconCollection extends Backbone.Model
+    url: -> "/data/localities/#{App.localityId}/all_refcons"
+    
     initialize: ->
       @set 'all',     new Refcons
       @set 'federal', new Refcons
@@ -20,21 +22,12 @@
       @get('local').reset data.mcd
       @get('other').reset data.other
 
-    fetchForLocality: (localityId) ->
-      @fetch
-        type: 'POST'
-        url: '/data/all_refcons'
-        reset: true
-        data:
-          locality_id: localityId
 
   API =
     getRefcons: ->
       unless Entities.refcons?
-        si = App.request "entities:scoreboardInfo"
         Entities.refcons = new Entities.RefconCollection
-        Entities.refcons.fetchForLocality si.get('localityId')
-
+        Entities.refcons.fetch()
       Entities.refcons
 
   App.reqres.setHandler 'entities:refcons', -> API.getRefcons()

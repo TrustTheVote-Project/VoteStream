@@ -1,12 +1,19 @@
 @App = do (Backbone, Marionette) ->
 
   App = new Marionette.Application
-
+    rootRoute: "map"
+    
   App.addRegions
     headerRegion: "#header-region"
     mainRegion: "#main-region"
 
   App.addInitializer ->
+    
+    @localityId   = gon.locality_id
+    @localityName = gon.locality_name
+    @localityInfo = gon.locality_info
+    @electionInfo = gon.election_info
+    @percentReporting = gon.percentReporting
     
     csrfToken = $("meta[name='csrf-token']").attr("content")
     $.ajaxSetup
@@ -14,11 +21,14 @@
         'X-CSRF-Token': csrfToken
    
     
-    unless App.Entities.refcons?
-      App.Entities.refcons = new App.Entities.RefconCollection
-      App.Entities.refcons.fetchForLocality gon.locality_id
+    App.request('entities:precincts')
+    App.request('entities:refcons')
+    App.request('entities:districts')
+    # unless App.Entities.refcons?
+    #   App.Entities.refcons = new App.Entities.RefconCollection
+    #   App.Entities.refcons.fetchForLocality gon.locality_id
    
-    App.execute 'when:fetched', App.Entities.refcons, =>
+    App.execute 'when:fetched', [App.Entities.refcons, App.Entities.precincts, App.Entities.districts], =>
       App.module("HeaderApp").start()
       App.module("ScoreboardsApp").start()
       App.module("AdvancedFiltersApp").start()
@@ -28,8 +38,6 @@
       @startHistory()
       @navigate(@rootRoute, trigger: true) unless @getCurrentRoute()
       
-
-  App.rootRoute = "map"
 
   # App.on "initialize:after", ->
   #   @startHistory()

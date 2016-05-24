@@ -82,7 +82,7 @@
           advanced = null #get from url if it matches a different one
         
           resultsColl = new App.Entities.ResultsCollection
-          resultsColl.fetchForFilter(gon.locality_id, filters.region, filters.refcon, extraOpts, advanced)
+          resultsColl.fetchForFilter(filters.region, filters.refcon, extraOpts, advanced)
           
           @listenTo resultsColl, 'reset', ((map, filters, advanced, results)->
             result = null # Specific selecte result / contesnt ?

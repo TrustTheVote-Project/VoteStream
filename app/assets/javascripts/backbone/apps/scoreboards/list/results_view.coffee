@@ -90,7 +90,7 @@
         model:             model
         extra:             !stats and i > 1
         hidden:            hidden
-        winner:            i is 0 and gon.percentReporting is 'Final Results'
+        winner:            i is 0 and App.percentReporting is 'Final Results'
         totalVotes:        @options.totalVotes
         excludeNP:         excludeNP,
         showVotingMethod:  @options.showVotingMethod && !stats

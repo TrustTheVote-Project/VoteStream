@@ -193,7 +193,7 @@
     itemViewContainer: 'ul'
     itemViewOptions: (m, i) ->
       return {
-        winner:     i is 0 and gon.percentReporting is 'Final Results',
+        winner:     i is 0 and App.percentReporting is 'Final Results',
         totalVotes: @model.get('summary').get('votes')
       }
 
@@ -214,7 +214,7 @@
       return {
         extra:      !stats and i > 1
         hidden:     stats or i > 1
-        winner:     i is 0 and gon.percentReporting is 'Final Results'
+        winner:     i is 0 and App.percentReporting is 'Final Results'
         totalVotes: @model.get('summary').get('votes')
       }
 

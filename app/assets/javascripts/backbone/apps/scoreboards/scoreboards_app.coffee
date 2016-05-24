@@ -3,14 +3,14 @@
 
   class ScoreboardsApp.Router extends Marionette.AppRouter
     appRoutes:
-      "map": "show"
-      "map/:ctype-:cid(/:region)(/:params)": "show"
-      "advanced-map/:params": "showAdvanced"
+      "map": "map"
+      "map/:ctype-:cid(/:region)(/:params)": "map"
+      "advanced-map/:params": "advancedMap"
       "map-list": "mapList"
       "map-comparison/:params": "mapComparison"
       "list": "list"
       "list/:ctype-:cid(/:region)(/:params)": "list"
-      "advanced-list/:params": "showAdvancedList"
+      "advanced-list/:params": "advancedList"
       #'*notFound': 'notFound'
   
   class ScoreboardsApp.Helpers
@@ -102,7 +102,7 @@
     notFound: (params) ->
       console.log(params)
     
-    showAdvancedList: (params) ->
+    advancedList: (params) ->
       setAdvancedParams(params)
       su = App.request 'entities:scoreboardUrl'
       su.view = 'advanced-list'
@@ -110,7 +110,7 @@
       ScoreboardsApp.List.Controller.show()
       
       
-    show: (ctype, cid, region, params) ->
+    map: (ctype, cid, region, params) ->
       if region and region.match('=')
         params = region
       else if region
@@ -124,7 +124,7 @@
       su.setView 'map'
       ScoreboardsApp.Show.Controller.show()
 
-    showAdvanced: (params) ->
+    advancedMap: (params) ->
       setAdvancedParams(params)
       
       su = App.request 'entities:scoreboardUrl'
@@ -160,7 +160,6 @@
       su = App.request 'entities:scoreboardUrl'
       su.setView 'list'
       ScoreboardsApp.List.Controller.show()
-
 
   App.on 'dataready', ->
     new ScoreboardsApp.Router

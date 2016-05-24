@@ -50,6 +50,7 @@ gem 'bootstrap3-rails'
 # Use VEDaSpace to load NIST ERR files
 gem "vedaspace", "1.3.8", :git=>"https://github.com/TrustTheVote-Project/VEDaSpace", :branch=>'master'
 
+gem "oj" # For faster version of  to_json methods
 
 group :doc do
   # bundle exec rake doc:rails generates the API under doc/api.
