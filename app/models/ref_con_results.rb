@@ -571,17 +571,24 @@ class RefConResults
 
   def registration_color(hash_of_parties)
     sorted_parties = hash_of_parties.to_a.sort {|ar1, ar2| ar2[1]<=>ar1[1]}
-    puts sorted_parties
-    color = sorted_parties[0][0][0].downcase # just take the first letter
-    diff = ((sorted_parties[0][1] - sorted_parties[1][1]) / sorted_parties[0][1].to_f) * 100
-    if diff < AppConfig['map_color']['threshold']['lower']
-      shade = 2
-    elsif diff < AppConfig['map_color']['threshold']['upper']
-      shade = 1
+    total = sorted_parties.collect {|a| a[1] }.sum
+    if sorted_parties.length > 1
+      color = sorted_parties[0][0][0].downcase # just take the first letter
+      diff = ((sorted_parties[0][1] - sorted_parties[1][1]) * 100 / total)
+      puts "#{diff} #{color}"
+      if diff <= AppConfig['map_color']['threshold']['lower']
+        shade = 2
+      elsif diff <= AppConfig['map_color']['threshold']['upper']
+        shade = 1
+      else
+        shade = 0
+      end
+      return "#{color}#{shade}"  
+    elsif sorted_parties.length == 1
+      return "#{sorted_parties[0][0][0].downcase}2"
     else
-      shade = 0
+      return "n2"
     end
-    return "#{color}#{shade}"  
   end
 
   def participation_shade(v)
