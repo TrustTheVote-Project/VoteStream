@@ -31,7 +31,9 @@
       'change:channelEarly': 'showChannels'
       'change:channelElectionday': 'showChannels'
       'change:channelAbsentee': 'showChannels'
-      'change:coloringType': 'showSettings'
+      'change:coloringType': ->
+        @showSettings()
+        @showBreadCrumbs()
       
       
     regions:
@@ -105,6 +107,13 @@
     showSettings: ->
       @.viewSettingsRegion?.show new ViewSettingsDropdown
         model: @scoreboardInfo
+    showBreadCrumbs: ->
+      @.breadcrumbsRegion.show new FilterBar.BreadcrumbsView
+        model: @scoreboardInfo
+    showViewSelector: ->
+      @.viewSelectorRegion.show new ViewSelectorView
+        model: @scoreboardInfo
+      
       
       
     onShow: ->
@@ -160,13 +169,10 @@
               { id: null, name: 'All Precincts' }
             ])
             collection: App.request 'entities:precincts'
-          ), 0
+          ), 2000
 
-      @.breadcrumbsRegion.show new FilterBar.BreadcrumbsView
-        model: @scoreboardInfo
-      @.viewSelectorRegion.show new ViewSelectorView
-        model: @scoreboardInfo
-      
+      @showBreadCrumbs()
+      @showViewSelector()
       @showSettings()
       
       $("body").on "click", => @closePopovers()
@@ -327,25 +333,23 @@
         inputType = $input.prop('type')
 
         # Use setTimeout to manually set element checked property after click event is resolved
-        setTimeout(() =>
-          switch inputType
-            when 'checkbox', 'valueCheckbox'
-              boolValue = !$input.prop('checked')
-              $input.prop('checked', boolValue)
-              newValue = if boolValue
-                $input.data('true-value') ? true
-              else
-                $input.data('false-value') ? false
-            when 'radio'
-              newValue = $input.data('value')
-              $input.prop('checked', true)
+        switch inputType
+          when 'checkbox', 'valueCheckbox'
+            boolValue = !$input.prop('checked')
+            $input.prop('checked', boolValue)
+            newValue = if boolValue
+              $input.data('true-value') ? true
             else
-              console.error('Unexpected checkbox type: ' + checkboxType) if console?
-              return
-          App.vent.trigger('setSbInfo', propertyName, newValue)
-          #@model.set propertyName, newValue
-          @render();          
-        , 0)
+              $input.data('false-value') ? false
+          when 'radio'
+            newValue = $input.data('value')
+            $input.prop('checked', true)
+          else
+            console.error('Unexpected checkbox type: ' + checkboxType) if console?
+            return
+        App.vent.trigger('setSbData', propertyName, newValue)
+        #@model.set propertyName, newValue
+        @render();          
 
         return false
 

@@ -4,11 +4,11 @@ InfoBubble.prototype.panToView = ->
 
   return if !projection
   return if !@bubble_
-
+  
   anchorHeight = @getAnchorHeight_()
   height       = @bubble_.offsetHeight + anchorHeight
   gMap         = @get('gMap')
-  mapDiv       = map.getDiv()
+  mapDiv       = gMap.getDiv()
   mapHeight    = mapDiv.offsetHeight
   latLng       = @getPosition()
   centerPos    = projection.fromLatLngToContainerPixel(gMap.getCenter())
@@ -293,14 +293,22 @@ InfoBubble.prototype.panToView = ->
               precinct = self.focusedPrecinct
               self.focusedPrecinct = null
 
-              App.vent.trigger 'region:selected', precinct
-
               if self.options.infoWindow != 'simple'
-                App.navigate 'list', trigger: true
+                # set params and navigate to the list page
+                su = App.request("entities:scoreboardUrl")
+                si = App.request("entities:scoreboardInfo")
+                si.set('region', precinct)
+                su.setView('list')
+                
+              else
+                App.vent.trigger 'region:selected', precinct
 
-            ib.open()
+              # if self.options.infoWindow != 'simple'
+              #   App.navigate 'list', trigger: true
 
-          mapView.timeout = setTimeout createBubble, 250
+            ib.open(mapView.gMap)
+
+          mapView.timeout = setTimeout createBubble, 50
 
     onPolygonMouseOut: ->
       @setOptions
@@ -345,23 +353,17 @@ InfoBubble.prototype.panToView = ->
 
     onPolygonClick: ->
       pid = @.data.precinctId
-      result = @.data.mapView.precinctResults.get('precincts').get(pid)
-      if result? and @.data.mapView.options.infoWindow isnt 'simple'
+      if @.data.mapView.options.infoWindow isnt 'simple'
         @setOptions
           fillColor:   @.data.colors.hoverFillColor
           fillOpacity: @.data.colors.hoverFillOpacity
 
-        pid = @.data.precinctId
         precincts = App.request 'entities:precincts'
         precinct  = precincts.get pid
 
         App.vent.trigger 'region:selected', precinct
-        App.navigate 'list', trigger: true
-      # else # show the info at least!
-      #   console.log(@.data)
 
     updateColorKey: ->
-      #@colorKey = if @si.get('coloringType') == 'results' then 'c' else 'p'
       @colorKey = if @options.coloringType == 'results' then 'c' else 'p'
 
     renderPrecincts: ->

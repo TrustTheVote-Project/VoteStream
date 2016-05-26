@@ -17,10 +17,8 @@
     show: (params) ->
       AdvancedFiltersApp.Show.Controller.show()
       if params
-        App.execute 'when:fetched', App.request('entities:precincts'),  =>
-          af = App.request('entities:advancedFilter')
-          af.fromParams(params)
-          #App.vent.trigger 'advancedFilterChange'
+        af = App.request('entities:advancedFilter')
+        af.fromParams(params)
 
   AdvancedFiltersApp.addInitializer ->
     new AdvancedFiltersApp.Router

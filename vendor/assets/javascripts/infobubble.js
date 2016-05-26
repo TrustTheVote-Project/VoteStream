@@ -1,6 +1,6 @@
 // ==ClosureCompiler==
 // @compilation_level ADVANCED_OPTIMIZATIONS
-// @externs_url http://closure-compiler.googlecode.com/svn/trunk/contrib/externs/maps/google_maps_api_v3.js
+// @externs_url https://raw.githubusercontent.com/google/closure-compiler/master/contrib/externs/maps/google_maps_api_v3_16.js
 // ==/ClosureCompiler==
 
 /**
@@ -90,8 +90,11 @@ function InfoBubble(opt_options) {
     options['arrowStyle'] = this.ARROW_STYLE_;
   }
 
-  this.buildDom_();
+  if (options['closeSrc'] == undefined) {
+    options['closeSrc'] = this.CLOSE_SRC_;
+  }
 
+  this.buildDom_();
   this.setValues(options);
 }
 window['InfoBubble'] = InfoBubble;
@@ -176,6 +179,12 @@ InfoBubble.prototype.BORDER_RADIUS_ = 10;
  */
 InfoBubble.prototype.BACKGROUND_COLOR_ = '#fff';
 
+/**
+ * Default close image source
+ * @const
+ * @private
+ */
+InfoBubble.prototype.CLOSE_SRC_ = 'https://maps.gstatic.com/intl/en_us/mapfiles/iw_close.gif';
 
 /**
  * Extends a objects prototype by anothers.
@@ -210,12 +219,10 @@ InfoBubble.prototype.buildDom_ = function() {
   // Close button
   var close = this.close_ = document.createElement('IMG');
   close.style['position'] = 'absolute';
-  close.style['width'] = this.px(12);
-  close.style['height'] = this.px(12);
   close.style['border'] = 0;
   close.style['zIndex'] = this.baseZIndex_ + 1;
   close.style['cursor'] = 'pointer';
-  close.src = 'http://maps.gstatic.com/intl/en_us/mapfiles/iw_close.gif';
+  close.src = this.get('closeSrc');
 
   var that = this;
   google.maps.event.addDomListener(close, 'click', function() {
@@ -294,8 +301,7 @@ InfoBubble.prototype.buildDom_ = function() {
 InfoBubble.prototype.setBackgroundClassName = function(className) {
   this.set('backgroundClassName', className);
 };
-InfoBubble.prototype['setBackgroundClassName'] =
-    InfoBubble.prototype.setBackgroundClassName;
+InfoBubble.prototype['setBackgroundClassName'] = InfoBubble.prototype.setBackgroundClassName;
 
 
 /**
@@ -304,8 +310,7 @@ InfoBubble.prototype['setBackgroundClassName'] =
 InfoBubble.prototype.backgroundClassName_changed = function() {
   this.content_.className = this.get('backgroundClassName');
 };
-InfoBubble.prototype['backgroundClassName_changed'] =
-    InfoBubble.prototype.backgroundClassName_changed;
+InfoBubble.prototype['backgroundClassName_changed'] = InfoBubble.prototype.backgroundClassName_changed;
 
 
 /**
@@ -316,8 +321,7 @@ InfoBubble.prototype['backgroundClassName_changed'] =
 InfoBubble.prototype.setTabClassName = function(className) {
   this.set('tabClassName', className);
 };
-InfoBubble.prototype['setTabClassName'] =
-    InfoBubble.prototype.setTabClassName;
+InfoBubble.prototype['setTabClassName'] = InfoBubble.prototype.setTabClassName;
 
 
 /**
@@ -326,8 +330,7 @@ InfoBubble.prototype['setTabClassName'] =
 InfoBubble.prototype.tabClassName_changed = function() {
   this.updateTabStyles_();
 };
-InfoBubble.prototype['tabClassName_changed'] =
-    InfoBubble.prototype.tabClassName_changed;
+InfoBubble.prototype['tabClassName_changed'] = InfoBubble.prototype.tabClassName_changed;
 
 
 /**
@@ -349,8 +352,7 @@ InfoBubble.prototype.getArrowStyle_ = function() {
 InfoBubble.prototype.setArrowStyle = function(style) {
   this.set('arrowStyle', style);
 };
-InfoBubble.prototype['setArrowStyle'] =
-    InfoBubble.prototype.setArrowStyle;
+InfoBubble.prototype['setArrowStyle'] = InfoBubble.prototype.setArrowStyle;
 
 
 /**
@@ -359,8 +361,7 @@ InfoBubble.prototype['setArrowStyle'] =
 InfoBubble.prototype.arrowStyle_changed = function() {
   this.arrowSize_changed();
 };
-InfoBubble.prototype['arrowStyle_changed'] =
-    InfoBubble.prototype.arrowStyle_changed;
+InfoBubble.prototype['arrowStyle_changed'] = InfoBubble.prototype.arrowStyle_changed;
 
 
 /**
@@ -382,8 +383,7 @@ InfoBubble.prototype.getArrowSize_ = function() {
 InfoBubble.prototype.setArrowSize = function(size) {
   this.set('arrowSize', size);
 };
-InfoBubble.prototype['setArrowSize'] =
-    InfoBubble.prototype.setArrowSize;
+InfoBubble.prototype['setArrowSize'] = InfoBubble.prototype.setArrowSize;
 
 
 /**
@@ -392,8 +392,7 @@ InfoBubble.prototype['setArrowSize'] =
 InfoBubble.prototype.arrowSize_changed = function() {
   this.borderWidth_changed();
 };
-InfoBubble.prototype['arrowSize_changed'] =
-    InfoBubble.prototype.arrowSize_changed;
+InfoBubble.prototype['arrowSize_changed'] = InfoBubble.prototype.arrowSize_changed;
 
 
 /**
@@ -404,8 +403,7 @@ InfoBubble.prototype['arrowSize_changed'] =
 InfoBubble.prototype.setArrowPosition = function(pos) {
   this.set('arrowPosition', pos);
 };
-InfoBubble.prototype['setArrowPosition'] =
-    InfoBubble.prototype.setArrowPosition;
+InfoBubble.prototype['setArrowPosition'] = InfoBubble.prototype.setArrowPosition;
 
 
 /**
@@ -428,8 +426,7 @@ InfoBubble.prototype.arrowPosition_changed = function() {
 
   this.redraw_();
 };
-InfoBubble.prototype['arrowPosition_changed'] =
-    InfoBubble.prototype.arrowPosition_changed;
+InfoBubble.prototype['arrowPosition_changed'] = InfoBubble.prototype.arrowPosition_changed;
 
 
 /**
@@ -518,8 +515,7 @@ InfoBubble.prototype.shadowStyle_changed = function() {
     this.draw();
   }
 };
-InfoBubble.prototype['shadowStyle_changed'] =
-    InfoBubble.prototype.shadowStyle_changed;
+InfoBubble.prototype['shadowStyle_changed'] = InfoBubble.prototype.shadowStyle_changed;
 
 
 /**
@@ -546,8 +542,7 @@ InfoBubble.prototype['hideCloseButton'] = InfoBubble.prototype.hideCloseButton;
 InfoBubble.prototype.hideCloseButton_changed = function() {
   this.close_.style['display'] = this.get('hideCloseButton') ? 'none' : '';
 };
-InfoBubble.prototype['hideCloseButton_changed'] =
-    InfoBubble.prototype.hideCloseButton_changed;
+InfoBubble.prototype['hideCloseButton_changed'] = InfoBubble.prototype.hideCloseButton_changed;
 
 
 /**
@@ -560,8 +555,7 @@ InfoBubble.prototype.setBackgroundColor = function(color) {
     this.set('backgroundColor', color);
   }
 };
-InfoBubble.prototype['setBackgroundColor'] =
-    InfoBubble.prototype.setBackgroundColor;
+InfoBubble.prototype['setBackgroundColor'] = InfoBubble.prototype.setBackgroundColor;
 
 
 /**
@@ -575,8 +569,7 @@ InfoBubble.prototype.backgroundColor_changed = function() {
       ' transparent transparent';
   this.updateTabStyles_();
 };
-InfoBubble.prototype['backgroundColor_changed'] =
-    InfoBubble.prototype.backgroundColor_changed;
+InfoBubble.prototype['backgroundColor_changed'] = InfoBubble.prototype.backgroundColor_changed;
 
 
 /**
@@ -611,8 +604,7 @@ InfoBubble.prototype.borderColor_changed = function() {
 
   this.updateTabStyles_();
 };
-InfoBubble.prototype['borderColor_changed'] =
-    InfoBubble.prototype.borderColor_changed;
+InfoBubble.prototype['borderColor_changed'] = InfoBubble.prototype.borderColor_changed;
 
 
 /**
@@ -657,8 +649,7 @@ InfoBubble.prototype.borderRadius_changed = function() {
 
   this.redraw_();
 };
-InfoBubble.prototype['borderRadius_changed'] =
-    InfoBubble.prototype.borderRadius_changed;
+InfoBubble.prototype['borderRadius_changed'] = InfoBubble.prototype.borderRadius_changed;
 
 
 /**
@@ -697,8 +688,7 @@ InfoBubble.prototype.borderWidth_changed = function() {
   this.borderRadius_changed();
   this.redraw_();
 };
-InfoBubble.prototype['borderWidth_changed'] =
-    InfoBubble.prototype.borderWidth_changed;
+InfoBubble.prototype['borderWidth_changed'] = InfoBubble.prototype.borderWidth_changed;
 
 
 /**
@@ -760,6 +750,19 @@ InfoBubble.prototype.setPadding = function(padding) {
   this.set('padding', padding);
 };
 InfoBubble.prototype['setPadding'] = InfoBubble.prototype.setPadding;
+
+
+/**
+ * Set the close image url
+ *
+ * @param {string} src The url of the image used as a close icon
+ */
+InfoBubble.prototype.setCloseSrc = function(src) {
+  if (src && this.close_) {
+    this.close_.src = src;
+  }
+};
+InfoBubble.prototype['setCloseSrc'] = InfoBubble.prototype.setCloseSrc;
 
 
 /**
@@ -842,6 +845,9 @@ InfoBubble.prototype.onAdd = function() {
     panes.floatPane.appendChild(this.bubble_);
     panes.floatShadow.appendChild(this.bubbleShadow_);
   }
+
+  /* once the infoBubble has been added to the DOM, fire 'domready' event */
+  google.maps.event.trigger(this, 'domready');
 };
 InfoBubble.prototype['onAdd'] = InfoBubble.prototype.onAdd;
 
@@ -990,6 +996,7 @@ InfoBubble.prototype.open = function(opt_map, opt_anchor) {
   }, 0);
 };
 
+
 /**
  * Open the InfoBubble
  * @private
@@ -1028,7 +1035,7 @@ InfoBubble.prototype.open_ = function(opt_map, opt_anchor) {
     window.setTimeout(function() {
       // Pan into view, done in a time out to make it feel nicer :)
       that.panToView();
-    }, 100);
+    }, 200);
   }
 };
 InfoBubble.prototype['open'] = InfoBubble.prototype.open;
@@ -1064,8 +1071,7 @@ InfoBubble.prototype['getPosition'] = InfoBubble.prototype.getPosition;
 InfoBubble.prototype.position_changed = function() {
   this.draw();
 };
-InfoBubble.prototype['position_changed'] =
-    InfoBubble.prototype.position_changed;
+InfoBubble.prototype['position_changed'] = InfoBubble.prototype.position_changed;
 
 
 /**
@@ -1208,10 +1214,10 @@ InfoBubble.prototype.updateContent_ = function() {
         that.imageLoaded_();
       });
     }
-    google.maps.event.trigger(this, 'domready');
   }
   this.redraw_();
 };
+
 
 /**
  * Image loaded
@@ -1224,6 +1230,7 @@ InfoBubble.prototype.imageLoaded_ = function() {
     this.panToView();
   }
 };
+
 
 /**
  * Updates the styles of the tabs
@@ -1375,8 +1382,7 @@ InfoBubble.prototype['setMaxWidth'] = InfoBubble.prototype.setMaxWidth;
 InfoBubble.prototype.maxWidth_changed = function() {
   this.redraw_();
 };
-InfoBubble.prototype['maxWidth_changed'] =
-    InfoBubble.prototype.maxWidth_changed;
+InfoBubble.prototype['maxWidth_changed'] = InfoBubble.prototype.maxWidth_changed;
 
 
 /**
@@ -1396,8 +1402,7 @@ InfoBubble.prototype['setMaxHeight'] = InfoBubble.prototype.setMaxHeight;
 InfoBubble.prototype.maxHeight_changed = function() {
   this.redraw_();
 };
-InfoBubble.prototype['maxHeight_changed'] =
-    InfoBubble.prototype.maxHeight_changed;
+InfoBubble.prototype['maxHeight_changed'] = InfoBubble.prototype.maxHeight_changed;
 
 
 /**
@@ -1417,8 +1422,7 @@ InfoBubble.prototype['setMinWidth'] = InfoBubble.prototype.setMinWidth;
 InfoBubble.prototype.minWidth_changed = function() {
   this.redraw_();
 };
-InfoBubble.prototype['minWidth_changed'] =
-    InfoBubble.prototype.minWidth_changed;
+InfoBubble.prototype['minWidth_changed'] = InfoBubble.prototype.minWidth_changed;
 
 
 /**
@@ -1438,8 +1442,7 @@ InfoBubble.prototype['setMinHeight'] = InfoBubble.prototype.setMinHeight;
 InfoBubble.prototype.minHeight_changed = function() {
   this.redraw_();
 };
-InfoBubble.prototype['minHeight_changed'] =
-    InfoBubble.prototype.minHeight_changed;
+InfoBubble.prototype['minHeight_changed'] = InfoBubble.prototype.minHeight_changed;
 
 
 /**
@@ -1475,6 +1478,7 @@ InfoBubble.prototype.addTab = function(label, content) {
   this.redraw_();
 };
 InfoBubble.prototype['addTab'] = InfoBubble.prototype.addTab;
+
 
 /**
  * Update a tab at a speicifc index

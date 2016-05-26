@@ -14,6 +14,7 @@
       af = App.request 'entities:advancedFilter'
       sd = af.get 'selectedDistricts'
       sp = af.get 'selectedPrecincts'
+      
 
       @federalDistrictsRegion.show new Show.SelectorView title: 'Federal', collection: App.request('entities:districts:federal'), selection: sd
       @stateDistrictsRegion.show new Show.SelectorView title: 'State', collection: App.request('entities:districts:state'), selection: sd

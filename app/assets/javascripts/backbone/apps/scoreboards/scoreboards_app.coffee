@@ -14,24 +14,34 @@
       #'*notFound': 'notFound'
   
   class ScoreboardsApp.Helpers
-    @percent: 
-      (count, total) -> 
-        if total > 0
-          Math.floor(count * 100 / (total || 1))
-        else
-          0
+    @percent: (count, total) -> 
+      if total > 0
+        Math.floor(count * 100 / (total || 1))
+      else
+        0
           
-    @percentFormatted: 
-      (count, total) -> 
-        if total > 0 
-          "#{Math.floor(count * 1000 / (total || 1)) / 10.0}%" 
-        else 
-          "0%"
+    @percentFormatted: (count, total) -> 
+      if total > 0 
+        "#{Math.floor(count * 1000 / (total || 1)) / 10.0}%" 
+      else 
+        "0%"
           
-    @numberFormatted:
-      (number) ->
-        numeral(number).format('0,0')
+    @numberFormatted: (number) ->
+      numeral(number).format('0,0')
   
+  
+    @getDefaultRefcon: ->
+      refcon = null
+      refs = App.request('entities:refcons')
+      if refs.get("federal").length > 0
+        refcon = App.request('entities:refcon:all-Federal') 
+      else if refs.get("state").length > 0
+        refcon = App.request('entities:refcon:all-State')
+      else if refs.get("local").length > 0
+        refcon = App.request('entities:refcon:all-MCD')
+      else if refs.get("other").length > 0
+        refcon = App.request('entities:refcon:all-Other')
+      return refcon
   
     @filtersFromParams: (ctype, cid, rtype, rid, params) ->
       refcon = null
@@ -91,18 +101,7 @@
       # TODO: ScoreboardUrl should listen to filters:set
       App.vent.trigger 'filters:set', filters
 
-  getDefaultRefcon = ->
-    refcon = null
-    refs = App.request('entities:refcons')
-    if refs.get("federal").length > 0
-      refcon = App.request('entities:refcon:all-Federal') 
-    else if refs.get("state").length > 0
-      refcon = App.request('entities:refcon:all-State')
-    else if refs.get("local").length > 0
-      refcon = App.request('entities:refcon:all-MCD')
-    else if refs.get("other").length > 0
-      refcon = App.request('entities:refcon:all-Other')
-    return refcon
+  
 
   API =
     notFound: (params) ->
@@ -117,10 +116,10 @@
       
       
     map: (ctype, cid, region, params) ->
-      console.log('hit the controller', ctype, cid, region, params)
+      console.log('hit the controller map', ctype, cid, region, params)
       if not ctype
         # Get the default and refresh the page
-        default_refcon = getDefaultRefcon()
+        default_refcon = App.ScoreboardsApp.Helpers.getDefaultRefcon()
         si = App.request 'entities:scoreboardInfo'
         si.set('refcon', default_refcon)
         su = App.request 'entities:scoreboardUrl'
@@ -133,10 +132,11 @@
           regionType = regionParts[0]
           regionId = regionParts[1]
         
-        setParams(ctype, cid, regionType, regionId, params)
-
         su = App.request 'entities:scoreboardUrl'
         su.view = 'map'
+
+        setParams(ctype, cid, regionType, regionId, params)
+
         ScoreboardsApp.Show.Controller.show()
 
     advancedMap: (params) ->
@@ -163,6 +163,7 @@
       ScoreboardsApp.MapComparison.Controller.show()
       
     list: (ctype, cid, region, params)->
+      console.log('hit the controller list', ctype, cid, region, params)
       if region and region.match('=')
         params = region
       else if region
@@ -170,10 +171,11 @@
         regionType = regionParts[0]
         regionId = regionParts[1]
         
+      su = App.request 'entities:scoreboardUrl'
+      su.view = 'list'
+
       setParams(ctype, cid, regionType, regionId, params)
 
-      su = App.request 'entities:scoreboardUrl'
-      su.setView 'list'
       ScoreboardsApp.List.Controller.show()
 
   App.on 'dataready', ->

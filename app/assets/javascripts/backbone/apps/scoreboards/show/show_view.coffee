@@ -9,17 +9,27 @@
       resultsSummaryRegion: '#results-summary-region'
       mapRegion: '#map-region'
 
-    onShow: ->
-      @si = si = App.request 'entities:scoreboardInfo'
-      @layout = new Show.ResultsSummaryLayout
+    initialize: ->
+      @si = App.request 'entities:scoreboardInfo'
+      @si.on 'change:coloringType', =>
+        @onChangeData()
 
+    onShow: ->
       @filterBarRegion.show new App.ScoreboardsApp.FilterBar.View
         model: App.request('entities:scoreboardInfo')
-      @resultsSummaryRegion.show @layout
-      @mapRegion.show new Show.MapView
-        infoWindow: true
-        noPanning: false
-        precinctResults: si.get 'precinctResults'
-        precinctColors:  si.get 'precinctColors'
-        precincts: App.request 'entities:precincts'
-        coloringType: si.get('coloringType')
+        
+      @onChangeData()
+      
+
+    onChangeData: ->
+      @layout = new Show.ResultsSummaryLayout
+      if @resultsSummaryRegion
+        @resultsSummaryRegion.show @layout
+      if @mapRegion
+        @mapRegion.show new Show.MapView
+          infoWindow: true
+          noPanning: false
+          precinctResults: @si.get 'precinctResults'
+          precinctColors:  @si.get 'precinctColors'
+          precincts: App.request 'entities:precincts'
+          coloringType: @si.get('coloringType')

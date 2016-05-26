@@ -5,13 +5,13 @@
     model: Entities.District
     url: -> "/data/localities/#{App.localityId}/districts"
     federal: ->
-      @where group: 'federal'
+      new Entities.Districts(@where group: 'federal')
     state: ->
-      @where group: 'state'
+      new Entities.Districts(@where group: 'state')
     local: ->
-      @where group: 'mcd'
+      new Entities.Districts(@where group: 'mcd')
     other: ->
-      @where group: 'other'
+      new Entities.Districts(@where group: 'other')
       
   App.reqres.setHandler 'entities:districts', -> 
     unless Entities.districts?

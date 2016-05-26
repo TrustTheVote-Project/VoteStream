@@ -53,7 +53,7 @@
         filter[kv[0]] = kv[1].split('-')
         
       for cid in filter.cid
-        c = fedCons.get(did) || stateCons.get(did) || localCons.get(did) || otherCons.get(did) || refcons.get(did)
+        c = fedCons.get(cid) || stateCons.get(cid) || localCons.get(cid) || otherCons.get(cid) || refcons.get(cid)
         if c
           @select(sc, c)
         

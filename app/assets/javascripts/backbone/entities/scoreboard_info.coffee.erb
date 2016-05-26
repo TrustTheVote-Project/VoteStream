@@ -33,12 +33,11 @@
       
       @get('results').on 'sync', =>
         result = @pickResult()
-        console.log(@get('result'), result)
         @set 'result', result
       
       @on 'change:result', =>
         @changeResult()
-        
+
       @get('precinctResults').on 'reset', =>
         @computeStats()
       
@@ -84,6 +83,7 @@
       return if @noResultsReload
       # Set any options
       for k,v of options
+        console.log(k,v)
         @set k, v
         
       @preselectedRefconId = options.result?.id

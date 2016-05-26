@@ -73,7 +73,7 @@
       parts.push @view or 'map'
 
       region = @si.get 'region'
-      refcon = @si.get 'refcon'
+      refcon = @si.get('refcon') || App.ScoreboardsApp.Helpers.getDefaultRefcon()
 
       ctype = refcon.get('type')        
       cid = refcon.get('id')
