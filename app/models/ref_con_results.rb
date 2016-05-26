@@ -573,7 +573,7 @@ class RefConResults
     sorted_parties = hash_of_parties.to_a.sort {|ar1, ar2| ar2[1]<=>ar1[1]}
     puts sorted_parties
     color = sorted_parties[0][0][0].downcase # just take the first letter
-    diff = sorted_parties[0][1] - sorted_parties[1][1]
+    diff = ((sorted_parties[0][1] - sorted_parties[1][1]) / sorted_parties[0][1]) * 100
     if diff < AppConfig['map_color']['threshold']['lower']
       shade = 2
     elsif diff < AppConfig['map_color']['threshold']['upper']
