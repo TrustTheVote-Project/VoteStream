@@ -302,7 +302,7 @@
         'map': [
           radiobox('Show Results', 'coloringType', 'results')
           radiobox('Show Participation', 'coloringType', 'participation')
-          radiobox('Show Party Registration', 'map_type', null)
+          radiobox('Show Party Registration', 'coloringType', 'partyRegistration')
           radiobox('Show Gender', 'map_type', null)
           radiobox('Show Race/Ethnicity', 'map_type', null)
           radiobox('Show Age', 'map_type', null)

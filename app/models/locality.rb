@@ -36,11 +36,11 @@ class Locality < ActiveRecord::Base
 
   def demographic_metadata
     basics = {
-      voter_registrations: registrants.count,
-      sex:  registrants.group(:sex).count,
-      race: registrants.group(:race).count,
-      party: registrants.group(:party).count,
-      birth_years: registrants.group(:date_of_birth).count,
+      "voter_registrations" => registrants.count,
+      "sex" =>  registrants.group(:sex).count,
+      "race" => registrants.group(:race).count,
+      "party" => registrants.group(:party).count,
+      "birth_years" => registrants.group(:date_of_birth).count,
     }
     
     voter_characteristics = {}
@@ -51,7 +51,7 @@ class Locality < ActiveRecord::Base
     # voter_characteristics: VoterRegistrationClassification.where(precinct_id: precincts.pluck(:id)).group(:name).count
     
     
-    basics[:voter_characteristics] = voter_characteristics
+    basics["voter_characteristics"] = voter_characteristics
     
     return basics
   end
@@ -82,15 +82,15 @@ class Locality < ActiveRecord::Base
     overvotes = stats.collect {|r| r.overvotes}.max
     undervotes = stats.collect {|r| r.undervotes}.max
     return {
-      total_valid_votes: total_valid_votes,
-      total_votes: total_votes,
-      overvotes: overvotes,
-      undervotes: undervotes,
-      election_day: vote_types["election-day"],
-      absentee: vote_types["absentee"],
-      early: vote_types["early"],
-      registrants: registrant_count,
-      demographics: demographic_metadata      
+      "total_valid_votes" => total_valid_votes,
+      "total_votes" => total_votes,
+      "overvotes" => overvotes,
+      "undervotes" => undervotes,
+      "election_day" => vote_types["election-day"],
+      "absentee" => vote_types["absentee"],
+      "early" => vote_types["early"],
+      "registrants" => registrant_count,
+      "demographics" => demographic_metadata      
     }
   end
 

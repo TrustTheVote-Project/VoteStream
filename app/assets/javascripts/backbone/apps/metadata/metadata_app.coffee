@@ -8,7 +8,8 @@
 
   API =
     show: () ->
-      MetadataApp.Show.Controller.show()
+      App.execute 'when:fetched', App.request('entities:electionMetadata'), =>
+        MetadataApp.Show.Controller.show()
 
   App.on 'dataready', ->
     new MetadataApp.Router

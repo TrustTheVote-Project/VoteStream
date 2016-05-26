@@ -169,11 +169,19 @@ class RefConResults
       memo
     end
 
+    precinct_registrants = VoterRegistration.where(precinct_id: reported_precinct_ids)
+    party_counts = precinct_registrants.select("party, precinct_id, count(*)").group(:party, :precinct_id)
+    precinct_parties = {}
+    party_counts.each do |pc|
+      precinct_parties[pc.precinct_id] ||= {}
+      precinct_parties[pc.precinct_id][pc.party] = pc.count
+    end
+    
     colors = results.map do |r|
       region = (r.inregion || region_pids.nil? ) ? 'i' : 'o'
       code   = r.color_code || 'n0'
       color  = "#{region}#{code}"
-
+      
       ballots = r.undervotes + r.overvotes + r.total_valid_votes
       registered = precinct_registered_voters[r.precinct_id] || 0
       participation = case
@@ -181,10 +189,17 @@ class RefConResults
         else ballots * 100.0 / registered
       end
       
+      party_reg_color = precinct_parties[r.precinct_id] ? registration_color(precinct_parties[r.precinct_id]) : 'n0' 
       
-      
-      
-      { "id" => r.precinct_id, "c" => color, "p" => "ip#{participation_shade(participation)}", "pp" => participation, "r" => registered, "b" => ballots }
+      { 
+        "id" => r.precinct_id, 
+        "c" => color,  #color shade for contest
+        "p" => "#{region}p#{participation_shade(participation)}",  #color shade for participation
+        "pr" => "#{region}#{party_reg_color}", #color shade for party registration
+        "pp" => participation, 
+        "r" => registered, 
+        "b" => ballots 
+      }
     end
 
     # colors for precincts in range
@@ -201,8 +216,8 @@ class RefConResults
     in_pids  = (pids & region_pids) - reported_precinct_ids
     out_pids = region_pids - pids
 
-    colors = colors + in_pids.map  { |pid| { "id" => pid, "c" => "in0", "p" => "in0" } }
-    colors = colors + out_pids.map { |pid| { "id" => pid, "c" => "on0", "p" => "on0" } }
+    colors = colors + in_pids.map  { |pid| { "id" => pid, "c" => "in0", "p" => "in0", "pr" => "in0" } }
+    colors = colors + out_pids.map { |pid| { "id" => pid, "c" => "on0", "p" => "on0", "pr" => "on0" } }
 
     colors
   end
@@ -552,6 +567,21 @@ class RefConResults
     raise ApiError.new("Not supported") if options.compact.size > 1
 
     return options
+  end
+
+  def registration_color(hash_of_parties)
+    sorted_parties = hash_of_parties.to_a.sort {|ar1, ar2| ar2[1]<=>ar1[1]}
+    puts sorted_parties
+    color = sorted_parties[0][0][0].downcase # just take the first letter
+    diff = sorted_parties[0][1] - sorted_parties[1][1]
+    if diff < AppConfig['map_color']['threshold']['lower']
+      shade = 2
+    elsif diff < AppConfig['map_color']['threshold']['upper']
+      shade = 1
+    else
+      shade = 0
+    end
+    return "#{color}#{shade}"  
   end
 
   def participation_shade(v)

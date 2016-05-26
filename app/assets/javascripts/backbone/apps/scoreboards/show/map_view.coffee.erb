@@ -227,7 +227,7 @@ InfoBubble.prototype.panToView = ->
       pc = '<%= AppConfig['map_color']['colors']['participation'] %>'
       for shade in [ 0, 1, 2, 3, 4, 5 ]
         @generateColor 'i', 'p', pc, shade, 1 - shade * 0.2
-      # @generateColor 'i', 'p', pc, 0, 1
+        @generateColor 'o', 'p', pc, shade, 1 - shade * 0.8
       # @generateColor 'i', 'p', pc, 1, .8
       # @generateColor 'i', 'p', pc, 2, .6
       # @generateColor 'i', 'p', pc, 3, .4
@@ -364,7 +364,15 @@ InfoBubble.prototype.panToView = ->
         App.vent.trigger 'region:selected', precinct
 
     updateColorKey: ->
-      @colorKey = if @options.coloringType == 'results' then 'c' else 'p'
+      @colorKey = switch @options.coloringType
+        when 'results'
+          'c'
+        when 'participation'
+          'p'
+        when 'partyRegistration'
+          'pr'
+        else
+          'c'
 
     renderPrecincts: ->
       App.execute 'when:fetched', @precincts, =>

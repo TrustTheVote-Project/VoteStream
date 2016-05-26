@@ -16,29 +16,35 @@ class ColorScheme
 
   def self.candidate_color(candidate, index)
     c = 'not_reporting'
-
     
     if candidate
-      party = candidate.party.name.downcase.strip
-      if party == 'nonpartisan'
-        c = index == 0 ? 'nonpartisan1' : 'nonpartisan2'
-      elsif party == 'republican'
-        c = 'republican'
-      elsif party == 'democratic-farmer-labor' or party == 'democratic'
-        c = 'democrat'
-      elsif party == 'write-in'
-        c = 'other'
-      else
-        # if candidate.color
-        #   return candidate.color
-        # else
-        c = "other#{index.to_i+1}"
-        # end
-      end
+      party = candidate.party.name
+      return self.party_color(party, index)
     end
-
-    colors[c]
+    return colors[c]
   end
+  
+  def self.party_color(party, index)
+    party = party.downcase.strip
+    c = 'not_reporting'
+    if party == 'nonpartisan'
+      c = index == 0 ? 'nonpartisan1' : 'nonpartisan2'
+    elsif party == 'republican'
+      c = 'republican'
+    elsif party == 'democratic-farmer-labor' or party == 'democratic'
+      c = 'democrat'
+    elsif party == 'write-in'
+      c = 'other'
+    else
+      # if candidate.color
+      #   return candidate.color
+      # else
+      c = "other#{index.to_i+1}"
+      # end
+    end
+    return colors[c]
+  end
+  
 
   def self.ballot_response_color(ballot_response, index)
     c = 'not_reporting'

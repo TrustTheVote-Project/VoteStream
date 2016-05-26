@@ -23,11 +23,12 @@
     App.request('entities:precincts')
     App.request('entities:refcons')
     App.request('entities:districts')
+    App.request('entities:electionMetadata')
     # unless App.Entities.refcons?
     #   App.Entities.refcons = new App.Entities.RefconCollection
     #   App.Entities.refcons.fetchForLocality gon.locality_id
    
-    App.execute 'when:fetched', [App.Entities.refcons, App.Entities.precincts, App.Entities.districts], =>
+    App.execute 'when:fetched', [App.Entities.refcons, App.Entities.precincts, App.Entities.districts, App.Entities.election_metadata], =>
       App.module("HeaderApp").start()
       App.module("ScoreboardsApp").start()
       App.module("AdvancedFiltersApp").start()
