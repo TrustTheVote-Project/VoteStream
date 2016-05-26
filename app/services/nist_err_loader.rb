@@ -196,25 +196,26 @@ class NistErrLoader < BaseLoader
               #   <Overvotes>0</Overvotes>
               #   <Undervotes>757</Undervotes>
               # </SummaryCounts>
-              c.summary_counts.each do |sc|
-                d_uid = sc.gp_unit_identifier #fix_district_uid(vc.gp_unit)
-                precinct = locality_precincts[d_uid]
+              if c.summary_counts
+                c.summary_counts.each do |sc|
+                  d_uid = sc.gp_unit_identifier #fix_district_uid(vc.gp_unit)
+                  precinct = locality_precincts[d_uid]
 
-                if precinct
-                  precinct = precinct.precinct || precinct
-                  d_uid = precinct.uid
-                  cr = precinct_results[d_uid]
-                  if cr.nil?
-                    raise "No contest result for contest total count #{contest_total}"
+                  if precinct
+                    precinct = precinct.precinct || precinct
+                    d_uid = precinct.uid
+                    cr = precinct_results[d_uid]
+                    if cr.nil?
+                      raise "No contest result for contest total count #{contest_total}"
+                    end
+                    cr.total_votes += sc.ballots_cast
+                    cr.undervotes += sc.undervotes
+                    cr.overvotes += sc.overvotes
+                  else
+                    raise "No pct for contest summary count #{sc}"
                   end
-                  cr.total_votes += sc.ballots_cast
-                  cr.undervotes += sc.undervotes
-                  cr.overvotes += sc.overvotes
-                else
-                  raise "No pct for contest summary count #{sc}"
                 end
               end
-
 
               # Overall winner
               con_winners = {}

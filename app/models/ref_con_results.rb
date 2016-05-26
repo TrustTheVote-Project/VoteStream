@@ -10,17 +10,17 @@ class RefConResults
 
   def all_refcons(params)
     locality = Locality.find(params[:locality_id])
-    { federal: refcons_of_type(locality, 'Federal', params),
-      state:   refcons_of_type(locality, 'State', params),
-      mcd:     refcons_of_type(locality, 'MCD', params),
-      other:   refcons_of_type(locality, 'Other', params) }
+    { "federal"    => refcons_of_type(locality, 'Federal', params),
+      "state"      => refcons_of_type(locality, 'State', params),
+      "mcd"        => refcons_of_type(locality, 'MCD', params),
+      "other"      => refcons_of_type(locality, 'Other', params) }
   end
 
   def refcons_of_type(locality, district_type, params)
     contests     = locality.contests.where(district_type: district_type).select("id, office as name, lpad(sort_order, 5, '0') || lower(office) as sort_order")
     refs         = locality.referendums.where(district_type: district_type).select("id, title as name, lpad(sort_order, 5, '0') || lower(title) as sort_order")
 
-    [ contests, refs ].flatten.sort_by(&:sort_order).map { |i| { id: i.id, name: i.name, type: i.kind_of?(Contest) ? 'c' : 'r' } }
+    [ contests, refs ].flatten.sort_by(&:sort_order).map { |i| { "id" => i.id, "name" => i.name, "type" => i.kind_of?(Contest) ? 'c' : 'r' } }
   end
 
   def region_refcons(params)
@@ -37,8 +37,8 @@ class RefConResults
 
     candidate_votes = results.select("sum(votes) v, candidate_id, ballot_type").group('ballot_type, candidate_id').order(nil).inject({}) do |m, cr|
       m[cr.candidate_id] ||= {}
-      m[cr.candidate_id][:total] ||= 0
-      m[cr.candidate_id][:total] += cr.v.to_i
+      m[cr.candidate_id]["total"] ||= 0
+      m[cr.candidate_id]["total"] += cr.v.to_i
       m[cr.candidate_id][cr.ballot_type] = cr.v.to_i
       m
     end
@@ -49,32 +49,32 @@ class RefConResults
 
     ordered = ordered_records(candidates, candidate_votes) do |c, votes, vote_channels, idx|
       { 
-        name: c.name, 
-        party: { 
-          name: c.party_name, 
-          abbr: c.party.abbr 
+        "name"  => c.name, 
+        "party" => { 
+          "name"  => c.party_name, 
+          "abbr"  => c.party.abbr 
         }, 
-        votes: votes,
-        vote_channels: vote_channels,
-        c: ColorScheme.candidate_color(c, ordered_candidates.index(c)) 
+        "votes" => votes,
+        "vote_channels" => vote_channels,
+        "c" => ColorScheme.candidate_color(c, ordered_candidates.index(c)) 
       }
     end
 
 
-    ordered << { name: 'Overvotes', party: { name: 'Stats', abbr: 'stats' }, votes: overvotes, c: ColorScheme.special_colors(:overvotes) }
-    ordered << { name: 'Undervotes', party: { name: 'Stats', abbr: 'stats' }, votes: undervotes, c: ColorScheme.special_colors(:undervotes) }
-    ordered << { name: 'Non-Participating', party: { name: 'Stats', abbr: 'stats' }, np: true, votes: registered - ballots, c: ColorScheme.special_colors(:non_participating) }
+    ordered << { "name" => 'Overvotes', "party" => { "name" => 'Stats', "abbr" => 'stats' }, "votes" => overvotes, "c" => ColorScheme.special_colors(:overvotes) }
+    ordered << { "name" => 'Undervotes', "party" => { "name" => 'Stats', "abbr" => 'stats' }, "votes" => undervotes, "c" => ColorScheme.special_colors(:undervotes) }
+    ordered << { "name" => 'Non-Participating', "party" => { "name" => 'Stats', "abbr" => 'stats' }, "np" => true, "votes" => registered - ballots, "c" => ColorScheme.special_colors(:non_participating) }
 
     return {
-      summary: {
-        title:         contest.office,
-        contest_type:  contest.district_type,
-        votes:         ballots - overvotes - undervotes,
-        voters:        registered,
-        overvotes:     overvotes,
-        undervotes:    undervotes,
-        ballots:       ballots,
-        rows:          ordered
+      "summary" => {
+        "title" =>         contest.office,
+        "contest_type"  =>  contest.district_type,
+        "votes" =>         ballots - overvotes - undervotes,
+        "voters"  =>        registered,
+        "overvotes" =>     overvotes,
+        "undervotes"  =>    undervotes,
+        "ballots" =>       ballots,
+        "rows"  =>          ordered
       }
     }
   end
@@ -113,31 +113,31 @@ class RefConResults
     
     response_votes = results.select("sum(votes) v, ballot_response_id, ballot_type").group('ballot_type, ballot_response_id').order(nil).inject({}) do |m, br|
       m[br.ballot_response_id] ||= {}
-      m[br.ballot_response_id][:total] ||= 0
-      m[br.ballot_response_id][:total] += br.v.to_i
+      m[br.ballot_response_id]["total"] ||= 0
+      m[br.ballot_response_id]["total"] += br.v.to_i
       m[br.ballot_response_id][m] = br.v.to_i
       m
     end
 
     ordered = ordered_records(responses, response_votes) do |b, votes, vote_channels, idx|
-      { name: b.name, votes: votes, vote_channels: vote_channels, c: ColorScheme.ballot_response_color(b, idx) }
+      { "name" => b.name, "votes" => votes, "vote_channels" => vote_channels, "c" => ColorScheme.ballot_response_color(b, idx) }
     end
 
-    ordered << { name: 'Overvotes', party: { name: 'Stats', abbr: 'stats' }, votes: overvotes, c: ColorScheme.special_colors(:overvotes) }
-    ordered << { name: 'Undervotes', party: { name: 'Stats', abbr: 'stats' }, votes: undervotes, c: ColorScheme.special_colors(:undervotes) }
-    ordered << { name: 'Non-Participating', party: { name: 'Stats', abbr: 'stats' }, votes: registered - ballots, c: ColorScheme.special_colors(:non_participating) }
+    ordered << { "name" => 'Overvotes', "party" => { "name" => 'Stats', "abbr" => 'stats' }, "votes" => overvotes, "c" => ColorScheme.special_colors(:overvotes) }
+    ordered << { "name" => 'Undervotes', "party" => { "name" => 'Stats', "abbr" => 'stats' }, "votes" => undervotes, "c" => ColorScheme.special_colors(:undervotes) }
+    ordered << { "name" => 'Non-Participating', "party" => { "name" => 'Stats', "abbr" => 'stats' }, "votes" => registered - ballots, "c" => ColorScheme.special_colors(:non_participating) }
 
     return {
-      summary: {
-        title:       referendum.title,
-        subtitle:    referendum.subtitle,
-        text:        referendum.question,
-        votes:       ballots - overvotes - undervotes,
-        overvotes:   overvotes,
-        undervotes:  undervotes,
-        ballots:     ballots,
-        voters:      registered,
-        rows:        ordered
+      "summary" => {
+        "title" =>       referendum.title,
+        "subtitle" =>    referendum.subtitle,
+        "text" =>        referendum.question,
+        "votes" =>       ballots - overvotes - undervotes,
+        "overvotes" =>   overvotes,
+        "undervotes" =>  undervotes,
+        "ballots" =>     ballots,
+        "voters" =>      registered,
+        "rows" =>        ordered
       }
     }
   end
@@ -184,7 +184,7 @@ class RefConResults
       
       
       
-      { id: r.precinct_id, c: color, p: "ip#{participation_shade(participation)}", pp: participation, r: registered, b: ballots }
+      { "id" => r.precinct_id, "c" => color, "p" => "ip#{participation_shade(participation)}", "pp" => participation, "r" => registered, "b" => ballots }
     end
 
     # colors for precincts in range
@@ -201,8 +201,8 @@ class RefConResults
     in_pids  = (pids & region_pids) - reported_precinct_ids
     out_pids = region_pids - pids
 
-    colors = colors + in_pids.map  { |pid| { id: pid, c: "in0", p: "in0" } }
-    colors = colors + out_pids.map { |pid| { id: pid, c: "on0", p: "on0" } }
+    colors = colors + in_pids.map  { |pid| { "id" => pid, "c" => "in0", "p" => "in0" } }
+    colors = colors + out_pids.map { |pid| { "id" => pid, "c" => "on0", "p" => "on0" } }
 
     colors
   end
@@ -239,18 +239,18 @@ class RefConResults
 
       contest_query.to_a.group_by(&:couid).each do |contest_result_uid, records|
         res = records.map do |cr|
-          { id: cr.cruid, v: cr.votes, cauid: cr.cauid, caname: cr.caname }
+          { "id" => cr.cruid, "v" => cr.votes, "cauid" => cr.cauid, "caname" => cr.caname }
         end
 
         r = records.first
         results << {
-          couid: contest_result_uid,
-          cert:  r.certification,
-          cuid:  r.cuid,
-          cname: r.cname,
-          tv:    r.total_votes,
-          tvv:   r.total_valid_votes,
-          r:     res }
+          "couid" => contest_result_uid,
+          "cert" =>  r.certification,
+          "cuid" =>  r.cuid,
+          "cname" => r.cname,
+          "tv" =>    r.total_votes,
+          "tvv" =>   r.total_valid_votes,
+          "r" =>     res }
       end
     end
 
@@ -262,22 +262,22 @@ class RefConResults
 
       ref_query.to_a.group_by(&:couid).each do |contest_result_uid, records|
         res = records.map do |rr|
-          { id: rr.brruid, v: rr.votes, bruid: rr.bruid, brname: rr.brname }
+          { "id" => rr.brruid, "v" => rr.votes, "bruid" => rr.bruid, "brname" => rr.brname }
         end
 
         r = records.first
         results << {
-          couid: contest_result_uid,
-          cert:  r.certification,
-          ruid:  r.ruid,
-          rname: r.rname,
-          tv:    r.total_votes,
-          tvv:   r.total_valid_votes,
-          r:     res }
+          "couid" => contest_result_uid,
+          "cert" =>  r.certification,
+          "ruid" =>  r.ruid,
+          "rname" => r.rname,
+          "tv"  =>   r.total_votes,
+          "tvv" =>   r.total_valid_votes,
+          "r" =>     res }
       end
     end
 
-    { puid: precinct.uid, pname: precinct.name, r: results }
+    { "puid" => precinct.uid, "pname" => precinct.name, "r" => results }
   end
   
   def set_ballot_type_filters(query, params)
@@ -334,21 +334,21 @@ class RefConResults
 
       pcr = precinct_candidate_results[p.id] || []
       candidate_votes = pcr.inject({}) do |memo, r|
-        memo[r.candidate_id] ||= { total: 0 }
-        memo[r.candidate_id][:total] += r.votes.to_i
+        memo[r.candidate_id] ||= { "total" => 0 }
+        memo[r.candidate_id]["total"] += r.votes.to_i
         memo
       end
 
       ordered = ordered_records(candidates, candidate_votes) do |i, votes, vote_channels, idx|
-        { id: i.id, votes: votes, vote_channels: vote_channels }
+        { "id" => i.id, "votes" => votes, "vote_channels" => vote_channels }
       end
 
       li = leader_info(pcr)
 
-      { id:       p.id,
-        votes:    li[:total_votes],
-        voters:   p.registered_voters,
-        rows:     ordered[0, 2] }
+      { "id" =>       p.id,
+        "votes" =>    li["total_votes"],
+        "voters" =>   p.registered_voters,
+        "rows" =>     ordered[0, 2] }
     end
 
     Rails.logger.debug("T::#{DateTime.now.strftime('%Q')} Done Total Counts")
@@ -361,17 +361,17 @@ class RefConResults
     
     Rails.logger.debug("T::#{DateTime.now.strftime('%Q')} Done Winning Candidates")
     
-    items = candidates.map { |c,i| { id:  c.id, name:  c.name, party:  { name:  c.party_name, abbr:  c.party.abbr }, c:  ColorScheme.candidate_color(c, ordered_candidates.index(c))} }
+    items = candidates.map { |c,i| { "id" =>  c.id, "name" =>  c.name, "party" =>  { "name" =>  c.party_name, "abbr" =>  c.party.abbr }, "c" =>  ColorScheme.candidate_color(c, ordered_candidates.index(c))} }
     
     Rails.logger.debug("T::#{DateTime.now.strftime('%Q')} Done  calculating items")
     
     return {
-      items:      items,
-      ballots:    ballots,
-      votes:      ballots - overvotes - undervotes,
-      voters:     registered,
-      channels:   channels,
-      precincts:  pmap
+      "items" =>      items,
+      "ballots" =>    ballots,
+      "votes" =>      ballots - overvotes - undervotes,
+      "voters" =>     registered,
+      "channels" =>   channels,
+      "precincts" =>  pmap
     }
   end
 
@@ -396,21 +396,21 @@ class RefConResults
 
       pcr = precinct_referendum_results[p.id] || []
       response_votes = pcr.inject({}) do |memo, r|
-        memo[r.ballot_response_id] ||= { total: 0 }
-        memo[r.ballot_response_id][:total] += r.votes.to_i
+        memo[r.ballot_response_id] ||= { "total"=> 0 }
+        memo[r.ballot_response_id]["total"] += r.votes.to_i
         memo
       end
 
       ordered = ordered_records(responses, response_votes) do |i, votes, vote_channels, idx|
-        { id: i.id, votes: votes, vote_channels: vote_channels }
+        { "id" => i.id, "votes" => votes, "vote_channels" => vote_channels }
       end
 
       li = leader_info(pcr)
 
-      { id:       p.id,
-        votes:    li[:total_votes],
-        voters:   p.registered_voters,
-        rows:     ordered[0, 2] }
+      { "id"       => p.id,
+        "votes"    => li["total_votes"],
+        "voters"   => p.registered_voters,
+        "rows"     => ordered[0, 2] }
     end
 
     ballots, overvotes, undervotes, registered, channels = get_vote_stats(referendum, rc_pids)
@@ -418,11 +418,11 @@ class RefConResults
     
 
     return {
-      items:      responses.map { |r| { id:  r.id, name:  r.name, c:  ColorScheme.ballot_response_color(r, responses.index(r)-1) } },
-      ballots:    ballots,
-      votes:      ballots - overvotes - undervotes,
-      voters:     registered,
-      precincts:  pmap
+      "items"      => responses.map { |r| { "id" =>  r.id, "name" =>  r.name, "c" =>  ColorScheme.ballot_response_color(r, responses.index(r)-1) } },
+      "ballots"    => ballots,
+      "votes"      => ballots - overvotes - undervotes,
+      "voters"     => registered,
+      "precincts"  => pmap
     }
   end
 
@@ -437,22 +437,22 @@ class RefConResults
     end
 
     return {
-      total_votes: total_votes,
-      leader: leader
+      "total_votes" => total_votes,
+      "leader"      => leader
     }
   end
 
   def ordered_records(items, items_votes_hash, &block)
     unordered = items.map do |i|
-      votes = items_votes_hash[i.id] ? items_votes_hash[i.id][:total].to_i : 0
-      { order: (@order_by_votes ? -votes * 10000 : 0) + i.sort_order.to_i, item: i }
+      votes = items_votes_hash[i.id] ? items_votes_hash[i.id]["total"].to_i : 0
+      { "order" => (@order_by_votes ? -votes * 10000 : 0) + i.sort_order.to_i, "item" => i }
     end
 
-    ordered = unordered.sort_by { |cv| cv[:order] }.map { |cv| cv[:item] }
+    ordered = unordered.sort_by { |cv| cv["order"] }.map { |cv| cv["item"] }
 
     idx = 0
     return ordered.map do |i|
-      votes = items_votes_hash[i.id] ? items_votes_hash[i.id][:total].to_i : 0
+      votes = items_votes_hash[i.id] ? items_votes_hash[i.id]["total"].to_i : 0
       vote_channels = items_votes_hash[i.id]
       # if items_votes_hash[i.id]
       #   items_votes_hash[i.id].keys.each do |k|
@@ -470,13 +470,13 @@ class RefConResults
       p = params.merge(no_precinct_results: true)
       if rc.kind_of?(Contest)
         data = contest_data(rc, p)
-        data[:type] = 'c'
+        data["type"] = 'c'
       else
         data = referendum_data(rc, p)
-        data[:type] = 'r'
+        data["type"] = 'r'
       end
 
-      data[:id] = rc.id
+      data["id"] = rc.id
       data
     end
   end
@@ -508,9 +508,9 @@ class RefConResults
     filt = {}
     if district_ids.blank?
       locality_id = params[:locality_id]
-      filt[:locality_id] = locality_id unless locality_id.blank?
+      filt["locality_id"] = locality_id unless locality_id.blank?
     else
-      filt[:district_id] = district_ids
+      filt["district_id"] = district_ids
     end
 
     cat = params[:category]

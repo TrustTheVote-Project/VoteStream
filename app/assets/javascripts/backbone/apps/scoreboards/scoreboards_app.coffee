@@ -78,26 +78,31 @@
       return filters
   
   setAdvancedParams = (params) ->
-    App.execute 'when:fetched', [App.request('entities:refcons'), App.request('entities:districts'), App.request('entities:precincts')], ->
-      App.vent.trigger 'filters:set', {advanced: params}
+    App.vent.trigger 'filters:set', {advanced: params}
     
     
   
     
   setParams = (ctype, cid, rtype, rid, params) ->
     waitingFor = []
-    # TODO: all of these should be pre-loaded before appstart so don't need to wait
-    if ctype == 'c' or ctype == 'r'
-      waitingFor.push App.request('entities:refcons')
-    if rtype == 'd'
-      waitingFor.push App.request('entities:districts')
-    if rtype == 'p'
-      waitingFor.push App.request('entities:precincts')
 
     App.execute 'when:fetched', waitingFor, ->
       filters = ScoreboardsApp.Helpers.filtersFromParams(ctype, cid, rtype, rid, params)
       # TODO: ScoreboardUrl should listen to filters:set
       App.vent.trigger 'filters:set', filters
+
+  getDefaultRefcon = ->
+    refcon = null
+    refs = App.request('entities:refcons')
+    if refs.get("federal").length > 0
+      refcon = App.request('entities:refcon:all-Federal') 
+    else if refs.get("state").length > 0
+      refcon = App.request('entities:refcon:all-State')
+    else if refs.get("local").length > 0
+      refcon = App.request('entities:refcon:all-MCD')
+    else if refs.get("other").length > 0
+      refcon = App.request('entities:refcon:all-Other')
+    return refcon
 
   API =
     notFound: (params) ->
@@ -112,19 +117,27 @@
       
       
     map: (ctype, cid, region, params) ->
-      console.log('hit the controller')
-      if region and region.match('=')
-        params = region
-      else if region
-        regionParts = region.split('-')
-        regionType = regionParts[0]
-        regionId = regionParts[1]
+      console.log('hit the controller', ctype, cid, region, params)
+      if not ctype
+        # Get the default and refresh the page
+        default_refcon = getDefaultRefcon()
+        si = App.request 'entities:scoreboardInfo'
+        si.set('refcon', default_refcon)
+        su = App.request 'entities:scoreboardUrl'
+        su.updatePath(true)
+      else
+        if region and region.match('=')
+          params = region
+        else if region
+          regionParts = region.split('-')
+          regionType = regionParts[0]
+          regionId = regionParts[1]
         
-      setParams(ctype, cid, regionType, regionId, params)
+        setParams(ctype, cid, regionType, regionId, params)
 
-      su = App.request 'entities:scoreboardUrl'
-      su.setView 'map'
-      ScoreboardsApp.Show.Controller.show()
+        su = App.request 'entities:scoreboardUrl'
+        su.view = 'map'
+        ScoreboardsApp.Show.Controller.show()
 
     advancedMap: (params) ->
       setAdvancedParams(params)

@@ -55,6 +55,7 @@
         colors = new PrecinctColors
         si = App.request 'entities:scoreboardInfo'
         colors.fetchForResult(@model, @region, si.get('advanced')).done ((si, colors) =>
+          window.colors = colors
           @mapRegion = new Marionette.Region
             el: @ui.mapContainer
 

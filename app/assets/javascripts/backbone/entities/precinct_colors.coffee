@@ -33,7 +33,6 @@
         else
           filter.precinct_id = rid
 
-
       @fetch
         type: 'POST'      
         url:   '/data/precinct_colors'

@@ -9,13 +9,6 @@
         @set attribute, value
         @reloadResults()
         
-      # Params => filters => entity queries
-      # UI changes => [Params w/out trigger, filters => entity queries]
-      # ScoreboardUrl should listen to this which should pass through to here
-      App.vent.on 'filters:set', (options = {}) =>
-        console.log('filters set', options)
-        @reloadResults options
-          #refcon: options.refcon
 
       App.vent.on 'region:selected', (region) =>
         @reloadResults({
@@ -36,7 +29,6 @@
 
       App.vent.on 'result:selected', (result) =>
         @set 'result', result
-      
       
       
       @get('results').on 'sync', =>
@@ -95,9 +87,9 @@
         @set k, v
         
       @preselectedRefconId = options.result?.id
-      console.log(@preselectedRefconId)
       results = @get 'results'
       results.fetchForFilter @get('region'), @get('refcon'), this.extraOpts(), @get('advanced')
+      App.vent.trigger('view_changed')
 
     pickResult: ->
       console.log('picking a result')
@@ -153,17 +145,7 @@
   API =
     getScoreboardInfo: ->
       unless Entities.scoreboardInfo?
-        refs = Entities.refcons
         refcon = null
-        if refs.get("federal").length > 0
-          refcon = App.request('entities:refcon:all-Federal') 
-        else if refs.get("state").length > 0
-          refcon = App.request('entities:refcon:all-State')
-        else if refs.get("local").length > 0
-          refcon = App.request('entities:refcon:all-MCD')
-        else if refs.get("other").length > 0
-          refcon = App.request('entities:refcon:all-Other')
-        
         # Scoreboard info is a *state* object
         Entities.scoreboardInfo = sb = window.sb = new Entities.ScoreboardInfo
           results:            new Entities.ResultsCollection

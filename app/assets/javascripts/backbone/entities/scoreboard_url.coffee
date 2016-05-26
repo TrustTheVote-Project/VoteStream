@@ -5,16 +5,29 @@
       @si = App.request 'entities:scoreboardInfo'
       @view = null
       @enabled = false
-      @si.on 'change:region change:refcon change:channelEarly change:channelElectionday change:channelAbsentee change:coloringType', =>
+      
+      # Params => filters => entity queries
+      # UI changes => [Params w/out trigger, filters => entity queries]
+      # ScoreboardUrl should listen to this which should pass through to here
+      App.vent.on 'filters:set', (options = {}) =>
+        #@updatePath(false)
+        console.log('filters set', options)
+        @si.reloadResults options
+          #refcon: options.refcon
+      
+      
+      App.vent.on 'view_changed', =>
         @updatePath(false)
+      
+      # @si.on 'change:region change:refcon change:channelEarly change:channelElectionday change:channelAbsentee change:coloringType', =>
+      #   @updatePath(false)
       @si.on 'change:advanced', =>
         #@updatePath()
         params = @si.get 'advanced'
         if params
-          App.execute 'when:fetched', App.request('entities:precincts'),  =>
-            af = App.request 'entities:advancedFilter'
-            af.fromParams(params)
-            @updatePath()
+          af = App.request 'entities:advancedFilter'
+          af.fromParams(params)
+          @updatePath()
             
           
     disable: -> @enabled = false
@@ -34,7 +47,9 @@
 
     updatePath: (refresh) =>
       return unless @enabled
-      App.navigate @path(), refresh
+      path = @path()
+      console.log("updateing path", path)
+      App.navigate path, refresh
 
     advancedView: ->
       @view == 'advanced-map' || @view == 'advanced-list'
@@ -42,6 +57,9 @@
     comparisonView: ->
       @view == 'map-comparison'
 
+    parseUrl: ->
+      
+    
     path: ->
       if @advancedView()
         af = App.request 'entities:advancedFilter'
@@ -57,11 +75,8 @@
       region = @si.get 'region'
       refcon = @si.get 'refcon'
 
-      ctype = 'all'
-      cid = 'federal'
-      if refcon
-        ctype = refcon.get('type')        
-        cid = refcon.get('id')
+      ctype = refcon.get('type')        
+      cid = refcon.get('id')
       ctype = 'a' if ctype == 'all'
       
       if region? or cid != 'federal'
