@@ -84,7 +84,8 @@
           resultsColl = new App.Entities.ResultsCollection
           resultsColl.fetchForFilter(filters.region, filters.refcon, extraOpts, advanced)
           
-          @listenTo resultsColl, 'reset', ((map, filters, advanced, results)->
+          @listenTo resultsColl, 'sync', ((map, filters, advanced, results)->
+            
             result = null # Specific selecte result / contesnt ?
             result = result || results.first()
 
