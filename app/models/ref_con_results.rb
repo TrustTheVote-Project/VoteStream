@@ -170,7 +170,7 @@ class RefConResults
     end
 
     precinct_registrants = VoterRegistration.where(precinct_id: reported_precinct_ids)
-    party_counts = precinct_registrants.select("party, precinct_id, count(*)").group(:party, :precinct_id)
+    party_counts = precinct_registrants.select("party, precinct_id, count(*)").group(:party, :precinct_id).where("party != 'None'")
     precinct_parties = {}
     party_counts.each do |pc|
       precinct_parties[pc.precinct_id] ||= {}
@@ -575,7 +575,6 @@ class RefConResults
     if sorted_parties.length > 1
       color = sorted_parties[0][0][0].downcase # just take the first letter
       diff = ((sorted_parties[0][1] - sorted_parties[1][1]) * 100 / total)
-      puts "#{diff} #{color}"
       if diff <= AppConfig['map_color']['threshold']['lower']
         shade = 2
       elsif diff <= AppConfig['map_color']['threshold']['upper']
