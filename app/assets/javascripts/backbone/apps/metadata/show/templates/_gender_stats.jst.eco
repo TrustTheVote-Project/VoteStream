@@ -1,0 +1,21 @@
+<div class='header'>
+  <h4><%= @stats_header %></h4>
+</div>
+<div class='row-fluid'>
+  <div class='span6'>
+    <canvas class="pie-chart"></canvas>
+  </div>
+  <div class='span6'>
+    <table>
+      <tr style="color: black">
+        <td>Total</td>
+        <td><%= @gender_total() %></td>
+      <% for gender in Object.keys(@gender_pctgs()): %>
+        <tr style="color: <%= @colors(gender) %>;">
+          <td><%= gender %></td>
+          <td><%= @gender_pctgs()[gender] %></td>
+        </tr>
+      <% end %>
+    </table>
+  </div>
+<div>

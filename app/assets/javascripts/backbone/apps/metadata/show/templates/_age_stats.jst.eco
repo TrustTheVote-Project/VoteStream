@@ -1,0 +1,4 @@
+<div class='header'>
+  <h4><%= @stats_header %></h4>
+</div>
+<canvas class="line-chart"></canvas>

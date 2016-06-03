@@ -1,4 +1,4 @@
 <ul class='toggle btn-group'>
-  <li class='btn btn-small'>Total Ballots</li>
-  <li class='btn btn-small <%= 'active' if @activeButton=='voters' %>'>Registered Voters</li>
+  <li data-value='voters' class='btn btn-small <%= 'active' if @activeButton=='voters' %>'>Registered Voters</li>
+  <li data-value='ballots' class='btn btn-small <%= 'active' if @activeButton=='ballots' %>'>Registered Voters and Participation</li>
 </ul>

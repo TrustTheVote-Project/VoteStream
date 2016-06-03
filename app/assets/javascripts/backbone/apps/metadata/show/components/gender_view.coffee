@@ -1,33 +1,46 @@
 @App.module "MetadataApp.Show", (Show, App, Backbone, Marionette, $, _) ->
 
-  class Show.GenderView extends Marionette.Layout
-    template: 'metadata/show/_gender'
-    
-    regions:
-      toggleRegion: '#metadata-gender-toggle'
+  class Show.GenderStatsView extends Marionette.ItemView
+    template: 'metadata/show/_gender_stats'
 
-    initialize: ->
+    initialize: (options)->
       @metaData = App.request('entities:electionMetadata')
       @demographics = @metaData.get('demographics')
       @genders = @demographics['sex']
-      @toggler = { selected: 'voters'}
+      @voting_genders = @demographics['sex_voted']
+      @toggler = options.toggler
       
-    serializeData: ->
-      genders = {}
-      gender_total = 0
+      @gender_pctgs = {}
+      @voting_gender_pctgs = {}
+      @gender_total = 0
+      @voting_gender_total = 0
       for gender, count of @genders
-        gender_total += count
+        @gender_total += count
+
+      for gender, count of @voting_genders
+        @voting_gender_total += count
         
       for gender, count of @genders        
-        genders[@genderLabel(gender)] = App.ScoreboardsApp.Helpers.percentFormatted(count, gender_total)
-            
+        @gender_pctgs[@genderLabel(gender)] = App.ScoreboardsApp.Helpers.percentFormatted(count, @gender_total)
+
+      for gender, count of @voting_genders        
+        @voting_gender_pctgs[@genderLabel(gender)] = App.ScoreboardsApp.Helpers.percentFormatted(count, @voting_gender_total)
+      
+    templateHelpers: =>
+      gender_pctgs: =>
+        if @toggler.selected == 'voters' then @gender_pctgs else @voting_gender_pctgs
+      gender_total: =>
+        App.ScoreboardsApp.Helpers.numberFormatted(if @toggler.selected == 'voters' then @gender_total else @voting_gender_total)
+        
+    serializeData: ->
+      stats_header = if @toggler.selected == 'voters' then "All Registrants" else "Participating Voters"
+      
       return {
-        genders: genders
+        stats_header: stats_header
         colors: @colors
       }
       
     onShow: ->
-      @toggleRegion.show new Show.TotalTypeTogglerView({toggler: @toggler})
       @renderPieChart()
 
     colors: (gender) ->
@@ -43,7 +56,8 @@
     
     renderPieChart: ->
       @pieData = []
-      for gender, count of @genders
+      gHash = if @toggler.selected == 'voters' then @genders else @voting_genders
+      for gender, count of gHash
         @pieData.push
           value: count
           color: @colors(gender)
@@ -53,6 +67,25 @@
         customTooltips: (tooltip) ->  # don't show a tooltip
           return;
       
-      ctx = $("#metadata-gender-chart").get(0).getContext("2d")
+      id_part = if @toggler.selected == 'voters' then "reg" else "bal"
+      ctx = $("#metadata-gender-stats-"+id_part+" .pie-chart").get(0).getContext("2d")
       @pieChart = new Chart(ctx).Pie(@pieData, @pieOptions)
+    
+
+  class Show.GenderView extends Marionette.Layout
+    template: 'metadata/show/_gender'
+    
+    regions:
+      statsRegionReg: '#metadata-gender-stats-reg'
+      statsRegionBal: '#metadata-gender-stats-bal'
+    
+    initialize: (options) ->
+      @toggler = options.toggler
+      @statsViewReg = new Show.GenderStatsView({toggler: {selected: 'voters'}})
+      @statsViewBal = new Show.GenderStatsView({toggler: {selected: 'ballots'}})
+      
+    onShow: ->
+      @statsRegionReg.show @statsViewReg
+      if @toggler.selected == 'ballots'
+        @statsRegionBal.show @statsViewBal
     

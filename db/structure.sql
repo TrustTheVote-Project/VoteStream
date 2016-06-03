@@ -642,7 +642,9 @@ CREATE TABLE voter_registrations (
     is_active_duty_uniformed_services boolean DEFAULT false NOT NULL,
     is_permanent_absetee boolean DEFAULT false NOT NULL,
     is_eligible_military_spouse_or_dependent boolean DEFAULT false NOT NULL,
-    is_residing_abroad_uncertain_return boolean DEFAULT false NOT NULL
+    is_residing_abroad_uncertain_return boolean DEFAULT false NOT NULL,
+    voter_outcome character varying(255),
+    voter_rejected_reason character varying(255)
 );
 
 
@@ -1263,6 +1265,20 @@ CREATE INDEX index_vr_on_is_permane ON voter_registrations USING btree (is_perma
 
 
 --
+-- Name: index_vr_on_outcome; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE INDEX index_vr_on_outcome ON voter_registrations USING btree (voter_outcome);
+
+
+--
+-- Name: index_vr_on_reason; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE INDEX index_vr_on_reason ON voter_registrations USING btree (voter_rejected_reason);
+
+
+--
 -- Name: unique_schema_migrations; Type: INDEX; Schema: public; Owner: -; Tablespace: 
 --
 
@@ -1385,3 +1401,7 @@ INSERT INTO schema_migrations (version) VALUES ('20160316151449');
 INSERT INTO schema_migrations (version) VALUES ('20160316153123');
 
 INSERT INTO schema_migrations (version) VALUES ('20160317160439');
+
+INSERT INTO schema_migrations (version) VALUES ('20160603011358');
+
+INSERT INTO schema_migrations (version) VALUES ('20160603110908');

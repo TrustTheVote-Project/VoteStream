@@ -1,22 +1,9 @@
 <div class='panel pie-panel'>
-  <div id="metadata-gender-toggle">
-  </div>
   <div class='header'>
     <h6>Breakdown by Gender</h6>
   </div>
-  <div class='row-fluid'>
-    <div class='span6'>
-      <canvas id="metadata-gender-chart" class="pie-chart"></canvas>
-    </div>
-    <div class='span6'>
-      <table>
-        <% for gender in Object.keys(@genders): %>
-          <tr style="color: <%= @colors(gender) %>;">
-            <td><%= gender %></td>
-            <td><%= @genders[gender] %></td>
-          </tr>
-        <% end %>
-      </table>
-    </div>
+  <div id="metadata-gender-stats-reg">
+  </div>
+  <div id="metadata-gender-stats-bal">
   </div>
 </div>

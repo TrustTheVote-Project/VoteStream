@@ -170,6 +170,7 @@ class RefConResults
     end
 
     precinct_registrants = VoterRegistration.where(precinct_id: reported_precinct_ids)
+    # TODO: Ignoring 'none' for now since we don't have a lot of party data
     party_counts = precinct_registrants.select("party, precinct_id, count(*)").group(:party, :precinct_id).where("party != 'None'")
     precinct_parties = {}
     party_counts.each do |pc|

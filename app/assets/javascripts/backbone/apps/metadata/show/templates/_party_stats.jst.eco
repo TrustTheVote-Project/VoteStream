@@ -1,0 +1,15 @@
+<div class='header'>
+  <h4><%= @stats_header %></h4>
+</div>
+<table class='bars'>
+  <% for party_count in @parties: %>
+    <tr>
+      <td>
+        <div style="background-color: <%= @colors(party_count[0]) %>; opacity: 0.4; width: <%= party_count[1] %>;" class='fill'> &nbsp;
+        </div>
+        <span><%= party_count[0] %></span>
+      </td>
+      <td style="color: <%= @colors(party_count[0]) %>;"><%= party_count[1] %></td>
+    </tr>
+  <% end %>
+</table>
