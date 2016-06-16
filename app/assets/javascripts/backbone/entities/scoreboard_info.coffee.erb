@@ -112,22 +112,26 @@
     dataTypeLabel:    ->
       if @coloringType == 'participation'
         return "Participation"
+      else if @coloringType == 'partyRegistration'
+        return "Party Registration"
       else
         return "Results"
 
     refconLabel:      ->
+      if @coloringType == 'partyRegistration'
+        return ''
       if App.request('entities:scoreboardUrl').advancedView()
         af = App.request 'entities:advancedFilter'
-        af.breadcrumbsContestName()              
+        af.breadcrumbsContestName() +  ' / '          
       else
         type = 'all'
         if @refcon
           type = @refcon.get('type')
           if type == 'all'
             id = @refcon.get('id')
-            gon.categories[id]
+            gon.categories[id] + ' / '
         if @refcon
-          @refcon.get('name')
+          @refcon.get('name') + ' / '
         else
           ''
         

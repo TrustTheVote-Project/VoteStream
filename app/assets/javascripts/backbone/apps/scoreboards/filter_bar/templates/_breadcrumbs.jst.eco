@@ -1,1 +1,1 @@
-<label><%= @dataTypeLabel() %>:</label> <%= @refconLabel() %> / <%= @regionLabel() %>
+<label><%= @dataTypeLabel() %>:</label> <%= @refconLabel() %><%= @regionLabel() %>
