@@ -1,0 +1,18 @@
+<div class='header'>
+  <h4><%= @stats_header %></h4>
+</div>
+<div class='row-fluid'>
+  <div class='span4'>
+    <canvas class="pie-chart"></canvas>
+  </div>
+  <div class='span8'>
+    <table>
+      <% for race in @race_pctgs(): %>
+        <tr style="color: <%= race.color %>;">
+          <td><%= race.label %></td>
+          <td><%= race.percent %></td>
+        </tr>
+      <% end %>
+    </table>
+  </div>
+</div>

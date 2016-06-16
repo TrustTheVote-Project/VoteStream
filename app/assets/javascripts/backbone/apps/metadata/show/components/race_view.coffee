@@ -1,45 +1,71 @@
 @App.module "MetadataApp.Show", (Show, App, Backbone, Marionette, $, _) ->
 
-  class Show.RaceView extends Marionette.Layout
-    template: 'metadata/show/_race'
-    
-    regions:
-      toggleRegion: '#metadata-race-toggle'
+  class Show.RaceStatsView extends Marionette.ItemView
+    template: 'metadata/show/_race_stats'
 
-    initialize: ->
+    initialize: (options) ->
       @metaData = App.request('entities:electionMetadata')
       @demographics = @metaData.get('demographics')
       @races = @demographics['race']
-      @toggler = { selected: 'voters'}
+      @voting_races = @demographics['race_voted']
+      @toggler = options.toggler
       
-    serializeData: ->
-      items = []
-      item_total = 0
+      @race_pctgs = []
+      @voting_race_pctgs = []
+      @race_total = 0
+      @voting_race_total = 0
       for item, count of @races
-        item_total += count
+        @race_total += count
+
+      for item, count of @voting_races
+        @voting_race_total += count
         
       for item, count of @races        
-        items.push
+        @race_pctgs.push
           label: @label(item)
           color: @colors(item)
-          percent: App.ScoreboardsApp.Helpers.percentFormatted(count, item_total)
+          percent: App.ScoreboardsApp.Helpers.percentFormatted(count, @race_total)
+          count: count
+          
+      for item, count of @voting_races        
+        @voting_race_pctgs.push
+          label: @label(item)
+          color: @colors(item)
+          percent: App.ScoreboardsApp.Helpers.percentFormatted(count, @voting_race_total)
           count: count
             
-      items.sort (a,b) ->
+      @race_pctgs.sort (a,b) ->
         if a.count > b.count
           return -1
         else if a.count == b.count
           return 0
         else
           return 1
-          
+        
+      @voting_race_pctgs.sort (a,b) ->
+        if a.count > b.count
+          return -1
+        else if a.count == b.count
+          return 0
+        else
+          return 1
+      
+      
+    templateHelpers: =>
+      race_pctgs: =>
+        if @toggler.selected == 'voters' then @race_pctgs else @voting_race_pctgs
+      race_total: =>
+        App.ScoreboardsApp.Helpers.numberFormatted(if @toggler.selected == 'voters' then @race_total else @voting_race_total)
+      
+    serializeData: ->
+      stats_header = if @toggler.selected == 'voters' then "All Registrants" else "Participating Voters"
+      
       return {
-        races: items
+        stats_header: stats_header
         colors: @colors
-      }
+      }  
       
     onShow: ->
-      @toggleRegion.show new Show.TotalTypeTogglerView({toggler: @toggler})
       @renderPieChart()
 
     colors: (name) ->
@@ -77,6 +103,24 @@
         customTooltips: (tooltip) ->  # don't show a tooltip
           return;
       
-      ctx = $("#metadata-race-chart").get(0).getContext("2d")
+      id_part = if @toggler.selected == 'voters' then "reg" else "bal"
+      ctx = $("#metadata-race-stats-"+id_part+" .pie-chart").get(0).getContext("2d")
+      
       @pieChart = new Chart(ctx).Pie(@pieData, @pieOptions)
     
+  class Show.RaceView extends Marionette.Layout
+    template: 'metadata/show/_race'
+  
+    regions:
+      statsRegionReg: '#metadata-race-stats-reg'
+      statsRegionBal: '#metadata-race-stats-bal'
+  
+    initialize: (options) ->
+      @toggler = options.toggler
+      @statsViewReg = new Show.RaceStatsView({toggler: {selected: 'voters'}})
+      @statsViewBal = new Show.RaceStatsView({toggler: {selected: 'ballots'}})
+    
+    onShow: ->
+      @statsRegionReg.show @statsViewReg
+      if @toggler.selected == 'ballots'
+        @statsRegionBal.show @statsViewBal

@@ -47,7 +47,7 @@
         @gender.show new Show.GenderView({toggler: @toggler})
         @age.show new Show.AgeView({toggler: @toggler})
         @party.show new Show.PartyView({toggler: @toggler})
-        @race.show new Show.RaceView()
-        @voterCharacteristics.show new Show.VoterCharacteristicsView()
+        @race.show new Show.RaceView({toggler: @toggler})
+        @voterCharacteristics.show new Show.VoterCharacteristicsView({toggler: @toggler})
         @zipCodes.show new Show.ZipCodesView()
         @totalTypeToggleRegion.show @togglerView

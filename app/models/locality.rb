@@ -38,9 +38,11 @@ class Locality < ActiveRecord::Base
     participating_registrants = registrants.where("voter_outcome != ? AND voter_outcome IS NOT NULL", "NonParticipating")
     basics = {
       "voter_registrations" => registrants.count,
+      "voters" => participating_registrants.count,
       "sex" =>  registrants.group(:sex).count,
       "sex_voted" => participating_registrants.group(:sex).count,
       "race" => registrants.group(:race).count,
+      "race_voted" => participating_registrants.group(:race).count,
       "party" => registrants.group(:party).count,
       "party_voted" => participating_registrants.group(:party).count,
       "birth_years" => registrants.group(:date_of_birth).count,
@@ -48,14 +50,17 @@ class Locality < ActiveRecord::Base
     }
     
     voter_characteristics = {}
+    voting_voter_characteristics = {}
     VoterRegistration::CLASSIFICATIONS.each do |k,v|
       voter_characteristics[k] = registrants.where(v => true).count
+      voting_voter_characteristics[k] = participating_registrants.where(v => true).count
     end
     # TODO: how to get "other" characteristics?
     # voter_characteristics: VoterRegistrationClassification.where(precinct_id: precincts.pluck(:id)).group(:name).count
     
     
     basics["voter_characteristics"] = voter_characteristics
+    basics["voting_voter_characteristics"] = voting_voter_characteristics
     
     return basics
   end

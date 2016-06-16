@@ -63,7 +63,6 @@
       @statsViewBal = new Show.PartyStatsView({toggler: {selected: 'ballots'}})
       
     onShow: ->
-      console.log('show')
       @statsRegionReg.show @statsViewReg
       if @toggler.selected == 'ballots'
         @statsRegionBal.show @statsViewBal
