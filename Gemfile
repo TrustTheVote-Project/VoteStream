@@ -91,9 +91,9 @@ group :test, :development do
   gem 'rspec-rails'
 end
 
+gem 'unicorn'
 group :production do
   gem 'redis-rails'
-  gem 'unicorn'
 end
 
 # Use debugger
