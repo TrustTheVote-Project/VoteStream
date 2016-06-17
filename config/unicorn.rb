@@ -13,8 +13,8 @@ stderr_path "/home/ec2-user/votestream/current/log/unicorn.log"
 stdout_path "/home/ec2-user/votestream/current/log/unicorn.log"
 
 # Unicorn socket
-listen "/home/ec2-user/votestream/current/tmp/sockets/unicorn.[app name].sock"
-listen "/home/ec2-user/votestream/current/tmp/sockets/unicorn.myapp.sock"
+listen "/home/ec2-user/votestream/current/tmp/sockets/unicorn.votestream.sock"
+# listen "/home/ec2-user/votestream/current/tmp/sockets/unicorn.myapp.sock"
 
 # Number of processes
 # worker_processes 4
