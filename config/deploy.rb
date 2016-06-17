@@ -3,7 +3,7 @@ set :repo_url, 'git@github.com:TrustTheVote-Project/VoteStream.git'
 
 set :branch, proc { `git rev-parse --abbrev-ref HEAD`.chomp }
 
-set :deploy_to, "/var/www/votestream"
+set :deploy_to, "/home/ec2-user/votestream"
 set :scm, :git
 
 set :format, :pretty
@@ -12,7 +12,7 @@ set :pty, true
 
 SSHKit.config.command_map[:rake] = "bundle exec rake"
 
-set :linked_files, %w{config/database.yml}
+set :linked_files, %w{.env}
 set :linked_dirs, %w{bin log tmp/pids tmp/cache tmp/sockets vendor/bundle public/system}
 
 # set :default_env, { path: "/opt/ruby/bin:$PATH" }
