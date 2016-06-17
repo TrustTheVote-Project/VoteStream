@@ -506,16 +506,16 @@ InfoBubble.prototype.panToView = ->
                 color: row_item.get('c')
             colors = @calculateColor(full_results, res.get('in_region'))
           else
-            console.log ('howd we get here?')
+            console.log('howd we get here?', precinctId, precinct_results)
             #color = @precinctColors.get precinctId
             #colors = @findPrecinctColors color
-            # colors =
-            #   fillColor: '<%= AppConfig['map_color']['colors']['not_reporting'] %>'
-            #   fillOpacity: 1
-            #   strokeColor:  '<%= AppConfig['map_color']['colors']['not_voting'] %>'
-            #   strokeWeight: 0.7
-            #   strokeOpacity: 0.5
-            #   zIndex: 1
+            colors =
+              fillColor: '<%= AppConfig['map_color']['colors']['not_voting'] %>'
+              fillOpacity: 1
+              strokeColor:  '#000000'
+              strokeWeight: 0.3
+              strokeOpacity: 0.3
+              zIndex: 1
             
           
           #console.log(full_results)
