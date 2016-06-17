@@ -1,9 +1,9 @@
-set :application, 'enrs'
+set :application, 'votestream'
 set :repo_url, 'git@github.com:TrustTheVote-Project/VoteStream.git'
 
 set :branch, proc { `git rev-parse --abbrev-ref HEAD`.chomp }
 
-set :deploy_to, '/home/deploy/enrs'
+set :deploy_to, "/var/www/votestream"
 set :scm, :git
 
 set :format, :pretty
