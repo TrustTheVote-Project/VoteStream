@@ -18,6 +18,8 @@
 # Ignore deployment config
 /config/deploy/staging.rb
 /config/deploy/production.rb
+config/database.yml
+
 
 .ruby-gemset
 dump.rdb
