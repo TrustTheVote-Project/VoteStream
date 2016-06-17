@@ -21,7 +21,7 @@
 
     onShow: ->
       if @collection.length > 2 and !@options.simpleVersion
-        @ui.showMoreBtn.show()
+        @ui.showMoreBtn.removeClass('hide')
 
       if !@options.simpleVersion
         @ui.title.removeClass('hide')
@@ -29,12 +29,12 @@
     events:
       'click #js-show-more': (e) ->
         e.preventDefault()
-        $('li.extra', @ui.rowsList).show()
-        @ui.showMoreBtn.hide()
-        @ui.showLessBtn.show()
+        $('li.extra', @ui.rowsList).removeClass('hide')
+        @ui.showMoreBtn.addClass('hide')
+        @ui.showLessBtn.removeClass('hide')
 
       'click #js-show-less': (e) ->
         e.preventDefault()
-        $('li.extra', @ui.rowsList).hide()
-        @ui.showLessBtn.hide()
-        @ui.showMoreBtn.show()
+        $('li.extra', @ui.rowsList).addClass('hide')
+        @ui.showLessBtn.addClass('hide')
+        @ui.showMoreBtn.removeClass('hide')

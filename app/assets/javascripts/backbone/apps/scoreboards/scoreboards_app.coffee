@@ -116,7 +116,6 @@
       
       
     map: (ctype, cid, region, params) ->
-      console.log('hit the controller map', ctype, cid, region, params)
       if not ctype
         # Get the default and refresh the page
         default_refcon = App.ScoreboardsApp.Helpers.getDefaultRefcon()
@@ -163,7 +162,6 @@
       ScoreboardsApp.MapComparison.Controller.show()
       
     list: (ctype, cid, region, params)->
-      console.log('hit the controller list', ctype, cid, region, params)
       if region and region.match('=')
         params = region
       else if region

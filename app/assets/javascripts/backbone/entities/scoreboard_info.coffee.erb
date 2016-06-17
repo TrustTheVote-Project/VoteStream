@@ -43,7 +43,6 @@
       
     computeStats: ->
       precinctResults = @get('precinctResults')
-      console.log('compute stats: ', precinctResults)
       precincts = precinctResults.get('precincts')
       @set 'precinctsReportingCount', precincts.length
       @set 'totalRegisteredVoters', precinctResults.get('voters')
@@ -59,7 +58,6 @@
       result  = @get 'result'
       region  = @get 'region'
       advanced = @get 'advanced'
-      console.log('the result changed')
       @set 'precinctsReportingCount', 0
       @set 'totalRegisteredVoters', 0
       @set 'totalBallotsCast', 0
@@ -71,8 +69,8 @@
     
       # This should *always* be pre-fetched and not change.
       #App.execute 'when:fetched', App.request('entities:precincts'), =>
-      colors  = @get 'precinctColors'
-      colors.fetchForResult result, region, advanced
+      #colors  = @get 'precinctColors'
+      #colors.fetchForResult result, region, advanced
 
       results = @get 'precinctResults'
       results.fetchForResult result, region, @extraOpts(), advanced
@@ -83,7 +81,6 @@
       return if @noResultsReload
       # Set any options
       for k,v of options
-        console.log(k,v)
         @set k, v
         
       @preselectedRefconId = options.result?.id
@@ -92,7 +89,6 @@
       App.vent.trigger('view_changed')
 
     pickResult: ->
-      console.log('picking a result')
       results = @get 'results'
       if @preselectedRefconId?
         result = results.get @preselectedRefconId
@@ -154,7 +150,7 @@
         Entities.scoreboardInfo = sb = window.sb = new Entities.ScoreboardInfo
           results:            new Entities.ResultsCollection
           result:             null
-          precinctColors:     new Entities.PrecinctColors
+          #precinctColors:     new Entities.PrecinctColors
           precinctResults:    new Entities.PrecinctResultData
           channelEarly:       true
           channelElectionday: true

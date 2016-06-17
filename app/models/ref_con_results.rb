@@ -318,15 +318,18 @@ class RefConResults
     
     pids       = precinct_ids_for_region(params)
     
-    rc_pids    = contest.precinct_ids.uniq
-    rc_pids    = rc_pids & pids unless pids.nil?
-    precincts  = Precinct.select("precincts.id, registered_voters").where(id: rc_pids)
+    contest_pids    = contest.precinct_ids.uniq
+    rc_pids    = pids ? (contest_pids & pids) : contest_pids
+    
+    precincts  = Precinct.select("precincts.id, registered_voters").where(id: contest_pids)
+
+    
 
     candidates = contest.candidates.includes(:party)
     Rails.logger.debug("T::#{DateTime.now.strftime('%Q')} Done Initial load")
     
     results    = set_ballot_type_filters(CandidateResult.where(candidate_id: contest.candidate_ids, precinct_id: rc_pids), params)
-
+    all_results = set_ballot_type_filters(CandidateResult.where(candidate_id: contest.candidate_ids, precinct_id: contest_pids), params)
     
     #grp_only = results.group_by(&:precinct_id)
 
@@ -339,32 +342,63 @@ class RefConResults
       precinct_candidate_results[r.precinct_id] ||= []
       precinct_candidate_results[r.precinct_id] << r
     end
+    all_results = all_results.select("SUM(candidate_results.votes) as votes, candidate_results.precinct_id as precinct_id, candidate_results.candidate_id as candidate_id").group("candidate_results.candidate_id, candidate_results.precinct_id")
+    all_precinct_candidate_results = {}
+    all_results.each do |r|
+      all_precinct_candidate_results[r.precinct_id] ||= []
+      all_precinct_candidate_results[r.precinct_id] << r
+    end
     
     Rails.logger.debug("T::#{DateTime.now.strftime('%Q')} Done Grouping")
     
-
-    voters = 0
-
+    precinct_registrants = VoterRegistration.where(precinct_id: contest_pids)
+    # TODO: Ignoring 'none' for now since we don't have a lot of party data
+    party_counts = precinct_registrants.select("party, precinct_id, count(*)").group(:party, :precinct_id).where("party != 'None'")
+    precinct_parties = {}
+    party_counts.each do |pc|
+      precinct_parties[pc.precinct_id] ||= {}
+      precinct_parties[pc.precinct_id][pc.party] = pc.count
+    end
+    
     pmap = precincts.map do |p|
-      voters += p.registered_voters || 0
-
+      in_region = false
+      ordered = []
+      li = {}
+      
       pcr = precinct_candidate_results[p.id] || []
-      candidate_votes = pcr.inject({}) do |memo, r|
-        memo[r.candidate_id] ||= { "total" => 0 }
-        memo[r.candidate_id]["total"] += r.votes.to_i
-        memo
+      if pcr.any?
+        in_region = true
+        candidate_votes = pcr.inject({}) do |memo, r|
+          memo[r.candidate_id] ||= { "total" => 0 }
+          memo[r.candidate_id]["total"] += r.votes.to_i
+          memo
+        end
+
+        ordered = ordered_records(candidates, candidate_votes) do |i, votes, vote_channels, idx|
+          { "id" => i.id, "votes" => votes, "vote_channels" => vote_channels }
+        end
+
+        li = leader_info(pcr)
+      else
+        pcr = all_precinct_candidate_results[p.id] || []
+        candidate_votes = pcr.inject({}) do |memo, r|
+          memo[r.candidate_id] ||= { "total" => 0 }
+          memo[r.candidate_id]["total"] += r.votes.to_i
+          memo
+        end
+
+        ordered = ordered_records(candidates, candidate_votes) do |i, votes, vote_channels, idx|
+          { "id" => i.id, "votes" => votes, "vote_channels" => vote_channels }
+        end
+
+        li = leader_info(pcr)
       end
-
-      ordered = ordered_records(candidates, candidate_votes) do |i, votes, vote_channels, idx|
-        { "id" => i.id, "votes" => votes, "vote_channels" => vote_channels }
-      end
-
-      li = leader_info(pcr)
-
       { "id" =>       p.id,
         "votes" =>    li["total_votes"],
         "voters" =>   p.registered_voters,
-        "rows" =>     ordered[0, 2] }
+        "rows" =>     ordered[0, 2],
+        "in_region" => in_region,
+        "party_registrations" => precinct_parties[p.id]}
     end
 
     Rails.logger.debug("T::#{DateTime.now.strftime('%Q')} Done Total Counts")

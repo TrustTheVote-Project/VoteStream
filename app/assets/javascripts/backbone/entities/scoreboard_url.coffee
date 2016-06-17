@@ -11,7 +11,6 @@
       # ScoreboardUrl should listen to this which should pass through to here
       App.vent.on 'filters:set', (options = {}) =>
         #@updatePath(false)
-        console.log('filters set', options)
         @si.reloadResults options
           #refcon: options.refcon
       
@@ -48,7 +47,6 @@
     updatePath: (refresh) =>
       return unless @enabled
       path = @path()
-      console.log("updateing path", path)
       App.navigate path, refresh
 
     advancedView: ->

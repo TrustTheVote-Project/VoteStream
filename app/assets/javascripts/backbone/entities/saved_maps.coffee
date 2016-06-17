@@ -36,7 +36,6 @@
     
     getDescription: () ->
       filters = @getFilters()
-      console.log(filters)
       parts = []
       if filters.region
         parts.push(filters.region.get 'name')
@@ -94,7 +93,6 @@
       for map in list
         ids.push(map.id || 0)
         
-      console.log(ids)
       Math.max.apply(Math, ids) + 1
       
       
@@ -112,7 +110,6 @@
       # Check if @maps include something with this name
       name = @getMapName(name, maps)
       id = @nextId(maps)
-      console.log(id)
       maps.push(new Entities.SavedMap({url: url, name: name, id: id}))
       @setMaps(maps)
 

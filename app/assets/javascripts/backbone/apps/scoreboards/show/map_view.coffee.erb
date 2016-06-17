@@ -35,38 +35,42 @@ InfoBubble.prototype.panToView = ->
       @initColors()
 
       #@si = si = App.request 'entities:scoreboardInfo'
+      # What is the format of these? And how does it map with staticColors below?
       @precinctResults = @options.precinctResults #si.get 'precinctResults'
 
-      if @options.staticColors
-        @precinctColors = @options.staticColors
-      else
-        @precinctColors = @options.precinctColors #si.get 'precinctColors'
-        @precinctColors.on 'sync', @updateColors, @
-        #si.on 'change:coloringType', @updateColors, @
+      @precinctResults.on 'sync', =>
+        @renderPrecincts()
+
+      # if @options.staticColors
+      #   @precinctColors = @options.staticColors
+      # else
+      #   @precinctColors = @options.precinctColors #si.get 'precinctColors'
+      #   @precinctColors.on 'sync', @updateColors, @
+      #   #si.on 'change:coloringType', @updateColors, @
 
       @precincts = @options.precincts #App.request 'entities:precincts'
+      
+      #precinctResults.get('precincts').get(pid)
 
-    updateColors: ->
-      @closeInfoWindow()
-      @updateColorKey()
-
-      precincts = @precinctResults.get('precincts')
-
-      for p in @polygons
-        color = @precinctColors.get p.data.precinctId
-        newColors = @findPrecinctColors(color)
-        p.data.colors = newColors
-        p.setOptions p.data.colors
-
-      undefined
+    # updateColors: ->
+    #   @closeInfoWindow()
+    #   @updateColorKey()
+    #
+    #   for p in @polygons
+    #     color = @precinctColors.get p.data.precinctId
+    #     newColors = @findPrecinctColors(color)
+    #     p.data.colors = newColors
+    #     p.setOptions p.data.colors
+    #
+    #   undefined
 
     onShow: ->
-      @renderPrecincts()
+      #@renderPrecincts()
 
     onClose: ->
       @closeInfoWindow()
       @removePreviousPolygons()
-      @precinctColors.off 'sync', @updateColors, @
+      # @precinctColors.off 'sync', @updateColors, @
       delete @gMap
       @initMap
       
@@ -237,13 +241,13 @@ InfoBubble.prototype.panToView = ->
 
       undefined
 
-    findPrecinctColors: (precinctColor) ->
-      if precinctColor?
-        colors = @colors[precinctColor.get(@colorKey)]
-      else
-        colors = @colors.noResults
-
-      return colors
+    # findPrecinctColors: (precinctColor) ->
+    #   if precinctColor?
+    #     colors = @colors[precinctColor.get(@colorKey)]
+    #   else
+    #     colors = @colors.noResults
+    #
+    #   return colors
 
     onPolygonMouseOver: (e) ->
       if @.data.mapView.options.infoWindow isnt 'simple'
@@ -363,34 +367,162 @@ InfoBubble.prototype.panToView = ->
 
         App.vent.trigger 'region:selected', precinct
 
-    updateColorKey: ->
-      @colorKey = switch @options.coloringType
-        when 'results'
-          'c'
-        when 'participation'
-          'p'
-        when 'partyRegistration'
-          'pr'
+    # updateColorKey: ->
+    #   @colorKey = switch @options.coloringType
+    #     when 'results'
+    #       'c'
+    #     when 'participation'
+    #       'p'
+    #     when 'partyRegistration'
+    #       'pr'
+    #     else
+    #       'c'
+
+    calculateColor: (resultDetailList, in_region) ->
+      # determine leader
+      opacity = 1
+      if @options.coloringType == 'participation'
+        color = '<%= AppConfig['map_color']['colors']['participation'] %>'
+        if resultDetailList.length > 0
+          if in_region
+            opacity = ((resultDetailList[0].participation_percentage / 100) * .8) + .2
+          else
+            opacity = ((resultDetailList[0].participation_percentage / 100) * .15)
+            
+      else if @options.coloringType == 'partyRegistration'
+        if resultDetailList.length > 0
+          res = resultDetailList[0]
+          color = '<%= AppConfig['map_color']['colors']['other'] %>'
+          opacity = 1
+          pctDem = (res['demReg'] / (res['demReg'] + res['repReg'] * 1.0)) * 100.0
+          if pctDem > 50
+            color = '<%= AppConfig['map_color']['colors']['democrat'] %>'
+            opacity =  <%= AppConfig['map_color']['saturation']['low'] %>
+          if pctDem < 50
+            color = '<%= AppConfig['map_color']['colors']['republican'] %>'
+            opacity =  <%= AppConfig['map_color']['saturation']['low'] %>            
+          if pctDem > 50 + 2 * <%= AppConfig['map_color']['threshold']['upper'] %> or pctDem < 50 - 2 * <%= AppConfig['map_color']['threshold']['upper'] %>
+            opacity =  1
+          else if pctDem > 50 + <%= AppConfig['map_color']['threshold']['upper'] %> or pctDem < 50 - <%= AppConfig['map_color']['threshold']['upper'] %>
+            opacity =  <%= AppConfig['map_color']['saturation']['high'] %>
+          else if pctDem > 50 + <%= AppConfig['map_color']['threshold']['lower'] %> or pctDem < 50 - <%= AppConfig['map_color']['threshold']['lower'] %>
+            opacity = <%= AppConfig['map_color']['saturation']['middle']%>
+            
+          if not in_region
+            opacity = opacity * .2
+      else 
+        sortedResults = resultDetailList.sort (a,b) ->
+          if b.percentage < a.percentage 
+            -1
+          else if a.percentage < b.percentage
+            1
+          else
+            0
+        leader = sortedResults[0]
+        color = '<%= AppConfig['map_color']['colors']['other'] %>'
+        if leader.votes == 0
+          color = '<%= AppConfig['map_color']['colors']['not_reporting'] %>'
         else
-          'c'
+          if sortedResults.length > 1
+            second = sortedResults[1]
+            percent_diff = leader.percentage - second.percentage
+            # opacity = (leader.percentage - second.percentage) / 100
+            if percent_diff > 2 * <%= AppConfig['map_color']['threshold']['upper'] %>
+              opacity = 1
+            else if percent_diff > <%= AppConfig['map_color']['threshold']['upper'] %>
+              opacity = <%= AppConfig['map_color']['saturation']['high'] %>
+            else if percent_diff > <%= AppConfig['map_color']['threshold']['lower'] %>
+              opacity = <%= AppConfig['map_color']['saturation']['middle'] %>
+            else
+              opacity = <%= AppConfig['map_color']['saturation']['low'] %>
+          
+          if leader.party
+            if leader.party.abbr == "DEM"
+              color = '<%= AppConfig['map_color']['colors']['democrat'] %>'
+            else if leader.party.abbr == "REP"
+              color = '<%= AppConfig['map_color']['colors']['republican'] %>'
+            else
+              color = '<%= AppConfig['map_color']['colors']['other'] %>'
+          if not in_region
+            opacity = 0.1
+          
+      return {
+        fillColor: color
+        fillOpacity: opacity
+        strokeColor: if in_region then "#000000" else '<%= AppConfig['map_color']['colors']['not_voting'] %>'
+        strokeWeight: if in_region then 0.7 else 0.5
+        strokeOpacity: if in_region then 0.8 else 0.5
+        zIndex: if in_region then 2 else 1 
+      }
 
     renderPrecincts: ->
-      App.execute 'when:fetched', @precincts, =>
+      App.execute 'when:fetched', [@precincts, @precinctResults], =>
         @initMap()
         @removePreviousPolygons()
 
-        precincts = @precinctResults.get 'precincts'
+        precinct_results = @precinctResults.get 'precincts'
         bounds  = new google.maps.LatLngBounds()
+        row_items = @precinctResults.get 'items'
 
-        @updateColorKey()
+
+        # p = @precincts.models[0]
+        # console.log(p)
+        # pid = p.get('id')
+        # p_res = precincts.get(pid)
+        # console.log(p_res)
+
+        #@updateColorKey()
         for precinct in @precincts.models
           this_bounds = new google.maps.LatLngBounds()
           precinctId = precinct.get 'id'
 
-          res = precincts.get precinctId
-          color = @precinctColors.get precinctId
+          res = precinct_results.get precinctId
+          voters = precinct.get('voters')
+          
+          
+          if res
+            result_rows = res.get('rows')
+            total_votes = res.get('votes')
+            partyRegistrations = res.get('party_registrations')
+            demReg = if partyRegistrations then partyRegistrations['Democrat'] || 0 else 0
+            repReg = if partyRegistrations then partyRegistrations['Republic'] || 0 else 0
+            
+          
+            full_results = []
+            for row in result_rows.models
+              row_id = row.get 'id'
+              row_item = row_items.get row_id
+              v = row.get('votes') || 0
+              full_results.push
+                votes: v
+                total_votes: total_votes
+                name: row_item.get('name')
+                party: row_item.get('party')
+                percentage: Math.floor((v * 1000) / (total_votes || 1)) / 10.0
+                voters: voters
+                demReg: demReg
+                repReg: repReg
+                participation_percentage: Math.floor((total_votes * 1000) / (voters || 1)) / 10.0
+                color: row_item.get('c')
+            colors = @calculateColor(full_results, res.get('in_region'))
+          else
+            console.log ('howd we get here?')
+            #color = @precinctColors.get precinctId
+            #colors = @findPrecinctColors color
+            # colors =
+            #   fillColor: '<%= AppConfig['map_color']['colors']['not_reporting'] %>'
+            #   fillOpacity: 1
+            #   strokeColor:  '<%= AppConfig['map_color']['colors']['not_voting'] %>'
+            #   strokeWeight: 0.7
+            #   strokeOpacity: 0.5
+            #   zIndex: 1
+            
+          
+          #console.log(full_results)
+          # color = @precinctColors.get precinctId
+          # console.log color
           kml = precinct.get 'kml'
-          colors = @findPrecinctColors color
+          # colors = @findPrecinctColors color
           lines = @pointsFromKml(kml)
 
           for points in lines
@@ -413,7 +545,7 @@ InfoBubble.prototype.panToView = ->
               colors:           colors
               mapView:          @
 
-          if @options.infoWindow
+          if @options.infoWindow and res and res.get('in_region')
             google.maps.event.addListener poly, 'mouseover', @onPolygonMouseOver
             google.maps.event.addListener poly, 'mouseout', @onPolygonMouseOut
             google.maps.event.addListener poly, 'click', @onPolygonClick

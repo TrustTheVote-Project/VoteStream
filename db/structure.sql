@@ -1272,6 +1272,20 @@ CREATE INDEX index_vr_on_outcome ON voter_registrations USING btree (voter_outco
 
 
 --
+-- Name: index_vr_on_party; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE INDEX index_vr_on_party ON voter_registrations USING btree (party);
+
+
+--
+-- Name: index_vr_on_party_and_precinct; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE INDEX index_vr_on_party_and_precinct ON voter_registrations USING btree (party, precinct_id);
+
+
+--
 -- Name: index_vr_on_reason; Type: INDEX; Schema: public; Owner: -; Tablespace: 
 --
 
@@ -1405,3 +1419,5 @@ INSERT INTO schema_migrations (version) VALUES ('20160317160439');
 INSERT INTO schema_migrations (version) VALUES ('20160603011358');
 
 INSERT INTO schema_migrations (version) VALUES ('20160603110908');
+
+INSERT INTO schema_migrations (version) VALUES ('20160617020513');
