@@ -92,7 +92,7 @@ end
 
 group :production do
   gem 'redis-rails'
-  gem 'puma'
+  gem 'unicorn'
 end
 
 # Use debugger
