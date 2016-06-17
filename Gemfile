@@ -4,6 +4,7 @@ source 'https://rubygems.org'
 gem 'rails', '4.0.1'
 gem 'dotenv-rails'
 
+
 # Use postgresql as the database for Active Record
 gem 'pg'
 gem 'activerecord-postgis-adapter'
@@ -66,6 +67,7 @@ end
 
 # Use Capistrano for deployment
 group :development do
+  gem 'rvm1-capistrano3', require: false
   gem 'capistrano', '~> 3.0.0'
   gem 'capistrano-bundler'
   gem 'capistrano-rails'
@@ -90,6 +92,7 @@ end
 
 group :production do
   gem 'redis-rails'
+  gem 'puma'
 end
 
 # Use debugger

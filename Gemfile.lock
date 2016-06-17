@@ -155,6 +155,7 @@ GEM
       coderay (~> 1.0)
       method_source (~> 0.8)
       slop (~> 3.4)
+    puma (3.4.0)
     quiet_assets (1.0.2)
       railties (>= 3.1, < 5.0)
     rack (1.5.2)
@@ -217,6 +218,8 @@ GEM
       rspec-core (~> 2.14.0)
       rspec-expectations (~> 2.14.0)
       rspec-mocks (~> 2.14.0)
+    rvm1-capistrano3 (1.0.0)
+      capistrano (~> 3.0)
     sass (3.2.12)
     sass-rails (4.0.1)
       railties (>= 4.0.0, < 5.0)
@@ -300,10 +303,12 @@ DEPENDENCIES
   nokogiri
   oj
   pg
+  puma
   quiet_assets
   rails (= 4.0.1)
   redis-rails
   rspec-rails
+  rvm1-capistrano3
   sass-rails (~> 4.0.0)
   sdoc
   shoulda-matchers
