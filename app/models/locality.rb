@@ -35,6 +35,7 @@ class Locality < ActiveRecord::Base
   end
 
   def demographic_metadata
+    #return {}
     participating_registrants = registrants.where("voter_outcome != ? AND voter_outcome IS NOT NULL", "NonParticipating")
     basics = {
       "voter_registrations" => registrants.count,
