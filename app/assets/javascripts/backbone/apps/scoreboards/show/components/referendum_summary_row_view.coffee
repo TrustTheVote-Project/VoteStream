@@ -10,7 +10,7 @@
       return classes.join(' ')
     serializeData: ->
       data = Backbone.Marionette.ItemView.prototype.serializeData.apply @, arguments
-      data.totalVotes = @options.totalVotes
+      data.totalVotes = if @options.showByRegVoters then @options.voters else @options.totalVotes
       data
     templateHelpers: ->
       percent: -> App.ScoreboardsApp.Helpers.percent(@votes, @totalVotes)

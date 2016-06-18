@@ -25,10 +25,12 @@
           view = new Show.ContestSummaryView
             model:      result
             collection: rows
+            si: @si
         else
           view = new Show.ReferendumSummaryView
             model:      result
             collection: rows
+            si: @si
 
         @summaryRegion.show view
 

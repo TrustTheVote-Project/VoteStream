@@ -32,54 +32,18 @@ InfoBubble.prototype.panToView = ->
       @polygons = []
       @options = options
 
-      @initColors()
-
-      #@si = si = App.request 'entities:scoreboardInfo'
-      # What is the format of these? And how does it map with staticColors below?
       @precinctResults = @options.precinctResults #si.get 'precinctResults'
 
       @precinctResults.on 'sync', =>
         @renderPrecincts()
 
-      # if @options.staticColors
-      #   @precinctColors = @options.staticColors
-      # else
-      #   @precinctColors = @options.precinctColors #si.get 'precinctColors'
-      #   @precinctColors.on 'sync', @updateColors, @
-      #   #si.on 'change:coloringType', @updateColors, @
-
       @precincts = @options.precincts #App.request 'entities:precincts'
       
-      #precinctResults.get('precincts').get(pid)
-
-    # updateColors: ->
-    #   @closeInfoWindow()
-    #   @updateColorKey()
-    #
-    #   for p in @polygons
-    #     color = @precinctColors.get p.data.precinctId
-    #     newColors = @findPrecinctColors(color)
-    #     p.data.colors = newColors
-    #     p.setOptions p.data.colors
-    #
-    #   undefined
-
-    onShow: ->
-      #@renderPrecincts()
-
     onClose: ->
       @closeInfoWindow()
       @removePreviousPolygons()
-      # @precinctColors.off 'sync', @updateColors, @
       delete @gMap
       @initMap
-      
-      # Looks like everything initialized in #initialize is reused,
-      # so can't delete it here
-      #delete @polygons
-      #delete @precinctColors
-      #delete @precinctResults
-      #delete @precincts
 
     closeInfoWindow: ->
       if @timeout
@@ -160,94 +124,6 @@ InfoBubble.prototype.panToView = ->
     removePreviousPolygons: ->
       poly.setMap(null) for poly in @polygons
       @polygons = []
-
-    colorShade: (leaderAdvantage) ->
-      if leaderAdvantage < gon.colorScheme.threshold.lower
-        c = 2
-      else if leaderAdvantage < gon.colorScheme.threshold.upper
-        c = 1
-      else
-        c = 0
-
-      gon.colorScheme.saturation[c]
-
-    generateColor: (region, colorCode, color, shade, saturation) ->
-      key = "#{region}#{colorCode}#{shade}"
-
-      if region == 'i'
-        strokeColor = '#000000'
-        fillOpacity = saturation
-      else if colorCode == 'n'
-        strokeColor = '<%= AppConfig['map_color']['colors']['not_voting'] %>'
-        fillOpacity = 1
-      else
-        strokeColor = '#ffffff'
-        fillOpacity = 0.2
-      
-      @colors[key] = {
-        fillColor:    color
-        fillOpacity:  fillOpacity
-        hoverColor:   color
-        hoverOpacity: 0.9
-        strokeColor:  strokeColor
-        strokeWeight: if region == 'i' then 0.5 else 0.7
-        zIndex:       if region == 'i' then 2 else 1
-      }
-
-    initColors: ->
-      # region: i / o
-      #  class: r / c / o / n / 1 / 2
-      #  shade: 0 - 2
-      @colors = window.mapcolors =
-        noResults:
-          fillColor:     gon.colorScheme.colors.notVoting
-          fillOpacity:   1
-          hoverColor:    gon.colorScheme.colors.notVoting
-          hoverOpacity:  0.9
-          strokeColor:   if @options.whiteBackground then '#bbbbbb' else '#ffffff'
-          strokeWeight:  0.7
-          zIndex:         1
-
-      # generate candidate / ballot shades
-      for region in [ 'i', 'o' ]
-        for cl in [ [ 'r', '<%= AppConfig['map_color']['colors']['republican'] %>' ],
-                    [ 'd', '<%= AppConfig['map_color']['colors']['democrat'] %>' ],
-                    [ 'o', '<%= AppConfig['map_color']['colors']['other'] %>' ],
-                    [ 'a', '<%= AppConfig['map_color']['colors']['other1'] %>' ],
-                    [ 'b', '<%= AppConfig['map_color']['colors']['other2'] %>' ],
-                    [ 'c', '<%= AppConfig['map_color']['colors']['other3'] %>' ],
-                    [ 'n', '<%= AppConfig['map_color']['colors']['not_reporting'] %>' ],
-                    [ '1', '<%= AppConfig['map_color']['colors']['nonpartisan1'] %>' ],
-                    [ '2', '<%= AppConfig['map_color']['colors']['nonpartisan2'] %>' ],
-                    [ 'Y', '<%= AppConfig['map_color']['colors']['referenda_yes'] %>' ],
-                    [ 'N', '<%= AppConfig['map_color']['colors']['referenda_no'] %>' ],
-                    [ 't', '<%= AppConfig['map_color']['colors']['tie'] %>' ] ]
-          clc = cl[0]
-          color = cl[1]
-          for shade in [ 0, 1, 2 ]
-            @generateColor region, clc, color, shade, gon.colorScheme.saturation[shade]
-
-      # generate participation shades
-      pc = '<%= AppConfig['map_color']['colors']['participation'] %>'
-      for shade in [ 0, 1, 2, 3, 4, 5 ]
-        @generateColor 'i', 'p', pc, shade, 1 - shade * 0.2
-        @generateColor 'o', 'p', pc, shade, 1 - shade * 0.8
-      # @generateColor 'i', 'p', pc, 1, .8
-      # @generateColor 'i', 'p', pc, 2, .6
-      # @generateColor 'i', 'p', pc, 3, .4
-      # @generateColor 'i', 'p', pc, 4, .2
-      # @generateColor 'i', 'p', pc, 5, 0
-      
-
-      undefined
-
-    # findPrecinctColors: (precinctColor) ->
-    #   if precinctColor?
-    #     colors = @colors[precinctColor.get(@colorKey)]
-    #   else
-    #     colors = @colors.noResults
-    #
-    #   return colors
 
     onPolygonMouseOver: (e) ->
       if @.data.mapView.options.infoWindow isnt 'simple'
@@ -367,17 +243,6 @@ InfoBubble.prototype.panToView = ->
 
         App.vent.trigger 'region:selected', precinct
 
-    # updateColorKey: ->
-    #   @colorKey = switch @options.coloringType
-    #     when 'results'
-    #       'c'
-    #     when 'participation'
-    #       'p'
-    #     when 'partyRegistration'
-    #       'pr'
-    #     else
-    #       'c'
-
     calculateColor: (resultDetailList, in_region) ->
       # determine leader
       opacity = 1
@@ -442,7 +307,10 @@ InfoBubble.prototype.panToView = ->
             else if leader.party.abbr == "REP"
               color = '<%= AppConfig['map_color']['colors']['republican'] %>'
             else
-              color = '<%= AppConfig['map_color']['colors']['other'] %>'
+              color = leader.color
+          else
+            color = leader.color
+              
           if not in_region
             opacity = 0.1
           
@@ -464,14 +332,6 @@ InfoBubble.prototype.panToView = ->
         bounds  = new google.maps.LatLngBounds()
         row_items = @precinctResults.get 'items'
 
-
-        # p = @precincts.models[0]
-        # console.log(p)
-        # pid = p.get('id')
-        # p_res = precincts.get(pid)
-        # console.log(p_res)
-
-        #@updateColorKey()
         for precinct in @precincts.models
           this_bounds = new google.maps.LatLngBounds()
           precinctId = precinct.get 'id'
@@ -506,7 +366,7 @@ InfoBubble.prototype.panToView = ->
                 color: row_item.get('c')
             colors = @calculateColor(full_results, res.get('in_region'))
           else
-            console.log('howd we get here?', precinctId, precinct_results)
+            #console.log('howd we get here?', precinctId, precinct_results)
             #color = @precinctColors.get precinctId
             #colors = @findPrecinctColors color
             colors =
