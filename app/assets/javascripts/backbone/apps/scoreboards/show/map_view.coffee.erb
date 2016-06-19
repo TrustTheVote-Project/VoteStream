@@ -311,7 +311,6 @@ InfoBubble.prototype.panToView = ->
           else
             color = leader.color
           
-          console.log color, leader.color, leader.party
           if not in_region
             opacity = 0.1
           
@@ -367,7 +366,7 @@ InfoBubble.prototype.panToView = ->
                 color: row_item.get('c')
             colors = @calculateColor(full_results, res.get('in_region'))
           else
-            #console.log('howd we get here?', precinctId, precinct_results)
+            console.log('howd we get here?', precinctId, precinct_results)
             #color = @precinctColors.get precinctId
             #colors = @findPrecinctColors color
             colors =
