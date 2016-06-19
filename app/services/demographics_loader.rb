@@ -13,6 +13,8 @@ class DemographicsLoader < BaseLoader
     Rails.logger.info "Build Reg List"
     build_voter_regs
     
+    #TODO: Run SQL "vacuum analyze voter_registrations;"
+    
   end
   
   def build_voter_regs

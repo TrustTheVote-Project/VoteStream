@@ -1294,6 +1294,195 @@ CREATE INDEX index_vr_on_party_and_precinct ON voter_registrations USING btree (
 
 
 --
+-- Name: index_vr_on_precicnt_is_active_duty_uniformed_services; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE INDEX index_vr_on_precicnt_is_active_duty_uniformed_services ON voter_registrations USING btree (precinct_id, is_active_duty_uniformed_services);
+
+
+--
+-- Name: index_vr_on_precicnt_is_citizen; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE INDEX index_vr_on_precicnt_is_citizen ON voter_registrations USING btree (precinct_id, is_eighteen_election_day);
+
+
+--
+-- Name: index_vr_on_precicnt_is_eighteen_election_day; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE INDEX index_vr_on_precicnt_is_eighteen_election_day ON voter_registrations USING btree (precinct_id, is_citizen);
+
+
+--
+-- Name: index_vr_on_precicnt_is_election_absentee; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE INDEX index_vr_on_precicnt_is_election_absentee ON voter_registrations USING btree (precinct_id, is_election_absentee);
+
+
+--
+-- Name: index_vr_on_precicnt_is_elig_mil_spouse_or_dep; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE INDEX index_vr_on_precicnt_is_elig_mil_spouse_or_dep ON voter_registrations USING btree (precinct_id, is_eligible_military_spouse_or_dependent);
+
+
+--
+-- Name: index_vr_on_precicnt_is_permanent_absetee; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE INDEX index_vr_on_precicnt_is_permanent_absetee ON voter_registrations USING btree (precinct_id, is_permanent_absetee);
+
+
+--
+-- Name: index_vr_on_precicnt_is_res_abroad_ir; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE INDEX index_vr_on_precicnt_is_res_abroad_ir ON voter_registrations USING btree (precinct_id, is_residing_abroad_with_intent_to_return);
+
+
+--
+-- Name: index_vr_on_precicnt_is_res_abroad_ur; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE INDEX index_vr_on_precicnt_is_res_abroad_ur ON voter_registrations USING btree (precinct_id, is_residing_abroad_uncertain_return);
+
+
+--
+-- Name: index_vr_on_precicnt_is_residing_at_registration_address; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE INDEX index_vr_on_precicnt_is_residing_at_registration_address ON voter_registrations USING btree (precinct_id, is_residing_at_registration_address);
+
+
+--
+-- Name: index_vr_on_precinct_and_outcome; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE INDEX index_vr_on_precinct_and_outcome ON voter_registrations USING btree (precinct_id, voter_outcome);
+
+
+--
+-- Name: index_vr_on_precinct_dib; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE INDEX index_vr_on_precinct_dib ON voter_registrations USING btree (precinct_id, date_of_birth);
+
+
+--
+-- Name: index_vr_on_precinct_outcome_dob; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE INDEX index_vr_on_precinct_outcome_dob ON voter_registrations USING btree (precinct_id, voter_outcome, date_of_birth);
+
+
+--
+-- Name: index_vr_on_precinct_outcome_is_adus; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE INDEX index_vr_on_precinct_outcome_is_adus ON voter_registrations USING btree (precinct_id, is_active_duty_uniformed_services, voter_outcome);
+
+
+--
+-- Name: index_vr_on_precinct_outcome_is_citizen; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE INDEX index_vr_on_precinct_outcome_is_citizen ON voter_registrations USING btree (precinct_id, is_citizen, voter_outcome);
+
+
+--
+-- Name: index_vr_on_precinct_outcome_is_eighteen_election_day; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE INDEX index_vr_on_precinct_outcome_is_eighteen_election_day ON voter_registrations USING btree (precinct_id, is_eighteen_election_day, voter_outcome);
+
+
+--
+-- Name: index_vr_on_precinct_outcome_is_election_absentee; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE INDEX index_vr_on_precinct_outcome_is_election_absentee ON voter_registrations USING btree (precinct_id, is_election_absentee, voter_outcome);
+
+
+--
+-- Name: index_vr_on_precinct_outcome_is_eligible_mil_spouse_or_dep; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE INDEX index_vr_on_precinct_outcome_is_eligible_mil_spouse_or_dep ON voter_registrations USING btree (precinct_id, is_eligible_military_spouse_or_dependent, voter_outcome);
+
+
+--
+-- Name: index_vr_on_precinct_outcome_is_permanent_absetee; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE INDEX index_vr_on_precinct_outcome_is_permanent_absetee ON voter_registrations USING btree (precinct_id, is_permanent_absetee, voter_outcome);
+
+
+--
+-- Name: index_vr_on_precinct_outcome_is_res_abroad_ir; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE INDEX index_vr_on_precinct_outcome_is_res_abroad_ir ON voter_registrations USING btree (precinct_id, is_residing_abroad_with_intent_to_return, voter_outcome);
+
+
+--
+-- Name: index_vr_on_precinct_outcome_is_res_abroad_ur; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE INDEX index_vr_on_precinct_outcome_is_res_abroad_ur ON voter_registrations USING btree (precinct_id, is_residing_abroad_uncertain_return, voter_outcome);
+
+
+--
+-- Name: index_vr_on_precinct_outcome_is_res_reg_address; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE INDEX index_vr_on_precinct_outcome_is_res_reg_address ON voter_registrations USING btree (precinct_id, is_residing_at_registration_address, voter_outcome);
+
+
+--
+-- Name: index_vr_on_precinct_outcome_party; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE INDEX index_vr_on_precinct_outcome_party ON voter_registrations USING btree (precinct_id, voter_outcome, party);
+
+
+--
+-- Name: index_vr_on_precinct_outcome_race; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE INDEX index_vr_on_precinct_outcome_race ON voter_registrations USING btree (precinct_id, voter_outcome, race);
+
+
+--
+-- Name: index_vr_on_precinct_outcome_sex; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE INDEX index_vr_on_precinct_outcome_sex ON voter_registrations USING btree (precinct_id, voter_outcome, sex);
+
+
+--
+-- Name: index_vr_on_precinct_party; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE INDEX index_vr_on_precinct_party ON voter_registrations USING btree (precinct_id, party);
+
+
+--
+-- Name: index_vr_on_precinct_race; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE INDEX index_vr_on_precinct_race ON voter_registrations USING btree (precinct_id, race);
+
+
+--
+-- Name: index_vr_on_precinct_sex; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE INDEX index_vr_on_precinct_sex ON voter_registrations USING btree (precinct_id, sex);
+
+
+--
 -- Name: index_vr_on_reason; Type: INDEX; Schema: public; Owner: -; Tablespace: 
 --
 
@@ -1431,3 +1620,7 @@ INSERT INTO schema_migrations (version) VALUES ('20160603110908');
 INSERT INTO schema_migrations (version) VALUES ('20160617020513');
 
 INSERT INTO schema_migrations (version) VALUES ('20160618233639');
+
+INSERT INTO schema_migrations (version) VALUES ('20160619230645');
+
+INSERT INTO schema_migrations (version) VALUES ('20160619231907');
