@@ -194,11 +194,10 @@
 
     initialize: (opts) ->
       @model = App.request 'entities:scoreboardInfo'
-      #@.listenTo @model.get('precinctResults'), 'sync', => @render()
 
     itemViewOptions: (model, i) ->
       summary = model.get('summary')
-      totalVotes = if model.get('percentageType') == 'voters' then summary.get('voters') else summary.get('ballots')
+      totalVotes = if @model.get('percentageType') == 'voters' then summary.get('voters') else summary.get('ballots')
 
       return {
         model:             model
