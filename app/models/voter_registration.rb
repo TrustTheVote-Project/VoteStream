@@ -20,7 +20,7 @@ class VoterRegistration < ActiveRecord::Base
     [MILITARY, "is_active_duty_uniformed_services"],
     [PERM_ABSENTEE, "is_permanent_absetee"],
     [MILITARY_DEP, "is_eligible_military_spouse_or_dependent"],
-    [ABROAD, "is_residing_abroad_uncertain_return"]
+    [ABROAD, "is_residing_abroad_uncertain_return"],
     [ABROAD_RETURN, "is_residing_abroad_with_intent_to_return"]
   ]
   
