@@ -10,6 +10,7 @@ class VoterRegistration < ActiveRecord::Base
   PERM_ABSENTEE = "PermanentAbsentee"
   MILITARY_DEP = "EligibleMilitarySpouseOrDependent"
   ABROAD = "ResidingAbroadUncertainReturn"
+  ABROAD_RETURN = "ResidingAbroadWithIntentToReturn"
 
   CLASSIFICATIONS = [
     [CITIZEN, "is_citizen"],
@@ -20,6 +21,7 @@ class VoterRegistration < ActiveRecord::Base
     [PERM_ABSENTEE, "is_permanent_absetee"],
     [MILITARY_DEP, "is_eligible_military_spouse_or_dependent"],
     [ABROAD, "is_residing_abroad_uncertain_return"]
+    [ABROAD_RETURN, "is_residing_abroad_with_intent_to_return"]
   ]
   
   def self.is_classification_method(value)

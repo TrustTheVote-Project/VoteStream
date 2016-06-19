@@ -644,7 +644,8 @@ CREATE TABLE voter_registrations (
     is_eligible_military_spouse_or_dependent boolean DEFAULT false NOT NULL,
     is_residing_abroad_uncertain_return boolean DEFAULT false NOT NULL,
     voter_outcome character varying(255),
-    voter_rejected_reason character varying(255)
+    voter_rejected_reason character varying(255),
+    is_residing_abroad_with_intent_to_return boolean DEFAULT false NOT NULL
 );
 
 
@@ -1216,6 +1217,13 @@ CREATE INDEX index_vr_on_is_abroad ON voter_registrations USING btree (is_residi
 
 
 --
+-- Name: index_vr_on_is_abroad_intent_return; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE INDEX index_vr_on_is_abroad_intent_return ON voter_registrations USING btree (is_residing_abroad_with_intent_to_return);
+
+
+--
 -- Name: index_vr_on_is_absentee; Type: INDEX; Schema: public; Owner: -; Tablespace: 
 --
 
@@ -1421,3 +1429,5 @@ INSERT INTO schema_migrations (version) VALUES ('20160603011358');
 INSERT INTO schema_migrations (version) VALUES ('20160603110908');
 
 INSERT INTO schema_migrations (version) VALUES ('20160617020513');
+
+INSERT INTO schema_migrations (version) VALUES ('20160618233639');
