@@ -21,6 +21,9 @@
           <tr class='absentee'>
             <td>Absentee</td><td><%= @absenteePercentage %></td><td><%= @absentee %></td>
           </tr>
+          <tr class='provisional'>
+            <td>Provisional</td><td><%= @provisionalPercentage %></td><td><%= @provisional %></td>
+          </tr>
         </tbody>
       </table>
     </div>

@@ -10,7 +10,8 @@
       @registrantsNotVoted = @registrants - @total
       @overvotes = @metaData.get('overvotes')
       @undervotes = @metaData.get('undervotes')
-      @votesNotCounted = (@overvotes + @undervotes)
+      @votesNotCounted = @metaData.get('rejected') || 0
+      #@votesNotCounted = (@overvotes + @undervotes)
       
     serializeData: ->
       return {
