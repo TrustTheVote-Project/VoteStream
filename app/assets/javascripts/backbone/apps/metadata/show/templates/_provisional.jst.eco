@@ -1,16 +1,26 @@
-<div class='panel'>
-  <div class='header'>
-    <h6>Provisional Ballots</h6>
-  </div>
-  <div class='row-fluid'>
-    <div class='span6 border-right'>
-      <div class='label'>Counted</div>
-      <div class='big-num'><%= @provisional_counted %></div>
+<div class='panel pie-panel'>
+  <div class='row'>
+    <div class="col-xs-8 col-sm-6 col-md-8 col-lg-4 border-right">
+      <div class='header'>
+        <h6>Provisional Ballots</h6>          
+      </div>
+      <span class='big-num'><%= @provisional_percent %></span>
+      <span class=''>of <%= @voters %> total voters</span>
     </div>
-    <div class='span6'>
-      <div class='label'>Uncounted</div>
-      <div class='big-num'><%= @provisional_uncounted %></div>
+    <div class='col-xs-4 col-sm-6 col-md-4 col-lg-2'>
+      <canvas id="metadata-provisional-chart" class="pie-chart"></canvas>
+    </div>
+    <div class='col-xs-12 col-lg-6'>
+      <table>
+        <tbody>
+          <tr class="vote-count">
+            <td>Counted</td><td><%= @turnoutPercentage %></td><td><%= @counted %></td>
+          </tr>
+          <tr class='rejected-count'>
+            <td>Rejected</td><td><%= @registrantsNotVotedPercentage %></td><td><%= @rejected %></td>
+          </tr>
+        </tbody>
+      </table>
     </div>
   </div>
-  
 </div>

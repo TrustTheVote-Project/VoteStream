@@ -42,7 +42,8 @@
         @turnoutRegion.show new Show.TurnoutView()
         @voterNumbersRegion.show new Show.VoterNumbersView()
         @absentee.show new Show.AbsenteeView()
-        @provisional.show new Show.ProvisionalView()
+        if @metaData.get('demographics')['provisional_success']
+          @provisional.show new Show.ProvisionalView()
         @nonParticipating.show new Show.NonParticipatingView()
         @gender.show new Show.GenderView({toggler: @toggler})
         @age.show new Show.AgeView({toggler: @toggler})
