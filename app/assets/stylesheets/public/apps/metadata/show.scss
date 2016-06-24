@@ -187,8 +187,11 @@
         .fill {
           height: 24px;
         }
+        &.char-label {
+            font-weight: normal;
+        }
         &:first-child {
-          width: 80%;
+          width: 65%;
           span {
             display: block;
             position: absolute;

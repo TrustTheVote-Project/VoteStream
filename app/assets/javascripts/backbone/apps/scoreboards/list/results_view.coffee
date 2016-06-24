@@ -49,31 +49,50 @@
     # Requires @district and @ui.mapContainer to be defined in the subclass.
     toggleMapView: () ->
       @ui.mapContainer.toggleClass('hidden')
+      @mapRegion = new Marionette.Region
+        el: @ui.mapContainer
+      si = App.request 'entities:scoreboardInfo'
+      precinctResults = new App.Entities.PrecinctResultData
+      @mapViewInstance = new App.ScoreboardsApp.Show.MapView
+        zoomLevel: 12
+        hideControls:     true
+        whiteBackground:  false
+        noZoom:           false
+        noPanning:        false
+        infoWindow:       'simple'
+        precinctResults: precinctResults
+        precincts: App.request 'entities:precincts'
+        coloringType: si.get('coloringType')
+        
+      precinctResults.fetchForResult(@model, @region)
+      console.log(@mapViewInstance)
+      @mapRegion.show  @mapViewInstance
       
-      if !@mapViewInstance
-        PrecinctColors = App.module('Entities').PrecinctColors
-        colors = new PrecinctColors
-        si = App.request 'entities:scoreboardInfo'
-        colors.fetchForResult(@model, @region, si.get('advanced')).done ((si, colors) =>
-          window.colors = colors
-          @mapRegion = new Marionette.Region
-            el: @ui.mapContainer
-
-              
-          @mapViewInstance = new App.ScoreboardsApp.Show.MapView
-            zoomLevel: 12
-            hideControls:     true
-            whiteBackground:  false
-            noZoom:           false
-            noPanning:        false
-            infoWindow:       'simple'
-            precinctColors:     colors
-            precinctResults: si.get 'precinctResults'
-            precincts: App.request 'entities:precincts'
-            coloringType: si.get('coloringType')
-            
-          @mapRegion.show  @mapViewInstance).bind(this, si, colors)
     
+      # PrecinctColors = App.module('Entities').PrecinctColors
+      #   colors = new PrecinctColors
+      #   si = App.request 'entities:scoreboardInfo'
+      #   colors.fetchForResult(@model, @region, si.get('advanced')).done ((si, colors) =>
+      #     window.colors = colors
+      #     @mapRegion = new Marionette.Region
+      #       el: @ui.mapContainer
+      #
+      #
+      #     @mapViewInstance = new App.ScoreboardsApp.Show.MapView
+      #       zoomLevel: 12
+      #       hideControls:     true
+      #       whiteBackground:  false
+      #       noZoom:           false
+      #       noPanning:        false
+      #       infoWindow:       'simple'
+      #       precinctColors:     colors
+      #       precinctResults: si.get 'precinctResults'
+      #       precincts: App.request 'entities:precincts'
+      #       coloringType: si.get('coloringType')
+      #
+      #     @mapRegion.show  @mapViewInstance).bind(this, si, colors)
+
+
 
   class ContestResultView extends BaseResultView
     template: 'scoreboards/list/_contest_result'

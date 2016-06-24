@@ -66,12 +66,12 @@ InfoBubble.prototype.panToView = ->
         mapTypeId:              google.maps.MapTypeId.ROADMAP
 
       # https://developers.google.com/maps/documentation/javascript/controls
+      mapOptions.mapTypeControl = false
       if @options.hideControls
         mapOptions.disableDefaultUI = true
       else
-        mapOptions.mapTypeControl = true
-        mapOptions.mapTypeControlOptions =
-          style: google.maps.MapTypeControlStyle.DROPDOWN_MENU
+        # mapOptions.mapTypeControlOptions =
+        #   style: google.maps.MapTypeControlStyle.DROPDOWN_MENU
         mapOptions.navigationControl = true
 
       #always no zoom viz scrollwheel
@@ -83,9 +83,9 @@ InfoBubble.prototype.panToView = ->
         mapOptions.zoomControl = true
       if @options.noPanning
         mapOptions.draggable = false
-
+      
       @gMap = new google.maps.Map @el, mapOptions
-
+      
       style = [{
           featureType: 'all'
           stylers: [ saturation: -99 ]

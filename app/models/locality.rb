@@ -50,18 +50,18 @@ class Locality < ActiveRecord::Base
       "party_voted" => participating_registrants.group(:party).count,
       "birth_years" => registrants.group(:date_of_birth).count,
       "birth_years_voted" => participating_registrants.group(:date_of_birth).count,
-      "absentee_success" => participating_registrants.where(voter_outcome: "VotedAbsentee").count,
-      "absentee_rejected" => participating_registrants.where(voter_outcome: "RejectedAbsentee").count,
-      "provisional_success" => 335, #participating_registrants.where(voter_outcome: "VotedProvisional").count,
-      "provisional_rejected" => 1462,# participating_registrants.where(voter_outcome: "RejectedProvisional").count,
-      "registration_rejected" => participating_registrants.where(voter_outcome: "RejectedRegistration").count
+      "absentee_success" => registrants.where(voter_outcome: "VotedAbsentee").count,
+      "absentee_rejected" => registrants.where(voter_outcome: "RejectedAbsentee").count,
+      "provisional_success" => 335, #registrants.where(voter_outcome: "VotedProvisional").count,
+      "provisional_rejected" => 1462,# registrants.where(voter_outcome: "RejectedProvisional").count,
+      "registration_rejected" => registrants.where(voter_outcome: "RejectedRegistration").count
     }
     
     voter_characteristics = {}
     voting_voter_characteristics = {}
     VoterRegistration::CLASSIFICATIONS.each do |k,v|
-      voter_characteristics[k] = registrants.where(v => true).count
-      voting_voter_characteristics[k] = participating_registrants.where(v => true).count
+      voter_characteristics[v] = registrants.where(v => true).count
+      voting_voter_characteristics[v] = participating_registrants.where(v => true).count
     end
     # TODO: how to get "other" characteristics?
     # voter_characteristics: VoterRegistrationClassification.where(precinct_id: precincts.pluck(:id)).group(:name).count

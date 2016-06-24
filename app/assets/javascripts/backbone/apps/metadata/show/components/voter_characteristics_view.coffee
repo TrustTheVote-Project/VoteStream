@@ -6,33 +6,51 @@
     initialize: (options) ->
       @metaData = App.request('entities:electionMetadata')
       @demographics = @metaData.get('demographics')
-      @voter_characteristics = @demographics['voter_characteristics']
-      @voting_voter_characteristics = @demographics['voting_voter_characteristics']
+      @vc = @demographics['voter_characteristics']
+      @vc['absentee_total'] =       @absentee = @metaData.get('absentee')
+      @vc['absentee_overseas'] =  @vc["is_residing_abroad_uncertain_return"] + @vc["is_residing_abroad_with_intent_to_return"]
+      @vc["absentee_military"] = @vc["is_active_duty_uniformed_services"] + @vc["is_eligible_military_spouse_or_dependent"]
+      @vc['absentee_domestic'] = @vc['absentee_total'] - (@vc['absentee_overseas'] + @vc['absentee_military'])
+      
+      @voting_vc = @demographics['voting_voter_characteristics']
+      @voting_vc['absentee_total'] =       @absentee = @metaData.get('absentee')
+      @voting_vc['absentee_overseas'] =  @voting_vc["is_residing_abroad_uncertain_return"] + @voting_vc["is_residing_abroad_with_intent_to_return"]
+      @voting_vc["absentee_military"] = @voting_vc["is_active_duty_uniformed_services"] + @voting_vc["is_eligible_military_spouse_or_dependent"]
+      @voting_vc['absentee_domestic'] = @voting_vc['absentee_total'] - (@voting_vc['absentee_overseas'] + @voting_vc['absentee_military'])
+      # Same as above
+      
+      @ordered_characteristics = [
+        ["is_citizen", "Citizen"]
+        ["is_eighteen_election_day", "Eighteen By Election Day" ]
+        ["is_residing_at_registration_address", "Resides at Registration Address"]
+        ["absentee_total", "Absentee"]
+        ["absentee_domestic", "Domestic Absentee"]
+        ["absentee_overseas", "Overseas Absentee"]
+        ["absentee_military", "Military Absentee"]
+        ["is_residing_abroad_uncertain_return", "Resides Abroad with Uncertain Return"]
+        ["is_residing_abroad_with_intent_to_return", "Resides Abroad with Intent To Return"]
+        ["is_active_duty_uniformed_services", "Active Duty Uniformed Services"]
+        ["is_eligible_military_spouse_or_dependent", "Eligible Military Spouse or Dependent"]
+      ]
+  
       @total_registrants = @demographics['voter_registrations']
       @total_voters = @demographics['voters']
       @toggler = options.toggler
   
   
     serializeData: ->
-      chars = if @toggler.selected == 'voters' then @voter_characteristics else @voting_voter_characteristics
+      char_vals = if @toggler.selected == 'voters' then @vc else @voting_vc
       total = if @toggler.selected == 'voters' then @total_registrants else @total_voters
       stats_header = if @toggler.selected == 'voters' then "All Registrants" else "Participating Voters"
       items = []
       
-      for item, count of chars        
+      for char_opt in @ordered_characteristics
+        count = char_vals[char_opt[0]]
         items.push
-          label: @label(item)
+          label: char_opt[1]
           percent: App.ScoreboardsApp.Helpers.percentFormatted(count, total)
           count: count
             
-      items.sort (a,b) ->
-        if a.count > b.count
-          return -1
-        else if a.count == b.count
-          return 0
-        else
-          return 1
-          
       i = 0
       for item in items
         item.color = @colors(i, item.count)
@@ -41,6 +59,7 @@
       return {
         voter_characteristics: items
         colors: @colors
+        stats_header: stats_header
       }
       
     colors: (i, count) ->

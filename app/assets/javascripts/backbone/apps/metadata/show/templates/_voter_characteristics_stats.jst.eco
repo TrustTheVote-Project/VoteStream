@@ -4,12 +4,12 @@
 <table class='bars'>
   <% for vc in @voter_characteristics: %>
     <tr>
-      <td>
+      <td class='characteristic-label'>
         <div style="background-color: <%= vc.color %>; opacity: 0.4; width: <%= vc.percent %>;" class='fill'> &nbsp;
         </div>
         <span><%= vc.label %></span>
       </td>
-      <td style="color: <%= vc.color %>;"><%= vc.percent %></td>
+      <td style="color: <%= vc.color %>;"><%= App.ScoreboardsApp.Helpers.numberFormatted(vc.count) %> (<%= vc.percent %>)</td>
     </tr>
   <% end %>
 </table>
