@@ -35,7 +35,7 @@
           label: "Counted Provisional"
         },
         {
-          value: @unreturned
+          value: @rejected
           color: "#e68a00"
           highlight: "#e68a00"
           label: "Rejected Provisional"

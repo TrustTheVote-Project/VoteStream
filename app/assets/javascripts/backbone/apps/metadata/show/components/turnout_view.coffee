@@ -10,7 +10,9 @@
       @registrantsNotVoted = @registrants - @total
       @overvotes = @metaData.get('overvotes')
       @undervotes = @metaData.get('undervotes')
-      @votesNotCounted = @metaData.get('rejected') || 0
+      demographics = @metaData.get('demographics')
+      @votesNotCounted = demographics['absentee_rejected'] + demographics['provisional_rejected']
+      @regRejected = demographics['registration_rejected']
       #@votesNotCounted = (@overvotes + @undervotes)
       
     serializeData: ->
@@ -20,8 +22,10 @@
         total: App.ScoreboardsApp.Helpers.numberFormatted(@total)
         registrantsNotVoted: App.ScoreboardsApp.Helpers.numberFormatted(@registrantsNotVoted)
         registrantsNotVotedPercentage:  App.ScoreboardsApp.Helpers.percentFormatted(@registrantsNotVoted, @registrants)
-        votesNotCounted: App.ScoreboardsApp.Helpers.numberFormatted(@votesNotCounted)
-        votesNotCountedPercentage: App.ScoreboardsApp.Helpers.percentFormatted(@votesNotCounted, @registrants)
+        votesNotCounted: if @votesNotCounted then App.ScoreboardsApp.Helpers.numberFormatted(@votesNotCounted) else "N/A"
+        votesNotCountedPercentage: if @votesNotCounted then App.ScoreboardsApp.Helpers.percentFormatted(@votesNotCounted, @registrants) else "N/A"
+        regRejected: if @regRejected then App.ScoreboardsApp.Helpers.numberFormatted(@regRejected) else "N/A"
+        regRejectedPercentage: if @regRejected then App.ScoreboardsApp.Helpers.percentFormatted(@regRejected, @registrants) else "N/A"
       }
 
     onShow: ->
@@ -48,6 +52,12 @@
           color: "#ff8080"
           highlight: "#ff8080"
           label: "Not Counted"
+        },
+        {
+          value: @regRejected,
+          color: "#aa3030",
+          highlight: "#aa3030",
+          label: "Registration Rejected"
         }
         
       ]

@@ -22,6 +22,9 @@
           <tr class='rejected-count'>
             <td>Registered, Attempted to Vote</td><td><%= @votesNotCountedPercentage %></td><td><%= @votesNotCounted %></td>
           </tr>
+          <tr class='reg-rejected'>
+            <td>Registration Rejected</td><td><%= @regRejectedPercentage %></td><td><%= @regRejected %></td>
+          </tr>
         </tbody>
       </table>
     </div>

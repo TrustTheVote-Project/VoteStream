@@ -162,6 +162,9 @@
         tr.rejected-count {
             color: $rejected-count;
         }
+        tr.reg-rejected {
+            color: $reg-rejected;
+        }
       }
     }
     
