@@ -16,6 +16,7 @@
     serializeData: ->
       return {
         turnoutPercentage:  App.ScoreboardsApp.Helpers.percentFormatted(@total, @registrants)
+        totalRegistrants: App.ScoreboardsApp.Helpers.numberFormatted(@registrants)
         total: App.ScoreboardsApp.Helpers.numberFormatted(@total)
         registrantsNotVoted: App.ScoreboardsApp.Helpers.numberFormatted(@registrantsNotVoted)
         registrantsNotVotedPercentage:  App.ScoreboardsApp.Helpers.percentFormatted(@registrantsNotVoted, @registrants)
@@ -32,21 +33,21 @@
       @pieData = [
         {
           value: @total
-          color: "#41aef4"
-          highlight: "#41aef4"
-          label: "In Person"
+          color: "#00cc7a"
+          highlight: "#00cc7a"
+          label: "Voted"
         },
         {
           value: @registrantsNotVoted
-          color: "#5a7688"
-          highlight: "#5a7688"
-          label: "In Person Early"
+          color: "#e68a00"
+          highlight: "#e68a00"
+          label: "Registered Not Voted"
         },
         {
           value: @votesNotCounted
-          color: "#ebe5e1"
-          highlight: "#ebe5e1"
-          label: "Absentee"
+          color: "#ff8080"
+          highlight: "#ff8080"
+          label: "Not Counted"
         }
         
       ]

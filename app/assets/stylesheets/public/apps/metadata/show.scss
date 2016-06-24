@@ -72,10 +72,10 @@
     
     .big-num {
       display: block;
-      padding-bottom: 10px;
+      padding-bottom: 5px;
       font-size: 30px;
       line-height: 1em;
-      height: 30px;
+      height: 35px;
       font-weight: bold;
       color: #113d54;
     }
@@ -111,9 +111,9 @@
       padding-top: 25px;
       padding-bottom: 20px;
       .big-num {
-        padding-bottom: 10px;
+        padding-bottom: 5px;
         font-size: 50px;
-        height: 50px;
+        height: 55px;
       }
   
       .pie-chart {
@@ -152,6 +152,15 @@
         }
         tr.absentee {
           color: $absentee;
+        }
+        tr.vote-count {
+            color: $vote-count;
+        }
+        tr.not-vote-count {
+            color: $not-vote-count;
+        }
+        tr.rejected-count {
+            color: $rejected-count;
         }
       }
     }

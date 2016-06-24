@@ -1,56 +1,29 @@
-<div class='panel'>
+<div class='panel pie-panel'>
   <div class='row'>
-    <div class='col-xs-12 col-sm-6 '>
+    <div class="col-xs-8 col-sm-6 col-md-8 col-lg-4 border-right">
       <div class='header'>
-        <h6>Absentee Ballots</h6>
+        <h6>Absentee Ballots</h6>          
       </div>
-      <div class='row'>
-        <div class='col-xs-6 border-right'>
-          <div class='label'>Counted</div> 
-          <span class='big-num'><%= @counted %></span>
-        </div>
-        <div class='col-xs-6'>
-          <div class='label'>Uncounted</div> 
-          <span class='big-num'><%= @uncounted %></span>       
-        </div>
-      </div>
+      <span class='big-num'><%= @absentee_percent %></span>
+      <span class=''>of <%= @voters %> total voters</span>
     </div>
-    <div class='col-xs-12 col-sm-6'>
-      <div class='label'>Breakdown</div>
-      <div class='bars'>
-        <table>
-          <tr>
-            <td>Domestic</td>
-            <td class='bar'>
-              <div class='filler domestic' style='width: <%= @domesticPercentage %>'>
-              </div>
-            </td>
-            <td>
-              <%= @domesticPercentage %>
-            </td>
+    <div class='col-xs-4 col-sm-6 col-md-4 col-lg-2'>
+      <canvas id="metadata-absentee-chart" class="pie-chart"></canvas>
+    </div>
+    <div class='col-xs-12 col-lg-6'>
+      <table>
+        <tbody>
+          <tr class="vote-count">
+            <td>Counted</td><td><%= @turnoutPercentage %></td><td><%= @counted %></td>
           </tr>
-          <tr>
-            <td>Overseas</td>
-            <td class='bar'>
-              <div class='filler overseas' style='width: <%= @overseasPercentage %>'>                  
-              </div>
-            </td>
-            <td>
-              <%= @overseasPercentage %>
-            </td>
+          <tr class='rejected-count'>
+            <td>Rejected</td><td><%= @registrantsNotVotedPercentage %></td><td><%= @rejected %></td>
           </tr>
-          <tr>
-            <td>Military</td>
-            <td class='bar'>
-              <div class='filler military' style='width: <%= @militaryPercentage %>'>
-              </div>
-            </td>
-            <td>
-              <%= @militaryPercentage %>
-            </td>
+          <tr class='not-vote-count'>
+            <td>Not Returned</td><td><%= @votesNotCountedPercentage %></td><td><%= @unreturned %></td>
           </tr>
-        </table>
-      </div>
+        </tbody>
+      </table>
     </div>
   </div>
 </div>
