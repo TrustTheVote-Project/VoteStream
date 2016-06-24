@@ -19,6 +19,7 @@
       race: '#metadata-race'
       voterCharacteristics: '#metadata-voter-characteristics'
       zipCodes: '#metadata-zip-codes'
+      uocava: ''
       
     events:
       'click #js-clear-maps': (e) -> @clearMaps(e)
@@ -50,5 +51,5 @@
         @party.show new Show.PartyView({toggler: @toggler})
         @race.show new Show.RaceView({toggler: @toggler})
         @voterCharacteristics.show new Show.VoterCharacteristicsView({toggler: @toggler})
-        @zipCodes.show new Show.ZipCodesView()
+        # @zipCodes.show new Show.ZipCodesView()
         @totalTypeToggleRegion.show @togglerView
