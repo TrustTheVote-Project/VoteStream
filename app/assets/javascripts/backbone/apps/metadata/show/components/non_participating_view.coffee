@@ -5,30 +5,29 @@
 
     initialize: ->
       @metaData = App.request('entities:electionMetadata')
+      @demographics = @metaData.get('demographics')
       @total = @metaData.get('total_valid_votes')
       @registrants = @metaData.get('registrants')
       @absentee = @metaData.get('absentee')
-      @absenteeUncounted = .2 * @absentee   #FAKE
+      @ab_counted = @demographics['absentee_success']
+      @ab_rejected = @demographics['absentee_rejected']
+      @ab_unreturned = @absentee - (@ab_counted + @ab_rejected)
+      
       
       @registrantsNotVoted = @registrants - @total
-      @domestic = .88 * @registrantsNotVoted
-      @military = .07 * @registrantsNotVoted
-      @overseas = .05 * @registrantsNotVoted
       
-      @provisionalUncounted = 111
-      @totalNonParticipating = @registrantsNotVoted + @absenteeUncounted + @provisionalUncounted
+      @provisionalUncounted = @demographics['provisional_rejected'] || 0 
+      @totalNonParticipating = @registrantsNotVoted + @ab_rejected + @ab_unreturned + @provisionalUncounted
       
     serializeData: ->
       return {
         totalNonParticipating: App.ScoreboardsApp.Helpers.numberFormatted(@totalNonParticipating)
-        domestic: App.ScoreboardsApp.Helpers.numberFormatted(@domestic)
-        domesticPercentage: App.ScoreboardsApp.Helpers.percentFormatted(@domestic, @totalNonParticipating)
-        overseas: App.ScoreboardsApp.Helpers.numberFormatted(@overseas)
-        overseasPercentage: App.ScoreboardsApp.Helpers.percentFormatted(@overseas, @totalNonParticipating)
-        military: App.ScoreboardsApp.Helpers.numberFormatted(@military)
-        militaryPercentage: App.ScoreboardsApp.Helpers.percentFormatted(@military, @totalNonParticipating)
-        absenteeUncounted: App.ScoreboardsApp.Helpers.numberFormatted(@absenteeUncounted)
-        absenteeUncountedPercentage: App.ScoreboardsApp.Helpers.percentFormatted(@absenteeUncounted, @totalNonParticipating)
+        registrantsNotVoted: App.ScoreboardsApp.Helpers.numberFormatted(@registrantsNotVoted)
+        registrantsNotVotedPercentage: App.ScoreboardsApp.Helpers.percentFormatted(@registrantsNotVoted, @totalNonParticipating)
+        absenteeRejected: App.ScoreboardsApp.Helpers.numberFormatted(@ab_rejected)
+        absenteeRejectedPercentage: App.ScoreboardsApp.Helpers.percentFormatted(@ab_rejected, @totalNonParticipating)
+        absenteeUnreturned: App.ScoreboardsApp.Helpers.numberFormatted(@ab_unreturned)
+        absenteeUnreturnedPercentage: App.ScoreboardsApp.Helpers.percentFormatted(@ab_unreturned, @totalNonParticipating)
         provisionalUncounted: App.ScoreboardsApp.Helpers.numberFormatted(@provisionalUncounted)
         provisionalUncountedPercentage: App.ScoreboardsApp.Helpers.percentFormatted(@provisionalUncounted, @totalNonParticipating)
       }
@@ -41,29 +40,25 @@
     
       @pieData = [
         {
-          value: @domestic
-          color: "#113d54"
-          label: "In Person"
-        },
+          value: @registrantsNotVoted
+          color: "#e68a00"
+          highlight: "#e68a00"
+          label: "Registered Not Voted"
+        },        
         {
-          value: @overseas
-          color: "#5a7688"
-          label: "In Person Early"
-        },
-        {
-          value: @military
-          color: "#f29101"
-          label: "Absentee"
-        },
-        {
-          value: @absenteeUncounted
+          value: @ab_unreturned
           color: "#aba5a1"
-          label: "Absentee"
+          label: "Absentee Unreturned"
+        },
+        {
+          value: @ab_rejected
+          color: "#ff8080"
+          label: "Absentee Rejected"
         },
         {
           value: @provisionalUncounted
           color: "#cbc5c1"
-          label: "Absentee"
+          label: "Provisional"
         }
       
       ]

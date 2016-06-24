@@ -5,7 +5,7 @@
         <h6>Absentee Ballots</h6>          
       </div>
       <span class='big-num'><%= @absentee_percent %></span>
-      <span class=''>of <%= @voters %> total voters</span>
+      <span class=''>of <%= @voters %> total ballots</span>
     </div>
     <div class='col-xs-4 col-sm-6 col-md-4 col-lg-2'>
       <canvas id="metadata-absentee-chart" class="pie-chart"></canvas>

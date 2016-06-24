@@ -12,17 +12,14 @@
     <div class='col-xs-12 col-lg-6'>
       <table>
         <tbody>
-          <tr class="domestic">
-            <td>Non Voting Domestic</td><td><%= @domesticPercentage %></td><td><%= @domestic %></td>
-          </tr>
-          <tr class="military">
-            <td>Non Voting Military</td><td><%= @militaryPercentage %></td><td><%= @military %></td>
-          </tr>
-          <tr class="overseas">
-            <td>Non Voting Overseas</td><td><%= @overseasPercentage %></td><td><%= @overseas %></td>
+          <tr class='not-vote-count'>
+            <td>Registered, Not Voting</td><td><%= @registrantsNotVotedPercentage %></td><td><%= @registrantsNotVoted %></td>
           </tr>
           <tr class="absentee">
-            <td>Absentee Not Counted</td><td><%= @absenteeUncountedPercentage %></td><td><%= @absenteeUncounted %></td>
+            <td>Absentee Not Returned</td><td><%= @absenteeUnreturnedPercentage %></td><td><%= @absenteeUnreturned %></td>
+          </tr>
+          <tr class="rejected-count">
+            <td>Absentee Rejected</td><td><%= @absenteeRejectedPercentage %></td><td><%= @absenteeRejected %></td>
           </tr>
           <tr class="provisional">
             <td>Provisional Not Counted</td><td><%= @provisionalUncountedPercentage %></td><td><%= @provisionalUncounted %></td>

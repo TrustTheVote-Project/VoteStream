@@ -11,10 +11,6 @@
       @counted = @demographics['absentee_success']
       @rejected = @demographics['absentee_rejected']
       @unreturned = @absentee - (@counted + @rejected)
-
-      @pb_counted = @metaData.get('provisional_success')
-      @pb_rejected = @metaData.get('provisional_rejected')
-      @provisional = @pb_counted + @pb_rejected
       
     serializeData: ->
       return {
