@@ -15,6 +15,7 @@
     templateHelpers: ->
       percent: -> App.ScoreboardsApp.Helpers.percent(@votes, @totalVotes)
       percentFormatted: -> App.ScoreboardsApp.Helpers.percentFormatted(@votes, @totalVotes)
+      formattedVotes: -> App.ScoreboardsApp.Helpers.numberFormatted(@votes)
       
     onShow: ->
       c = @model.get('c')
