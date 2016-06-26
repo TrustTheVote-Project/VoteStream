@@ -11,6 +11,7 @@
       turnoutRegion: '#metadata-turnout'
       voterNumbersRegion: '#metadata-voter-numbers'
       absentee: '#metadata-absentee'
+      uocava: '#metadata-uocava'
       provisional: '#metadata-provisional'
       nonParticipating: '#metadata-non-participating'
       gender: '#metadata-gender'
@@ -19,7 +20,7 @@
       race: '#metadata-race'
       voterCharacteristics: '#metadata-voter-characteristics'
       zipCodes: '#metadata-zip-codes'
-      uocava: ''
+      uocava: '#metadata-uocava'
       
     events:
       'click #js-clear-maps': (e) -> @clearMaps(e)
@@ -43,6 +44,7 @@
         @turnoutRegion.show new Show.TurnoutView()
         @voterNumbersRegion.show new Show.VoterNumbersView()
         @absentee.show new Show.AbsenteeView()
+        @uocava.show new Show.UocavaView()
         if @metaData.get('demographics')['provisional_success']
           @provisional.show new Show.ProvisionalView()
         @nonParticipating.show new Show.NonParticipatingView()

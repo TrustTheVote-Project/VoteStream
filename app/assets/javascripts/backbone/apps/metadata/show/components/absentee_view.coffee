@@ -12,6 +12,8 @@
       @rejected = @demographics['absentee_rejected']
       @unreturned = @absentee - (@counted + @rejected)
       
+      
+      
     serializeData: ->
       return {
         voters:  App.ScoreboardsApp.Helpers.numberFormatted(@voters)
@@ -57,4 +59,5 @@
       
       ctx = $("#metadata-absentee-chart").get(0).getContext("2d")
       @pieChart = new Chart(ctx).Pie(@pieData, @pieOptions)
+      
       

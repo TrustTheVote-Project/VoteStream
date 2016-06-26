@@ -1,0 +1,50 @@
+<div class='panel pie-panel'>
+  <div class='row'>
+    <div class="col-xs-8 col-sm-6 col-md-8 col-lg-4 border-right">
+      <div class='header'>
+        <h6>UOCAVA Ballots</h6>          
+      </div>
+      <span class='big-num'><%= @uocava_percent %></span>
+      <span class=''>of <%= @absentee %> total absentee ballots</span>
+    </div>
+    <div class='col-xs-4 col-sm-6 col-md-4 col-lg-2'>
+      <canvas id="metadata-uocava-chart" class="pie-chart"></canvas>
+    </div>
+    <div class='col-xs-12 col-lg-6'>
+      <table>
+        <tbody>
+          <tr class="vote-count" style="color:  #00cc7a;">
+            <td>Domestic Counted</td><td><%= @non_uocava_counted_percentage %></td><td><%= @non_uocava_counted %></td>
+          </tr>
+          <tr class="vote-count" style="color:  #00aa7a;">
+            <td>Domestic Rejected</td><td><%= @non_uocava_rejected_percentage %></td><td><%= @non_uocava_rejected %></td>
+          </tr>
+          <tr class="vote-count" style="color:  #cc6633;">
+            <td>Military Counted</td><td><%= @military_counted_percentage %></td><td><%= @military_counted %></td>
+          </tr>
+          <tr class="vote-count" style="color: #aa6633;">
+            <td>Military Rejected</td><td><%= @military_rejected_percentage %></td><td><%= @military_rejected %></td>
+          </tr>
+          <tr class="vote-count" style="color:  #cc007a;">
+            <td>Military Dependent or Spouse Counted</td><td><%= @military_dep_counted_percentage %></td><td><%= @military_dep_counted %></td>
+          </tr>
+          <tr class="vote-count" style="color:  #aa007a;">
+            <td>Military Dependent or Spouse Rejected</td><td><%= @military_dep_rejected_percentage %></td><td><%= @military_dep_rejected %></td>
+          </tr>
+          <tr class="vote-count" style="color:  #7acccc;">
+            <td>Overseas with Intent to Return Counted</td><td><%= @intent_to_return_counted_percentage %></td><td><%= @intent_to_return_counted %></td>
+          </tr>
+          <tr class="vote-count" style="color:  #7aaaaa;">
+            <td>Overseas with Intent to Return Rejected</td><td><%= @intent_to_return_rejected_percentage %></td><td><%= @intent_to_return_rejected %></td>
+          </tr>
+          <tr class="vote-count" style="color:  #007acc;">
+            <td>Overseas with Uncertain Status Rejected</td><td><%= @uncertain_return_counted_percentage %></td><td><%= @uncertain_return_counted %></td>
+          </tr>
+          <tr class="vote-count" style="color:  #007aaa;">
+            <td>Overseas with Uncertain Status Counted</td><td><%= @uncertain_return_rejected_percentage %></td><td><%= @uncertain_return_rejected %></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
