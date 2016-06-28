@@ -109,6 +109,9 @@
       @pieChart = new Chart(ctx).Pie(@pieData, @pieOptions)
     
   class Show.RaceView extends Marionette.Layout
+    className: ->
+       "stats-layout"
+    
     template: 'metadata/show/_race'
   
     regions:

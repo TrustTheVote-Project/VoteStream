@@ -68,6 +68,9 @@
       @lineChart = new Chart(ctx).Line data, lineOptions
 
   class Show.AgeView extends Marionette.Layout
+    className: ->
+       "stats-layout"
+    
     template: 'metadata/show/_age'
       
     regions:

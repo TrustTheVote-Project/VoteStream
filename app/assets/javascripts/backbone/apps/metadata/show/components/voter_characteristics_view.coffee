@@ -77,6 +77,9 @@
       name.charAt(0).toUpperCase() + name.slice(1);
     
   class Show.VoterCharacteristicsView extends Marionette.Layout
+    className: ->
+       "stats-layout"
+    
     template: 'metadata/show/_voter_characteristics'
     
     regions:

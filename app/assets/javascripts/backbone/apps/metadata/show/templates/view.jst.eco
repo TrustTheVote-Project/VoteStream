@@ -48,30 +48,34 @@
   </div>  
   
   <div class="row">
-    <div class="col-xs-12 col-sm-6 demographics-box">
-      <div id="metadata-gender" class='stats-box'>
+    <div class="row-height">
+      <div class="col-xs-12 col-sm-6 demographics-box col-sm-height">
+        <div id="metadata-gender" class='stats-box  inside inside-full-height'>
+        </div>
+      </div>
+      <div class="col-xs-12 col-sm-6  demographics-box col-sm-height">
+        <div id="metadata-age" class='stats-box inside inside-full-height'>        
+        </div>
       </div>
     </div>
-    <div class="col-xs-12 col-sm-6  demographics-box">
-      <div id="metadata-age" class='stats-box'>        
+    <div class="row-height">
+      <div class="col-xs-12 col-sm-6  demographics-box col-sm-height">
+        <div id="metadata-party" class='stats-box inside inside-full-height'>
+        </div>
+      </div>
+      <div class="col-xs-12 col-sm-6  demographics-box col-sm-height">
+        <div id="metadata-race" class='stats-box inside inside-full-height'>
+        </div>
       </div>
     </div>
-    <div class='clearfix visible-sm-block'></div>
-    <div class="col-xs-12 col-sm-6  demographics-box">
-      <div id="metadata-party" class='stats-box'>
+    <div class="row-height">
+      <div class="col-xs-12 col-sm-6  demographics-box col-sm-height">
+        <div id="metadata-voter-characteristics" class='stats-box inside inside-full-height'>
+        </div>
       </div>
-    </div>
-    <div class="col-xs-12 col-sm-6  demographics-box">
-      <div id="metadata-race" class='stats-box'>
-      </div>
-    </div>
-    <div class='clearfix visible-sm-block'></div>
-    <div class="col-xs-12 col-sm-6  demographics-box">
-      <div id="metadata-voter-characteristics" class='stats-box'>
-      </div>
-    </div>
-    <div class="col-xs-12 col-sm-6  demographics-box">
-      <div id="metadata-zip-codes" class='stats-box'>
+      <div class="col-xs-12 col-sm-6  demographics-box col-sm-height">
+        <div id="metadata-zip-codes" class='stats-box inside inside-full-height'>
+        </div>
       </div>
     </div>
   </div>

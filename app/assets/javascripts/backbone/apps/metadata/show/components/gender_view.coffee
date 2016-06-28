@@ -73,6 +73,9 @@
     
 
   class Show.GenderView extends Marionette.Layout
+    className: ->
+       "stats-layout"
+       
     template: 'metadata/show/_gender'
     
     regions:

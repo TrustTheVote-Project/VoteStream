@@ -51,6 +51,9 @@
       name.charAt(0).toUpperCase() + name.slice(1);
       
   class Show.PartyView extends Marionette.Layout
+    className: ->
+       "stats-layout"
+    
     template: 'metadata/show/_party'
   
     regions:
