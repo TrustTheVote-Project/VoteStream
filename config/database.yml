@@ -1,11 +1,12 @@
 development:
   adapter:  postgis
   host:     localhost
+  # host: votestreamdemo2-public.cf36qcgagelg.us-east-1.rds.amazonaws.com
   encoding: unicode
   database: <%= ENV['DATABASE_NAME'] %>
   pool: 5
-  username: enrs
-  password: enrs
+  username: <%= ENV['DATABASE_USER'] %>
+  password: <%= ENV['DATABASE_PW'] %>
 
 test:
   adapter:  postgis

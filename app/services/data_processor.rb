@@ -44,6 +44,24 @@ class DataProcessor
       DistrictsPrecinct.where(precinct_id: precinct_ids).group("district_id").having("count(*) < #{precinct_count}").pluck(:district_id)
     end
   end
+  
+  def self.counties_json(locality)
+    # SELECT stusps,
+    #      ST_Multi(ST_Union(f.the_geom)) as singlegeom
+    #    FROM sometable As f
+    # GROUP BY stusps
+    district_ids = locality.districts.where("name like '%County'").pluck(:id)
+    shapes = DistrictsPrecinct.joins(:precinct).where(district_id: district_ids).select("districts_precincts.district_id, ST_AsGeoJSON(ST_Union(precincts.geo)) kml").group("district_id").order(nil)
+    # county_shapes = districts.collect do |district|
+    #   shape = district.precincts.select("district_id, ST_AsGeoJSON(ST_Union(geo)) kml").group("district_id").order(nil).first
+    county_shapes = shapes.collect do |shape|
+      {
+        "id" => shape.district_id,
+        "kml" => JSON.parse(shape.kml)
+      }
+    end
+    return Oj.dump(county_shapes)
+  end
 
   def self.precincts_json(locality)
     t = Time.now

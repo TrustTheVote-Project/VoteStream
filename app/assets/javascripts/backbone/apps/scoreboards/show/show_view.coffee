@@ -33,3 +33,4 @@
           precinctColors:  @si.get 'precinctColors'
           precincts: App.request 'entities:precincts'
           coloringType: @si.get('coloringType')
+          counties: App.request 'entities:counties'

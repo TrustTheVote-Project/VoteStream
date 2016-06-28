@@ -13,6 +13,12 @@ class DataController < ApplicationController
     render text: precincts_json
   end
 
+  def counties
+    locality = Locality.find(params[:locality_id])
+    counties_json = DataProcessor.counties_json(locality)
+    render text: counties_json
+  end
+
   # the list of all refcons grouped
   def all_refcons
     render json: RefConResults.new.all_refcons(params)

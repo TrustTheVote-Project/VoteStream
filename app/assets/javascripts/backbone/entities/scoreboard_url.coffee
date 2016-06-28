@@ -73,9 +73,10 @@
       region = @si.get 'region'
       refcon = @si.get('refcon') || App.ScoreboardsApp.Helpers.getDefaultRefcon()
 
-      ctype = refcon.get('type')        
-      cid = refcon.get('id')
-      ctype = 'a' if ctype == 'all'
+      if refcon
+        ctype = refcon.get('type')        
+        cid = refcon.get('id')
+        ctype = 'a' if ctype == 'all'
       
       if region? or cid != 'federal'
         parts.push ctype + '-' + cid

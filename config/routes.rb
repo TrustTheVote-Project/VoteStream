@@ -22,6 +22,7 @@ Enrs::Application.routes.draw do
   get  '/data/localities/:locality_id/districts'        => 'data#districts'
   post '/data/districts'        => 'data#districts'
   get  '/data/localities/:locality_id/precincts'        => 'data#precincts'
+  get  '/data/localities/:locality_id/counties'        => 'data#counties'
   #post '/data/precincts'        => 'data#precincts'
   get  '/data/voting_results'   => 'data#voting_results'
   post '/data/voting_results'   => 'data#voting_results'

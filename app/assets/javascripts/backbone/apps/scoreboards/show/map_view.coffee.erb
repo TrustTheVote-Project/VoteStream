@@ -38,6 +38,7 @@ InfoBubble.prototype.panToView = ->
         @renderPrecincts()
 
       @precincts = @options.precincts #App.request 'entities:precincts'
+      @counties = @options.counties || []
       
     onClose: ->
       @closeInfoWindow()
@@ -324,9 +325,28 @@ InfoBubble.prototype.panToView = ->
       }
 
     renderPrecincts: ->
-      App.execute 'when:fetched', [@precincts, @precinctResults], =>
+      App.execute 'when:fetched', [@precincts, @precinctResults, @counties], =>
         @initMap()
         @removePreviousPolygons()
+
+        if @counties.length > 0
+          for county in @counties.models
+            kml = county.get 'kml'
+            lines = @pointsFromKml(kml)
+            poly = new google.maps.Polygon
+              paths:          lines,
+              strokeColor:  '#666666'
+              strokeWeight: 1
+              strokeOpacity: .7
+              fillColor:      "#ffffff"
+              fillOpacity:    0
+              zIndex:         5
+              data:
+                districtId:       county.get('id')
+                mapView:          @
+            @polygons.push poly
+            poly.setMap @gMap
+              
 
         precinct_results = @precinctResults.get 'precincts'
         bounds  = new google.maps.LatLngBounds()
