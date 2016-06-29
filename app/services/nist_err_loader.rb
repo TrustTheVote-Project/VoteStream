@@ -52,7 +52,7 @@ class NistErrLoader < BaseLoader
         reg_voters = precinct_splits_voters[p_child.uid].to_i
         p_parent = precinct_parents[p_child.uid]
         if p_parent
-          p_parent.registered_voters = (p_parent.registered_voters || 0) + reg_voters
+          p_parent.registered_voters = (p_parent.registered_voters || 0) + (reg_voters || 0)
         else
           raise p_child.uid.to_s
         end
@@ -165,7 +165,7 @@ class NistErrLoader < BaseLoader
                       contest_response_results[cr.uid] << can_res
                       cr.candidate_results << can_res
                     else
-                      can_res.votes = (can_res.votes || 0) + vc.count
+                      can_res.votes = (can_res.votes || 0) + (vc.count || 0)
                     end
                   else
                     mismatches[:precincts] ||= []
@@ -178,7 +178,7 @@ class NistErrLoader < BaseLoader
                       can_results[can_result_uid] = can_res
                       cr.candidate_results << can_res
                     else
-                      can_res.votes = (can_res.votes || 0) + vc.count
+                      can_res.votes = (can_res.votes || 0) + (vc.count || 0)
                     end
                   end
                   precinct_results[d_uid] = cr
@@ -208,9 +208,9 @@ class NistErrLoader < BaseLoader
                     if cr.nil?
                       raise "No contest result for contest total count #{contest_total}"
                     end
-                    cr.total_votes += sc.ballots_cast
-                    cr.undervotes += sc.undervotes
-                    cr.overvotes += sc.overvotes
+                    cr.total_votes += sc.ballots_cast || 0
+                    cr.undervotes += sc.undervotes || 0
+                    cr.overvotes += sc.overvotes || 0
                   else
                     raise "No pct for contest summary count #{sc}"
                   end
@@ -307,7 +307,7 @@ class NistErrLoader < BaseLoader
                       contest_response_results[cr.uid] << ref_res
                       cr.ballot_response_results << ref_res
                     else
-                      ref_res.votes = (ref_res.votes || 0) + vc.count
+                      ref_res.votes = (ref_res.votes || 0) + (vc.count || 0)
                     end
                   else
                     mismatches[:precincts] ||= []
