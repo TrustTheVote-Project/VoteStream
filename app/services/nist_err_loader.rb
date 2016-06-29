@@ -231,7 +231,7 @@ class NistErrLoader < BaseLoader
                 if !cr.precinct_id.blank? && cr.candidate_results.size > 0
                   items = cr.candidate_results.to_a.sort {|a,b| b.votes.to_i <=> a.votes.to_i}
                   total_votes = cr.total_valid_votes || 0
-                  diff = (items[0].votes - (items[1].try(:votes) || 0)) * 100 / (total_votes == 0 ? 1 : total_votes)
+                  diff = ((items[0].votes || 0) - (items[1].try(:votes) || 0)) * 100 / (total_votes == 0 ? 1 : total_votes)
                   leader = items[0].candidate
 
                   cr.color_code = self.candidate_color_code(leader, diff, total_votes, top_cans)
@@ -348,7 +348,7 @@ class NistErrLoader < BaseLoader
                 if !cr.precinct_id.blank? && cr.ballot_response_results.size > 0
                   items = cr.ballot_response_results.to_a.sort {|a,b| b.votes.to_i <=> a.votes.to_i}
                   total_votes = cr.total_votes || 0
-                  diff = (items[0].votes - (items[1].try(:votes) || 0)) * 100 / (total_votes == 0 ? 1 : total_votes)
+                  diff = ((items[0].votes || 0) - (items[1].try(:votes) || 0)) * 100 / (total_votes == 0 ? 1 : total_votes)
                   leader = items[0].ballot_response
 
                   cr.color_code = self.ballot_response_color_code(leader, diff, total_votes)
