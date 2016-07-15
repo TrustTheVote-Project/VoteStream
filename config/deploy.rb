@@ -33,6 +33,12 @@ namespace :deploy do
       # within release_path do
       #   execute :rake, 'cache:clear'
       # end
+      # within release_path do
+      #   execute :rake, 'assets:precompile'
+      # end
+      # within release_path do
+      #   execute :rake, 'tmp:cache:clear'
+      # end
     end
   end
 
