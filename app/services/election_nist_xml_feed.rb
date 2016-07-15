@@ -8,7 +8,7 @@ class ElectionNistXmlFeed < ElectionFeed
 
   def render
     er = from_locality
-    er.to_xml_node.to_xml
+    er.to_xml_node
   end
 
 
