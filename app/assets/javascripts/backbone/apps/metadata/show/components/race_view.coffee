@@ -16,7 +16,7 @@
       @voting_race_total = 0
       for item, count of @races
         @race_total += count
-
+      
       for item, count of @voting_races
         @voting_race_total += count
         
@@ -52,6 +52,8 @@
       
       
     templateHelpers: =>
+      has_race_data: =>
+        @has_race_data()
       race_pctgs: =>
         if @toggler.selected == 'voters' then @race_pctgs else @voting_race_pctgs
       race_total: =>
@@ -65,8 +67,12 @@
         colors: @colors
       }  
       
+    has_race_data: ->
+      Object.keys(@races).length > 1
+      
     onShow: ->
-      @renderPieChart()
+      if @has_race_data()
+        @renderPieChart()
 
     colors: (name) ->
       switch name.toLowerCase()

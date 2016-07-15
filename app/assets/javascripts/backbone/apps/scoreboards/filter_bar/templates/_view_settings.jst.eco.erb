@@ -7,7 +7,7 @@
   <%% for setting in @view_settings: %>
     <%% if setting.settingType == 'radio': %>
       <li class="text-left">
-        <a class='change-setting' href="" <%% unless setting.enabled: %> class="disabled" <%% end %>>
+        <a class='change-setting <%% unless setting.enabled: %>disabled<%% end %>' href="" >
           <input type="radio"
                  name="<%%= setting.property %>"
                  data-value="<%%= setting.value %>"
@@ -18,7 +18,7 @@
       </li>
     <%% else if setting.settingType == 'checkbox': %>
       <li class="text-left">
-        <a class='change-setting' href="">
+        <a class='change-setting <%% unless setting.enabled: %>disabled<%% end %>' href="">
           <input type="checkbox"
             name="<%%= setting.property %>"
             <%% if setting.trueValue: %>data-true-value="<%%= setting.trueValue %>"<%% end %>
@@ -30,7 +30,7 @@
       </li>
     <%% else if setting.settingType == 'valueCheckbox': %>
       <li class="text-left">
-        <a class='change-setting' href="">
+        <a class='change-setting <%% unless setting.enabled: %>disabled<%% end %>' href="">
           <input type="checkbox"
             name="<%%= setting.property %>"
             <%% if setting.trueValue: %>data-true-value="<%%= setting.trueValue %>"<%% end %>

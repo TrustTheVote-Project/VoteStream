@@ -41,8 +41,8 @@
         },
         {
           value: @unreturned
-          color: "#e68a00"
-          highlight: "#e68a00"
+          color: "#aba5a1"
+          highlight: "#aba5a1"
           label: "Unreturned absentee"
         },
         {

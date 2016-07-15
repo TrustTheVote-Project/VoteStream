@@ -19,7 +19,7 @@
           <tr class='rejected-count'>
             <td>Rejected</td><td><%= @registrantsNotVotedPercentage %></td><td><%= @rejected %></td>
           </tr>
-          <tr class='not-vote-count'>
+          <tr class='absentee'>
             <td>Not Returned</td><td><%= @votesNotCountedPercentage %></td><td><%= @unreturned %></td>
           </tr>
         </tbody>

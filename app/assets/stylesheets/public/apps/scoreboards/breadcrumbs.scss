@@ -112,7 +112,13 @@ $selector-icon-padding: 0px;
       color: white !important;
       background-color: #DDDCDC !important;
     }
-    
+    &.disabled {
+      color: #888 !important;
+      &:hover {
+        color: #888 !important;
+        background-color: white !important;
+      }
+    }
     input[type="radio"], input[type="checkbox"] {
         margin: 0;
     }    

@@ -70,14 +70,14 @@
       @pieData = [
         {
           value: @non_uocava_counted
-          color: "#00cc7a"
-          highlight: "#00cc7a"
+          color: "#FAC520"
+          highlight: "#FAC520"
           label: "Domestic Counted"
         },
         {
           value: @non_uocava_rejected
-          color: "#00aa7a"
-          highlight: "#00aa7a"
+          color: "#DAA520"
+          highlight: "#DAA520"
           label: "Domestic Rejected"
         },
         {

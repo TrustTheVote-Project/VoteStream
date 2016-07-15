@@ -195,6 +195,7 @@
         line-height: 1em;
         .fill {
           height: 24px;
+          position: absolute;          
         }
         &.char-label {
             font-weight: normal;
@@ -203,9 +204,9 @@
           width: 65%;
           span {
             display: block;
-            position: absolute;
             top: 5px;
             left: 8px;
+            line-height: 24px;
           }
         } 
       }

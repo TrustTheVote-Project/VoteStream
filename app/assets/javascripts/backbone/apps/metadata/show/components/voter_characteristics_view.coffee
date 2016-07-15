@@ -46,14 +46,15 @@
       
       for char_opt in @ordered_characteristics
         count = char_vals[char_opt[0]]
-        items.push
-          label: char_opt[1]
-          percent: App.ScoreboardsApp.Helpers.percentFormatted(count, total)
-          count: count
+        if count > 0
+          items.push
+            label: char_opt[1]
+            percent: App.ScoreboardsApp.Helpers.percentFormatted(count, total)
+            count: count
             
       i = 0
       for item in items
-        item.color = @colors(i, item.count)
+        item.color = @colors(i)
         i+= 1
           
       return {
@@ -62,15 +63,11 @@
         stats_header: stats_header
       }
       
-    colors: (i, count) ->
-      total = if @toggler.selected == 'voters' then @total_registrants else @total_voters
-      val = parseInt(255 * count / total)
-      if i % 3 == 0
-        return "rgb(#{val}, 50, 50)"
-      else if i % 3 == 1
-        return "rgb(50, #{val}, 50)"
-      else if i % 3 == 2
-        return "rgb(50, 50, #{val})"
+    colors: (i) ->
+      if i % 2 == 0
+        return "rgb(50, 5, 50)"
+      else
+        return "rgb(50, 50, 252)"
       
     label: (name) ->
       name = name.toLowerCase()

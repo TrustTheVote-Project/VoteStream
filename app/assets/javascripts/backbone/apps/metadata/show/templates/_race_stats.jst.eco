@@ -6,13 +6,17 @@
     <canvas class="pie-chart"></canvas>
   </div>
   <div class='span8'>
-    <table>
-      <% for race in @race_pctgs(): %>
-        <tr style="color: <%= race.color %>;">
-          <td><%= race.label %></td>
-          <td><%= race.percent %></td>
-        </tr>
-      <% end %>
-    </table>
+    <% if @has_race_data(): %>
+      <table>
+        <% for race in @race_pctgs(): %>
+          <tr style="color: <%= race.color %>;">
+            <td><%= race.label %></td>
+            <td><%= race.percent %></td>
+          </tr>
+        <% end %>
+      </table>
+    <% else: %>
+      Data not collected
+    <% end %>
   </div>
 </div>

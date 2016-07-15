@@ -13,10 +13,10 @@
     <div class='col-xs-12 col-lg-6'>
       <table>
         <tbody>
-          <tr class="vote-count" style="color:  #00cc7a;">
+          <tr class="vote-count" style="color:  #FAC520;">
             <td>Domestic Counted</td><td><%= @non_uocava_counted_percentage %></td><td><%= @non_uocava_counted %></td>
           </tr>
-          <tr class="vote-count" style="color:  #00aa7a;">
+          <tr class="vote-count" style="color:  #DAA520;">
             <td>Domestic Rejected</td><td><%= @non_uocava_rejected_percentage %></td><td><%= @non_uocava_rejected %></td>
           </tr>
           <tr class="vote-count" style="color:  #cc6633;">
