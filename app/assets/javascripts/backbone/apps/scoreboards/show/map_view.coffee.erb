@@ -205,29 +205,52 @@ InfoBubble.prototype.panToView = ->
       summary = result.get 'summary'
       title = summary.get 'title'
       
-      precinctResult = poly.data.mapView.precinctResults.get('precincts').get(poly.data.precinctId)
-      rows  = precinctResult.get('rows')
-      votes = precinctResult.get('votes')
+      if @options.coloringType == 'gender'
+        precinct_results = results.get 'precincts'
+        res = precinct_results.get precinct.id
+        genders = res.get('genders')
+        genderM = if genders then genders['MALE'] || 0 else 0
+        genderF = if genders then genders['FEMALE'] || 0 else 0   
+        genderMPct = (genderM / (genderM + genderF * 1.0)) * 100.0
+        genderFPct = 100-genderMPct
+        genderMPct = Math.floor(genderMPct * 10) / 10.0
+        genderFPct = Math.floor(genderFPct * 10) / 10.0
+        
+        rowsHtml = ''
+        
+        colorM = '<%= AppConfig['map_color']['colors']['male'] %>'
+        colorF = '<%= AppConfig['map_color']['colors']['female'] %>'
+        
+        rowsHtml += "<tr style='background-color: #{colorM}; padding: 3px'><td class='iw-n'>Male</td><td class='iw-v'>#{genderM}</td><td class='iw-p'>#{genderMPct}%</td></tr>"
+        rowsHtml += "<tr style='background-color: #{colorF}'><td class='iw-n'>Female</td><td class='iw-v'>#{genderF}</td><td class='iw-p'>#{genderFPct}%</td></tr>"
+        # rowsHtml += "<tr style='color: #{color};'><td class='iw-n'>#{name.toLowerCase().replace(' and ', ' & ')}</td><td class='iw-v'>#{v}</td><td class='iw-p'>#{p}%</td></tr>"
+        "<div class='precinct-bubble'><div class='iw-c'><h5>#{precinct.get('name')}</h5><table class='iw-rows'>#{rowsHtml}</table></div><div class='iw-all'><a href='#'>View All Results</a></div></div>"             
+      else
+        precinctResult = poly.data.mapView.precinctResults.get('precincts').get(poly.data.precinctId)
+        rows  = precinctResult.get('rows')
+        votes = precinctResult.get('votes')
 
-      rowsHtml = ""
-      items = results.get('items')
+        rowsHtml = ""
+        items = results.get('items')
 
-      totalDisplayed = 0
-      for row in rows.models
-        i = items.get row.get('id')
-        v = row.get('votes') || 0
-        totalDisplayed += v
-        p = Math.floor((v * 1000) / (votes || 1)) / 10.0
-        color = i.get('c')
-        name = i.get('name')
-        rowsHtml += "<tr style='color: #{color};'><td class='iw-n'>#{name.toLowerCase().replace(' and ', ' & ')}</td><td class='iw-v'>#{v}</td><td class='iw-p'>#{p}%</td></tr>"
+        totalDisplayed = 0
+      
+      
+        for row in rows.models
+          i = items.get row.get('id')
+          v = row.get('votes') || 0
+          totalDisplayed += v
+          p = Math.floor((v * 1000) / (votes || 1)) / 10.0
+          color = i.get('c')
+          name = i.get('name')
+          rowsHtml += "<tr style='color: #{color};'><td class='iw-n'>#{name.toLowerCase().replace(' and ', ' & ')}</td><td class='iw-v'>#{v}</td><td class='iw-p'>#{p}%</td></tr>"
 
-      if votes > totalDisplayed
-        v = votes - totalDisplayed
-        p = Math.floor((v * 1000) / (votes || 1)) / 10.0
-        rowsHtml += "<tr class='other'><td class='iw-n'>Others</td><td class='iw-v'>#{v}</td><td class='iw-p'>#{p}%</td></tr>"
+        if votes > totalDisplayed
+          v = votes - totalDisplayed
+          p = Math.floor((v * 1000) / (votes || 1)) / 10.0
+          rowsHtml += "<tr class='other'><td class='iw-n'>Others</td><td class='iw-v'>#{v}</td><td class='iw-p'>#{p}%</td></tr>"
 
-      "<div class='precinct-bubble'><div class='iw-c'><h5>#{precinct.get('name')}</h5><table class='iw-rows'>#{rowsHtml}</table></div><div class='iw-all'><a href='#'>View All Results</a></div></div>"
+        "<div class='precinct-bubble'><div class='iw-c'><h5>#{precinct.get('name')}</h5><table class='iw-rows'>#{rowsHtml}</table></div><div class='iw-all'><a href='#'>View All Results</a></div></div>"
 
     simpleInfoWindowHtml: (poly, precinct) ->
       "<div class='precinct-bubble'><div class='iw-c'><h5>#{precinct.get('name')}</h5></div><div class='iw-all'><a href='#'>Set as Region</a></div></div>"
@@ -276,6 +299,25 @@ InfoBubble.prototype.panToView = ->
             
           if not in_region
             opacity = opacity * .2
+      else if @options.coloringType == 'gender'
+        res = resultDetailList[0]
+        color = '<%= AppConfig['map_color']['colors']['other'] %>'
+        opacity = 1
+        pctMale = (res['genderM'] / (res['genderM'] + res['genderF'] * 1.0)) * 100.0
+        if pctMale > 50
+          color = '<%= AppConfig['map_color']['colors']['male'] %>'
+          opacity =  <%= AppConfig['map_color']['saturation']['low'] %>
+        if pctMale < 50
+          color = '<%= AppConfig['map_color']['colors']['female'] %>'
+          opacity =  <%= AppConfig['map_color']['saturation']['low'] %>            
+        if pctMale > 50 + 2 * <%= AppConfig['map_color']['gender_threshold']['upper'] %> or pctMale < 50 - 2 * <%= AppConfig['map_color']['gender_threshold']['upper'] %>
+          opacity =  1
+        else if pctMale > 50 + <%= AppConfig['map_color']['gender_threshold']['upper'] %> or pctMale < 50 - <%= AppConfig['map_color']['gender_threshold']['upper'] %>
+          opacity =  <%= AppConfig['map_color']['saturation']['high'] %>
+        else if pctMale > 50 + <%= AppConfig['map_color']['gender_threshold']['lower'] %> or pctMale < 50 - <%= AppConfig['map_color']['gender_threshold']['lower'] %>
+          opacity = <%= AppConfig['map_color']['saturation']['middle']%>          
+        if not in_region
+          opacity = opacity * .2
       else 
         sortedResults = resultDetailList.sort (a,b) ->
           if b.percentage < a.percentage 
@@ -366,6 +408,9 @@ InfoBubble.prototype.panToView = ->
             partyRegistrations = res.get('party_registrations')
             demReg = if partyRegistrations then partyRegistrations['Democrat'] || 0 else 0
             repReg = if partyRegistrations then partyRegistrations['Republic'] || 0 else 0
+            genders = res.get('genders')
+            genderM = if genders then genders['MALE'] || 0 else 0
+            genderF = if genders then genders['FEMALE'] || 0 else 0
             
           
             full_results = []
@@ -382,6 +427,8 @@ InfoBubble.prototype.panToView = ->
                 voters: voters
                 demReg: demReg
                 repReg: repReg
+                genderM: genderM
+                genderF: genderF
                 participation_percentage: Math.floor((total_votes * 1000) / (voters || 1)) / 10.0
                 color: row_item.get('c')
             colors = @calculateColor(full_results, res.get('in_region'))

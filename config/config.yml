@@ -8,6 +8,8 @@ map_color:
   colors:
     republican:     '#dc1521'
     democrat:       '#023582'
+    male:     '#ffff00'
+    female:       '#ff9900'
     other:          '#998675'
     other1:         '#00aa00'
     other2:         '#ddbb00'
@@ -32,6 +34,10 @@ map_color:
   threshold:
     lower:  10
     upper:  20
+    
+  gender_threshold:
+    lower:  1
+    upper: 2
 
   saturation:
     high:   0.7

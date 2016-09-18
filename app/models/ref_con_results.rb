@@ -178,6 +178,7 @@ class RefConResults
       precinct_parties[pc.precinct_id][pc.party] = pc.count
     end
     
+    
     colors = results.map do |r|
       region = (r.inregion || region_pids.nil? ) ? 'i' : 'o'
       code   = r.color_code || 'n0'
@@ -192,6 +193,7 @@ class RefConResults
       
       party_reg_color = precinct_parties[r.precinct_id] ? registration_color(precinct_parties[r.precinct_id]) : 'n0' 
       
+      
       { 
         "id" => r.precinct_id, 
         "c" => color,  #color shade for contest
@@ -202,7 +204,7 @@ class RefConResults
         "b" => ballots 
       }
     end
-
+    
     # colors for precincts in range
     if cid
       contest = Contest.find(cid)
@@ -360,6 +362,15 @@ class RefConResults
       precinct_parties[pc.precinct_id][pc.party] = pc.count
     end
     
+    gender_counts = precinct_registrants.select("sex, precinct_id, count(*)").group(:sex, :precinct_id)
+    precinct_genders = {}
+    gender_counts.each do |gc|
+      precinct_genders[gc.precinct_id] ||= {}
+      precinct_genders[gc.precinct_id][gc.sex] = gc.count
+    end
+    
+    
+    
     pmap = precincts.map do |p|
       in_region = false
       ordered = []
@@ -398,7 +409,8 @@ class RefConResults
         "voters" =>   p.registered_voters,
         "rows" =>     ordered[0, 2],
         "in_region" => in_region,
-        "party_registrations" => precinct_parties[p.id]}
+        "party_registrations" => precinct_parties[p.id],
+        "genders" => precinct_genders[p.id]}
     end
 
     ballots, overvotes, undervotes, registered, channels = get_vote_stats(contest, rc_pids)
@@ -641,7 +653,7 @@ class RefConResults
       return "n2"
     end
   end
-
+  
   def participation_shade(v)
     if v < 10
       5
